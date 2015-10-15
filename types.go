@@ -6,12 +6,13 @@ import (
     "fmt"
 )
 
+
 const (
     // APIBaseSandBox points to the sandbox (for testing) version of the API
-    APIBaseSandBox = "https://api.sandbox.paypal.com/v1"
+    APIBaseSandBox = "https://api.sandbox.paypal.com"
 
     // APIBaseLive points to the live version of the API
-    APIBaseLive = "https://api.paypal.com/v1"
+    APIBaseLive = "https://api.paypal.com"
 )
 
 type (
