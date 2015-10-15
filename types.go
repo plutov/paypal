@@ -3,6 +3,7 @@ package paypalsdk
 import (
     "net/http"
     "time"
+    "fmt"
 )
 
 const (
@@ -32,4 +33,25 @@ type (
         ExpiresIn int       `json:"expires_in"`   // 28800
         ExpiresAt time.Time `json:"expires_at"`
     }
+
+    // ErrorResponse is used when a response has errors
+    ErrorResponse struct {
+        Response        *http.Response `json:"-"`
+        Name            string        `json:"name"`
+        DebugID         string        `json:"debug_id"`
+        Message         string        `json:"message"`
+        InformationLink string        `json:"information_link"`
+        Details         []ErrorDetail `json:"details"`
+    }
+
+    // ErrorDetails map to error_details object
+    ErrorDetail struct {
+        Field string `json:"field"`
+        Issue string `json:"issue"`
+    }
 )
+
+// Error method implementation for ErrorResponse struct
+func (r *ErrorResponse) Error() string {
+    return fmt.Sprintf("%v %v: %d %v\nDetails: %v", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message, r.Details)
+}
