@@ -4,6 +4,7 @@ import (
     "encoding/json"
     "io/ioutil"
     "net/http"
+    "errors"
     "bytes"
     "time"
     "fmt"
@@ -12,6 +13,10 @@ import (
 
 // NewClient returns new Client struct
 func NewClient(clientID string, secret string, APIBase string) (*Client, error) {
+    if clientID == "" || secret == "" || APIBase == "" {
+        return &Client{}, errors.New("ClientID, Secret and APIBase are required to create a Client")
+    }
+
     return &Client{
         &http.Client{},
         clientID,
