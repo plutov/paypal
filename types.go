@@ -2,7 +2,6 @@ package paypalsdk
 
 import (
     "net/http"
-    "time"
     "fmt"
 )
 
@@ -27,12 +26,19 @@ type (
 
     // TokenResponse maps to the API response for the /oauth2/token endpoint
     TokenResponse struct {
-        Scope     string    `json:"scope"`        // "https://api.paypal.com/v1/payments/.* https://api.paypal.com/v1/vault/credit-card https://api.paypal.com/v1/vault/credit-card/.*",
-        Token     string    `json:"access_token"` // "EEwJ6tF9x5WCIZDYzyZGaz6Khbw7raYRIBV_WxVvgmsG",
-        Type      string    `json:"token_type"`   // "Bearer",
-        AppID     string    `json:"app_id"`       // "APP-6XR95014BA15863X",
-        ExpiresIn int       `json:"expires_in"`   // 28800
-        ExpiresAt time.Time `json:"expires_at"`
+        Scope     string    `json:"scope"`
+        Token     string    `json:"access_token"`
+        Type      string    `json:"token_type"`
+        AppID     string    `json:"app_id"`
+        ExpiresIn int       `json:"expires_in"`
+    }
+
+    // RefreshTokenResponse maps to the API response for the /v1/identity/openidconnect/tokenservice
+    RefreshTokenResponse struct {
+        Type         string    `json:"token_type"`
+        RefreshToken string    `json:"refresh_token"`
+        AccessToken  string    `json:"access_token"`
+        ExpiresIn    int       `json:"expires_in"`
     }
 
     // ErrorResponse is used when a response has errors

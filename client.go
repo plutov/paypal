@@ -6,7 +6,6 @@ import (
     "net/http"
     "errors"
     "bytes"
-    "time"
     "fmt"
     "io"
 )
@@ -31,7 +30,7 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
     buf := bytes.NewBuffer([]byte("grant_type=client_credentials"))
     req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/oauth2/token"), buf)
     if err != nil {
-        return nil, err
+        return &TokenResponse{}, err
     }
 
     req.SetBasicAuth(c.ClientID, c.Secret)
@@ -39,9 +38,6 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 
     t := TokenResponse{}
     err = c.Send(req, &t)
-    if err == nil {
-        t.ExpiresAt = time.Now().Add(time.Duration(t.ExpiresIn/2) * time.Second)
-    }
 
     return &t, err
 }

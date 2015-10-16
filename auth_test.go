@@ -22,3 +22,19 @@ func TestGetAuthorizationCodeURL(t *testing.T) {
         t.Errorf("GetAuthorizationCodeURL returns incorrect value for redirectURI=test and scope=address")
     }
 }
+
+func TestGetRefreshToken(t *testing.T) {
+    c, _ := NewClient("clid", "secret", APIBaseSandBox)
+
+    _, err := c.GetRefreshToken("123", "")
+    if err == nil {
+        t.Errorf("redirectURI is required in GetRefreshToken")
+    }
+
+    _, err = c.GetRefreshToken("", "123")
+    if err == nil {
+        t.Errorf("authorizationCode is required in GetRefreshToken")
+    }
+
+    _, err = c.GetRefreshToken("123", "123")
+}
