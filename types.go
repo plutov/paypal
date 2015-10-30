@@ -25,18 +25,9 @@ type (
 
 	// TokenResponse maps to the API response for the /oauth2/token endpoint
 	TokenResponse struct {
-		Scope     string `json:"scope"`
-		Token     string `json:"access_token"`
-		Type      string `json:"token_type"`
-		AppID     string `json:"app_id"`
-		ExpiresIn int    `json:"expires_in"`
-	}
-
-	// RefreshTokenResponse maps to the API response for the /v1/identity/openidconnect/tokenservice
-	RefreshTokenResponse struct {
-		Type         string `json:"token_type"`
 		RefreshToken string `json:"refresh_token"`
-		AccessToken  string `json:"access_token"`
+		Token        string `json:"access_token"`
+		Type         string `json:"token_type"`
 		ExpiresIn    int    `json:"expires_in"`
 	}
 
@@ -56,8 +47,8 @@ type (
 		Issue string `json:"issue"`
 	}
 
-	// CreditCrad - All info about customer's CC
-	CreditCrad struct {
+	// CreditCard - All info about customer's CC
+	CreditCard struct {
 		Type        string
 		Number      string
 		ExpireYear  int
