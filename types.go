@@ -47,20 +47,24 @@ type (
 		Issue string `json:"issue"`
 	}
 
-	// CreditCard - All info about customer's CC
-	CreditCard struct {
-		Type        string
-		Number      string
-		ExpireYear  int
-		ExpireMonth int
-		FirstName   string
-		LastName    string
+	// PaypalPaymentRequest - All info about paypal type payment
+	PaypalPaymentRequest struct {
+		Transactions []Transaction
+	}
+
+	// PaymentResponse structure
+	PaymentResponse struct {
+	}
+
+	// Transaction element
+	Transaction struct {
+		Amount Amount
 	}
 
 	// Amount to pay
 	Amount struct {
 		Currency string
-		Amount   float32
+		Total    float32
 	}
 )
 
