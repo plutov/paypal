@@ -47,24 +47,15 @@ type (
 		Issue string `json:"issue"`
 	}
 
-	// PaypalPaymentRequest - All info about paypal type payment
-	PaypalPaymentRequest struct {
-		Transactions []Transaction
-	}
-
 	// PaymentResponse structure
 	PaymentResponse struct {
-	}
-
-	// Transaction element
-	Transaction struct {
-		Amount Amount
+		ID string `json:"id"`
 	}
 
 	// Amount to pay
 	Amount struct {
 		Currency string
-		Total    float32
+		Total    float64
 	}
 )
 
