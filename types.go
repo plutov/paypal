@@ -49,13 +49,26 @@ type (
 
 	// PaymentResponse structure
 	PaymentResponse struct {
-		ID string `json:"id"`
+		ID    string        `json:"id"`
+		Links []PaymentLink `json:"links"`
+	}
+
+	// PaymentLink structure
+	PaymentLink struct {
+		Href string `json:"href"`
 	}
 
 	// Amount to pay
 	Amount struct {
 		Currency string
 		Total    float64
+	}
+
+	// ExecuteResponse structure
+	ExecuteResponse struct {
+		ID    string        `json:"id"`
+		Links []PaymentLink `json:"links"`
+		State string        `json:"state"`
 	}
 )
 
