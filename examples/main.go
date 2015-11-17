@@ -15,4 +15,7 @@ func main() {
 		fmt.Println("ERROR: " + err.Error())
 		os.Exit(1)
 	}
+
+	url, err := client.GetAuthorizationCodeURL("http://test.com", []string{})
+	fmt.Println("DEBUG: AuthCodeURL=" + url)
 }
