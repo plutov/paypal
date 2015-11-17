@@ -20,7 +20,7 @@ func (c *Client) GetAuthorizationCodeURL(redirectURI string, scopes []string) (s
 		scopes = []string{"profile", "email"}
 	}
 
-	return c.APIBase + "/webapps/auth/protocol/openidconnect/v1/authorize?client_id=" +
+	return strings.Replace(c.APIBase, "api.", "", -1) + "/webapps/auth/protocol/openidconnect/v1/authorize?client_id=" +
 		url.QueryEscape(c.ClientID) + "&response_type=code&scope=" + strings.Join(scopes, "+") +
 		"&redirect_uri=" + url.QueryEscape(redirectURI), nil
 }

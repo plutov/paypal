@@ -13,13 +13,13 @@ func TestGetAuthorizationCodeURL(t *testing.T) {
 	}
 
 	uri, err := c.GetAuthorizationCodeURL("test", []string{})
-	if uri != "https://api.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=clid&response_type=code&scope=profile+email&redirect_uri=test" {
-		t.Errorf("GetAuthorizationCodeURL returns incorrect value for redirectURI=test")
+	if uri != "https://sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=clid&response_type=code&scope=profile+email&redirect_uri=test" {
+		t.Errorf("GetAuthorizationCodeURL returns incorrect value for redirectURI=test " + uri)
 	}
 
 	uri, err = c.GetAuthorizationCodeURL("test", []string{"address"})
-	if uri != "https://api.sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=clid&response_type=code&scope=address&redirect_uri=test" {
-		t.Errorf("GetAuthorizationCodeURL returns incorrect value for redirectURI=test and scope=address")
+	if uri != "https://sandbox.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize?client_id=clid&response_type=code&scope=address&redirect_uri=test" {
+		t.Errorf("GetAuthorizationCodeURL returns incorrect value for redirectURI=test and scope=address " + uri)
 	}
 }
 
