@@ -15,7 +15,7 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 	}
 
 	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Content-type", "application/json")
+	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 
 	t := TokenResponse{}
 	err = c.Send(req, &t)
