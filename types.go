@@ -56,6 +56,7 @@ type (
 	// PaymentLink structure
 	PaymentLink struct {
 		Href string `json:"href"`
+		Rel  string `json:"rel"`
 	}
 
 	// Amount to pay
