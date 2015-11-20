@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 // NewClient returns new Client struct
@@ -19,8 +20,16 @@ func NewClient(clientID string, secret string, APIBase string) (*Client, error) 
 		clientID,
 		secret,
 		APIBase,
+		"",
 		nil,
 	}, nil
+}
+
+// SetLogFile func
+func (c *Client) SetLogFile(filepath string) error {
+	c.LogFile = filepath
+
+	return nil
 }
 
 // SetAccessToken sets saved token to current client
@@ -46,6 +55,8 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	}
 
 	resp, err := c.client.Do(req)
+	c.log(req, resp)
+
 	if err != nil {
 		return err
 	}
@@ -74,4 +85,15 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	}
 
 	return nil
+}
+
+func (c *Client) log(request *http.Request, response *http.Response) {
+	if c.LogFile != "" {
+		os.OpenFile(c.LogFile, os.O_CREATE, 0755)
+
+		logFile, err := os.OpenFile(c.LogFile, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0755)
+		if err == nil {
+			logFile.WriteString("URL: " + request.RequestURI + "\n\n")
+		}
+	}
 }
