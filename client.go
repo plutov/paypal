@@ -87,6 +87,15 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	return nil
 }
 
+// SendWithAuth makes a request to the API and apply OAuth2 header automatically.
+// If the access token soon to be expired, it will try to get a new one before
+// making the main request
+func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
+	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
+
+	return c.Send(req, v)
+}
+
 func (c *Client) log(request *http.Request, response *http.Response) {
 	if c.LogFile != "" {
 		os.OpenFile(c.LogFile, os.O_CREATE, 0755)

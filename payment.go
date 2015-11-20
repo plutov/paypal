@@ -22,7 +22,7 @@ func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string) (*
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
 	p := PaymentResponse{}
-	err = c.Send(req, &p)
+	err = c.SendWithAuth(req, &p)
 
 	if p.ID == "" {
 		return &p, errors.New("Unable to create payment with this access token")
@@ -43,7 +43,7 @@ func (c *Client) ExecuteApprovedPayment(paymentID string, payerID string) (*Exec
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
 	e := ExecuteResponse{}
-	err = c.Send(req, &e)
+	err = c.SendWithAuth(req, &e)
 
 	if e.ID == "" {
 		return &e, errors.New("Unable to execute payment with paymentID=" + paymentID)
