@@ -15,7 +15,7 @@ func TestCreateDirectPaypalPayment(t *testing.T) {
 		Currency: "USD",
 	}
 
-	_, err := c.CreateDirectPaypalPayment(amount, "http://example.com")
+	_, err := c.CreateDirectPaypalPayment(amount, "http://example.com", "http://example.com")
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid token")
