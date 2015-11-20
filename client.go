@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"os"
 )
 
@@ -96,13 +97,16 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	return c.Send(req, v)
 }
 
-func (c *Client) log(request *http.Request, response *http.Response) {
+func (c *Client) log(req *http.Request, resp *http.Response) {
 	if c.LogFile != "" {
 		os.OpenFile(c.LogFile, os.O_CREATE, 0755)
 
 		logFile, err := os.OpenFile(c.LogFile, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0755)
 		if err == nil {
-			logFile.WriteString("URL: " + request.RequestURI + "\n\n")
+			reqDump, _ := httputil.DumpRequestOut(req, true)
+			respDump, _ := httputil.DumpResponse(resp, true)
+
+			logFile.WriteString("Request: " + string(reqDump) + "\nResponse: " + string(respDump) + "\n\n")
 		}
 	}
 }
