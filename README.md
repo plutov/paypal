@@ -7,16 +7,12 @@ PayPal REST API
 ```go
 // Create a client instance
 c, err := paypalsdk.NewClient("clietnid", "secret", paypalsdk.APIBaseSandBox)
-```
-
-```go
-// Redirect client to this URL with provided redirect URI and necessary scopes. It's necessary to retreive authorization_code
-authCodeURL, err := c.GetAuthorizationCodeURL("https://example.com/redirect-uri1", []string{"address"})
+c.SetLogFile("/tpm/paypal-debug.log") // Set log file if necessary
 ```
 
 ```go
 // When you will have authorization_code you can get an access_token
-accessToken, err := c.GetAccessToken(authCode, "https://example.com/redirect-uri2")
+accessToken, err := c.GetAccessToken()
 ```
 
 ```go
@@ -25,7 +21,7 @@ amount := Amount{
     Total:    15.1111,
     Currency: "USD",
 }
-paymentResult, err := c.CreateDirectPaypalPayment(amount, "http://example.com/redirect-uri3")
+paymentResult, err := c.CreateDirectPaypalPayment(amount, "http://example.com/redirect-uri")
 
 // If paymentResult.ID is not empty and paymentResult.Links is also
 // we can redirect user to approval page (paymentResult.Links[0]).

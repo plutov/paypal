@@ -12,7 +12,7 @@ import (
 func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string) (*PaymentResponse, error) {
 	buf := bytes.NewBuffer([]byte("{\"intent\":\"sale\",\"payer\":{\"payment_method\":\"paypal\"}," +
 		"\"transactions\":[{\"amount\":{\"total\":\"" + strconv.FormatFloat(amount.Total, 'f', 2, 64) +
-		"\",\"currency\":\"" + amount.Currency + "\"}}],\"redirect_urls\":{\"return_url\":\"" + redirectURI + "\"}}"))
+		"\",\"currency\":\"" + amount.Currency + "\"},\"description\":\"logpacker.com\"}],\"redirect_urls\":{\"return_url\":\"" + redirectURI + "\"}}"))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment"), buf)
 	if err != nil {
 		return &PaymentResponse{}, err
