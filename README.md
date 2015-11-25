@@ -21,7 +21,7 @@ amount := Amount{
     Total:    15.1111,
     Currency: "USD",
 }
-paymentResult, err := c.CreateDirectPaypalPayment(amount, "http://example.com/redirect-uri")
+paymentResult, err := c.CreateDirectPaypalPayment(amount, "http://example.com/redirect-uri", "http://example.com/cancel-uri", "Description for this payment")
 
 // If paymentResult.ID is not empty and paymentResult.Links is also
 // we can redirect user to approval page (paymentResult.Links[0]).
@@ -35,4 +35,14 @@ paymentID := "PAY-17S8410768582940NKEE66EQ"
 // payerID is returned via return_url
 payerID := "7E7MGXCWTTKK2"
 executeResult, err := c.ExecuteApprovedPayment(paymentID, payerID)
+```
+
+```go
+// Get created payment info
+payment, err := c.GetPayment(paymentID)
+```
+
+```go
+// Get all payments slice
+payments, err := c.GetPayments()
 ```

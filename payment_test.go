@@ -11,14 +11,40 @@ func TestCreateDirectPaypalPayment(t *testing.T) {
 	}
 
 	amount := Amount{
-		Total:    15.1111,
+		Total:    "15.1111",
 		Currency: "USD",
 	}
 
-	_, err := c.CreateDirectPaypalPayment(amount, "http://example.com", "http://example.com")
+	_, err := c.CreateDirectPaypalPayment(amount, "http://example.com", "http://example.com", "test payment")
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid token")
+	}
+}
+
+func TestGetPayment(t *testing.T) {
+	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c.Token = &TokenResponse{
+		Token: "invalidtoken",
+	}
+
+	_, err := c.GetPayment("PAY-TEST-123")
+
+	if err == nil {
+		t.Errorf("Error must be returned for invalid ID")
+	}
+}
+
+func TestGetPayments(t *testing.T) {
+	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c.Token = &TokenResponse{
+		Token: "invalidtoken",
+	}
+
+	payments, _ := c.GetPayments()
+
+	if len(payments) != 0 {
+		t.Errorf("0 payments must be returned for unautgorized request")
 	}
 }
 

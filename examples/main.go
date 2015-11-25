@@ -2,6 +2,7 @@ package main
 
 import (
 	"paypalsdk"
+	"strconv"
 
 	"fmt"
 	"os"
@@ -15,4 +16,24 @@ func main() {
 		fmt.Println("ERROR: " + err.Error())
 		os.Exit(1)
 	}
+
+	token, err := client.GetAccessToken()
+	if err == nil {
+		fmt.Println("DEBUG: AccessToken=" + token.Token)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+		os.Exit(1)
+	}
+
+	payment, err := client.GetPayment("PAY-TEST-123")
+	fmt.Println("DEBUG: PaymentID=" + payment.ID)
+
+	payments, err := client.GetPayments()
+	if err == nil {
+		fmt.Println("DEBUG: PaymentsCount=" + strconv.Itoa(len(payments)))
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+		os.Exit(1)
+	}
+	fmt.Println("OK")
 }

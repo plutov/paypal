@@ -5,13 +5,17 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
 )
+
+// ListPaymentsResp slice of payments
+type ListPaymentsResp struct {
+	Payments []Payment `json:"payments"`
+}
 
 // CreateDirectPaypalPayment sends request with payment
 func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string, cancelURI string, description string) (*PaymentResponse, error) {
 	buf := bytes.NewBuffer([]byte("{\"intent\":\"sale\",\"payer\":{\"payment_method\":\"paypal\"}," +
-		"\"transactions\":[{\"amount\":{\"total\":\"" + strconv.FormatFloat(amount.Total, 'f', 2, 64) +
+		"\"transactions\":[{\"amount\":{\"total\":\"" + amount.Total +
 		"\",\"currency\":\"" + amount.Currency + "\"},\"description\":\"" + description + "\"}],\"redirect_urls\":{\"return_url\":\"" +
 		redirectURI + "\",\"cancel_url\":\"" + cancelURI + "\"}}"))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment"), buf)
@@ -24,6 +28,9 @@ func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string, ca
 
 	p := PaymentResponse{}
 	err = c.SendWithAuth(req, &p)
+	if err != nil {
+		return &p, err
+	}
 
 	if p.ID == "" {
 		return &p, errors.New("Unable to create payment with this access token")
@@ -45,10 +52,51 @@ func (c *Client) ExecuteApprovedPayment(paymentID string, payerID string) (*Exec
 
 	e := ExecuteResponse{}
 	err = c.SendWithAuth(req, &e)
+	if err != nil {
+		return &e, err
+	}
 
 	if e.ID == "" {
 		return &e, errors.New("Unable to execute payment with paymentID=" + paymentID)
 	}
 
 	return &e, err
+}
+
+// GetPayment gets a payment from PayPal
+func (c *Client) GetPayment(paymentID string) (*Payment, error) {
+	p := Payment{}
+
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment/"+paymentID), nil)
+	if err != nil {
+		return &p, err
+	}
+
+	err = c.SendWithAuth(req, &p)
+	if err != nil {
+		return &p, err
+	}
+
+	if p.ID == "" {
+		return &p, errors.New("Unable to get payment with paymentID=" + paymentID)
+	}
+
+	return &p, nil
+}
+
+// GetPayments retrieve payments resources from Paypal
+func (c *Client) GetPayments() ([]Payment, error) {
+	var p ListPaymentsResp
+
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment/"), nil)
+	if err != nil {
+		return p.Payments, err
+	}
+
+	err = c.SendWithAuth(req, &p)
+	if err != nil {
+		return p.Payments, err
+	}
+
+	return p.Payments, nil
 }
