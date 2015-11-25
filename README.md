@@ -27,7 +27,7 @@ accessToken, err := c.GetAccessToken()
 ```go
 // Now we can create a paypal payment
 amount := Amount{
-    Total:    15.1111,
+    Total:    "15.11",
     Currency: "USD",
 }
 redirectURI := "http://example.com/redirect-uri"
