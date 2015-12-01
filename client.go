@@ -1,6 +1,7 @@
 package paypalsdk
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"io"
@@ -92,9 +93,26 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 // If the access token soon to be expired, it will try to get a new one before
 // making the main request
 func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
+	if c.Token != nil {
+		req.Header.Set("Authorization", "Bearer "+c.Token.Token)
+	}
 
 	return c.Send(req, v)
+}
+
+// NewRequest constructs a request
+// Convert payload to a JSON
+func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Request, error) {
+	var buf io.Reader
+	if payload != nil {
+		var b []byte
+		b, err := json.Marshal(&payload)
+		if err != nil {
+			return nil, err
+		}
+		buf = bytes.NewBuffer(b)
+	}
+	return http.NewRequest(method, url, buf)
 }
 
 func (c *Client) log(req *http.Request, resp *http.Response) {

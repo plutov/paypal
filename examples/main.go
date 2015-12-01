@@ -35,5 +35,41 @@ func main() {
 		fmt.Println("ERROR: " + err.Error())
 		os.Exit(1)
 	}
+
+	p := paypalsdk.Payment{
+		Intent: "sale",
+		Payer: &paypalsdk.Payer{
+			PaymentMethod: "credit_card",
+			FundingInstruments: []paypalsdk.FundingInstrument{paypalsdk.FundingInstrument{
+				CreditCard: &paypalsdk.CreditCard{
+					Number:      "4111111111111111",
+					Type:        "visa",
+					ExpireMonth: "11",
+					ExpireYear:  "2020",
+					CVV2:        "777",
+					FirstName:   "John",
+					LastName:    "Doe",
+				},
+			}},
+		},
+		Transactions: []paypalsdk.Transaction{paypalsdk.Transaction{
+			Amount: &paypalsdk.Amount{
+				Currency: "USD",
+				Total:    "200",
+			},
+			Description: "My Payment",
+		}},
+		RedirectURLs: &paypalsdk.RedirectURLs{
+			ReturnURL: "http://...",
+			CancelURL: "http://...",
+		},
+	}
+	paymentResponse, err := client.CreatePayment(p)
+	if err == nil {
+		fmt.Println("DEBUG: CreatedPaymentID=" + paymentResponse.Payment.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+		os.Exit(1)
+	}
 	fmt.Println("OK")
 }

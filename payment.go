@@ -12,7 +12,14 @@ type ListPaymentsResp struct {
 	Payments []Payment `json:"payments"`
 }
 
+// CreatePaymentResp returned by CreatePayment
+type CreatePaymentResp struct {
+	*Payment
+	Links []Links `json:"links"`
+}
+
 // CreateDirectPaypalPayment sends request with payment
+// CreatePayment is more common function for any kind of payment
 func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string, cancelURI string, description string) (*PaymentResponse, error) {
 	buf := bytes.NewBuffer([]byte("{\"intent\":\"sale\",\"payer\":{\"payment_method\":\"paypal\"}," +
 		"\"transactions\":[{\"amount\":{\"total\":\"" + amount.Total +
@@ -37,6 +44,23 @@ func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string, ca
 	}
 
 	return &p, err
+}
+
+// CreatePayment creates a payment in Paypal
+func (c *Client) CreatePayment(p Payment) (*CreatePaymentResp, error) {
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment"), p)
+	if err != nil {
+		return &CreatePaymentResp{}, err
+	}
+
+	response := &CreatePaymentResp{}
+
+	err = c.SendWithAuth(req, response)
+	if err != nil {
+		return response, err
+	}
+
+	return response, nil
 }
 
 // ExecuteApprovedPayment executes approved payment

@@ -25,6 +25,33 @@ type (
 		Token    *TokenResponse
 	}
 
+	// Authorization maps to the  authorization object
+	Authorization struct {
+		Amount                    *Amount    `json:"amount,omitempty"`
+		CreateTime                *time.Time `json:"create_time,omitempty"`
+		UpdateTime                *time.Time `json:"update_time,omitempty"`
+		State                     string     `json:"state,omitempty"`
+		ParentPayment             string     `json:"parent_payment,omitempty"`
+		ID                        string     `json:"id,omitempty"`
+		ValidUntil                *time.Time `json:"valid_until,omitempty"`
+		Links                     []Links    `json:"links,omitempty"`
+		ClearingTime              string     `json:"clearing_time,omitempty"`
+		ProtectionEligibility     string     `json:"protection_eligibility,omitempty"`
+		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
+	}
+
+	// Capture maps to the capture object
+	Capture struct {
+		Amount         *Amount    `json:"amount,omitempty"`
+		IsFinalCapture bool       `json:"is_final_capture"`
+		CreateTime     *time.Time `json:"create_time,omitempty"`
+		UpdateTime     *time.Time `json:"update_time,omitempty"`
+		State          string     `json:"state,omitempty"`
+		ParentPayment  string     `json:"parent_payment,omitempty"`
+		ID             string     `json:"id,omitempty"`
+		Links          []Links    `json:"links,omitempty"`
+	}
+
 	// Address maps to address object
 	Address struct {
 		Line1       string `json:"line1"`
@@ -133,6 +160,14 @@ type (
 	RedirectURLs struct {
 		ReturnURL string `json:"return_url,omitempty"`
 		CancelURL string `json:"cancel_url,omitempty"`
+	}
+
+	// Links maps to links object
+	Links struct {
+		Href    string `json:"href"`
+		Rel     string `json:"rel"`
+		Method  string `json:"method"`
+		Enctype string `json:"enctype"`
 	}
 
 	// Payment maps to payment object
