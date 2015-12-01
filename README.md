@@ -5,12 +5,12 @@
 #### Coverage
  * POST /v1/oauth2/token
  * POST /v1/payments/payment
- * GET /v1/payments/payment/%ID%
+ * GET /v1/payments/payment/**ID**
  * GET /v1/payments/payment
- * GET /v1/payments/authorization/%ID%
- * POST /v1/payments/authorization/%ID%/capture
- * POST /v1/payments/authorization/%ID%/void
- * POST /v1/payments/authorization/%ID%/reauthorize
+ * GET /v1/payments/authorization/**ID**
+ * POST /v1/payments/authorization/**ID**/capture
+ * POST /v1/payments/authorization/**ID**/void
+ * POST /v1/payments/authorization/**ID**/reauthorize
 
 #### Create client
 
