@@ -14,6 +14,10 @@
  * GET /v1/payments/sale/**ID**
  * POST /v1/payments/sale/**ID**/refund
  * GET /v1/payments/refund/**ID**
+ * GET /v1/payments/orders/**ID**
+ * POST /v1/payments/orders/**ID**/authorize
+ * POST /v1/payments/orders/**ID**/capture
+ * POST /v1/payments/orders/**ID**/do-void
 
 #### Create client
 
@@ -23,7 +27,7 @@ import "github.com/logpacker/paypalsdk"
 
 ```go
 // Create a client instance
-c, err := paypalsdk.NewClient("clietnid", "secret", paypalsdk.APIBaseSandBox)
+c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)
 c.SetLogFile("/tpm/paypal-debug.log") // Set log file if necessary
 ```
 
@@ -136,20 +140,44 @@ auth, err := c.ReauthorizeAuthorization("AUTH-1", &paypalsdk.Amount{Total: "200"
 #### Get Sale by ID
 
 ```go
-sale, err := c.GetSale("1")
+sale, err := c.GetSale("SALE-1")
 ```
 
 #### Refund Sale by ID
 
 ```go
 // Full
-refund, err := c.RefundSale("1", nil)
+refund, err := c.RefundSale("SALE-1", nil)
 // Partial
-refund, err := c.RefundSale("1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+refund, err := c.RefundSale("SALE-1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
 ```
 
 #### Get Refund by ID
 
 ```go
-refund, err := c.GetRefund("1")
+refund, err := c.GetRefund("ORDER-1")
+```
+
+#### Get Order by ID
+
+```go
+order, err := c.GetOrder("ORDER-1")
+```
+
+#### Authorize Order
+
+```go
+auth, err := c.AuthorizeOrder("ORDER-1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+```
+
+#### Capture Order
+
+```go
+capture, err := c.CaptureOrder("ORDER-1", &paypalsdk.Amount{Total: "100", Currency: "USD"}, true, nil)
+```
+
+#### Void Order
+
+```go
+order, err := c.VoidOrder("ORDER-1")
 ```

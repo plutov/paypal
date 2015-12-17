@@ -15,17 +15,24 @@ const (
 )
 
 type (
-	// Client represents a Paypal REST API Client
-	Client struct {
-		client   *http.Client
-		ClientID string
-		Secret   string
-		APIBase  string
-		LogFile  string // If user set log file name all requests will be logged there
-		Token    *TokenResponse
+	// Address struct
+	Address struct {
+		Line1       string `json:"line1"`
+		Line2       string `json:"line2,omitempty"`
+		City        string `json:"city"`
+		CountryCode string `json:"country_code"`
+		PostalCode  string `json:"postal_code,omitempty"`
+		State       string `json:"state,omitempty"`
+		Phone       string `json:"phone,omitempty"`
 	}
 
-	// Authorization maps to the  authorization object
+	// Amount to pay
+	Amount struct {
+		Currency string `json:"currency"`
+		Total    string `json:"total"`
+	}
+
+	// Authorization represetns PayPal authorization
 	Authorization struct {
 		Amount                    *Amount    `json:"amount,omitempty"`
 		CreateTime                *time.Time `json:"create_time,omitempty"`
@@ -40,7 +47,7 @@ type (
 		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
 	}
 
-	// Capture maps to the capture object
+	// Capture struct
 	Capture struct {
 		Amount         *Amount    `json:"amount,omitempty"`
 		IsFinalCapture bool       `json:"is_final_capture"`
@@ -52,18 +59,17 @@ type (
 		Links          []Links    `json:"links,omitempty"`
 	}
 
-	// Address maps to address object
-	Address struct {
-		Line1       string `json:"line1"`
-		Line2       string `json:"line2,omitempty"`
-		City        string `json:"city"`
-		CountryCode string `json:"country_code"`
-		PostalCode  string `json:"postal_code,omitempty"`
-		State       string `json:"state,omitempty"`
-		Phone       string `json:"phone,omitempty"`
+	// Client represents a Paypal REST API Client
+	Client struct {
+		client   *http.Client
+		ClientID string
+		Secret   string
+		APIBase  string
+		LogFile  string // If user set log file name all requests will be logged there
+		Token    *TokenResponse
 	}
 
-	// CreditCard maps to credit_card object
+	// CreditCard struct
 	CreditCard struct {
 		ID             string   `json:"id,omitempty"`
 		PayerID        string   `json:"payer_id,omitempty"`
@@ -79,7 +85,7 @@ type (
 		ValidUntil     string   `json:"valid_until,omitempty"`
 	}
 
-	// CreditCardToken maps to credit_card_token object
+	// CreditCardToken struct
 	CreditCardToken struct {
 		CreditCardID string `json:"credit_card_id"`
 		PayerID      string `json:"payer_id,omitempty"`
@@ -88,17 +94,10 @@ type (
 		ExpireMonth  string `json:"expire_month,omitempty"`
 	}
 
-	// FundingInstrument maps to funding_instrument object
-	FundingInstrument struct {
-		CreditCard      *CreditCard      `json:"credit_card,omitempty"`
-		CreditCardToken *CreditCardToken `json:"credit_card_token,omitempty"`
-	}
-
-	// TokenResponse maps to the API response for the /oauth2/token endpoint
-	TokenResponse struct {
-		RefreshToken string `json:"refresh_token"`
-		Token        string `json:"access_token"`
-		Type         string `json:"token_type"`
+	// Currency https://developer.paypal.com/webapps/developer/docs/api/#currency-object
+	Currency struct {
+		Currency string `json:"currency,omitempty"`
+		Value    string `json:"value,omitempty"`
 	}
 
 	// ErrorResponse is used when a response has errors
@@ -117,13 +116,57 @@ type (
 		Issue string `json:"issue"`
 	}
 
-	// PaymentResponse structure
-	PaymentResponse struct {
+	// ExecuteResponse structure
+	ExecuteResponse struct {
 		ID    string        `json:"id"`
 		Links []PaymentLink `json:"links"`
+		State string        `json:"state"`
 	}
 
-	// Payer maps to payer object
+	// FundingInstrument struct
+	FundingInstrument struct {
+		CreditCard      *CreditCard      `json:"credit_card,omitempty"`
+		CreditCardToken *CreditCardToken `json:"credit_card_token,omitempty"`
+	}
+
+	// Item struct
+	Item struct {
+		Quantity    int    `json:"quantity"`
+		Name        string `json:"name"`
+		Price       string `json:"price"`
+		Currency    string `json:"currency"`
+		SKU         string `json:"sku,omitempty"`
+		Description string `json:"description,omitempty"`
+		Tax         string `json:"tax,omitempty"`
+	}
+
+	// ItemList struct
+	ItemList struct {
+		Items           []Item           `json:"items,omitempty"`
+		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
+	}
+
+	// Links struct
+	Links struct {
+		Href    string `json:"href"`
+		Rel     string `json:"rel"`
+		Method  string `json:"method"`
+		Enctype string `json:"enctype"`
+	}
+
+	// Order https://developer.paypal.com/webapps/developer/docs/api/#order-object
+	Order struct {
+		ID            string     `json:"id,omitempty"`
+		CreateTime    *time.Time `json:"create_time,omitempty"`
+		UpdateTime    *time.Time `json:"update_time,omitempty"`
+		State         string     `json:"state,omitempty"`
+		Amount        *Amount    `json:"amount,omitempty"`
+		PendingReason string     `json:"pending_reason,omitempty"`
+		ParentPayment string     `json:"parent_payment,omitempty"`
+		Links         []Links    `json:"links,omitempty"`
+	}
+
+	// Payer struct
 	Payer struct {
 		PaymentMethod      string              `json:"payment_method"`
 		FundingInstruments []FundingInstrument `json:"funding_instruments,omitempty"`
@@ -131,7 +174,7 @@ type (
 		Status             string              `json:"payer_status,omitempty"`
 	}
 
-	// PayerInfo maps to payer_info object
+	// PayerInfo struct
 	PayerInfo struct {
 		Email           string           `json:"email,omitempty"`
 		FirstName       string           `json:"first_name,omitempty"`
@@ -143,34 +186,7 @@ type (
 		TaxID           string           `json:"tax_id,omitempty"`
 	}
 
-	// ShippingAddress maps to shipping_address object
-	ShippingAddress struct {
-		RecipientName string `json:"recipient_name,omitempty"`
-		Type          string `json:"type,omitempty"`
-		Line1         string `json:"line1"`
-		Line2         string `json:"line2,omitempty"`
-		City          string `json:"city"`
-		CountryCode   string `json:"country_code"`
-		PostalCode    string `json:"postal_code,omitempty"`
-		State         string `json:"state,omitempty"`
-		Phone         string `json:"phone,omitempty"`
-	}
-
-	// RedirectURLs maps to redirect_urls object
-	RedirectURLs struct {
-		ReturnURL string `json:"return_url,omitempty"`
-		CancelURL string `json:"cancel_url,omitempty"`
-	}
-
-	// Links maps to links object
-	Links struct {
-		Href    string `json:"href"`
-		Rel     string `json:"rel"`
-		Method  string `json:"method"`
-		Enctype string `json:"enctype"`
-	}
-
-	// Payment maps to payment object
+	// Payment struct
 	Payment struct {
 		Intent              string        `json:"intent"`
 		Payer               *Payer        `json:"payer"`
@@ -183,50 +199,33 @@ type (
 		ExperienceProfileID string        `json:"experience_profile_id,omitempty"`
 	}
 
-	// Item maps to item object
-	Item struct {
-		Quantity    int    `json:"quantity"`
-		Name        string `json:"name"`
-		Price       string `json:"price"`
-		Currency    string `json:"currency"`
-		SKU         string `json:"sku,omitempty"`
-		Description string `json:"description,omitempty"`
-		Tax         string `json:"tax,omitempty"`
-	}
-
-	// ItemList maps to item_list object
-	ItemList struct {
-		Items           []Item           `json:"items,omitempty"`
-		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
-	}
-
-	// Transaction maps to transaction object
-	Transaction struct {
-		Amount         *Amount   `json:"amount"`
-		Description    string    `json:"description,omitempty"`
-		ItemList       *ItemList `json:"item_list,omitempty"`
-		InvoiceNumber  string    `json:"invoice_number,omitempty"`
-		Custom         string    `json:"custom,omitempty"`
-		SoftDescriptor string    `json:"soft_descriptor,omitempty"`
-	}
-
 	// PaymentLink structure
 	PaymentLink struct {
 		Href string `json:"href"`
 		Rel  string `json:"rel"`
 	}
 
-	// Amount to pay
-	Amount struct {
-		Currency string `json:"currency"`
-		Total    string `json:"total"`
-	}
-
-	// ExecuteResponse structure
-	ExecuteResponse struct {
+	// PaymentResponse structure
+	PaymentResponse struct {
 		ID    string        `json:"id"`
 		Links []PaymentLink `json:"links"`
-		State string        `json:"state"`
+	}
+
+	// RedirectURLs for redirect_urls
+	RedirectURLs struct {
+		ReturnURL string `json:"return_url,omitempty"`
+		CancelURL string `json:"cancel_url,omitempty"`
+	}
+
+	// Refund will be returned by RefundSale
+	Refund struct {
+		ID            string     `json:"id,omitempty"`
+		Amount        *Amount    `json:"amount,omitempty"`
+		CreateTime    *time.Time `json:"create_time,omitempty"`
+		State         string     `json:"state,omitempty"`
+		CaptureID     string     `json:"capture_id,omitempty"`
+		ParentPayment string     `json:"parent_payment,omitempty"`
+		UpdateTime    *time.Time `json:"update_time,omitempty"`
 	}
 
 	// Sale will be returned by GetSale
@@ -247,15 +246,34 @@ type (
 		Links                     []Links    `json:"links,omitempty"`
 	}
 
-	// Refund will be returned by RefundSale
-	Refund struct {
-		ID            string     `json:"id,omitempty"`
-		Amount        *Amount    `json:"amount,omitempty"`
-		CreateTime    *time.Time `json:"create_time,omitempty"`
-		State         string     `json:"state,omitempty"`
-		CaptureID     string     `json:"capture_id,omitempty"`
-		ParentPayment string     `json:"parent_payment,omitempty"`
-		UpdateTime    *time.Time `json:"update_time,omitempty"`
+	// ShippingAddress for shipping_address
+	ShippingAddress struct {
+		RecipientName string `json:"recipient_name,omitempty"`
+		Type          string `json:"type,omitempty"`
+		Line1         string `json:"line1"`
+		Line2         string `json:"line2,omitempty"`
+		City          string `json:"city"`
+		CountryCode   string `json:"country_code"`
+		PostalCode    string `json:"postal_code,omitempty"`
+		State         string `json:"state,omitempty"`
+		Phone         string `json:"phone,omitempty"`
+	}
+
+	// TokenResponse is for API response for the /oauth2/token endpoint
+	TokenResponse struct {
+		RefreshToken string `json:"refresh_token"`
+		Token        string `json:"access_token"`
+		Type         string `json:"token_type"`
+	}
+
+	// Transaction is for transaction object
+	Transaction struct {
+		Amount         *Amount   `json:"amount"`
+		Description    string    `json:"description,omitempty"`
+		ItemList       *ItemList `json:"item_list,omitempty"`
+		InvoiceNumber  string    `json:"invoice_number,omitempty"`
+		Custom         string    `json:"custom,omitempty"`
+		SoftDescriptor string    `json:"soft_descriptor,omitempty"`
 	}
 )
 

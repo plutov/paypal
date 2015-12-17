@@ -91,4 +91,36 @@ func main() {
 		fmt.Println("ERROR: " + err.Error())
 	}
 	fmt.Println("OK")
+
+	order, err := client.GetOrder("1")
+	if err == nil {
+		fmt.Println("DEBUG: OrderID=" + order.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
+	fmt.Println("OK")
+
+	auth, err := client.AuthorizeOrder("1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+	if err == nil {
+		fmt.Println("DEBUG: AuthID=" + auth.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
+	fmt.Println("OK")
+
+	capture, err := client.CaptureOrder("1", &paypalsdk.Amount{Total: "100", Currency: "USD"}, true, nil)
+	if err == nil {
+		fmt.Println("DEBUG: CaptureID=" + capture.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
+	fmt.Println("OK")
+
+	order, err = client.VoidOrder("1")
+	if err == nil {
+		fmt.Println("DEBUG: OrderID=" + order.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
+	fmt.Println("OK")
 }

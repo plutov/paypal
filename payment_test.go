@@ -1,6 +1,7 @@
 package paypalsdk
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -19,6 +20,8 @@ func TestCreateDirectPaypalPayment(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid token")
+	} else {
+		fmt.Println(err.Error())
 	}
 }
 
@@ -32,6 +35,8 @@ func TestGetPayment(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid ID")
+	} else {
+		fmt.Println(err.Error())
 	}
 }
 
@@ -58,5 +63,7 @@ func TestExecuteApprovedPayment(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid token")
+	} else {
+		fmt.Println(err.Error())
 	}
 }

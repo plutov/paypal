@@ -1,6 +1,7 @@
 package paypalsdk
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -17,6 +18,8 @@ func TestGetAuthorization(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid Auth ID")
+	} else {
+		fmt.Println(err.Error())
 	}
 }
 
@@ -28,6 +31,8 @@ func TestCaptureAuthorization(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid Auth ID")
+	} else {
+		fmt.Println(err.Error())
 	}
 }
 
@@ -39,6 +44,8 @@ func TestVoidAuthorization(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid Auth ID")
+	} else {
+		fmt.Println(err.Error())
 	}
 }
 
@@ -50,5 +57,7 @@ func TestReauthorizeAuthorization(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Error must be returned for invalid Auth ID")
+	} else {
+		fmt.Println(err.Error())
 	}
 }
