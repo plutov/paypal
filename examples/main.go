@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"fmt"
-	"os"
 )
 
 func main() {
@@ -14,7 +13,6 @@ func main() {
 		fmt.Println("DEBUG: ClientID=" + client.ClientID + " APIBase=" + client.APIBase)
 	} else {
 		fmt.Println("ERROR: " + err.Error())
-		os.Exit(1)
 	}
 
 	token, err := client.GetAccessToken()
@@ -22,7 +20,6 @@ func main() {
 		fmt.Println("DEBUG: AccessToken=" + token.Token)
 	} else {
 		fmt.Println("ERROR: " + err.Error())
-		os.Exit(1)
 	}
 
 	payment, err := client.GetPayment("PAY-TEST-123")
@@ -33,7 +30,6 @@ func main() {
 		fmt.Println("DEBUG: PaymentsCount=" + strconv.Itoa(len(payments)))
 	} else {
 		fmt.Println("ERROR: " + err.Error())
-		os.Exit(1)
 	}
 
 	p := paypalsdk.Payment{
@@ -69,7 +65,22 @@ func main() {
 		fmt.Println("DEBUG: CreatedPaymentID=" + paymentResponse.Payment.ID)
 	} else {
 		fmt.Println("ERROR: " + err.Error())
-		os.Exit(1)
+	}
+	fmt.Println("OK")
+
+	sale, err := client.GetSale("1")
+	if err == nil {
+		fmt.Println("DEBUG: SaleID=" + sale.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
+	fmt.Println("OK")
+
+	refund, err := client.RefundSale("1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+	if err == nil {
+		fmt.Println("DEBUG: RefundID=" + refund.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
 	}
 	fmt.Println("OK")
 }

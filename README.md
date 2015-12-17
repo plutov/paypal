@@ -11,6 +11,8 @@
  * POST /v1/payments/authorization/**ID**/capture
  * POST /v1/payments/authorization/**ID**/void
  * POST /v1/payments/authorization/**ID**/reauthorize
+ * GET /v1/payments/sale/**ID**
+ * POST /v1/payments/sale/**ID**/refund
 
 #### Create client
 
@@ -128,4 +130,19 @@ auth, err := c.VoidAuthorization("AUTH-1")
 
 ```go
 auth, err := c.ReauthorizeAuthorization("AUTH-1", &paypalsdk.Amount{Total: "200", Currency: "USD"})
+```
+
+#### Get Sale by ID
+
+```go
+sale, err := c.GetSale("1")
+```
+
+#### Refund Sale by ID
+
+```go
+// Full
+refund, err := c.RefundSale("1", nil)
+// Partial
+refund, err := c.RefundSale("1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
 ```

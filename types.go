@@ -228,6 +228,35 @@ type (
 		Links []PaymentLink `json:"links"`
 		State string        `json:"state"`
 	}
+
+	// Sale will be returned by GetSale
+	Sale struct {
+		ID                        string     `json:"id,omitempty"`
+		Amount                    *Amount    `json:"amount,omitempty"`
+		Description               string     `json:"description,omitempty"`
+		CreateTime                *time.Time `json:"create_time,omitempty"`
+		State                     string     `json:"state,omitempty"`
+		ParentPayment             string     `json:"parent_payment,omitempty"`
+		UpdateTime                *time.Time `json:"update_time,omitempty"`
+		PaymentMode               string     `json:"payment_mode,omitempty"`
+		PendingReason             string     `json:"pending_reason,omitempty"`
+		ReasonCode                string     `json:"reason_code,omitempty"`
+		ClearingTime              string     `json:"clearing_time,omitempty"`
+		ProtectionEligibility     string     `json:"protection_eligibility,omitempty"`
+		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
+		Links                     []Links    `json:"links,omitempty"`
+	}
+
+	// Refund will be returned by RefundSale
+	Refund struct {
+		ID            string     `json:"id,omitempty"`
+		Amount        *Amount    `json:"amount,omitempty"`
+		CreateTime    *time.Time `json:"create_time,omitempty"`
+		State         string     `json:"state,omitempty"`
+		CaptureID     string     `json:"capture_id,omitempty"`
+		ParentPayment string     `json:"parent_payment,omitempty"`
+		UpdateTime    *time.Time `json:"update_time,omitempty"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct
