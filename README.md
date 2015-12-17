@@ -19,7 +19,10 @@
  * POST /v1/payments/orders/**ID**/capture
  * POST /v1/payments/orders/**ID**/do-void
 
-#### Create client
+#### Missing endpoints
+It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
+
+#### Create Client
 
 ```go
 import "github.com/logpacker/paypalsdk"
@@ -116,68 +119,71 @@ payments, err := c.GetPayments()
 #### Get authorization by ID
 
 ```go
-auth, err := c.GetAuthorization("AUTH-1")
+authID := "2DC87612EK520411B"
+auth, err := c.GetAuthorization(authID)
 ```
 
 #### Capture authorization
 
 ```go
-capture, err := c.CaptureAuthorization("AUTH-1", &paypalsdk.Amount{Total: "200", Currency: "USD"}, true)
+capture, err := c.CaptureAuthorization(authID, &paypalsdk.Amount{Total: "200", Currency: "USD"}, true)
 ```
 
 #### Void authorization
 
 ```go
-auth, err := c.VoidAuthorization("AUTH-1")
+auth, err := c.VoidAuthorization(authID)
 ```
 
 #### Reauthorize authorization
 
 ```go
-auth, err := c.ReauthorizeAuthorization("AUTH-1", &paypalsdk.Amount{Total: "200", Currency: "USD"})
+auth, err := c.ReauthorizeAuthorization(authID, &paypalsdk.Amount{Total: "200", Currency: "USD"})
 ```
 
 #### Get Sale by ID
 
 ```go
-sale, err := c.GetSale("SALE-1")
+saleID := "36C38912MN9658832"
+sale, err := c.GetSale(saleID)
 ```
 
 #### Refund Sale by ID
 
 ```go
 // Full
-refund, err := c.RefundSale("SALE-1", nil)
+refund, err := c.RefundSale(saleID, nil)
 // Partial
-refund, err := c.RefundSale("SALE-1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+refund, err := c.RefundSale(saleID, &paypalsdk.Amount{Total: "100", Currency: "USD"})
 ```
 
 #### Get Refund by ID
 
 ```go
-refund, err := c.GetRefund("ORDER-1")
+orderID := "O-4J082351X3132253H"
+refund, err := c.GetRefund(orderID)
 ```
 
 #### Get Order by ID
 
 ```go
-order, err := c.GetOrder("ORDER-1")
+order, err := c.GetOrder(orderID)
 ```
 
 #### Authorize Order
 
 ```go
-auth, err := c.AuthorizeOrder("ORDER-1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+auth, err := c.AuthorizeOrder(orderID, &paypalsdk.Amount{Total: "100", Currency: "USD"})
 ```
 
 #### Capture Order
 
 ```go
-capture, err := c.CaptureOrder("ORDER-1", &paypalsdk.Amount{Total: "100", Currency: "USD"}, true, nil)
+capture, err := c.CaptureOrder(orderID, &paypalsdk.Amount{Total: "100", Currency: "USD"}, true, nil)
 ```
 
 #### Void Order
 
 ```go
-order, err := c.VoidOrder("ORDER-1")
+order, err := c.VoidOrder(orderID)
 ```
