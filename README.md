@@ -13,6 +13,7 @@
  * POST /v1/payments/authorization/**ID**/reauthorize
  * GET /v1/payments/sale/**ID**
  * POST /v1/payments/sale/**ID**/refund
+ * GET /v1/payments/refund/**ID**
 
 #### Create client
 
@@ -145,4 +146,10 @@ sale, err := c.GetSale("1")
 refund, err := c.RefundSale("1", nil)
 // Partial
 refund, err := c.RefundSale("1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+```
+
+#### Get Refund by ID
+
+```go
+refund, err := c.GetRefund("1")
 ```

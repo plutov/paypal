@@ -26,3 +26,13 @@ func TestRefundSale(t *testing.T) {
 		t.Errorf("RefundSale must be failed")
 	}
 }
+
+func TestGetRefund(t *testing.T) {
+	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c.GetAccessToken()
+
+	_, err := c.GetRefund("1")
+	if err == nil {
+		t.Errorf("GetRefund must be failed")
+	}
+}

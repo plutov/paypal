@@ -83,4 +83,12 @@ func main() {
 		fmt.Println("ERROR: " + err.Error())
 	}
 	fmt.Println("OK")
+
+	refund, err = client.GetRefund("1")
+	if err == nil {
+		fmt.Println("DEBUG: RefundID=" + refund.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
+	fmt.Println("OK")
 }

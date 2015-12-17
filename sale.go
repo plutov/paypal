@@ -40,3 +40,20 @@ func (c *Client) RefundSale(saleID string, a *Amount) (*Refund, error) {
 
 	return refund, nil
 }
+
+// GetRefund by ID
+func (c *Client) GetRefund(refundID string) (*Refund, error) {
+	refund := &Refund{}
+
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/refund/"+refundID), nil)
+	if err != nil {
+		return refund, err
+	}
+
+	err = c.SendWithAuth(req, refund)
+	if err != nil {
+		return refund, err
+	}
+
+	return refund, nil
+}
