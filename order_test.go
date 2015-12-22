@@ -10,9 +10,13 @@ func TestGetOrder(t *testing.T) {
 	c.GetAccessToken()
 
 	o, err := c.GetOrder(testOrderID)
-
 	if err != nil || o.ID != testOrderID {
 		t.Errorf("GetOrder failed for ID=" + testOrderID)
+	}
+
+	o, err = c.GetOrder(testFakeOrderID)
+	if err == nil {
+		t.Errorf("GetOrder must return error for ID=" + testFakeOrderID)
 	}
 }
 

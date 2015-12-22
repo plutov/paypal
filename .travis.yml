@@ -1,6 +1,6 @@
 language: go
 go:
- - 1.4
+ - 1.5
 install:
  - export PATH=$PATH:$HOME/gopath/bin
 script:

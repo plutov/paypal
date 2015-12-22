@@ -18,9 +18,13 @@ func TestGetAuthorization(t *testing.T) {
 	c.GetAccessToken()
 
 	a, err := c.GetAuthorization(testAuthID)
-
 	if err != nil || a.ID != testAuthID {
 		t.Errorf("GetAuthorization failed for ID=" + testAuthID)
+	}
+
+	a, err = c.GetAuthorization(testFakeAuthID)
+	if err == nil {
+		t.Errorf("GetAuthorization must return error for ID=" + testFakeAuthID)
 	}
 }
 
