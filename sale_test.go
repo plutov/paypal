@@ -6,43 +6,43 @@ import (
 )
 
 func TestGetSale(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	_, err := c.GetSale("1")
+	_, err := c.GetSale(testSaleID)
 	if err == nil {
-		t.Errorf("GetSale must be failed")
+		t.Errorf("404 must be returned for ID=" + testSaleID)
 	} else {
 		fmt.Println(err.Error())
 	}
 }
 
 func TestRefundSale(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	_, err := c.RefundSale("1", nil)
+	_, err := c.RefundSale(testSaleID, nil)
 	if err == nil {
-		t.Errorf("RefundSale must be failed")
+		t.Errorf("404 must be returned for ID=" + testSaleID)
 	} else {
 		fmt.Println(err.Error())
 	}
 
-	_, err = c.RefundSale("1", &Amount{Total: "100", Currency: "USD"})
+	_, err = c.RefundSale(testSaleID, &Amount{Total: "7.00", Currency: "USD"})
 	if err == nil {
-		t.Errorf("RefundSale must be failed")
+		t.Errorf("404 must be returned for ID=" + testSaleID)
 	} else {
 		fmt.Println(err.Error())
 	}
 }
 
 func TestGetRefund(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
 	_, err := c.GetRefund("1")
 	if err == nil {
-		t.Errorf("GetRefund must be failed")
+		t.Errorf("404 must be returned for ID=" + testSaleID)
 	} else {
 		fmt.Println(err.Error())
 	}

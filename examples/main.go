@@ -76,7 +76,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	refund, err := client.RefundSale("1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+	refund, err := client.RefundSale("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 	if err == nil {
 		fmt.Println("DEBUG: RefundID=" + refund.ID)
 	} else {
@@ -100,7 +100,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	auth, err := client.AuthorizeOrder("1", &paypalsdk.Amount{Total: "100", Currency: "USD"})
+	auth, err := client.AuthorizeOrder("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 	if err == nil {
 		fmt.Println("DEBUG: AuthID=" + auth.ID)
 	} else {
@@ -108,7 +108,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	capture, err := client.CaptureOrder("1", &paypalsdk.Amount{Total: "100", Currency: "USD"}, true, nil)
+	capture, err := client.CaptureOrder("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true, nil)
 	if err == nil {
 		fmt.Println("DEBUG: CaptureID=" + capture.ID)
 	} else {

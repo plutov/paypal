@@ -6,63 +6,53 @@ import (
 )
 
 func TestCreateDirectPaypalPayment(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
-	c.Token = &TokenResponse{
-		Token: "invalidtoken",
-	}
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
 
 	amount := Amount{
-		Total:    "15.1111",
+		Total:    "15.11",
 		Currency: "USD",
 	}
 
-	_, err := c.CreateDirectPaypalPayment(amount, "http://example.com", "http://example.com", "test payment")
+	p, err := c.CreateDirectPaypalPayment(amount, "http://example.com", "http://example.com", "test payment")
 
-	if err == nil {
-		t.Errorf("Error must be returned for invalid token")
-	} else {
-		fmt.Println(err.Error())
+	if err != nil || p.ID == "" {
+		t.Errorf("Test paypal payment is not created")
 	}
 }
 
 func TestGetPayment(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
-	c.Token = &TokenResponse{
-		Token: "invalidtoken",
-	}
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
 
-	_, err := c.GetPayment("PAY-TEST-123")
+	_, err := c.GetPayment(testPaymentID)
 
 	if err == nil {
-		t.Errorf("Error must be returned for invalid ID")
+		t.Errorf("404 for this payment ID")
 	} else {
 		fmt.Println(err.Error())
 	}
 }
 
 func TestGetPayments(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
-	c.Token = &TokenResponse{
-		Token: "invalidtoken",
-	}
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
 
 	payments, _ := c.GetPayments()
 
-	if len(payments) != 0 {
-		t.Errorf("0 payments must be returned for unautgorized request")
+	if len(payments) != 5 {
+		t.Errorf("5 payments must be returned for GetPayments")
 	}
 }
 
 func TestExecuteApprovedPayment(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
-	c.Token = &TokenResponse{
-		Token: "invalidtoken",
-	}
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
 
-	_, err := c.ExecuteApprovedPayment("PAY-6RV70583SB702805EKEYSZ6Y", "7E7MGXCWTTKK2")
+	_, err := c.ExecuteApprovedPayment(testPaymentID, testPayerID)
 
 	if err == nil {
-		t.Errorf("Error must be returned for invalid token")
+		t.Errorf("404 for this payment ID")
 	} else {
 		fmt.Println(err.Error())
 	}

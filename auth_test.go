@@ -6,57 +6,58 @@ import (
 )
 
 func TestGetAccessToken(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
-	c.GetAccessToken()
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	token, err := c.GetAccessToken()
+	if err != nil || token.Token == "" {
+		t.Errorf("Token is not returned by GetAccessToken")
+	}
 }
 
 func TestGetAuthorization(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	_, err := c.GetAuthorization("123")
+	a, err := c.GetAuthorization(testAuthID)
 
-	if err == nil {
-		t.Errorf("Error must be returned for invalid Auth ID")
-	} else {
-		fmt.Println(err.Error())
+	if err != nil || a.ID != testAuthID {
+		t.Errorf("GetAuthorization failed for ID=" + testAuthID)
 	}
 }
 
 func TestCaptureAuthorization(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	_, err := c.CaptureAuthorization("123", &Amount{Total: "200", Currency: "USD"}, true)
+	_, err := c.CaptureAuthorization(testAuthID, &Amount{Total: "200", Currency: "USD"}, true)
 
 	if err == nil {
-		t.Errorf("Error must be returned for invalid Auth ID")
+		t.Errorf("Auth is expired, 400 error must be returned")
 	} else {
 		fmt.Println(err.Error())
 	}
 }
 
 func TestVoidAuthorization(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	_, err := c.VoidAuthorization("123")
+	_, err := c.VoidAuthorization(testAuthID)
 
 	if err == nil {
-		t.Errorf("Error must be returned for invalid Auth ID")
+		t.Errorf("Auth is expired, 400 error must be returned")
 	} else {
 		fmt.Println(err.Error())
 	}
 }
 
 func TestReauthorizeAuthorization(t *testing.T) {
-	c, _ := NewClient("clid", "secret", APIBaseSandBox)
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	_, err := c.ReauthorizeAuthorization("123", &Amount{Total: "200", Currency: "USD"})
+	_, err := c.ReauthorizeAuthorization(testAuthID, &Amount{Total: "200", Currency: "USD"})
 
 	if err == nil {
-		t.Errorf("Error must be returned for invalid Auth ID")
+		t.Errorf("Reauthorization not allowed for this product, 500 error must be returned")
 	} else {
 		fmt.Println(err.Error())
 	}
