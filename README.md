@@ -44,8 +44,8 @@ accessToken, err := c.GetAccessToken()
 
 ```go
 // Now we can create a paypal payment
-amount := Amount{
-    Total:    "15.11",
+amount := paypalsdk.Amount{
+    Total:    "7.00",
     Currency: "USD",
 }
 redirectURI := "http://example.com/redirect-uri"
@@ -79,7 +79,7 @@ p := paypalsdk.Payment{
     Transactions: []paypalsdk.Transaction{paypalsdk.Transaction{
         Amount: &paypalsdk.Amount{
             Currency: "USD",
-            Total:    "200",
+            Total:    "7.00",
         },
         Description: "My Payment",
     }},
@@ -126,7 +126,7 @@ auth, err := c.GetAuthorization(authID)
 #### Capture authorization
 
 ```go
-capture, err := c.CaptureAuthorization(authID, &paypalsdk.Amount{Total: "200", Currency: "USD"}, true)
+capture, err := c.CaptureAuthorization(authID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true)
 ```
 
 #### Void authorization
@@ -138,7 +138,7 @@ auth, err := c.VoidAuthorization(authID)
 #### Reauthorize authorization
 
 ```go
-auth, err := c.ReauthorizeAuthorization(authID, &paypalsdk.Amount{Total: "200", Currency: "USD"})
+auth, err := c.ReauthorizeAuthorization(authID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 ```
 
 #### Get Sale by ID
@@ -154,7 +154,7 @@ sale, err := c.GetSale(saleID)
 // Full
 refund, err := c.RefundSale(saleID, nil)
 // Partial
-refund, err := c.RefundSale(saleID, &paypalsdk.Amount{Total: "100", Currency: "USD"})
+refund, err := c.RefundSale(saleID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 ```
 
 #### Get Refund by ID
@@ -173,13 +173,13 @@ order, err := c.GetOrder(orderID)
 #### Authorize Order
 
 ```go
-auth, err := c.AuthorizeOrder(orderID, &paypalsdk.Amount{Total: "100", Currency: "USD"})
+auth, err := c.AuthorizeOrder(orderID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 ```
 
 #### Capture Order
 
 ```go
-capture, err := c.CaptureOrder(orderID, &paypalsdk.Amount{Total: "100", Currency: "USD"}, true, nil)
+capture, err := c.CaptureOrder(orderID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true, nil)
 ```
 
 #### Void Order
