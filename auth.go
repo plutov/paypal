@@ -7,6 +7,8 @@ import (
 )
 
 // GetAccessToken returns struct of TokenResponse
+// No need to call SetAccessToken to apply new access token for current Client
+// Endpoint: POST /v1/oauth2/token
 func (c *Client) GetAccessToken() (*TokenResponse, error) {
 	buf := bytes.NewBuffer([]byte("grant_type=client_credentials"))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/oauth2/token"), buf)
@@ -29,6 +31,7 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 }
 
 // GetAuthorization returns an authorization by ID
+// Endpoint: GET /v1/payments/authorization/ID
 func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(""))
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/authorization/"+authID), buf)
@@ -48,6 +51,7 @@ func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 
 // CaptureAuthorization captures and process an existing authorization.
 // To use this method, the original payment must have Intent set to "authorize"
+// Endpoint: POST /v1/payments/authorization/ID/capture
 func (c *Client) CaptureAuthorization(authID string, a *Amount, isFinalCapture bool) (*Capture, error) {
 	isFinalStr := "false"
 	if isFinalCapture {
@@ -70,6 +74,7 @@ func (c *Client) CaptureAuthorization(authID string, a *Amount, isFinalCapture b
 }
 
 // VoidAuthorization voids a previously authorized payment
+// Endpoint: POST /v1/payments/authorization/ID/void
 func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(""))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/authorization/"+authID+"/void"), buf)
@@ -89,6 +94,7 @@ func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 
 // ReauthorizeAuthorization reauthorize a Paypal account payment.
 // PayPal recommends to reauthorize payment after ~3 days
+// Endpoint: POST /v1/payments/authorization/ID/reauthorize
 func (c *Client) ReauthorizeAuthorization(authID string, a *Amount) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte("{\"amount\":{\"currency\":\"" + a.Currency + "\",\"total\":\"" + a.Total + "\"}}"))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/authorization/"+authID+"/reauthorize"), buf)
@@ -104,5 +110,4 @@ func (c *Client) ReauthorizeAuthorization(authID string, a *Amount) (*Authorizat
 	}
 
 	return auth, nil
-
 }

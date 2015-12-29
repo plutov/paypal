@@ -15,7 +15,7 @@ const (
 )
 
 type (
-	// Address struct
+	// Address https://developer.paypal.com/webapps/developer/docs/api/#address-object
 	Address struct {
 		Line1       string `json:"line1"`
 		Line2       string `json:"line2,omitempty"`
@@ -26,13 +26,13 @@ type (
 		Phone       string `json:"phone,omitempty"`
 	}
 
-	// Amount to pay
+	// Amount https://developer.paypal.com/webapps/developer/docs/api/#amount-object
 	Amount struct {
 		Currency string `json:"currency"`
 		Total    string `json:"total"`
 	}
 
-	// Authorization represetns PayPal authorization
+	// Authorization rhttps://developer.paypal.com/webapps/developer/docs/api/#authorization-object
 	Authorization struct {
 		Amount                    *Amount    `json:"amount,omitempty"`
 		CreateTime                *time.Time `json:"create_time,omitempty"`
@@ -47,7 +47,7 @@ type (
 		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
 	}
 
-	// Capture struct
+	// Capture https://developer.paypal.com/webapps/developer/docs/api/#capture-object
 	Capture struct {
 		Amount         *Amount    `json:"amount,omitempty"`
 		IsFinalCapture bool       `json:"is_final_capture"`
@@ -69,7 +69,7 @@ type (
 		Token    *TokenResponse
 	}
 
-	// CreditCard struct
+	// CreditCard https://developer.paypal.com/webapps/developer/docs/api/#creditcard-object
 	CreditCard struct {
 		ID             string   `json:"id,omitempty"`
 		PayerID        string   `json:"payer_id,omitempty"`
@@ -85,7 +85,7 @@ type (
 		ValidUntil     string   `json:"valid_until,omitempty"`
 	}
 
-	// CreditCardToken struct
+	// CreditCardToken https://developer.paypal.com/webapps/developer/docs/api/#creditcardtoken-object
 	CreditCardToken struct {
 		CreditCardID string `json:"credit_card_id"`
 		PayerID      string `json:"payer_id,omitempty"`
@@ -100,7 +100,7 @@ type (
 		Value    string `json:"value,omitempty"`
 	}
 
-	// ErrorResponse is used when a response has errors
+	// ErrorResponse https://developer.paypal.com/webapps/developer/docs/api/#error-object
 	ErrorResponse struct {
 		Response        *http.Response `json:"-"`
 		Name            string         `json:"name"`
@@ -110,7 +110,7 @@ type (
 		Details         []ErrorDetail  `json:"details"`
 	}
 
-	// ErrorDetail map to error_details object
+	// ErrorDetail https://developer.paypal.com/webapps/developer/docs/api/#errordetails-object
 	ErrorDetail struct {
 		Field string `json:"field"`
 		Issue string `json:"issue"`
@@ -123,13 +123,13 @@ type (
 		State string        `json:"state"`
 	}
 
-	// FundingInstrument struct
+	// FundingInstrument https://developer.paypal.com/webapps/developer/docs/api/#fundinginstrument-object
 	FundingInstrument struct {
 		CreditCard      *CreditCard      `json:"credit_card,omitempty"`
 		CreditCardToken *CreditCardToken `json:"credit_card_token,omitempty"`
 	}
 
-	// Item struct
+	// Item https://developer.paypal.com/webapps/developer/docs/api/#item-object
 	Item struct {
 		Quantity    int    `json:"quantity"`
 		Name        string `json:"name"`
@@ -146,7 +146,7 @@ type (
 		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
 	}
 
-	// Links struct
+	// Links https://developer.paypal.com/webapps/developer/docs/api/#itemlist-object
 	Links struct {
 		Href    string `json:"href"`
 		Rel     string `json:"rel"`
@@ -166,7 +166,7 @@ type (
 		Links         []Links    `json:"links,omitempty"`
 	}
 
-	// Payer struct
+	// Payer https://developer.paypal.com/webapps/developer/docs/api/#payer-object
 	Payer struct {
 		PaymentMethod      string              `json:"payment_method"`
 		FundingInstruments []FundingInstrument `json:"funding_instruments,omitempty"`
@@ -174,7 +174,7 @@ type (
 		Status             string              `json:"payer_status,omitempty"`
 	}
 
-	// PayerInfo struct
+	// PayerInfo https://developer.paypal.com/webapps/developer/docs/api/#itemlist-object
 	PayerInfo struct {
 		Email           string           `json:"email,omitempty"`
 		FirstName       string           `json:"first_name,omitempty"`
@@ -186,7 +186,7 @@ type (
 		TaxID           string           `json:"tax_id,omitempty"`
 	}
 
-	// Payment struct
+	// Payment https://developer.paypal.com/webapps/developer/docs/api/#payment-object
 	Payment struct {
 		Intent              string        `json:"intent"`
 		Payer               *Payer        `json:"payer"`
@@ -199,7 +199,7 @@ type (
 		ExperienceProfileID string        `json:"experience_profile_id,omitempty"`
 	}
 
-	// PaymentLink structure
+	// PaymentLink https://developer.paypal.com/webapps/developer/docs/api/#paymentlink-object
 	PaymentLink struct {
 		Href string `json:"href"`
 		Rel  string `json:"rel"`
@@ -211,13 +211,13 @@ type (
 		Links []PaymentLink `json:"links"`
 	}
 
-	// RedirectURLs for redirect_urls
+	// RedirectURLs https://developer.paypal.com/webapps/developer/docs/api/#redirecturls-object
 	RedirectURLs struct {
 		ReturnURL string `json:"return_url,omitempty"`
 		CancelURL string `json:"cancel_url,omitempty"`
 	}
 
-	// Refund will be returned by RefundSale
+	// Refund https://developer.paypal.com/webapps/developer/docs/api/#refund-object
 	Refund struct {
 		ID            string     `json:"id,omitempty"`
 		Amount        *Amount    `json:"amount,omitempty"`
@@ -228,7 +228,7 @@ type (
 		UpdateTime    *time.Time `json:"update_time,omitempty"`
 	}
 
-	// Sale will be returned by GetSale
+	// Sale https://developer.paypal.com/webapps/developer/docs/api/#sale-object
 	Sale struct {
 		ID                        string     `json:"id,omitempty"`
 		Amount                    *Amount    `json:"amount,omitempty"`
@@ -246,7 +246,7 @@ type (
 		Links                     []Links    `json:"links,omitempty"`
 	}
 
-	// ShippingAddress for shipping_address
+	// ShippingAddress https://developer.paypal.com/webapps/developer/docs/api/#shippingaddredd-object
 	ShippingAddress struct {
 		RecipientName string `json:"recipient_name,omitempty"`
 		Type          string `json:"type,omitempty"`
@@ -266,7 +266,7 @@ type (
 		Type         string `json:"token_type"`
 	}
 
-	// Transaction is for transaction object
+	// Transaction https://developer.paypal.com/webapps/developer/docs/api/#transaction-object
 	Transaction struct {
 		Amount         *Amount   `json:"amount"`
 		Description    string    `json:"description,omitempty"`

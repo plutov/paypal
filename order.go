@@ -2,7 +2,8 @@ package paypalsdk
 
 import "fmt"
 
-// GetOrder retreives order
+// GetOrder retreives order by ID
+// Endpoint: GET /v1/payments/orders/ID
 func (c *Client) GetOrder(orderID string) (*Order, error) {
 	order := &Order{}
 
@@ -19,7 +20,8 @@ func (c *Client) GetOrder(orderID string) (*Order, error) {
 	return order, nil
 }
 
-// AuthorizeOrder POST /v1/payments/orders/<Order-Id>/authorize
+// AuthorizeOrder - Use this call to authorize an order.
+// Endpoint: POST /v1/payments/orders/ID/authorize
 func (c *Client) AuthorizeOrder(orderID string, amount *Amount) (*Authorization, error) {
 	type authRequest struct {
 		Amount *Amount `json:"amount"`
@@ -40,7 +42,8 @@ func (c *Client) AuthorizeOrder(orderID string, amount *Amount) (*Authorization,
 	return auth, nil
 }
 
-// CaptureOrder POST /v1/payments/orders/<Order-Id>/capture
+// CaptureOrder - Use this call to capture a payment on an order. To use this call, an original payment call must specify an intent of order.
+// Endpoint: POST /v1/payments/orders/ID/capture
 func (c *Client) CaptureOrder(orderID string, amount *Amount, isFinalCapture bool, currency *Currency) (*Capture, error) {
 	type captureRequest struct {
 		Amount         *Amount   `json:"amount"`
@@ -63,7 +66,9 @@ func (c *Client) CaptureOrder(orderID string, amount *Amount, isFinalCapture boo
 	return capture, nil
 }
 
-// VoidOrder POST /v1/payments/orders/<Order-Id>/do-void
+// VoidOrder - Use this call to void an existing order.
+// Note: An order cannot be voided if payment has already been partially or fully captured.
+// Endpoint: POST /v1/payments/orders/ID/do-void
 func (c *Client) VoidOrder(orderID string) (*Order, error) {
 	order := &Order{}
 

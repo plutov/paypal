@@ -12,14 +12,15 @@ type ListPaymentsResp struct {
 	Payments []Payment `json:"payments"`
 }
 
-// CreatePaymentResp returned by CreatePayment
+// CreatePaymentResp contains Payment Info and Links slice
 type CreatePaymentResp struct {
 	*Payment
 	Links []Links `json:"links"`
 }
 
-// CreateDirectPaypalPayment sends request with payment
+// CreateDirectPaypalPayment sends request to create a payment with payment_method=paypal
 // CreatePayment is more common function for any kind of payment
+// Endpoint: POST /v1/payments/payment
 func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string, cancelURI string, description string) (*PaymentResponse, error) {
 	buf := bytes.NewBuffer([]byte("{\"intent\":\"sale\",\"payer\":{\"payment_method\":\"paypal\"}," +
 		"\"transactions\":[{\"amount\":{\"total\":\"" + amount.Total +
@@ -47,6 +48,8 @@ func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string, ca
 }
 
 // CreatePayment creates a payment in Paypal
+// Depending on the payment_method and the funding_instrument, you can use the payment resource for direct credit card payments, stored credit card payments, or PayPal account payments.
+// Endpoint: POST /v1/payments/payment
 func (c *Client) CreatePayment(p Payment) (*CreatePaymentResp, error) {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment"), p)
 	if err != nil {
@@ -63,7 +66,8 @@ func (c *Client) CreatePayment(p Payment) (*CreatePaymentResp, error) {
 	return response, nil
 }
 
-// ExecuteApprovedPayment executes approved payment
+// ExecuteApprovedPayment - Use this call to execute (complete) a PayPal payment that has been approved by the payer. You can optionally update transaction information when executing the payment by passing in one or more transactions.
+// Endpoint: POST /v1/payments/payment/paymentID/execute
 func (c *Client) ExecuteApprovedPayment(paymentID string, payerID string) (*ExecuteResponse, error) {
 	buf := bytes.NewBuffer([]byte("{\"payer_id\":\"" + payerID + "\"}"))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment/"+paymentID+"/execute"), buf)
@@ -88,6 +92,7 @@ func (c *Client) ExecuteApprovedPayment(paymentID string, payerID string) (*Exec
 }
 
 // GetPayment gets a payment from PayPal
+// Endpoint: GET /v1/payments/payment/ID
 func (c *Client) GetPayment(paymentID string) (*Payment, error) {
 	p := Payment{}
 
@@ -109,6 +114,7 @@ func (c *Client) GetPayment(paymentID string) (*Payment, error) {
 }
 
 // GetPayments retrieve payments resources from Paypal
+// Endpoint: GET /v1/payments/payment/
 func (c *Client) GetPayments() ([]Payment, error) {
 	var p ListPaymentsResp
 

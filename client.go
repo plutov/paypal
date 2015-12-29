@@ -12,6 +12,7 @@ import (
 )
 
 // NewClient returns new Client struct
+// APIBase is a base API URL, for testing you can use paypalsdk.APIBaseSandBox
 func NewClient(clientID string, secret string, APIBase string) (*Client, error) {
 	if clientID == "" || secret == "" || APIBase == "" {
 		return &Client{}, errors.New("ClientID, Secret and APIBase are required to create a Client")
@@ -27,7 +28,8 @@ func NewClient(clientID string, secret string, APIBase string) (*Client, error) 
 	}, nil
 }
 
-// SetLogFile func
+// SetLogFile will set/change a full path to a log file
+// If log file is set paypalsdk will log all requests and responses to this file
 func (c *Client) SetLogFile(filepath string) error {
 	c.LogFile = filepath
 
@@ -115,6 +117,7 @@ func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Requ
 	return http.NewRequest(method, url, buf)
 }
 
+// log will dump request and response to the log file
 func (c *Client) log(req *http.Request, resp *http.Response) {
 	if c.LogFile != "" {
 		os.OpenFile(c.LogFile, os.O_CREATE, 0755)
