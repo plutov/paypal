@@ -188,3 +188,11 @@ capture, err := c.CaptureOrder(orderID, &paypalsdk.Amount{Total: "7.00", Currenc
 ```go
 order, err := c.VoidOrder(orderID)
 ```
+
+#### How to Contribute
+
+* Fork a repository
+* Add/Fix something
+* Run ./before-commit.sh to check that tests passed and code is formatted well
+* Push to your repository
+* Create pull request
