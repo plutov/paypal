@@ -1,7 +1,7 @@
 package main
 
 import (
-	"paypalsdk"
+	paypalsdk "PayPal-Go-SDK"
 	"strconv"
 
 	"fmt"

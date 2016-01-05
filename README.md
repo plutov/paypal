@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/logpacker/paypalsdk.svg?branch=master)](https://travis-ci.org/logpacker/paypalsdk)
-[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/logpacker/paypalsdk)
+[![Build Status](https://travis-ci.org/logpacker/PayPal-Go-SDK.svg?branch=master)](https://travis-ci.org/logpacker/PayPal-Go-SDK)
+[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/logpacker/PayPal-Go-SDK)
 
 #### GO client for PayPal REST API
 
@@ -26,7 +26,7 @@ It is possible that some endpoints are missing in this SDK Client, but you can u
 #### Create Client
 
 ```go
-import "github.com/logpacker/paypalsdk"
+import "github.com/logpacker/PayPal-Go-SDK"
 ```
 
 ```go
