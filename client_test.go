@@ -26,6 +26,6 @@ func TestNewClient(t *testing.T) {
 
 	_, err = NewClient(testClientID, testSecret, APIBaseSandBox)
 	if err != nil {
-		t.Errorf("NewClient() must not return error for valid creds")
+		t.Errorf("NewClient() must not return error for valid creds: " + err.Error())
 	}
 }

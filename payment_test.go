@@ -2,6 +2,7 @@ package paypalsdk
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 )
 
@@ -41,7 +42,7 @@ func TestGetPayments(t *testing.T) {
 	payments, _ := c.GetPayments()
 
 	if len(payments) != 5 {
-		t.Errorf("5 payments must be returned for GetPayments")
+		t.Errorf("5 payments must be returned for GetPayments. Returned: " + strconv.Itoa(len(payments)))
 	}
 }
 

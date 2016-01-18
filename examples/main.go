@@ -8,24 +8,24 @@ import (
 )
 
 func main() {
-	client, err := paypalsdk.NewClient("AZgwu4yt5Ba0gyTu1dGBH3txHCJbMuFNvrmQxBaQbfDncDiCs6W_rwJD8Ir-0pZrN-_eq7n9zVd8Y-5f", "EBzA1wRl5t73OMugOieDj_tI3vihfJmGl47ukQT-cpctooIzDu0K7IPESNC0cKodlLSOXzwI8qXSM0rd", paypalsdk.APIBaseSandBox)
+	c, err := paypalsdk.NewClient("AZgwu4yt5Ba0gyTu1dGBH3txHCJbMuFNvrmQxBaQbfDncDiCs6W_rwJD8Ir-0pZrN-_eq7n9zVd8Y-5f", "EBzA1wRl5t73OMugOieDj_tI3vihfJmGl47ukQT-cpctooIzDu0K7IPESNC0cKodlLSOXzwI8qXSM0rd", paypalsdk.APIBaseSandBox)
 	if err == nil {
-		fmt.Println("DEBUG: ClientID=" + client.ClientID + " APIBase=" + client.APIBase)
+		fmt.Println("DEBUG: ClientID=" + c.ClientID + " APIBase=" + c.APIBase)
 	} else {
 		fmt.Println("ERROR: " + err.Error())
 	}
 
-	token, err := client.GetAccessToken()
+	token, err := c.GetAccessToken()
 	if err == nil {
 		fmt.Println("DEBUG: AccessToken=" + token.Token)
 	} else {
 		fmt.Println("ERROR: " + err.Error())
 	}
 
-	payment, err := client.GetPayment("PAY-TEST-123")
+	payment, err := c.GetPayment("PAY-TEST-123")
 	fmt.Println("DEBUG: PaymentID=" + payment.ID)
 
-	payments, err := client.GetPayments()
+	payments, err := c.GetPayments()
 	if err == nil {
 		fmt.Println("DEBUG: PaymentsCount=" + strconv.Itoa(len(payments)))
 	} else {
@@ -60,7 +60,7 @@ func main() {
 			CancelURL: "http://...",
 		},
 	}
-	paymentResponse, err := client.CreatePayment(p)
+	paymentResponse, err := c.CreatePayment(p)
 	if err == nil {
 		fmt.Println("DEBUG: CreatedPaymentID=" + paymentResponse.Payment.ID)
 	} else {
@@ -68,7 +68,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	sale, err := client.GetSale("1")
+	sale, err := c.GetSale("1")
 	if err == nil {
 		fmt.Println("DEBUG: SaleID=" + sale.ID)
 	} else {
@@ -76,7 +76,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	refund, err := client.RefundSale("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
+	refund, err := c.RefundSale("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 	if err == nil {
 		fmt.Println("DEBUG: RefundID=" + refund.ID)
 	} else {
@@ -84,7 +84,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	refund, err = client.GetRefund("1")
+	refund, err = c.GetRefund("1")
 	if err == nil {
 		fmt.Println("DEBUG: RefundID=" + refund.ID)
 	} else {
@@ -92,7 +92,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	order, err := client.GetOrder("1")
+	order, err := c.GetOrder("1")
 	if err == nil {
 		fmt.Println("DEBUG: OrderID=" + order.ID)
 	} else {
@@ -100,7 +100,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	auth, err := client.AuthorizeOrder("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
+	auth, err := c.AuthorizeOrder("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 	if err == nil {
 		fmt.Println("DEBUG: AuthID=" + auth.ID)
 	} else {
@@ -108,7 +108,7 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	capture, err := client.CaptureOrder("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true, nil)
+	capture, err := c.CaptureOrder("1", &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true, nil)
 	if err == nil {
 		fmt.Println("DEBUG: CaptureID=" + capture.ID)
 	} else {
@@ -116,11 +116,25 @@ func main() {
 	}
 	fmt.Println("OK")
 
-	order, err = client.VoidOrder("1")
+	order, err = c.VoidOrder("1")
 	if err == nil {
 		fmt.Println("DEBUG: OrderID=" + order.ID)
 	} else {
 		fmt.Println("ERROR: " + err.Error())
 	}
 	fmt.Println("OK")
+
+	token1, err := c.GrantNewAccessTokenFromAuthCode("123", "http://example.com/myapp/return.php")
+	if err == nil {
+		fmt.Println("DEBUG: Token=" + token1.Token)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
+
+	token2, err := c.GrantNewAccessTokenFromRefreshToken("123")
+	if err == nil {
+		fmt.Println("DEBUG: Token=" + token2.Token)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
 }

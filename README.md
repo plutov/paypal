@@ -189,6 +189,15 @@ capture, err := c.CaptureOrder(orderID, &paypalsdk.Amount{Total: "7.00", Currenc
 order, err := c.VoidOrder(orderID)
 ```
 
+#### Identity
+
+```go
+// Retreive tolen by authorization code
+token, err := c.GrantNewAccessTokenFromAuthCode("<Authorization-Code>", "http://example.com/myapp/return.php")
+// ... or by refresh token
+token, err := c.GrantNewAccessTokenFromRefreshToken("<Refresh-Token>")
+```
+
 #### How to Contribute
 
 * Fork a repository
