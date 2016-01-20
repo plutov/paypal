@@ -4,6 +4,8 @@
 
 #### GO client for PayPal REST API
 
+[![Join the chat at https://gitter.im/logpacker/PayPal-Go-SDK](https://badges.gitter.im/logpacker/PayPal-Go-SDK.svg)](https://gitter.im/logpacker/PayPal-Go-SDK?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 #### Coverage
  * POST /v1/oauth2/token
  * POST /v1/payments/payment
