@@ -5,17 +5,27 @@ import "testing"
 func TestGrantNewAccessTokenFromAuthCode(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 
-	token, _ := c.GrantNewAccessTokenFromAuthCode("123", "http://example.com/myapp/return.php")
-	if token.Token != "" {
-		t.Errorf("Empty token must be returned for invalid code")
+	_, err := c.GrantNewAccessTokenFromAuthCode("123", "http://example.com/myapp/return.php")
+	if err == nil {
+		t.Errorf("GrantNewAccessTokenFromAuthCode must return error for invalid code")
 	}
 }
 
 func TestGrantNewAccessTokenFromRefreshToken(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 
-	token, _ := c.GrantNewAccessTokenFromRefreshToken("123")
-	if token.Token != "" {
-		t.Errorf("Empty token must be returned for invalid refresh token")
+	_, err := c.GrantNewAccessTokenFromRefreshToken("123")
+	if err == nil {
+		t.Errorf("GrantNewAccessTokenFromRefreshToken must return error for invalid refresh token")
+	}
+}
+
+func TestGetUserInfo(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	u, err := c.GetUserInfo("openid")
+	if u.ID != testUserID || err != nil {
+		t.Errorf("GetUserInfo must return valid test ID=" + testUserID)
 	}
 }

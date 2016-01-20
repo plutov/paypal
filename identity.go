@@ -1,6 +1,9 @@
 package paypalsdk
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 // GrantNewAccessTokenFromAuthCode - Use this call to grant a new access token, using the previously obtained authorization code.
 // Endpoint: POST /v1/identity/openidconnect/tokenservice
@@ -47,4 +50,23 @@ func (c *Client) GrantNewAccessTokenFromRefreshToken(refreshToken string) (*Toke
 	}
 
 	return token, nil
+}
+
+// GetUserInfo - Use this call to retrieve user profile attributes.
+// Endpoint: GET /v1/identity/openidconnect/userinfo/?schema=<Schema>
+// Pass the schema that is used to return as per openidconnect protocol. The only supported schema value is openid.
+func (c *Client) GetUserInfo(schema string) (*UserInfo, error) {
+	u := UserInfo{}
+
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/identity/openidconnect/userinfo/?schema=", schema), nil)
+	if err != nil {
+		return &u, err
+	}
+
+	err = c.SendWithAuth(req, &u)
+	if err != nil {
+		return &u, err
+	}
+
+	return &u, nil
 }

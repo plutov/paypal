@@ -19,6 +19,8 @@
  * POST /v1/payments/orders/**ID**/authorize
  * POST /v1/payments/orders/**ID**/capture
  * POST /v1/payments/orders/**ID**/do-void
+ * POST /v1/identity/openidconnect/tokenservice
+ * GET /v1/identity/openidconnect/userinfo/?schema=**SCHEMA**
 
 #### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
@@ -196,6 +198,12 @@ order, err := c.VoidOrder(orderID)
 token, err := c.GrantNewAccessTokenFromAuthCode("<Authorization-Code>", "http://example.com/myapp/return.php")
 // ... or by refresh token
 token, err := c.GrantNewAccessTokenFromRefreshToken("<Refresh-Token>")
+```
+
+#### Retreive user information
+
+```go
+userInfo, err := c.GetUserInfo("openid")
 ```
 
 #### How to Contribute

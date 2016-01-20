@@ -137,4 +137,11 @@ func main() {
 	} else {
 		fmt.Println("ERROR: " + err.Error())
 	}
+
+	u, err := c.GetUserInfo("openid")
+	if err == nil {
+		fmt.Println("DEBUG: UserID=" + u.ID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
 }

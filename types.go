@@ -275,6 +275,26 @@ type (
 		Custom         string    `json:"custom,omitempty"`
 		SoftDescriptor string    `json:"soft_descriptor,omitempty"`
 	}
+
+	// UserInfo https://developer.paypal.com/webapps/developer/docs/api/#userinfo-object
+	UserInfo struct {
+		ID              string   `json:"user_id"`
+		Name            string   `json:"name"`
+		GivenName       string   `json:"given_name"`
+		FamilyName      string   `json:"family_name"`
+		Email           string   `json:"email"`
+		Verified        bool     `json:"verified,omitempty"`
+		Gender          string   `json:"gender,omitempty"`
+		BirthDate       string   `json:"birthdate,omitempty"`
+		ZoneInfo        string   `json:"zoneinfo,omitempty"`
+		Locale          string   `json:"locale,omitempty"`
+		Phone           string   `json:"phone_number,omitempty"`
+		Address         *Address `json:"address,omitempty"`
+		VerifiedAccount bool     `json:"verified_account,omitempty"`
+		AccountType     string   `json:"account_type,omitempty"`
+		AgeRange        string   `json:"age_range,omitempty"`
+		PayerID         string   `json:"payer_id,omitempty"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct

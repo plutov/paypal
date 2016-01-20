@@ -15,6 +15,7 @@ var testFakeOrderID = "FAKE-O-4J082351X3132253H"
 var testSaleID = "4CF18861HF410323U"
 var testPaymentID = "PAY-5YK922393D847794YKER7MUI"
 var testPayerID = "CR87QHB7JTRSC"
+var testUserID = "https://www.paypal.com/webapps/auth/identity/user/WEssgRpQij92sE99_F9MImvQ8FPYgUEjrvCja2qH2H8"
 
 func TestNewClient(t *testing.T) {
 	_, err := NewClient("", "", "")
