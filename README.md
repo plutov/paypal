@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/logpacker/PayPal-Go-SDK.svg?branch=master)](https://travis-ci.org/logpacker/PayPal-Go-SDK)
 [![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/logpacker/PayPal-Go-SDK)
+[![Chat at https://gitter.im/logpacker/PayPal-Go-SDK](https://img.shields.io/badge/gitter-dev_chat-46bc99.svg)](https://gitter.im/logpacker/PayPal-Go-SDK?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 #### GO client for PayPal REST API
 
