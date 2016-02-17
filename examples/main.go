@@ -144,4 +144,29 @@ func main() {
 	} else {
 		fmt.Println("ERROR: " + err.Error())
 	}
+
+	payout := paypalsdk.Payout{
+		SenderBatchHeader: &paypalsdk.SenderBatchHeader{
+			EmailSubject: "Subject will be displayed on PayPal",
+		},
+		Items: []paypalsdk.PayoutItem{
+			paypalsdk.PayoutItem{
+				RecipientType: "EMAIL",
+				Receiver:      "single-email-payout@mail.com",
+				Amount: &paypalsdk.AmountPayout{
+					Value:    "15.11",
+					Currency: "USD",
+				},
+				Note:         "Optional note",
+				SenderItemID: "Optional Item ID",
+			},
+		},
+	}
+
+	payoutResp, err := c.CreateSinglePayout(payout)
+	if err == nil && len(payoutResp.Items) > 0 {
+		fmt.Println("DEBUG: PayoutItemID=" + payoutResp.Items[0].PayoutItemID)
+	} else {
+		fmt.Println("ERROR: " + err.Error())
+	}
 }
