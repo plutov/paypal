@@ -355,5 +355,5 @@ type (
 
 // Error method implementation for ErrorResponse struct
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%v %v: %d %v\nDetails: %v", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message, r.Details)
+	return fmt.Sprintf("%v %v: %d %v", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
 }
