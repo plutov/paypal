@@ -1,8 +1,8 @@
 package paypalsdk_test
 
-import "github.com/logpacker/PayPal-Go-SDK"
+import paypalsdk "github.com/logpacker/PayPal-Go-SDK"
 
-func ExampleCreatePayment() {
+func Example() {
 	// Initialize client
 	c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)
 	if err != nil {
