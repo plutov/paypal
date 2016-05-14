@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
-	"os"
 )
 
 // NewClient returns new Client struct
@@ -23,16 +22,15 @@ func NewClient(clientID string, secret string, APIBase string) (*Client, error) 
 		clientID,
 		secret,
 		APIBase,
-		"",
+		nil,
 		nil,
 	}, nil
 }
 
-// SetLogFile will set/change a full path to a log file
-// If log file is set paypalsdk will log all requests and responses to this file
-func (c *Client) SetLogFile(filepath string) error {
-	c.LogFile = filepath
-
+// SetLog will set/change the output destination.
+// If log file is set paypalsdk will log all requests and responses to this Writer
+func (c *Client) SetLog(log io.Writer) error {
+	c.Log = log
 	return nil
 }
 
@@ -119,15 +117,11 @@ func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Requ
 
 // log will dump request and response to the log file
 func (c *Client) log(req *http.Request, resp *http.Response) {
-	if c.LogFile != "" {
-		os.OpenFile(c.LogFile, os.O_CREATE, 0755)
+	if c.Log != nil {
+		reqDump, _ := httputil.DumpRequestOut(req, true)
+		respDump, _ := httputil.DumpResponse(resp, true)
 
-		logFile, err := os.OpenFile(c.LogFile, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0755)
-		if err == nil {
-			reqDump, _ := httputil.DumpRequestOut(req, true)
-			respDump, _ := httputil.DumpResponse(resp, true)
+		c.Log.Write([]byte("Request: " + string(reqDump) + "\nResponse: " + string(respDump) + "\n\n"))
 
-			logFile.WriteString("Request: " + string(reqDump) + "\nResponse: " + string(respDump) + "\n\n")
-		}
 	}
 }

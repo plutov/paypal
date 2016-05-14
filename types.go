@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+	"io"
 )
 
 const (
@@ -82,7 +83,7 @@ type (
 		ClientID string
 		Secret   string
 		APIBase  string
-		LogFile  string // If user set log file name all requests will be logged there
+		Log  	 io.Writer // If user set log file name all requests will be logged there
 		Token    *TokenResponse
 	}
 
