@@ -36,7 +36,7 @@ import "github.com/logpacker/PayPal-Go-SDK"
 ```go
 // Create a client instance
 c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)
-c.SetLogFile("/tpm/paypal-debug.log") // Set log file if necessary
+c.SetLog(os.Stdout) // Set log to terminal stdout
 ```
 
 #### Get access token
