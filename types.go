@@ -321,6 +321,7 @@ type (
 		RefreshToken string `json:"refresh_token"`
 		Token        string `json:"access_token"`
 		Type         string `json:"token_type"`
+		ExpiresIn    int64  `json:"expires_in"`
 	}
 
 	// Transaction https://developer.paypal.com/webapps/developer/docs/api/#transaction-object
