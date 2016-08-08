@@ -59,7 +59,7 @@ description := "Description for this payment"
 paymentResult, err := c.CreateDirectPaypalPayment(amount, redirectURI, cancelURI, description)
 
 // If paymentResult.ID is not empty and paymentResult.Links is also
-// we can redirect user to approval page (paymentResult.Links[0]).
+// we can redirect user to approval page (paymentResult.Links[1]).
 // After approval user will be redirected to return_url from Request with PaymentID
 ```
 
