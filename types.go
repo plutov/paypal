@@ -136,9 +136,10 @@ type (
 
 	// ExecuteResponse structure
 	ExecuteResponse struct {
-		ID    string        `json:"id"`
-		Links []PaymentLink `json:"links"`
-		State string        `json:"state"`
+		ID           string        `json:"id"`
+		Links        []PaymentLink `json:"links"`
+		State        string        `json:"state"`
+		Transactions []Transaction `json:"transactions,omitempty"`
 	}
 
 	// FundingInstrument https://developer.paypal.com/webapps/developer/docs/api/#fundinginstrument-object
@@ -280,6 +281,15 @@ type (
 		UpdateTime    *time.Time `json:"update_time,omitempty"`
 	}
 
+	// Related https://developer.paypal.com/docs/api/payments/#definition-related
+	Related struct {
+		Sale          *Sale          `json:"sale,omitempty"`
+		Authorization *Authorization `json:"authorization,omitempty"`
+		Order         *Order         `json:"order,omitempty"`
+		Capture       *Capture       `json:"capture,omitempty"`
+		Refund        *Refund        `json:"refund,omitempty"`
+	}
+
 	// Sale https://developer.paypal.com/webapps/developer/docs/api/#sale-object
 	Sale struct {
 		ID                        string     `json:"id,omitempty"`
@@ -326,12 +336,13 @@ type (
 
 	// Transaction https://developer.paypal.com/webapps/developer/docs/api/#transaction-object
 	Transaction struct {
-		Amount         *Amount   `json:"amount"`
-		Description    string    `json:"description,omitempty"`
-		ItemList       *ItemList `json:"item_list,omitempty"`
-		InvoiceNumber  string    `json:"invoice_number,omitempty"`
-		Custom         string    `json:"custom,omitempty"`
-		SoftDescriptor string    `json:"soft_descriptor,omitempty"`
+		Amount           *Amount   `json:"amount"`
+		Description      string    `json:"description,omitempty"`
+		ItemList         *ItemList `json:"item_list,omitempty"`
+		InvoiceNumber    string    `json:"invoice_number,omitempty"`
+		Custom           string    `json:"custom,omitempty"`
+		SoftDescriptor   string    `json:"soft_descriptor,omitempty"`
+		RelatedResources []Related `json:"related_resources,omitempty"`
 	}
 
 	// UserInfo https://developer.paypal.com/webapps/developer/docs/api/#userinfo-object
