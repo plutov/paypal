@@ -1,10 +1,10 @@
 package main
 
 import (
-	paypalsdk "PayPal-Go-SDK"
+	"fmt"
 	"strconv"
 
-	"fmt"
+	"github.com/logpacker/PayPal-Go-SDK"
 )
 
 func main() {
