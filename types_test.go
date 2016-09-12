@@ -27,6 +27,6 @@ func TestTypeUserInfo(t *testing.T) {
 		u.GivenName != "Peter" ||
 		u.FamilyName != "Pepper" ||
 		u.Email != "ppuser@example.com" {
-		t.Errorf("UserInfo decoded result is incorrect")
+		t.Errorf("UserInfo decoded result is incorrect, Given: %v", u)
 	}
 }
