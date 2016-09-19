@@ -26,6 +26,6 @@ func TestGetUserInfo(t *testing.T) {
 
 	u, err := c.GetUserInfo("openid")
 	if u.ID != testUserID || err != nil {
-		t.Errorf("GetUserInfo must return valid test ID=" + testUserID)
+		t.Errorf("GetUserInfo must return valid test ID=%s", testUserID)
 	}
 }

@@ -11,12 +11,12 @@ func TestGetOrder(t *testing.T) {
 
 	o, err := c.GetOrder(testOrderID)
 	if err != nil || o.ID != testOrderID {
-		t.Errorf("GetOrder failed for ID=" + testOrderID)
+		t.Errorf("GetOrder failed for ID=%s", testOrderID)
 	}
 
 	o, err = c.GetOrder(testFakeOrderID)
 	if err == nil {
-		t.Errorf("GetOrder must return error for ID=" + testFakeOrderID)
+		t.Errorf("GetOrder must return error for ID=%s", testFakeOrderID)
 	}
 }
 

@@ -47,6 +47,12 @@ func (c *Client) SetAccessToken(token string) error {
 // unmarshaled into v, or if v is an io.Writer, the response will
 // be written to it without decoding
 func (c *Client) Send(req *http.Request, v interface{}) error {
+	var (
+		err  error
+		resp *http.Response
+		data []byte
+	)
+
 	// Set default headers
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Accept-Language", "en_US")
@@ -56,7 +62,7 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 		req.Header.Set("Content-type", "application/json")
 	}
 
-	resp, err := c.client.Do(req)
+	resp, err = c.client.Do(req)
 	c.log(req, resp)
 
 	if err != nil {
@@ -66,7 +72,7 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		errResp := &ErrorResponse{Response: resp}
-		data, err := ioutil.ReadAll(resp.Body)
+		data, err = ioutil.ReadAll(resp.Body)
 
 		if err == nil && len(data) > 0 {
 			json.Unmarshal(data, errResp)
@@ -90,10 +96,19 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 }
 
 // SendWithAuth makes a request to the API and apply OAuth2 header automatically.
-// If the access token soon to be expired, it will try to get a new one before
+// If the access token soon to be expired or already expired, it will try to get a new one before
 // making the main request
+// client.Token will be updated when changed
 func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	if c.Token != nil {
+		if c.Token.ExpiresIn < RequestNewTokenBeforeExpiresIn {
+			// c.Token willbe updated in GetAccessToken call
+			_, err := c.GetAccessToken()
+			if err != nil {
+				return err
+			}
+		}
+
 		req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	}
 

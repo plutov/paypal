@@ -13,6 +13,9 @@ const (
 
 	// APIBaseLive points to the live version of the API
 	APIBaseLive = "https://api.paypal.com"
+
+	// RequestNewTokenBeforeExpiresIn is used by SendWithAuth and try to get new Token when it's about to expire
+	RequestNewTokenBeforeExpiresIn = 60
 )
 
 type (
