@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/logpacker/PayPal-Go-SDK"
 )
@@ -27,7 +26,7 @@ func main() {
 
 	payments, err := c.GetPayments()
 	if err == nil {
-		fmt.Println("DEBUG: PaymentsCount=" + strconv.Itoa(len(payments)))
+		fmt.Printf("DEBUG: PaymentsCount=%d\n", len(payments))
 	} else {
 		fmt.Println("ERROR: " + err.Error())
 	}

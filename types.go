@@ -19,7 +19,7 @@ const (
 )
 
 type (
-	// Address https://developer.paypal.com/webapps/developer/docs/api/#address-object
+	// Address struct
 	Address struct {
 		Line1       string `json:"line1"`
 		Line2       string `json:"line2,omitempty"`
@@ -30,19 +30,19 @@ type (
 		Phone       string `json:"phone,omitempty"`
 	}
 
-	// Amount https://developer.paypal.com/webapps/developer/docs/api/#amount-object
+	// Amount struct
 	Amount struct {
 		Currency string `json:"currency"`
 		Total    string `json:"total"`
 	}
 
-	// AmountPayout https://developer.paypal.com/docs/integration/direct/create-single-payout/
+	// AmountPayout struct
 	AmountPayout struct {
 		Currency string `json:"currency"`
 		Value    string `json:"value"`
 	}
 
-	// Authorization rhttps://developer.paypal.com/webapps/developer/docs/api/#authorization-object
+	// Authorization struct
 	Authorization struct {
 		Amount                    *Amount    `json:"amount,omitempty"`
 		CreateTime                *time.Time `json:"create_time,omitempty"`
@@ -57,7 +57,7 @@ type (
 		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
 	}
 
-	// BatchHeader https://developer.paypal.com/docs/integration/direct/create-single-payout/
+	// BatchHeader struct
 	BatchHeader struct {
 		Amount            *AmountPayout      `json:"amount,omitempty"`
 		Fees              *AmountPayout      `json:"fees,omitempty"`
@@ -68,7 +68,7 @@ type (
 		SenderBatchHeader *SenderBatchHeader `json:"sender_batch_header,omitempty"`
 	}
 
-	// Capture https://developer.paypal.com/webapps/developer/docs/api/#capture-object
+	// Capture struct
 	Capture struct {
 		Amount         *Amount    `json:"amount,omitempty"`
 		IsFinalCapture bool       `json:"is_final_capture"`
@@ -90,7 +90,7 @@ type (
 		Token    *TokenResponse
 	}
 
-	// CreditCard https://developer.paypal.com/webapps/developer/docs/api/#creditcard-object
+	// CreditCard struct
 	CreditCard struct {
 		ID             string   `json:"id,omitempty"`
 		PayerID        string   `json:"payer_id,omitempty"`
@@ -106,7 +106,7 @@ type (
 		ValidUntil     string   `json:"valid_until,omitempty"`
 	}
 
-	// CreditCardToken https://developer.paypal.com/webapps/developer/docs/api/#creditcardtoken-object
+	// CreditCardToken struct
 	CreditCardToken struct {
 		CreditCardID string `json:"credit_card_id"`
 		PayerID      string `json:"payer_id,omitempty"`
@@ -115,29 +115,23 @@ type (
 		ExpireMonth  string `json:"expire_month,omitempty"`
 	}
 
-	// Currency https://developer.paypal.com/webapps/developer/docs/api/#currency-object
+	// Currency struct
 	Currency struct {
 		Currency string `json:"currency,omitempty"`
 		Value    string `json:"value,omitempty"`
 	}
 
-	// ErrorResponse https://developer.paypal.com/webapps/developer/docs/api/#error-object
+	// ErrorResponse https://developer.paypal.com/docs/api/errors/
 	ErrorResponse struct {
 		Response        *http.Response `json:"-"`
 		Name            string         `json:"name"`
 		DebugID         string         `json:"debug_id"`
 		Message         string         `json:"message"`
 		InformationLink string         `json:"information_link"`
-		Details         []ErrorDetail  `json:"details"`
+		Details         string         `json:"details"`
 	}
 
-	// ErrorDetail https://developer.paypal.com/webapps/developer/docs/api/#errordetails-object
-	ErrorDetail struct {
-		Field string `json:"field"`
-		Issue string `json:"issue"`
-	}
-
-	// ExecuteResponse structure
+	// ExecuteResponse struct
 	ExecuteResponse struct {
 		ID           string        `json:"id"`
 		Links        []PaymentLink `json:"links"`
@@ -145,13 +139,13 @@ type (
 		Transactions []Transaction `json:"transactions,omitempty"`
 	}
 
-	// FundingInstrument https://developer.paypal.com/webapps/developer/docs/api/#fundinginstrument-object
+	// FundingInstrument struct
 	FundingInstrument struct {
 		CreditCard      *CreditCard      `json:"credit_card,omitempty"`
 		CreditCardToken *CreditCardToken `json:"credit_card_token,omitempty"`
 	}
 
-	// Item https://developer.paypal.com/webapps/developer/docs/api/#item-object
+	// Item struct
 	Item struct {
 		Quantity    int    `json:"quantity"`
 		Name        string `json:"name"`
@@ -168,7 +162,7 @@ type (
 		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
 	}
 
-	// Links https://developer.paypal.com/webapps/developer/docs/api/#itemlist-object
+	// Links struct
 	Links struct {
 		Href    string `json:"href"`
 		Rel     string `json:"rel,omitempty"`
@@ -176,7 +170,7 @@ type (
 		Enctype string `json:"enctype,omitempty"`
 	}
 
-	// Order https://developer.paypal.com/webapps/developer/docs/api/#order-object
+	// Order struct
 	Order struct {
 		ID            string     `json:"id,omitempty"`
 		CreateTime    *time.Time `json:"create_time,omitempty"`
@@ -188,7 +182,7 @@ type (
 		Links         []Links    `json:"links,omitempty"`
 	}
 
-	// Payer https://developer.paypal.com/webapps/developer/docs/api/#payer-object
+	// Payer struct
 	Payer struct {
 		PaymentMethod      string              `json:"payment_method"`
 		FundingInstruments []FundingInstrument `json:"funding_instruments,omitempty"`
@@ -196,7 +190,7 @@ type (
 		Status             string              `json:"payer_status,omitempty"`
 	}
 
-	// PayerInfo https://developer.paypal.com/webapps/developer/docs/api/#itemlist-object
+	// PayerInfo struct
 	PayerInfo struct {
 		Email           string           `json:"email,omitempty"`
 		FirstName       string           `json:"first_name,omitempty"`
@@ -208,7 +202,7 @@ type (
 		TaxID           string           `json:"tax_id,omitempty"`
 	}
 
-	// Payment https://developer.paypal.com/webapps/developer/docs/api/#payment-object
+	// Payment struct
 	Payment struct {
 		Intent              string        `json:"intent"`
 		Payer               *Payer        `json:"payer"`
@@ -221,7 +215,7 @@ type (
 		ExperienceProfileID string        `json:"experience_profile_id,omitempty"`
 	}
 
-	// PaymentLink https://developer.paypal.com/webapps/developer/docs/api/#paymentlink-object
+	// PaymentLink struct
 	PaymentLink struct {
 		Href string `json:"href"`
 		Rel  string `json:"rel"`
@@ -233,13 +227,13 @@ type (
 		Links []PaymentLink `json:"links"`
 	}
 
-	// Payout https://developer.paypal.com/docs/integration/direct/create-single-payout/
+	// Payout struct
 	Payout struct {
 		SenderBatchHeader *SenderBatchHeader `json:"sender_batch_header"`
 		Items             []PayoutItem       `json:"items"`
 	}
 
-	// PayoutItem https://developer.paypal.com/docs/integration/direct/create-single-payout/
+	// PayoutItem struct
 	PayoutItem struct {
 		RecipientType string        `json:"recipient_type"`
 		Receiver      string        `json:"receiver"`
@@ -248,7 +242,7 @@ type (
 		SenderItemID  string        `json:"sender_item_id,omitempty"`
 	}
 
-	// PayoutItemResponse https://developer.paypal.com/docs/integration/direct/create-single-payout/
+	// PayoutItemResponse struct
 	PayoutItemResponse struct {
 		PayoutItemID      string        `json:"payout_item_id"`
 		TransactionID     string        `json:"transaction_id"`
@@ -260,20 +254,20 @@ type (
 		Links             []Links       `json:"links"`
 	}
 
-	// PayoutResponse https://developer.paypal.com/docs/integration/direct/create-single-payout/
+	// PayoutResponse struct
 	PayoutResponse struct {
 		BatchHeader *BatchHeader         `json:"batch_header"`
 		Items       []PayoutItemResponse `json:"items"`
 		Links       []Links              `json:"links"`
 	}
 
-	// RedirectURLs https://developer.paypal.com/webapps/developer/docs/api/#redirecturls-object
+	// RedirectURLs struct
 	RedirectURLs struct {
 		ReturnURL string `json:"return_url,omitempty"`
 		CancelURL string `json:"cancel_url,omitempty"`
 	}
 
-	// Refund https://developer.paypal.com/webapps/developer/docs/api/#refund-object
+	// Refund struct
 	Refund struct {
 		ID            string     `json:"id,omitempty"`
 		Amount        *Amount    `json:"amount,omitempty"`
@@ -284,7 +278,7 @@ type (
 		UpdateTime    *time.Time `json:"update_time,omitempty"`
 	}
 
-	// Related https://developer.paypal.com/docs/api/payments/#definition-related
+	// Related struct
 	Related struct {
 		Sale          *Sale          `json:"sale,omitempty"`
 		Authorization *Authorization `json:"authorization,omitempty"`
@@ -293,7 +287,7 @@ type (
 		Refund        *Refund        `json:"refund,omitempty"`
 	}
 
-	// Sale https://developer.paypal.com/webapps/developer/docs/api/#sale-object
+	// Sale struct
 	Sale struct {
 		ID                        string     `json:"id,omitempty"`
 		Amount                    *Amount    `json:"amount,omitempty"`
@@ -311,12 +305,12 @@ type (
 		Links                     []Links    `json:"links,omitempty"`
 	}
 
-	// SenderBatchHeader https://developer.paypal.com/docs/integration/direct/create-single-payout/
+	// SenderBatchHeader struct
 	SenderBatchHeader struct {
 		EmailSubject string `json:"email_subject"`
 	}
 
-	// ShippingAddress https://developer.paypal.com/webapps/developer/docs/api/#shippingaddredd-object
+	// ShippingAddress struct
 	ShippingAddress struct {
 		RecipientName string `json:"recipient_name,omitempty"`
 		Type          string `json:"type,omitempty"`
@@ -337,7 +331,7 @@ type (
 		ExpiresIn    int64  `json:"expires_in"`
 	}
 
-	// Transaction https://developer.paypal.com/webapps/developer/docs/api/#transaction-object
+	// Transaction struct
 	Transaction struct {
 		Amount           *Amount   `json:"amount"`
 		Description      string    `json:"description,omitempty"`
@@ -348,7 +342,7 @@ type (
 		RelatedResources []Related `json:"related_resources,omitempty"`
 	}
 
-	// UserInfo https://developer.paypal.com/webapps/developer/docs/api/#userinfo-object
+	// UserInfo struct
 	UserInfo struct {
 		ID              string   `json:"user_id"`
 		Name            string   `json:"name"`
@@ -371,5 +365,5 @@ type (
 
 // Error method implementation for ErrorResponse struct
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%v %v: %d %v", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
+	return fmt.Sprintf("%v %v: %d %s", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
 }
