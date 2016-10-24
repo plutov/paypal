@@ -147,7 +147,7 @@ type (
 
 	// Item struct
 	Item struct {
-		Quantity    int    `json:"quantity"`
+		Quantity    string `json:"quantity"`
 		Name        string `json:"name"`
 		Price       string `json:"price"`
 		Currency    string `json:"currency"`

@@ -30,3 +30,25 @@ func TestTypeUserInfo(t *testing.T) {
 		t.Errorf("UserInfo decoded result is incorrect, Given: %v", u)
 	}
 }
+
+func TestTypeItem(t *testing.T) {
+	response := `{
+    "name":"Item",
+    "price":"22.99",
+    "currency":"GBP",
+    "quantity":"1"
+}`
+
+	i := &Item{}
+	err := json.Unmarshal([]byte(response), i)
+	if err != nil {
+		t.Errorf("Item Unmarshal failed")
+	}
+
+	if i.Name != "Item" ||
+		i.Price != "22.99" ||
+		i.Currency != "GBP" ||
+		i.Quantity != "1" {
+		t.Errorf("Item decoded result is incorrect, Given: %v", i)
+	}
+}
