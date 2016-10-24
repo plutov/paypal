@@ -40,8 +40,8 @@ func TestGetPayments(t *testing.T) {
 
 	payments, _ := c.GetPayments()
 
-	if len(payments) != 2 {
-		t.Errorf("2 payments must be returned for GetPayments. Returned: %d", len(payments))
+	if len(payments) == 0 {
+		t.Errorf("> 0 payments must be returned for GetPayments. Returned: %d", len(payments))
 	}
 }
 
