@@ -105,7 +105,7 @@ func (c *Client) DeleteWebProfile(profileID string) error {
 
 	url := fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payment-experience/web-profiles/", profileID)
 
-	req, err := c.NewRequest(http.MethodPut, url, nil)
+	req, err := c.NewRequest(http.MethodDelete, url, nil)
 
 	if err != nil {
 		return err
