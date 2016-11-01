@@ -16,32 +16,32 @@ type webprofileTestServer struct {
 func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ts.t.Log(r.RequestURI)
 	if r.RequestURI == "/v1/payment-experience/web-profiles" {
-		if r.Method == http.MethodPost {
+		if r.Method == "POST" {
 			ts.create(w, r)
 		}
-		if r.Method == http.MethodGet {
+		if r.Method == "GET" {
 			ts.list(w, r)
 		}
 	}
 	if r.RequestURI == "/v1/payment-experience/web-profiles/XP-CP6S-W9DY-96H8-MVN2" {
-		if r.Method == http.MethodGet {
+		if r.Method == "GET" {
 			ts.getvalid(w, r)
 		}
-		if r.Method == http.MethodPut {
+		if r.Method == "PUT" {
 			ts.updatevalid(w, r)
 		}
-		if r.Method == http.MethodDelete {
+		if r.Method == "DELETE" {
 			ts.deletevalid(w, r)
 		}
 	}
 	if r.RequestURI == "/v1/payment-experience/web-profiles/foobar" {
-		if r.Method == http.MethodGet {
+		if r.Method == "GET" {
 			ts.getinvalid(w, r)
 		}
-		if r.Method == http.MethodPut {
+		if r.Method == "PUT" {
 			ts.updateinvalid(w, r)
 		}
-		if r.Method == http.MethodDelete {
+		if r.Method == "DELETE" {
 			ts.deleteinvalid(w, r)
 		}
 	}
