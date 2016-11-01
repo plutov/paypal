@@ -12,7 +12,7 @@ import (
 // Endpoint: POST /v1/payment-experience/web-profiles
 func (c *Client) CreateWebProfile(wp WebProfile) (*WebProfile, error) {
 	url := fmt.Sprintf("%s%s", c.APIBase, "/v1/payment-experience/web-profiles")
-	req, err := c.NewRequest(http.MethodPost, url, wp)
+	req, err := c.NewRequest("POST", url, wp)
 	if err != nil {
 		return &WebProfile{}, err
 	}
@@ -34,7 +34,7 @@ func (c *Client) GetWebProfile(profileID string) (*WebProfile, error) {
 	var wp WebProfile
 
 	url := fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payment-experience/web-profiles/", profileID)
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest("GET", url, nil)
 
 	if err != nil {
 		return &wp, err
@@ -59,7 +59,7 @@ func (c *Client) GetWebProfiles() ([]WebProfile, error) {
 	var wps []WebProfile
 
 	url := fmt.Sprintf("%s%s", c.APIBase, "/v1/payment-experience/web-profiles")
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := http.NewRequest("GET", url, nil)
 
 	if err != nil {
 		return wps, err
@@ -84,7 +84,7 @@ func (c *Client) SetWebProfile(wp WebProfile) error {
 
 	url := fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payment-experience/web-profiles/", wp.ID)
 
-	req, err := c.NewRequest(http.MethodPut, url, wp)
+	req, err := c.NewRequest("PUT", url, wp)
 
 	if err != nil {
 		return err
@@ -105,7 +105,7 @@ func (c *Client) DeleteWebProfile(profileID string) error {
 
 	url := fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payment-experience/web-profiles/", profileID)
 
-	req, err := c.NewRequest(http.MethodDelete, url, nil)
+	req, err := c.NewRequest("DELETE", url, nil)
 
 	if err != nil {
 		return err
