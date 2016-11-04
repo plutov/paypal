@@ -23,6 +23,11 @@
  * POST /v1/identity/openidconnect/tokenservice
  * GET /v1/identity/openidconnect/userinfo/?schema=**SCHEMA**
  * POST /v1/payments/payouts?sync_mode=true
+ * GET /v1/payment-experience/web-profiles
+ * POST /v1/payment-experience/web-profiles
+ * GET /v1/payment-experience/web-profiles/**ID**
+ * PUT /v1/payment-experience/web-profiles/**ID**
+ * DELETE /v1/payment-experience/web-profiles/**ID**
 
 #### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
@@ -230,6 +235,61 @@ payout := paypalsdk.Payout{
 }
 
 payoutResp, err := c.CreateSinglePayout(payout)
+```
+
+### Create web experience profile
+
+```go
+webprofile := WebProfile{
+    Name: "YeowZa! T-Shirt Shop",
+    Presentation: Presentation{
+        BrandName:  "YeowZa! Paypal",
+        LogoImage:  "http://www.yeowza.com",
+        LocaleCode: "US",
+    },
+
+    InputFields: InputFields{
+        AllowNote:       true,
+        NoShipping:      NoShippingDisplay,
+        AddressOverride: AddrOverrideFromCall,
+    },
+
+    FlowConfig: FlowConfig{
+        LandingPageType:   LandingPageTypeBilling,
+        BankTXNPendingURL: "http://www.yeowza.com",
+    },
+}
+
+result, err := c.CreateWebProfile(webprofile)
+```
+
+### Get web experience profile
+
+```go
+webprofile, err := c.GetWebProfile("XP-CP6S-W9DY-96H8-MVN2")
+```
+
+### List web experience profile
+
+```go
+webprofiles, err := c.GetWebProfiles()
+```
+
+### Update web experience profile
+
+```go
+
+webprofile := WebProfile{
+    ID: "XP-CP6S-W9DY-96H8-MVN2",
+    Name: "Shop YeowZa! YeowZa! ",
+}
+err := c.SetWebProfile(webprofile)
+```
+
+### Delete web experience profile
+
+```go
+err := c.DeleteWebProfile("XP-CP6S-W9DY-96H8-MVN2")
 ```
 
 #### How to Contribute
