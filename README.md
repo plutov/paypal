@@ -2,9 +2,9 @@
 [![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/logpacker/PayPal-Go-SDK)
 [![Chat at https://gitter.im/logpacker/PayPal-Go-SDK](https://img.shields.io/badge/gitter-dev_chat-46bc99.svg)](https://gitter.im/logpacker/PayPal-Go-SDK?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-#### GO client for PayPal REST API
+### GO client for PayPal REST API
 
-#### Coverage
+### Coverage
  * POST /v1/oauth2/token
  * POST /v1/payments/payment
  * GET /v1/payments/payment/**ID**
@@ -29,10 +29,10 @@
  * PUT /v1/payment-experience/web-profiles/**ID**
  * DELETE /v1/payment-experience/web-profiles/**ID**
 
-#### Missing endpoints
+### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
 
-#### Create Client
+### Create Client
 
 ```go
 import "github.com/logpacker/PayPal-Go-SDK"
@@ -44,13 +44,13 @@ c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)
 c.SetLog(os.Stdout) // Set log to terminal stdout
 ```
 
-#### Get access token
+### Get access token
 ```go
 // When you will have authorization_code you can get an access_token
 accessToken, err := c.GetAccessToken()
 ```
 
-#### Create direct paypal payment
+### Create direct paypal payment
 
 ```go
 // Now we can create a paypal payment
@@ -101,7 +101,7 @@ p := paypalsdk.Payment{
 paymentResponse, err := client.CreatePayment(p)
 ```
 
-#### Execute approved payment
+### Execute approved payment
 
 ```go
 // And the last step is to execute approved payment
@@ -112,53 +112,53 @@ payerID := "7E7MGXCWTTKK2"
 executeResult, err := c.ExecuteApprovedPayment(paymentID, payerID)
 ```
 
-#### Get payment by ID
+### Get payment by ID
 
 ```go
 // Get created payment info
 payment, err := c.GetPayment(paymentID)
 ```
 
-#### Get list of payments
+### Get list of payments
 
 ```go
 // Get all payments slice
 payments, err := c.GetPayments()
 ```
 
-#### Get authorization by ID
+### Get authorization by ID
 
 ```go
 authID := "2DC87612EK520411B"
 auth, err := c.GetAuthorization(authID)
 ```
 
-#### Capture authorization
+### Capture authorization
 
 ```go
 capture, err := c.CaptureAuthorization(authID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true)
 ```
 
-#### Void authorization
+### Void authorization
 
 ```go
 auth, err := c.VoidAuthorization(authID)
 ```
 
-#### Reauthorize authorization
+### Reauthorize authorization
 
 ```go
 auth, err := c.ReauthorizeAuthorization(authID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 ```
 
-#### Get Sale by ID
+### Get Sale by ID
 
 ```go
 saleID := "36C38912MN9658832"
 sale, err := c.GetSale(saleID)
 ```
 
-#### Refund Sale by ID
+### Refund Sale by ID
 
 ```go
 // Full
@@ -167,38 +167,38 @@ refund, err := c.RefundSale(saleID, nil)
 refund, err := c.RefundSale(saleID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 ```
 
-#### Get Refund by ID
+### Get Refund by ID
 
 ```go
 orderID := "O-4J082351X3132253H"
 refund, err := c.GetRefund(orderID)
 ```
 
-#### Get Order by ID
+### Get Order by ID
 
 ```go
 order, err := c.GetOrder(orderID)
 ```
 
-#### Authorize Order
+### Authorize Order
 
 ```go
 auth, err := c.AuthorizeOrder(orderID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
 ```
 
-#### Capture Order
+### Capture Order
 
 ```go
 capture, err := c.CaptureOrder(orderID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true, nil)
 ```
 
-#### Void Order
+### Void Order
 
 ```go
 order, err := c.VoidOrder(orderID)
 ```
 
-#### Identity
+### Identity
 
 ```go
 // Retreive tolen by authorization code
@@ -207,13 +207,13 @@ token, err := c.GrantNewAccessTokenFromAuthCode("<Authorization-Code>", "http://
 token, err := c.GrantNewAccessTokenFromRefreshToken("<Refresh-Token>")
 ```
 
-#### Retreive user information
+### Retreive user information
 
 ```go
 userInfo, err := c.GetUserInfo("openid")
 ```
 
-#### Create single payout to email
+### Create single payout to email
 
 ```go
 payout := paypalsdk.Payout{
@@ -292,7 +292,7 @@ err := c.SetWebProfile(webprofile)
 err := c.DeleteWebProfile("XP-CP6S-W9DY-96H8-MVN2")
 ```
 
-#### How to Contribute
+### How to Contribute
 
 * Fork a repository
 * Add/Fix something
