@@ -137,7 +137,7 @@ func (c *Client) log(r *http.Request, resp *http.Response) {
 		reqDump := fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
 		respDump, _ := httputil.DumpResponse(resp, true)
 
-		c.Log.Write([]byte("Request: " + string(reqDump) + "\nResponse: " + string(respDump) + "\n\n"))
+		c.Log.Write([]byte("Request: " + reqDump + "\nResponse: " + string(respDump) + "\n\n"))
 
 	}
 }

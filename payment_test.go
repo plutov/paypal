@@ -2,11 +2,13 @@ package paypalsdk
 
 import (
 	"fmt"
+	"os"
 	"testing"
 )
 
 func TestCreateDirectPaypalPayment(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.SetLog(os.Stdout)
 	c.GetAccessToken()
 
 	amount := Amount{
