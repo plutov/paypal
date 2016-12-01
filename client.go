@@ -133,7 +133,7 @@ func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Requ
 // log will dump request and response to the log file
 func (c *Client) log(req *http.Request, resp *http.Response) {
 	if c.Log != nil {
-		reqDump, _ := httputil.DumpRequestOut(req, true)
+		reqDump, _ := httputil.DumpRequest(req, true)
 		respDump, _ := httputil.DumpResponse(resp, true)
 
 		c.Log.Write([]byte("Request: " + string(reqDump) + "\nResponse: " + string(respDump) + "\n\n"))
