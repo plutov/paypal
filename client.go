@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -131,9 +132,9 @@ func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Requ
 }
 
 // log will dump request and response to the log file
-func (c *Client) log(req *http.Request, resp *http.Response) {
+func (c *Client) log(r *http.Request, resp *http.Response) {
 	if c.Log != nil {
-		reqDump, _ := httputil.DumpRequest(req, true)
+		reqDump := fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
 		respDump, _ := httputil.DumpResponse(resp, true)
 
 		c.Log.Write([]byte("Request: " + string(reqDump) + "\nResponse: " + string(respDump) + "\n\n"))
