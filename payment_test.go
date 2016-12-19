@@ -40,10 +40,10 @@ func TestGetPayments(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	payments, _ := c.GetPayments()
+	_, err := c.GetPayments()
 
-	if len(payments) == 0 {
-		t.Errorf("> 0 payments must be returned for GetPayments. Returned: %d", len(payments))
+	if err != nil {
+		t.Errorf("Nil error expected")
 	}
 }
 

@@ -76,7 +76,7 @@ type (
 		ParentPayment             string     `json:"parent_payment,omitempty"`
 		ID                        string     `json:"id,omitempty"`
 		ValidUntil                *time.Time `json:"valid_until,omitempty"`
-		Links                     []Links    `json:"links,omitempty"`
+		Links                     []Link     `json:"links,omitempty"`
 		ClearingTime              string     `json:"clearing_time,omitempty"`
 		ProtectionEligibility     string     `json:"protection_eligibility,omitempty"`
 		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
@@ -102,7 +102,7 @@ type (
 		State          string     `json:"state,omitempty"`
 		ParentPayment  string     `json:"parent_payment,omitempty"`
 		ID             string     `json:"id,omitempty"`
-		Links          []Links    `json:"links,omitempty"`
+		Links          []Link     `json:"links,omitempty"`
 	}
 
 	// Client represents a Paypal REST API Client
@@ -131,6 +131,14 @@ type (
 		ValidUntil     string   `json:"valid_until,omitempty"`
 	}
 
+	// CreditCards GET /v1/vault/credit-cards
+	CreditCards struct {
+		Items      []CreditCard `json:"items"`
+		Links      []Link       `json:"links"`
+		TotalItems int          `json:"total_items"`
+		TotalPages int          `json:"total_pages"`
+	}
+
 	// CreditCardToken struct
 	CreditCardToken struct {
 		CreditCardID string `json:"credit_card_id"`
@@ -138,6 +146,19 @@ type (
 		Last4        string `json:"last4,omitempty"`
 		ExpireYear   string `json:"expire_year,omitempty"`
 		ExpireMonth  string `json:"expire_month,omitempty"`
+	}
+
+	// CreditCardsFilter struct
+	CreditCardsFilter struct {
+		PageSize int
+		Page     int
+	}
+
+	// CreditCardField PATCH /v1/vault/credit-cards/credit_card_id
+	CreditCardField struct {
+		Operation string `json:"op"`
+		Path      string `json:"path"`
+		Value     string `json:"value"`
 	}
 
 	// Currency struct
@@ -159,7 +180,7 @@ type (
 	// ExecuteResponse struct
 	ExecuteResponse struct {
 		ID           string        `json:"id"`
-		Links        []PaymentLink `json:"links"`
+		Links        []Link        `json:"links"`
 		State        string        `json:"state"`
 		Transactions []Transaction `json:"transactions,omitempty"`
 	}
@@ -187,8 +208,8 @@ type (
 		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
 	}
 
-	// Links struct
-	Links struct {
+	// Link struct
+	Link struct {
 		Href    string `json:"href"`
 		Rel     string `json:"rel,omitempty"`
 		Method  string `json:"method,omitempty"`
@@ -204,7 +225,7 @@ type (
 		Amount        *Amount    `json:"amount,omitempty"`
 		PendingReason string     `json:"pending_reason,omitempty"`
 		ParentPayment string     `json:"parent_payment,omitempty"`
-		Links         []Links    `json:"links,omitempty"`
+		Links         []Link     `json:"links,omitempty"`
 	}
 
 	// Payer struct
@@ -240,16 +261,10 @@ type (
 		ExperienceProfileID string        `json:"experience_profile_id,omitempty"`
 	}
 
-	// PaymentLink struct
-	PaymentLink struct {
-		Href string `json:"href"`
-		Rel  string `json:"rel"`
-	}
-
 	// PaymentResponse structure
 	PaymentResponse struct {
-		ID    string        `json:"id"`
-		Links []PaymentLink `json:"links"`
+		ID    string `json:"id"`
+		Links []Link `json:"links"`
 	}
 
 	// Payout struct
@@ -276,14 +291,14 @@ type (
 		PayoutItemFee     *AmountPayout `json:"payout_item_fee,omitempty"`
 		PayoutItem        *PayoutItem   `json:"payout_item"`
 		TimeProcessed     *time.Time    `json:"time_processed,omitempty"`
-		Links             []Links       `json:"links"`
+		Links             []Link        `json:"links"`
 	}
 
 	// PayoutResponse struct
 	PayoutResponse struct {
 		BatchHeader *BatchHeader         `json:"batch_header"`
 		Items       []PayoutItemResponse `json:"items"`
-		Links       []Links              `json:"links"`
+		Links       []Link               `json:"links"`
 	}
 
 	// RedirectURLs struct
@@ -327,7 +342,7 @@ type (
 		ClearingTime              string     `json:"clearing_time,omitempty"`
 		ProtectionEligibility     string     `json:"protection_eligibility,omitempty"`
 		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
-		Links                     []Links    `json:"links,omitempty"`
+		Links                     []Link     `json:"links,omitempty"`
 	}
 
 	// SenderBatchHeader struct

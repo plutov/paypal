@@ -168,4 +168,28 @@ func main() {
 	} else {
 		fmt.Println("ERROR: " + err.Error())
 	}
+
+	cc := paypalsdk.CreditCard{
+		Number:      "4417119669820331",
+		Type:        "visa",
+		ExpireMonth: "11",
+		ExpireYear:  "2020",
+		CVV2:        "874",
+		FirstName:   "Foo",
+		LastName:    "Bar",
+	}
+	r1, e1 := c.StoreCreditCard(cc)
+	fmt.Printf("DEBUG StoreCreditCard: %v, %v\n", r1, e1)
+
+	r2, e2 := c.DeleteCreditCard("123")
+	fmt.Printf("DEBUG DeleteCreditCard: %v, %v\n", r2, e2)
+
+	r3, e3 := c.PatchCreditCard("123", nil)
+	fmt.Printf("DEBUG PatchCreditCard: %v, %v\n", r3, e3)
+
+	r4, e4 := c.GetCreditCard("123")
+	fmt.Printf("DEBUG GetCreditCard: %v, %v\n", r4, e4)
+
+	r5, e5 := c.GetCreditCards(nil)
+	fmt.Printf("DEBUG GetCreditCards: %v, %v\n", r5, e5)
 }

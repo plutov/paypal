@@ -28,6 +28,11 @@
  * GET /v1/payment-experience/web-profiles/**ID**
  * PUT /v1/payment-experience/web-profiles/**ID**
  * DELETE /v1/payment-experience/web-profiles/**ID**
+ * POST /v1/vault/credit-cards
+ * DELETE /v1/vault/credit-cards/**ID**
+ * PATCH /v1/vault/credit-cards/**ID**
+ * GET /v1/vault/credit-cards/**ID**
+ * GET /v1/vault/credit-cards
 
 ### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
@@ -290,6 +295,41 @@ err := c.SetWebProfile(webprofile)
 
 ```go
 err := c.DeleteWebProfile("XP-CP6S-W9DY-96H8-MVN2")
+```
+
+### Vault
+
+```go
+// https://developer.paypal.com/docs/api/vault/
+
+// Store CC
+c.StoreCreditCard(paypalsdk.CreditCard{
+    Number:      "4417119669820331",
+    Type:        "visa",
+    ExpireMonth: "11",
+    ExpireYear:  "2020",
+    CVV2:        "874",
+    FirstName:   "Foo",
+    LastName:    "Bar",
+})
+
+// Delete it
+c.DeleteCreditCard("CARD-ID-123")
+
+// Edit it
+c.PatchCreditCard("CARD-ID-123", []paypalsdk.CreditCardField{
+    paypalsdk.CreditCardField{
+        Operation: "replace",
+        Path:      "/billing_address/line1",
+        Value:     "New value",
+    },
+})
+
+// Get it
+c.GetCreditCard("CARD-ID-123")
+
+// get all stored credit cards
+c.GetCreditCards(nil)
 ```
 
 ### How to Contribute

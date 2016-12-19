@@ -135,9 +135,10 @@ func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Requ
 func (c *Client) log(r *http.Request, resp *http.Response) {
 	if c.Log != nil {
 		reqDump := fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
+		dump, _ := ioutil.ReadAll(r.Body)
+		fmt.Println(string(dump))
 		respDump, _ := httputil.DumpResponse(resp, true)
 
 		c.Log.Write([]byte("Request: " + reqDump + "\nResponse: " + string(respDump) + "\n\n"))
-
 	}
 }
