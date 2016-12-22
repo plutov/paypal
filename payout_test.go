@@ -11,7 +11,7 @@ func TestCreateSinglePayout(t *testing.T) {
 			EmailSubject: "Subject will be displayed on PayPal",
 		},
 		Items: []PayoutItem{
-			PayoutItem{
+			{
 				RecipientType: "EMAIL",
 				Receiver:      "single-email-payout@mail.com",
 				Amount: &AmountPayout{

@@ -20,7 +20,7 @@ func Example() {
 		Intent: "sale",
 		Payer: &paypalsdk.Payer{
 			PaymentMethod: "credit_card",
-			FundingInstruments: []paypalsdk.FundingInstrument{paypalsdk.FundingInstrument{
+			FundingInstruments: []paypalsdk.FundingInstrument{{
 				CreditCard: &paypalsdk.CreditCard{
 					Number:      "4111111111111111",
 					Type:        "visa",
@@ -32,7 +32,7 @@ func Example() {
 				},
 			}},
 		},
-		Transactions: []paypalsdk.Transaction{paypalsdk.Transaction{
+		Transactions: []paypalsdk.Transaction{{
 			Amount: &paypalsdk.Amount{
 				Currency: "USD",
 				Total:    "7.00",
