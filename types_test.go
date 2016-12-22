@@ -1,6 +1,6 @@
 package paypalsdk
 
-// These tests test responses convertion from JSON to golang structs
+// These tests test responses conversion from JSON to golang structs
 
 import (
 	"encoding/json"

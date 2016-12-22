@@ -2,7 +2,7 @@ package paypalsdk
 
 import "fmt"
 
-// GetOrder retreives order by ID
+// GetOrder retrieves order by ID
 // Endpoint: GET /v1/payments/orders/ID
 func (c *Client) GetOrder(orderID string) (*Order, error) {
 	order := &Order{}
