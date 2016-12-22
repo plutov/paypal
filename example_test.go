@@ -9,7 +9,7 @@ func Example() {
 		panic(err)
 	}
 
-	// Retreive access token
+	// Retrieve access token
 	_, err = c.GetAccessToken()
 	if err != nil {
 		panic(err)
