@@ -21,7 +21,7 @@ func (c *Client) GrantNewAccessTokenFromAuthCode(code string, redirectURI string
 		return token, err
 	}
 
-	err = c.Send(req, token)
+	err = c.SendWithAuth(req, token)
 	if err != nil {
 		return token, err
 	}
@@ -44,7 +44,7 @@ func (c *Client) GrantNewAccessTokenFromRefreshToken(refreshToken string) (*Toke
 		return token, err
 	}
 
-	err = c.Send(req, token)
+	err = c.SendWithAuth(req, token)
 	if err != nil {
 		return token, err
 	}
