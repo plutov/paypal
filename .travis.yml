@@ -7,4 +7,4 @@ go:
 install:
  - export PATH=$PATH:$HOME/gopath/bin
 script:
- - go test -tags=unit
+ - go test

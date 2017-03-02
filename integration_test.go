@@ -3,7 +3,6 @@
 package paypalsdk
 
 import (
-	"fmt"
 	"os"
 	"testing"
 )
@@ -55,8 +54,6 @@ func TestCaptureAuthorization(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Auth is expired, 400 error must be returned")
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -68,8 +65,6 @@ func TestVoidAuthorization(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Auth is expired, 400 error must be returned")
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -81,8 +76,6 @@ func TestReauthorizeAuthorization(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("Reauthorization not allowed for this product, 500 error must be returned")
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -136,8 +129,6 @@ func TestAuthorizeOrder(t *testing.T) {
 	_, err := c.AuthorizeOrder(testOrderID, &Amount{Total: "7.00", Currency: "USD"})
 	if err == nil {
 		t.Errorf("Order is expired, 400 error must be returned")
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -148,8 +139,6 @@ func TestCaptureOrder(t *testing.T) {
 	_, err := c.CaptureOrder(testOrderID, &Amount{Total: "100", Currency: "USD"}, true, nil)
 	if err == nil {
 		t.Errorf("Order is expired, 400 error must be returned")
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -160,8 +149,6 @@ func TestVoidOrder(t *testing.T) {
 	_, err := c.VoidOrder(testOrderID)
 	if err == nil {
 		t.Errorf("Order is expired, 400 error must be returned")
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -190,8 +177,6 @@ func TestGetPayment(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("404 for this payment ID")
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -214,8 +199,6 @@ func TestExecuteApprovedPayment(t *testing.T) {
 
 	if err == nil {
 		t.Errorf("404 for this payment ID")
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -255,8 +238,6 @@ func TestGetSale(t *testing.T) {
 	_, err := c.GetSale(testSaleID)
 	if err == nil {
 		t.Errorf("404 must be returned for ID=%s", testSaleID)
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -267,15 +248,11 @@ func TestRefundSale(t *testing.T) {
 	_, err := c.RefundSale(testSaleID, nil)
 	if err == nil {
 		t.Errorf("404 must be returned for ID=%s", testSaleID)
-	} else {
-		fmt.Println(err.Error())
 	}
 
 	_, err = c.RefundSale(testSaleID, &Amount{Total: "7.00", Currency: "USD"})
 	if err == nil {
 		t.Errorf("404 must be returned for ID=%s", testSaleID)
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
@@ -286,8 +263,6 @@ func TestGetRefund(t *testing.T) {
 	_, err := c.GetRefund("1")
 	if err == nil {
 		t.Errorf("404 must be returned for ID=%s", testSaleID)
-	} else {
-		fmt.Println(err.Error())
 	}
 }
 
