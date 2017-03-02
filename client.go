@@ -15,24 +15,39 @@ import (
 // APIBase is a base API URL, for testing you can use paypalsdk.APIBaseSandBox
 func NewClient(clientID string, secret string, APIBase string) (*Client, error) {
 	if clientID == "" || secret == "" || APIBase == "" {
-		return &Client{}, errors.New("ClientID, Secret and APIBase are required to create a Client")
+		return nil, errors.New("ClientID, Secret and APIBase are required to create a Client")
 	}
 
 	return &Client{
-		&http.Client{},
-		clientID,
-		secret,
-		APIBase,
-		nil,
-		nil,
+		client:   &http.Client{},
+		ClientID: clientID,
+		Secret:   secret,
+		APIBase:  APIBase,
 	}, nil
 }
 
-// SetLog will set/change the output destination.
-// If log file is set paypalsdk will log all requests and responses to this Writer
-func (c *Client) SetLog(log io.Writer) error {
-	c.Log = log
-	return nil
+// GetAccessToken returns struct of TokenResponse
+// No need to call SetAccessToken to apply new access token for current Client
+// Endpoint: POST /v1/oauth2/token
+func (c *Client) GetAccessToken() (*TokenResponse, error) {
+	buf := bytes.NewBuffer([]byte("grant_type=client_credentials"))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/oauth2/token"), buf)
+	if err != nil {
+		return &TokenResponse{}, err
+	}
+
+	req.SetBasicAuth(c.ClientID, c.Secret)
+	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
+
+	t := TokenResponse{}
+	err = c.Send(req, &t)
+
+	// Set Token fur current Client
+	if t.Token != "" {
+		c.Token = &t
+	}
+
+	return &t, err
 }
 
 // SetAccessToken sets saved token to current client
@@ -41,6 +56,13 @@ func (c *Client) SetAccessToken(token string) error {
 		Token: token,
 	}
 
+	return nil
+}
+
+// SetLog will set/change the output destination.
+// If log file is set paypalsdk will log all requests and responses to this Writer
+func (c *Client) SetLog(log io.Writer) error {
+	c.Log = log
 	return nil
 }
 

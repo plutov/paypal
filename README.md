@@ -39,28 +39,21 @@
 ### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
 
-### Create Client
+### New Client
 
 ```go
 import "github.com/logpacker/PayPal-Go-SDK"
-```
 
-```go
 // Create a client instance
 c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)
 c.SetLog(os.Stdout) // Set log to terminal stdout
-```
 
-### Get access token
-```go
-// When you will have authorization_code you can get an access_token
 accessToken, err := c.GetAccessToken()
 ```
 
 ### Create direct paypal payment
 
 ```go
-// Now we can create a paypal payment
 amount := paypalsdk.Amount{
     Total:    "7.00",
     Currency: "USD",
@@ -69,13 +62,9 @@ redirectURI := "http://example.com/redirect-uri"
 cancelURI := "http://example.com/cancel-uri"
 description := "Description for this payment"
 paymentResult, err := c.CreateDirectPaypalPayment(amount, redirectURI, cancelURI, description)
-
-// If paymentResult.ID is not empty and paymentResult.Links is also
-// we can redirect user to approval page (paymentResult.Links[1]).
-// After approval user will be redirected to return_url from Request with PaymentID
 ```
 
-### Create any payment
+### Create custom payment
 ```go
 p := paypalsdk.Payment{
     Intent: "sale",
@@ -111,10 +100,7 @@ paymentResponse, err := client.CreatePayment(p)
 ### Execute approved payment
 
 ```go
-// And the last step is to execute approved payment
-// paymentID is returned via return_url
 paymentID := "PAY-17S8410768582940NKEE66EQ"
-// payerID is returned via return_url
 payerID := "7E7MGXCWTTKK2"
 executeResult, err := c.ExecuteApprovedPayment(paymentID, payerID)
 ```
@@ -122,22 +108,19 @@ executeResult, err := c.ExecuteApprovedPayment(paymentID, payerID)
 ### Get payment by ID
 
 ```go
-// Get created payment info
-payment, err := c.GetPayment(paymentID)
+payment, err := c.GetPayment("PAY-17S8410768582940NKEE66EQ")
 ```
 
 ### Get list of payments
 
 ```go
-// Get all payments slice
 payments, err := c.GetPayments()
 ```
 
 ### Get authorization by ID
 
 ```go
-authID := "2DC87612EK520411B"
-auth, err := c.GetAuthorization(authID)
+auth, err := c.GetAuthorization("2DC87612EK520411B")
 ```
 
 ### Capture authorization
@@ -161,8 +144,7 @@ auth, err := c.ReauthorizeAuthorization(authID, &paypalsdk.Amount{Total: "7.00",
 ### Get Sale by ID
 
 ```go
-saleID := "36C38912MN9658832"
-sale, err := c.GetSale(saleID)
+sale, err := c.GetSale("36C38912MN9658832")
 ```
 
 ### Refund Sale by ID
@@ -177,14 +159,13 @@ refund, err := c.RefundSale(saleID, &paypalsdk.Amount{Total: "7.00", Currency: "
 ### Get Refund by ID
 
 ```go
-orderID := "O-4J082351X3132253H"
-refund, err := c.GetRefund(orderID)
+refund, err := c.GetRefund("O-4J082351X3132253H")
 ```
 
 ### Get Order by ID
 
 ```go
-order, err := c.GetOrder(orderID)
+order, err := c.GetOrder("O-4J082351X3132253H")
 ```
 
 ### Authorize Order
@@ -208,7 +189,6 @@ order, err := c.VoidOrder(orderID)
 ### Identity
 
 ```go
-// Retreive tolen by authorization code
 token, err := c.GrantNewAccessTokenFromAuthCode("<Authorization-Code>", "http://example.com/myapp/return.php")
 // ... or by refresh token
 token, err := c.GrantNewAccessTokenFromRefreshToken("<Refresh-Token>")
@@ -302,8 +282,6 @@ err := c.DeleteWebProfile("XP-CP6S-W9DY-96H8-MVN2")
 ### Vault
 
 ```go
-// https://developer.paypal.com/docs/api/vault/
-
 // Store CC
 c.StoreCreditCard(paypalsdk.CreditCard{
     Number:      "4417119669820331",
@@ -330,7 +308,7 @@ c.PatchCreditCard("CARD-ID-123", []paypalsdk.CreditCardField{
 // Get it
 c.GetCreditCard("CARD-ID-123")
 
-// get all stored credit cards
+// Get all stored credit cards
 c.GetCreditCards(nil)
 ```
 
@@ -338,6 +316,10 @@ c.GetCreditCards(nil)
 
 * Fork a repository
 * Add/Fix something
-* Run ./before-commit.sh to check that tests passed and code is formatted well
-* Push to your repository
-* Create pull request
+* Check that tests are passing
+* Create PR
+
+### Tests
+
+* Unit tests: `go test -tags=unit`
+* Integration tests: `go test -tags=inegration`
