@@ -3,6 +3,7 @@
 [![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/logpacker/PayPal-Go-SDK)
 [![Chat at https://gitter.im/logpacker/PayPal-Go-SDK](https://img.shields.io/badge/gitter-dev_chat-46bc99.svg)](https://gitter.im/logpacker/PayPal-Go-SDK?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Sourcegraph](https://sourcegraph.com/github.com/logpacker/PayPal-Go-SDK/-/badge.svg)](https://sourcegraph.com/github.com/logpacker/PayPal-Go-SDK?badge)
+[![API Testing](https://img.shields.io/badge/API%20Test-RapidAPI-blue.svg)](https://rapidapi.com/package/PayPal/functions?utm_source=PaypalGithub&utm_medium=button&utm_content=Vender_GitHub)
 
 ### GO client for PayPal REST API
 
