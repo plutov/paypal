@@ -23,19 +23,18 @@ func (c *Client) StoreCreditCard(cc CreditCard) (*CreditCard, error) {
 
 // DeleteCreditCard func
 // Endpoint: DELETE /v1/vault/credit-cards/credit_card_id
-func (c *Client) DeleteCreditCard(id string) (*CreditCard, error) {
+func (c *Client) DeleteCreditCard(id string) error {
 	req, err := c.NewRequest("DELETE", fmt.Sprintf("%s/v1/vault/credit-cards/%s", c.APIBase, id), nil)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	response := CreditCard{}
-	err = c.SendWithAuth(req, &response)
+	err = c.SendWithAuth(req, nil)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &response, nil
+	return nil
 }
 
 // GetCreditCard func
