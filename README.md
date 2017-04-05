@@ -322,4 +322,4 @@ c.GetCreditCards(nil)
 ### Tests
 
 * Unit tests: `go test`
-* Integration tests: `go test -tags=inegration`
+* Integration tests: `go test -tags=integration`

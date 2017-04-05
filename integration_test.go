@@ -293,8 +293,8 @@ func TestDeleteCreditCard(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	r1, e1 := c.DeleteCreditCard("")
-	if e1 == nil || r1 != nil {
+	e1 := c.DeleteCreditCard("")
+	if e1 == nil {
 		t.Errorf("Error is expected for invalid CC ID")
 	}
 }
