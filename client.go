@@ -125,9 +125,8 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	if c.Token != nil {
 		if c.Token.ExpiresIn < RequestNewTokenBeforeExpiresIn {
-			// c.Token willbe updated in GetAccessToken call
-			_, err := c.GetAccessToken()
-			if err != nil {
+			// c.Token will be updated in GetAccessToken call
+			if _, err := c.GetAccessToken(); err != nil {
 				return err
 			}
 		}
@@ -156,9 +155,18 @@ func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Requ
 // log will dump request and response to the log file
 func (c *Client) log(r *http.Request, resp *http.Response) {
 	if c.Log != nil {
-		reqDump := fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
-		respDump, _ := httputil.DumpResponse(resp, true)
+		var (
+			reqDump  string
+			respDump []byte
+		)
 
-		c.Log.Write([]byte("Request: " + reqDump + "\nResponse: " + string(respDump) + "\n\n"))
+		if r != nil {
+			reqDump = fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
+		}
+		if resp != nil {
+			respDump, _ = httputil.DumpResponse(resp, true)
+		}
+
+		c.Log.Write([]byte(fmt.Sprintf("Request: %s\nResponse: %s\n", reqDump, string(respDump))))
 	}
 }
