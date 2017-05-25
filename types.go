@@ -119,7 +119,7 @@ type (
 	CreditCard struct {
 		ID                 string   `json:"id,omitempty"`
 		PayerID            string   `json:"payer_id,omitempty"`
-		ExternalCustomerId string   `json:"external_customer_id,omitempty"`
+		ExternalCustomerID string   `json:"external_customer_id,omitempty"`
 		Number             string   `json:"number"`
 		Type               string   `json:"type"`
 		ExpireMonth        string   `json:"expire_month"`
