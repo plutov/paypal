@@ -117,18 +117,19 @@ type (
 
 	// CreditCard struct
 	CreditCard struct {
-		ID             string   `json:"id,omitempty"`
-		PayerID        string   `json:"payer_id,omitempty"`
-		Number         string   `json:"number"`
-		Type           string   `json:"type"`
-		ExpireMonth    string   `json:"expire_month"`
-		ExpireYear     string   `json:"expire_year"`
-		CVV2           string   `json:"cvv2,omitempty"`
-		FirstName      string   `json:"first_name,omitempty"`
-		LastName       string   `json:"last_name,omitempty"`
-		BillingAddress *Address `json:"billing_address,omitempty"`
-		State          string   `json:"state,omitempty"`
-		ValidUntil     string   `json:"valid_until,omitempty"`
+		ID                 string   `json:"id,omitempty"`
+		PayerID            string   `json:"payer_id,omitempty"`
+		ExternalCustomerID string   `json:"external_customer_id,omitempty"`
+		Number             string   `json:"number"`
+		Type               string   `json:"type"`
+		ExpireMonth        string   `json:"expire_month"`
+		ExpireYear         string   `json:"expire_year"`
+		CVV2               string   `json:"cvv2,omitempty"`
+		FirstName          string   `json:"first_name,omitempty"`
+		LastName           string   `json:"last_name,omitempty"`
+		BillingAddress     *Address `json:"billing_address,omitempty"`
+		State              string   `json:"state,omitempty"`
+		ValidUntil         string   `json:"valid_until,omitempty"`
 	}
 
 	// CreditCards GET /v1/vault/credit-cards
