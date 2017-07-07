@@ -19,7 +19,7 @@ func NewClient(clientID string, secret string, APIBase string) (*Client, error) 
 	}
 
 	return &Client{
-		client:   &http.Client{},
+		Client:   &http.Client{},
 		ClientID: clientID,
 		Secret:   secret,
 		APIBase:  APIBase,
@@ -49,6 +49,13 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 
 	return &t, err
 }
+
+// SetHTTPClient sets *http.Client to current client
+func (c *Client) SetHTTPClient(client *http.Client) error {
+	c.Client = client
+	return nil
+}
+
 
 // SetAccessToken sets saved token to current client
 func (c *Client) SetAccessToken(token string) error {
@@ -85,7 +92,7 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 		req.Header.Set("Content-type", "application/json")
 	}
 
-	resp, err = c.client.Do(req)
+	resp, err = c.Client.Do(req)
 	c.log(req, resp)
 
 	if err != nil {

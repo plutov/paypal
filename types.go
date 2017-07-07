@@ -107,7 +107,7 @@ type (
 
 	// Client represents a Paypal REST API Client
 	Client struct {
-		client   *http.Client
+		Client   *http.Client
 		ClientID string
 		Secret   string
 		APIBase  string
