@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
+	"time"
 )
 
 // NewClient returns new Client struct
@@ -45,6 +46,7 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 	// Set Token fur current Client
 	if t.Token != "" {
 		c.Token = &t
+		c.tokenExpiresAt = time.Now().Add(time.Duration(t.ExpiresIn) * time.Second)
 	}
 
 	return &t, err
@@ -55,6 +57,7 @@ func (c *Client) SetAccessToken(token string) error {
 	c.Token = &TokenResponse{
 		Token: token,
 	}
+	c.tokenExpiresAt = time.Unix(0, 0)
 
 	return nil
 }
@@ -124,7 +127,7 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 // client.Token will be updated when changed
 func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	if c.Token != nil {
-		if c.Token.ExpiresIn < RequestNewTokenBeforeExpiresIn {
+		if !c.tokenExpiresAt.IsZero() && c.tokenExpiresAt.Sub(time.Now()) < RequestNewTokenBeforeExpiresIn {
 			// c.Token will be updated in GetAccessToken call
 			if _, err := c.GetAccessToken(); err != nil {
 				return err
