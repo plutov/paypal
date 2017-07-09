@@ -15,7 +15,7 @@ const (
 	APIBaseLive = "https://api.paypal.com"
 
 	// RequestNewTokenBeforeExpiresIn is used by SendWithAuth and try to get new Token when it's about to expire
-	RequestNewTokenBeforeExpiresIn = 60
+	RequestNewTokenBeforeExpiresIn = time.Duration(60) * time.Second
 )
 
 // Possible values for `no_shipping` in InputFields
@@ -113,6 +113,7 @@ type (
 		APIBase  string
 		Log      io.Writer // If user set log file name all requests will be logged there
 		Token    *TokenResponse
+		tokenExpiresAt time.Time
 	}
 
 	// CreditCard struct
