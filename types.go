@@ -107,12 +107,12 @@ type (
 
 	// Client represents a Paypal REST API Client
 	Client struct {
-		client         *http.Client
-		ClientID       string
-		Secret         string
-		APIBase        string
-		Log            io.Writer // If user set log file name all requests will be logged there
-		Token          *TokenResponse
+		Client   *http.Client
+		ClientID string
+		Secret   string
+		APIBase  string
+		Log      io.Writer // If user set log file name all requests will be logged there
+		Token    *TokenResponse
 		tokenExpiresAt time.Time
 	}
 
