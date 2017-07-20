@@ -93,6 +93,15 @@ type (
 		SenderBatchHeader *SenderBatchHeader `json:"sender_batch_header,omitempty"`
 	}
 
+	// BillingPlan struct
+	BillingPlan struct {
+		Name                string              `json:"name,omitempty"`
+		Description         string              `json:"description,omitempty"`
+		Type                string              `json:"type,omitempty"`
+		PaymentDefinitions  []PaymentDefinition `json:"payment_definitions,omitempty"`
+		MerchantPreferences MerchantPreferences `json:"merchant_preferences,omitempty"`
+	}
+
 	// Capture struct
 	Capture struct {
 		Amount         *Amount    `json:"amount,omitempty"`
@@ -105,14 +114,20 @@ type (
 		Links          []Link     `json:"links,omitempty"`
 	}
 
+	// ChargeModel struct
+	ChargeModel struct {
+		Type   string       `json:"type,omitempty"`
+		Amount AmountPayout `json:"amount,omitempty"`
+	}
+
 	// Client represents a Paypal REST API Client
 	Client struct {
-		Client   *http.Client
-		ClientID string
-		Secret   string
-		APIBase  string
-		Log      io.Writer // If user set log file name all requests will be logged there
-		Token    *TokenResponse
+		Client         *http.Client
+		ClientID       string
+		Secret         string
+		APIBase        string
+		Log            io.Writer // If user set log file name all requests will be logged there
+		Token          *TokenResponse
 		tokenExpiresAt time.Time
 	}
 
@@ -218,6 +233,16 @@ type (
 		Enctype string `json:"enctype,omitempty"`
 	}
 
+	// MerchantPreferences struct
+	MerchantPreferences struct {
+		SetupFee                AmountPayout `json:"setup_fee,omitempty"`
+		ReturnUrl               string       `json:"return_url,omitempty"`
+		CancelUrl               string       `json:"cancel_url,omitempty"`
+		AutoBillAmount          string       `json:"auto_bill_amount,omitempty"`
+		InitialFailAmountAction string       `json:"initial_fail_amount_action,omitempty"`
+		MaxFailAttempts         string       `json:"max_fail_attempts,omitempty"`
+	}
+
 	// Order struct
 	Order struct {
 		ID            string     `json:"id,omitempty"`
@@ -261,6 +286,17 @@ type (
 		State               string        `json:"state,omitempty"`
 		UpdateTime          *time.Time    `json:"update_time,omitempty"`
 		ExperienceProfileID string        `json:"experience_profile_id,omitempty"`
+	}
+
+	// PaymentDefinition struct
+	PaymentDefinition struct {
+		Name              string        `json:"name,omitempty"`
+		Type              string        `json:"type,omitempty"`
+		Frequency         string        `json:"frequency,omitempty"`
+		FrequencyInterval string        `json:"frequency_interval,omitempty"`
+		Amount            AmountPayout  `json:"amount,omitempty"`
+		Cycles            string        `json:"cycles,omitempty"`
+		ChargeModels      []ChargeModel `json:"charge_models,omitempty"`
 	}
 
 	// PaymentResponse structure
