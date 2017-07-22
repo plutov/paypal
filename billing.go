@@ -1,7 +1,9 @@
 package paypalsdk
 
 import (
+	"bytes"
 	"fmt"
+	"net/http"
 	"time"
 )
 
@@ -34,4 +36,18 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 	}
 
 	return response, nil
+}
+
+// Activates a billing plan
+// By default, a new plan is not activated
+// Endpoint: PATCH /v1/payments/billing-plans/
+func (c *Client) ActivatePlan(planID string) error {
+	buf := bytes.NewBuffer([]byte("[{\"op\":\"replace\",\"path\":\"/\",\"value\":{\"state\":\"ACTIVE\"}}]"))
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans/"+planID), buf)
+	if err != nil {
+		return err
+	}
+	req.SetBasicAuth(c.ClientID, c.Secret)
+	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
+	return c.SendWithAuth(req, nil)
 }
