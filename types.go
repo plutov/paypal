@@ -44,6 +44,9 @@ const (
 )
 
 type (
+	// JsonTime overrides MarshalJson method to format in ISO8601
+	JsonTime time.Time
+
 	// Address struct
 	Address struct {
 		Line1       string `json:"line1"`
@@ -93,13 +96,24 @@ type (
 		SenderBatchHeader *SenderBatchHeader `json:"sender_batch_header,omitempty"`
 	}
 
+	// BillingAgreement struct
+	BillingAgreement struct {
+		Name            string           `json:"name,omitempty"`
+		Description     string           `json:"description,omitempty"`
+		StartDate       JsonTime         `json:"start_date,omitempty"`
+		Plan            BillingPlan      `json:"plan,omitempty"`
+		Payer           Payer            `json:"payer,omitempty"`
+		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
+	}
+
 	// BillingPlan struct
 	BillingPlan struct {
-		Name                string              `json:"name,omitempty"`
-		Description         string              `json:"description,omitempty"`
-		Type                string              `json:"type,omitempty"`
-		PaymentDefinitions  []PaymentDefinition `json:"payment_definitions,omitempty"`
-		MerchantPreferences MerchantPreferences `json:"merchant_preferences,omitempty"`
+		ID                  string               `json:"id,omitempty"`
+		Name                string               `json:"name,omitempty"`
+		Description         string               `json:"description,omitempty"`
+		Type                string               `json:"type,omitempty"`
+		PaymentDefinitions  []PaymentDefinition  `json:"payment_definitions,omitempty"`
+		MerchantPreferences *MerchantPreferences `json:"merchant_preferences,omitempty"`
 	}
 
 	// Capture struct
@@ -485,4 +499,9 @@ type (
 // Error method implementation for ErrorResponse struct
 func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %d %s", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
+}
+
+func (t JsonTime) MarshalJSON() ([]byte, error) {
+	stamp := fmt.Sprintf(`"%s"`, time.Time(t).UTC().Format(time.RFC3339))
+	return []byte(stamp), nil
 }

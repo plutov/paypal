@@ -18,24 +18,27 @@ type (
 		UpdateTime          time.Time           `json:"update_time,omitempty"`
 		Links               []Link              `json:"links,omitempty"`
 	}
+
+	// CreateAgreementResp struct
+	CreateAgreementResp struct {
+		Name        string      `json:"name,omitempty"`
+		Description string      `json:"description,omitempty"`
+		Plan        BillingPlan `json:"plan,omitempty"`
+		Links       []Link      `json:"links,omitempty"`
+		StartTime   time.Time   `json:"start_time,omitempty"`
+	}
 )
 
 // CreateBillingPlan creates a billing plan in Paypal
 // Endpoint: POST /v1/payments/billing-plans
 func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error) {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
-	if err != nil {
-		return &CreateBillingResp{}, err
-	}
-
 	response := &CreateBillingResp{}
-
-	err = c.SendWithAuth(req, response)
 	if err != nil {
 		return response, err
 	}
-
-	return response, nil
+	err = c.SendWithAuth(req, response)
+	return response, err
 }
 
 // Activates a billing plan
@@ -50,4 +53,16 @@ func (c *Client) ActivatePlan(planID string) error {
 	req.SetBasicAuth(c.ClientID, c.Secret)
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	return c.SendWithAuth(req, nil)
+}
+
+// Creates an agreement for specified plan
+// Endpoint: POST /v1/payments/billing-agreements
+func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementResp, error) {
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
+	response := &CreateAgreementResp{}
+	if err != nil {
+		return response, err
+	}
+	err = c.SendWithAuth(req, response)
+	return response, err
 }
