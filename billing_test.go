@@ -1,142 +1,65 @@
-package paypalsdk
+package paypalsdk_test
 
 import (
-	"encoding/json"
-	"github.com/stretchr/testify/assert"
-	"testing"
+	"fmt"
+	pp "github.com/logpacker/PayPal-Go-SDK"
+	"time"
 )
 
-func TestJsonStructure(t *testing.T) {
-	expected_str := `{
-  "name": "Plan with Regular and Trial Payment Definitions",
-  "description": "Plan with regular and trial payment definitions.",
-  "type": "fixed",
-  "payment_definitions": [
-  {
-    "name": "Regular payment definition",
-    "type": "REGULAR",
-    "frequency": "MONTH",
-    "frequency_interval": "2",
-    "amount":
-    {
-      "value": "100",
-      "currency": "USD"
-    },
-    "cycles": "12",
-    "charge_models": [
-    {
-      "type": "SHIPPING",
-      "amount":
-      {
-        "value": "10",
-        "currency": "USD"
-      }
-    },
-    {
-      "type": "TAX",
-      "amount":
-      {
-        "value": "12",
-        "currency": "USD"
-      }
-    }]
-  },
-  {
-    "name": "Trial payment definition",
-    "type": "trial",
-    "frequency": "week",
-    "frequency_interval": "5",
-    "amount":
-    {
-      "value": "9.19",
-      "currency": "USD"
-    },
-    "cycles": "2",
-    "charge_models": [
-    {
-      "type": "SHIPPING",
-      "amount":
-      {
-        "value": "1",
-        "currency": "USD"
-      }
-    },
-    {
-      "type": "TAX",
-      "amount":
-      {
-        "value": "2",
-        "currency": "USD"
-      }
-    }]
-  }],
-  "merchant_preferences":
-  {
-    "setup_fee":
-    {
-      "value": "1",
-      "currency": "USD"
-    },
-    "return_url": "http://www.paypal.com",
-    "cancel_url": "http://www.paypal.com/cancel",
-    "auto_bill_amount": "YES",
-    "initial_fail_amount_action": "CONTINUE",
-    "max_fail_attempts": "0"
-  }
-}`
-	plan := BillingPlan{
+func Example() {
+	plan := pp.BillingPlan{
 		Name:        "Plan with Regular and Trial Payment Definitions",
 		Description: "Plan with regular and trial payment definitions.",
 		Type:        "fixed",
-		PaymentDefinitions: []PaymentDefinition{
-			PaymentDefinition{
+		PaymentDefinitions: []pp.PaymentDefinition{
+			pp.PaymentDefinition{
 				Name:              "Regular payment definition",
 				Type:              "REGULAR",
 				Frequency:         "MONTH",
 				FrequencyInterval: "2",
-				Amount: AmountPayout{
+				Amount: pp.AmountPayout{
 					Value:    "100",
 					Currency: "USD",
 				},
 				Cycles: "12",
-				ChargeModels: []ChargeModel{
-					ChargeModel{
+				ChargeModels: []pp.ChargeModel{
+					pp.ChargeModel{
 						Type: "SHIPPING",
-						Amount: AmountPayout{
+						Amount: pp.AmountPayout{
 							Value:    "10",
 							Currency: "USD",
 						},
 					},
-					ChargeModel{
+					pp.ChargeModel{
 						Type: "TAX",
-						Amount: AmountPayout{
+						Amount: pp.AmountPayout{
 							Value:    "12",
 							Currency: "USD",
 						},
 					},
 				},
 			},
-			PaymentDefinition{
+			pp.PaymentDefinition{
 				Name:              "Trial payment definition",
 				Type:              "trial",
 				Frequency:         "week",
 				FrequencyInterval: "5",
-				Amount: AmountPayout{
+				Amount: pp.AmountPayout{
 					Value:    "9.19",
 					Currency: "USD",
 				},
 				Cycles: "2",
-				ChargeModels: []ChargeModel{
-					ChargeModel{
+				ChargeModels: []pp.ChargeModel{
+					pp.ChargeModel{
 						Type: "SHIPPING",
-						Amount: AmountPayout{
+						Amount: pp.AmountPayout{
 							Value:    "1",
 							Currency: "USD",
 						},
 					},
-					ChargeModel{
+					pp.ChargeModel{
 						Type: "TAX",
-						Amount: AmountPayout{
+						Amount: pp.AmountPayout{
 							Value:    "2",
 							Currency: "USD",
 						},
@@ -144,8 +67,8 @@ func TestJsonStructure(t *testing.T) {
 				},
 			},
 		},
-		MerchantPreferences: MerchantPreferences{
-			SetupFee: AmountPayout{
+		MerchantPreferences: &pp.MerchantPreferences{
+			SetupFee: pp.AmountPayout{
 				Value:    "1",
 				Currency: "USD",
 			},
@@ -156,9 +79,29 @@ func TestJsonStructure(t *testing.T) {
 			MaxFailAttempts:         "0",
 		},
 	}
-	_, err := json.Marshal(&plan)
-	expected := new(BillingPlan)
-	json.Unmarshal([]byte(expected_str), expected)
-	assert.NoError(t, err)
-	assert.Equal(t, expected, &plan, "Wrong billing builder")
+	c, err := pp.NewClient("clientID", "secretID", pp.APIBaseSandBox)
+	if err != nil {
+		panic(err)
+	}
+	_, err = c.GetAccessToken()
+	if err != nil {
+		panic(err)
+	}
+	planResp, err := c.CreateBillingPlan(plan)
+	if err != nil {
+		panic(err)
+	}
+	err = c.ActivatePlan(planResp.ID)
+	fmt.Println(err)
+	agreement := pp.BillingAgreement{
+		Name:        "Fast Speed Agreement",
+		Description: "Agreement for Fast Speed Plan",
+		StartDate:   pp.JsonTime(time.Now().Add(time.Hour * 24)),
+		Plan:        pp.BillingPlan{ID: planResp.ID},
+		Payer: pp.Payer{
+			PaymentMethod: "paypal",
+		},
+	}
+	resp, err := c.CreateBillingAgreement(agreement)
+	fmt.Println(err, resp)
 }
