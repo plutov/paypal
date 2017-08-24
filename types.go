@@ -58,6 +58,18 @@ type (
 		Phone       string `json:"phone,omitempty"`
 	}
 
+	// AgreementDetails struct
+	AgreementDetails struct {
+		OutstandingBalance AmountPayout `json:"outstanding_balance"`
+		CyclesRemaining    int          `json:"cycles_remaining"`
+		CyclesCompleted    int          `json:"cycles_completed"`
+		NextBillingDate    time.Time    `json:"next_billing_date"`
+		LastPaymentDate    time.Time    `json:"last_payment_date"`
+		LastPaymentAmount  AmountPayout `json:"last_payment_amount"`
+		FinalPaymentDate   time.Time    `json:"final_payment_date"`
+		FailedPaymentCount int          `json:"failed_payment_count"`
+	}
+
 	// Amount struct
 	Amount struct {
 		Currency string `json:"currency"`
@@ -206,6 +218,19 @@ type (
 		Message         string         `json:"message"`
 		InformationLink string         `json:"information_link"`
 		Details         string         `json:"details"`
+	}
+
+	// ExecuteAgreementResponse struct
+	ExecuteAgreementResponse struct {
+		ID               string           `json:"id"`
+		State            string           `json:"state"`
+		Description      string           `json:"description,omitempty"`
+		Payer            Payer            `json:"payer"`
+		Plan             BillingPlan      `json:"plan"`
+		StartDate        time.Time        `json:"start_date"`
+		ShippingAddress  ShippingAddress  `json:"shipping_address"`
+		AgreementDetails AgreementDetails `json:"agreement_details"`
+		Links            []Link           `json:"links"`
 	}
 
 	// ExecuteResponse struct

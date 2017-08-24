@@ -2,6 +2,7 @@ package paypalsdk
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -65,4 +66,28 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 	}
 	err = c.SendWithAuth(req, response)
 	return response, err
+}
+
+// ExecuteApprovedAgreement - Use this call to execute (complete) a PayPal agreement that has been approved by the payer.
+// Endpoint: POST /v1/payments/billing-agreements/token/agreement-execute
+func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+token+"/agreement-execute"), nil)
+	if err != nil {
+		return &ExecuteAgreementResponse{}, err
+	}
+
+	req.SetBasicAuth(c.ClientID, c.Secret)
+	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
+
+	e := ExecuteAgreementResponse{}
+	err = c.SendWithAuth(req, &e)
+	if err != nil {
+		return &e, err
+	}
+
+	if e.ID == "" {
+		return &e, errors.New("Unable to execute agreement with token=" + token)
+	}
+
+	return &e, err
 }
