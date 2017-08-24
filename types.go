@@ -61,13 +61,13 @@ type (
 	// AgreementDetails struct
 	AgreementDetails struct {
 		OutstandingBalance AmountPayout `json:"outstanding_balance"`
-		CyclesRemaining    int          `json:"cycles_remaining"`
-		CyclesCompleted    int          `json:"cycles_completed"`
+		CyclesRemaining    int          `json:"cycles_remaining,string"`
+		CyclesCompleted    int          `json:"cycles_completed,string"`
 		NextBillingDate    time.Time    `json:"next_billing_date"`
 		LastPaymentDate    time.Time    `json:"last_payment_date"`
 		LastPaymentAmount  AmountPayout `json:"last_payment_amount"`
 		FinalPaymentDate   time.Time    `json:"final_payment_date"`
-		FailedPaymentCount int          `json:"failed_payment_count"`
+		FailedPaymentCount int          `json:"failed_payment_count,string"`
 	}
 
 	// Amount struct
