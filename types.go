@@ -249,12 +249,12 @@ type (
 
 	// MerchantPreferences struct
 	MerchantPreferences struct {
-		SetupFee                AmountPayout `json:"setup_fee,omitempty"`
-		ReturnUrl               string       `json:"return_url,omitempty"`
-		CancelUrl               string       `json:"cancel_url,omitempty"`
-		AutoBillAmount          string       `json:"auto_bill_amount,omitempty"`
-		InitialFailAmountAction string       `json:"initial_fail_amount_action,omitempty"`
-		MaxFailAttempts         string       `json:"max_fail_attempts,omitempty"`
+		SetupFee                *AmountPayout `json:"setup_fee,omitempty"`
+		ReturnUrl               string        `json:"return_url,omitempty"`
+		CancelUrl               string        `json:"cancel_url,omitempty"`
+		AutoBillAmount          string        `json:"auto_bill_amount,omitempty"`
+		InitialFailAmountAction string        `json:"initial_fail_amount_action,omitempty"`
+		MaxFailAttempts         string        `json:"max_fail_attempts,omitempty"`
 	}
 
 	// Order struct
