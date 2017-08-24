@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func Example() {
+func BillingExample() {
 	plan := pp.BillingPlan{
 		Name:        "Plan with Regular and Trial Payment Definitions",
 		Description: "Plan with regular and trial payment definitions.",
@@ -68,7 +68,7 @@ func Example() {
 			},
 		},
 		MerchantPreferences: &pp.MerchantPreferences{
-			SetupFee: pp.AmountPayout{
+			SetupFee: &pp.AmountPayout{
 				Value:    "1",
 				Currency: "USD",
 			},
