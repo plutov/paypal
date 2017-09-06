@@ -35,6 +35,10 @@
  * PATCH /v1/vault/credit-cards/**ID**
  * GET /v1/vault/credit-cards/**ID**
  * GET /v1/vault/credit-cards
+ * POST /v1/payments/billing-plans
+ * PATCH /v1/payments/billing-plans/***ID***
+ * POST /v1/payments/billing-agreements
+ * POST /v1/payments/billing-agreements/***TOKEN***/agreement-execute
 
 ### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
