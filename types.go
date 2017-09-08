@@ -44,6 +44,9 @@ const (
 )
 
 type (
+	// JsonTime overrides MarshalJson method to format in ISO8601
+	JsonTime time.Time
+
 	// Address struct
 	Address struct {
 		Line1       string `json:"line1"`
@@ -53,6 +56,18 @@ type (
 		PostalCode  string `json:"postal_code,omitempty"`
 		State       string `json:"state,omitempty"`
 		Phone       string `json:"phone,omitempty"`
+	}
+
+	// AgreementDetails struct
+	AgreementDetails struct {
+		OutstandingBalance AmountPayout `json:"outstanding_balance"`
+		CyclesRemaining    int          `json:"cycles_remaining,string"`
+		CyclesCompleted    int          `json:"cycles_completed,string"`
+		NextBillingDate    time.Time    `json:"next_billing_date"`
+		LastPaymentDate    time.Time    `json:"last_payment_date"`
+		LastPaymentAmount  AmountPayout `json:"last_payment_amount"`
+		FinalPaymentDate   time.Time    `json:"final_payment_date"`
+		FailedPaymentCount int          `json:"failed_payment_count,string"`
 	}
 
 	// Amount struct
@@ -93,6 +108,26 @@ type (
 		SenderBatchHeader *SenderBatchHeader `json:"sender_batch_header,omitempty"`
 	}
 
+	// BillingAgreement struct
+	BillingAgreement struct {
+		Name            string           `json:"name,omitempty"`
+		Description     string           `json:"description,omitempty"`
+		StartDate       JsonTime         `json:"start_date,omitempty"`
+		Plan            BillingPlan      `json:"plan,omitempty"`
+		Payer           Payer            `json:"payer,omitempty"`
+		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
+	}
+
+	// BillingPlan struct
+	BillingPlan struct {
+		ID                  string               `json:"id,omitempty"`
+		Name                string               `json:"name,omitempty"`
+		Description         string               `json:"description,omitempty"`
+		Type                string               `json:"type,omitempty"`
+		PaymentDefinitions  []PaymentDefinition  `json:"payment_definitions,omitempty"`
+		MerchantPreferences *MerchantPreferences `json:"merchant_preferences,omitempty"`
+	}
+
 	// Capture struct
 	Capture struct {
 		Amount         *Amount    `json:"amount,omitempty"`
@@ -105,14 +140,20 @@ type (
 		Links          []Link     `json:"links,omitempty"`
 	}
 
+	// ChargeModel struct
+	ChargeModel struct {
+		Type   string       `json:"type,omitempty"`
+		Amount AmountPayout `json:"amount,omitempty"`
+	}
+
 	// Client represents a Paypal REST API Client
 	Client struct {
-		Client   *http.Client
-		ClientID string
-		Secret   string
-		APIBase  string
-		Log      io.Writer // If user set log file name all requests will be logged there
-		Token    *TokenResponse
+		Client         *http.Client
+		ClientID       string
+		Secret         string
+		APIBase        string
+		Log            io.Writer // If user set log file name all requests will be logged there
+		Token          *TokenResponse
 		tokenExpiresAt time.Time
 	}
 
@@ -179,6 +220,19 @@ type (
 		Details         string         `json:"details"`
 	}
 
+	// ExecuteAgreementResponse struct
+	ExecuteAgreementResponse struct {
+		ID               string           `json:"id"`
+		State            string           `json:"state"`
+		Description      string           `json:"description,omitempty"`
+		Payer            Payer            `json:"payer"`
+		Plan             BillingPlan      `json:"plan"`
+		StartDate        time.Time        `json:"start_date"`
+		ShippingAddress  ShippingAddress  `json:"shipping_address"`
+		AgreementDetails AgreementDetails `json:"agreement_details"`
+		Links            []Link           `json:"links"`
+	}
+
 	// ExecuteResponse struct
 	ExecuteResponse struct {
 		ID           string        `json:"id"`
@@ -216,6 +270,16 @@ type (
 		Rel     string `json:"rel,omitempty"`
 		Method  string `json:"method,omitempty"`
 		Enctype string `json:"enctype,omitempty"`
+	}
+
+	// MerchantPreferences struct
+	MerchantPreferences struct {
+		SetupFee                *AmountPayout `json:"setup_fee,omitempty"`
+		ReturnUrl               string        `json:"return_url,omitempty"`
+		CancelUrl               string        `json:"cancel_url,omitempty"`
+		AutoBillAmount          string        `json:"auto_bill_amount,omitempty"`
+		InitialFailAmountAction string        `json:"initial_fail_amount_action,omitempty"`
+		MaxFailAttempts         string        `json:"max_fail_attempts,omitempty"`
 	}
 
 	// Order struct
@@ -261,6 +325,18 @@ type (
 		State               string        `json:"state,omitempty"`
 		UpdateTime          *time.Time    `json:"update_time,omitempty"`
 		ExperienceProfileID string        `json:"experience_profile_id,omitempty"`
+	}
+
+	// PaymentDefinition struct
+	PaymentDefinition struct {
+		ID                string        `json:"id,omitempty"`
+		Name              string        `json:"name,omitempty"`
+		Type              string        `json:"type,omitempty"`
+		Frequency         string        `json:"frequency,omitempty"`
+		FrequencyInterval string        `json:"frequency_interval,omitempty"`
+		Amount            AmountPayout  `json:"amount,omitempty"`
+		Cycles            string        `json:"cycles,omitempty"`
+		ChargeModels      []ChargeModel `json:"charge_models,omitempty"`
 	}
 
 	// PaymentResponse structure
@@ -448,4 +524,9 @@ type (
 // Error method implementation for ErrorResponse struct
 func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %d %s", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
+}
+
+func (t JsonTime) MarshalJSON() ([]byte, error) {
+	stamp := fmt.Sprintf(`"%s"`, time.Time(t).UTC().Format(time.RFC3339))
+	return []byte(stamp), nil
 }
