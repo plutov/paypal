@@ -3,8 +3,6 @@
 package paypalsdk
 
 import (
-	"encoding/json"
-	"fmt"
 	"os"
 	"testing"
 )
@@ -156,7 +154,7 @@ func TestVoidOrder(t *testing.T) {
 
 func TestCreateDirectPaypalPayment(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	//c.SetLog(os.Stdout)
+	c.SetLog(os.Stdout)
 	c.GetAccessToken()
 
 	amount := Amount{
@@ -214,16 +212,14 @@ func TestCreatePayment(t *testing.T) {
 			},
 		}},
 		RedirectURLs: &RedirectURLs{
-			ReturnURL: "http://localhost:9000/gb/checkout/payment",
-			CancelURL: "http://localhost:9000/gb/checkout/summary",
+			ReturnURL: "http://..",
+			CancelURL: "http://..",
 		},
 	}
 	pr, err := c.CreatePayment(p)
 	if err != nil {
 		t.Errorf("Error creating payment.")
 	}
-	pmEnc, _ := json.Marshal(pr)
-	fmt.Printf("pmEnc: %s", pmEnc)
 }
 
 func TestGetPayment(t *testing.T) {
