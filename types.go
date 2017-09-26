@@ -72,8 +72,9 @@ type (
 
 	// Amount struct
 	Amount struct {
-		Currency string `json:"currency"`
-		Total    string `json:"total"`
+		Currency string  `json:"currency"`
+		Total    string  `json:"total"`
+		Details  Details `json:"details,omitempty"`
 	}
 
 	// AmountPayout struct
@@ -208,6 +209,17 @@ type (
 	Currency struct {
 		Currency string `json:"currency,omitempty"`
 		Value    string `json:"value,omitempty"`
+	}
+
+	// Details structure used in Amount structures as optional value
+	Details struct {
+		Subtotal         string `json:"subtotal,omitempty"`
+		Shipping         string `json:"shipping,omitempty"`
+		Tax              string `json:"tax,omitempty"`
+		HandlingFee      string `json:"handling_fee,omitempty"`
+		ShippingDiscount string `json:"shipping_discount,omitempty"`
+		Insurance        string `json:"insurance,omitempty"`
+		GiftWrap         string `json:"gift_wrap,omitempty"`
 	}
 
 	// ErrorResponse https://developer.paypal.com/docs/api/errors/
