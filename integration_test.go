@@ -169,6 +169,59 @@ func TestCreateDirectPaypalPayment(t *testing.T) {
 	}
 }
 
+func TestCreatePayment(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.SetLog(os.Stdout)
+	c.GetAccessToken()
+
+	p := Payment{
+		Intent: "sale",
+		Payer: &Payer{
+			PaymentMethod: "credit_card",
+			FundingInstruments: []FundingInstrument{{
+				CreditCard: &CreditCard{
+					Number:      "4111111111111111",
+					Type:        "visa",
+					ExpireMonth: "11",
+					ExpireYear:  "2020",
+					CVV2:        "777",
+					FirstName:   "John",
+					LastName:    "Doe",
+				},
+			}},
+		},
+		Transactions: []Transaction{{
+			Amount: &Amount{
+				Currency: "USD",
+				Total:    "10.00", // total cost including shipping
+				Details: Details{
+					Shipping: "3.00", // total shipping cost
+					Subtotal: "7.00", // total cost without shipping
+				},
+			},
+			Description: "My Payment",
+			ItemList: &ItemList{
+				Items: []Item{
+					Item{
+						Quantity: 2,
+						Price:    "3.50",
+						Currency: "USD",
+						Name:     "Product 1",
+					},
+				},
+			},
+		}},
+		RedirectURLs: &RedirectURLs{
+			ReturnURL: "http://..",
+			CancelURL: "http://..",
+		},
+	}
+	pr, err := c.CreatePayment(p)
+	if err != nil {
+		t.Errorf("Error creating payment.")
+	}
+}
+
 func TestGetPayment(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
