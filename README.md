@@ -24,7 +24,7 @@
  * POST /v1/payments/orders/**ID**/do-void
  * POST /v1/identity/openidconnect/tokenservice
  * GET /v1/identity/openidconnect/userinfo/?schema=**SCHEMA**
- * POST /v1/payments/payouts?sync_mode=true
+ * POST /v1/payments/payouts
  * GET /v1/payment-experience/web-profiles
  * POST /v1/payment-experience/web-profiles
  * GET /v1/payment-experience/web-profiles/**ID**
