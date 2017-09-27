@@ -42,7 +42,7 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 	return response, err
 }
 
-// Activates a billing plan
+// ActivatePlan activates a billing plan
 // By default, a new plan is not activated
 // Endpoint: PATCH /v1/payments/billing-plans/
 func (c *Client) ActivatePlan(planID string) error {
@@ -56,9 +56,14 @@ func (c *Client) ActivatePlan(planID string) error {
 	return c.SendWithAuth(req, nil)
 }
 
-// Creates an agreement for specified plan
+// CreateBillingAgreement creates an agreement for specified plan
 // Endpoint: POST /v1/payments/billing-agreements
 func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementResp, error) {
+	// PayPal needs only ID, so we will remove all fields except Plan ID
+	a.Plan = BillingPlan{
+		ID: a.Plan.ID,
+	}
+
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
 	response := &CreateAgreementResp{}
 	if err != nil {
