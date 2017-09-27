@@ -216,7 +216,7 @@ func TestCreatePayment(t *testing.T) {
 			CancelURL: "http://..",
 		},
 	}
-	pr, err := c.CreatePayment(p)
+	_, err := c.CreatePayment(p)
 	if err != nil {
 		t.Errorf("Error creating payment.")
 	}
