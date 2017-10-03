@@ -58,7 +58,6 @@ func (c *Client) SetHTTPClient(client *http.Client) error {
 	return nil
 }
 
-
 // SetAccessToken sets saved token to current client
 func (c *Client) SetAccessToken(token string) error {
 	c.Token = &TokenResponse{

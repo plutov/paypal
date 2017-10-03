@@ -44,8 +44,8 @@ const (
 )
 
 type (
-	// JsonTime overrides MarshalJson method to format in ISO8601
-	JsonTime time.Time
+	// JSONTime overrides MarshalJson method to format in ISO8601
+	JSONTime time.Time
 
 	// Address struct
 	Address struct {
@@ -113,7 +113,7 @@ type (
 	BillingAgreement struct {
 		Name            string           `json:"name,omitempty"`
 		Description     string           `json:"description,omitempty"`
-		StartDate       JsonTime         `json:"start_date,omitempty"`
+		StartDate       JSONTime         `json:"start_date,omitempty"`
 		Plan            BillingPlan      `json:"plan,omitempty"`
 		Payer           Payer            `json:"payer,omitempty"`
 		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
@@ -287,8 +287,8 @@ type (
 	// MerchantPreferences struct
 	MerchantPreferences struct {
 		SetupFee                *AmountPayout `json:"setup_fee,omitempty"`
-		ReturnUrl               string        `json:"return_url,omitempty"`
-		CancelUrl               string        `json:"cancel_url,omitempty"`
+		ReturnURL               string        `json:"return_url,omitempty"`
+		CancelURL               string        `json:"cancel_url,omitempty"`
 		AutoBillAmount          string        `json:"auto_bill_amount,omitempty"`
 		InitialFailAmountAction string        `json:"initial_fail_amount_action,omitempty"`
 		MaxFailAttempts         string        `json:"max_fail_attempts,omitempty"`
@@ -539,7 +539,8 @@ func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %d %s", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
 }
 
-func (t JsonTime) MarshalJSON() ([]byte, error) {
+// MarshalJSON for JSONTime
+func (t JSONTime) MarshalJSON() ([]byte, error) {
 	stamp := fmt.Sprintf(`"%s"`, time.Time(t).UTC().Format(time.RFC3339))
 	return []byte(stamp), nil
 }
