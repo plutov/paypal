@@ -2,8 +2,9 @@ package paypalsdk_test
 
 import (
 	"fmt"
-	pp "github.com/logpacker/PayPal-Go-SDK"
 	"time"
+
+	pp "github.com/logpacker/PayPal-Go-SDK"
 )
 
 func BillingExample() {
@@ -72,8 +73,8 @@ func BillingExample() {
 				Value:    "1",
 				Currency: "USD",
 			},
-			ReturnUrl:               "http://www.paypal.com",
-			CancelUrl:               "http://www.paypal.com/cancel",
+			ReturnURL:               "http://www.paypal.com",
+			CancelURL:               "http://www.paypal.com/cancel",
 			AutoBillAmount:          "YES",
 			InitialFailAmountAction: "CONTINUE",
 			MaxFailAttempts:         "0",
@@ -96,7 +97,7 @@ func BillingExample() {
 	agreement := pp.BillingAgreement{
 		Name:        "Fast Speed Agreement",
 		Description: "Agreement for Fast Speed Plan",
-		StartDate:   pp.JsonTime(time.Now().Add(time.Hour * 24)),
+		StartDate:   pp.JSONTime(time.Now().Add(time.Hour * 24)),
 		Plan:        pp.BillingPlan{ID: planResp.ID},
 		Payer: pp.Payer{
 			PaymentMethod: "paypal",
