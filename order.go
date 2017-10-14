@@ -7,7 +7,7 @@ import "fmt"
 func (c *Client) GetOrder(orderID string) (*Order, error) {
 	order := &Order{}
 
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/orders/"+orderID), nil)
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/orders/", orderID), nil)
 	if err != nil {
 		return order, err
 	}

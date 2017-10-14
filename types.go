@@ -224,12 +224,12 @@ type (
 
 	// ErrorResponse https://developer.paypal.com/docs/api/errors/
 	ErrorResponse struct {
-		Response        *http.Response `json:"-"`
-		Name            string         `json:"name"`
-		DebugID         string         `json:"debug_id"`
-		Message         string         `json:"message"`
-		InformationLink string         `json:"information_link"`
-		Details         string         `json:"details"`
+		Response        *http.Response    `json:"-"`
+		Name            string            `json:"name"`
+		DebugID         string            `json:"debug_id"`
+		Message         string            `json:"message"`
+		InformationLink string            `json:"information_link"`
+		Details         map[string]string `json:"details"`
 	}
 
 	// ExecuteAgreementResponse struct

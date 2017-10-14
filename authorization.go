@@ -10,7 +10,7 @@ import (
 // Endpoint: GET /v1/payments/authorization/ID
 func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(""))
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/authorization/"+authID), buf)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/authorization/", authID), buf)
 	if err != nil {
 		return &Authorization{}, err
 	}
