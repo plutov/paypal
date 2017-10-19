@@ -63,7 +63,7 @@ func (c *Client) SetAccessToken(token string) error {
 	c.Token = &TokenResponse{
 		Token: token,
 	}
-	c.tokenExpiresAt = time.Unix(0, 0)
+	c.tokenExpiresAt = time.Time{}
 
 	return nil
 }
