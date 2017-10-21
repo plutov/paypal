@@ -3,25 +3,28 @@ package paypalsdk
 import (
 	"fmt"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 // GrantNewAccessTokenFromAuthCode - Use this call to grant a new access token, using the previously obtained authorization code.
 // Endpoint: POST /v1/identity/openidconnect/tokenservice
 func (c *Client) GrantNewAccessTokenFromAuthCode(code string, redirectURI string) (*TokenResponse, error) {
-	type request struct {
-		GrantType   string `json:"grant_type"`
-		Code        string `json:"code"`
-		RedirectURI string `json:"redirect_uri"`
-	}
-
 	token := &TokenResponse{}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/identity/openidconnect/tokenservice"), request{GrantType: "authorization_code", Code: code, RedirectURI: redirectURI})
+	q := url.Values{}
+	q.Set("grant_type", "authorization_code")
+	q.Set("code", code)
+	q.Set("redirect_uri", redirectURI)
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/identity/openidconnect/tokenservice"), strings.NewReader(q.Encode()))
 	if err != nil {
 		return token, err
 	}
 
-	err = c.SendWithAuth(req, token)
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+	err = c.SendWithBasicAuth(req, token)
 	if err != nil {
 		return token, err
 	}

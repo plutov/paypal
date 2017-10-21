@@ -1,6 +1,7 @@
 package paypalsdk
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -454,12 +455,14 @@ type (
 		Phone         string `json:"phone,omitempty"`
 	}
 
+	expirationTime int64
+
 	// TokenResponse is for API response for the /oauth2/token endpoint
 	TokenResponse struct {
-		RefreshToken string `json:"refresh_token"`
-		Token        string `json:"access_token"`
-		Type         string `json:"token_type"`
-		ExpiresIn    int64  `json:"expires_in"`
+		RefreshToken string         `json:"refresh_token"`
+		Token        string         `json:"access_token"`
+		Type         string         `json:"token_type"`
+		ExpiresIn    expirationTime `json:"expires_in"`
 	}
 
 	// Transaction struct
@@ -480,14 +483,14 @@ type (
 		GivenName       string   `json:"given_name"`
 		FamilyName      string   `json:"family_name"`
 		Email           string   `json:"email"`
-		Verified        bool     `json:"verified,omitempty"`
+		Verified        bool     `json:"verified,omitempty,string"`
 		Gender          string   `json:"gender,omitempty"`
 		BirthDate       string   `json:"birthdate,omitempty"`
 		ZoneInfo        string   `json:"zoneinfo,omitempty"`
 		Locale          string   `json:"locale,omitempty"`
 		Phone           string   `json:"phone_number,omitempty"`
 		Address         *Address `json:"address,omitempty"`
-		VerifiedAccount bool     `json:"verified_account,omitempty"`
+		VerifiedAccount bool     `json:"verified_account,omitempty,string"`
 		AccountType     string   `json:"account_type,omitempty"`
 		AgeRange        string   `json:"age_range,omitempty"`
 		PayerID         string   `json:"payer_id,omitempty"`
@@ -543,4 +546,18 @@ func (r *ErrorResponse) Error() string {
 func (t JSONTime) MarshalJSON() ([]byte, error) {
 	stamp := fmt.Sprintf(`"%s"`, time.Time(t).UTC().Format(time.RFC3339))
 	return []byte(stamp), nil
+}
+
+func (e *expirationTime) UnmarshalJSON(b []byte) error {
+	var n json.Number
+	err := json.Unmarshal(b, &n)
+	if err != nil {
+		return err
+	}
+	i, err := n.Int64()
+	if err != nil {
+		return err
+	}
+	*e = expirationTime(i)
+	return nil
 }
