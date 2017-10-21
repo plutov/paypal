@@ -37,11 +37,10 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 		return &TokenResponse{}, err
 	}
 
-	req.SetBasicAuth(c.ClientID, c.Secret)
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 
 	t := TokenResponse{}
-	err = c.Send(req, &t)
+	err = c.SendWithBasicAuth(req, &t)
 
 	// Set Token fur current Client
 	if t.Token != "" {
@@ -142,6 +141,13 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 
 		req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	}
+
+	return c.Send(req, v)
+}
+
+// SendWithBasicAuth makes a request to the API using clientID:secret basic auth
+func (c *Client) SendWithBasicAuth(req *http.Request, v interface{}) error {
+	req.SetBasicAuth(c.ClientID, c.Secret)
 
 	return c.Send(req, v)
 }
