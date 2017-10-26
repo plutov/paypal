@@ -76,6 +76,74 @@ func TestTypeItem(t *testing.T) {
 	}
 }
 
+func TestTypeErrorResponseOne(t *testing.T) {
+	response := `{
+		"name":"USER_BUSINESS_ERROR",
+		"message":"User business error.",
+		"debug_id":"f05063556a338",
+		"information_link":"https://developer.paypal.com/docs/api/payments.payouts-batch/#errors",
+		"details":[
+			{
+				"field":"SENDER_BATCH_ID",
+				"issue":"Batch with given sender_batch_id already exists",
+				"link":[
+					{
+						"href":"https://api.sandbox.paypal.com/v1/payments/payouts/CR9VS2K4X4846",
+						"rel":"self",
+						"method":"GET"
+					}
+				]
+			}
+		]
+	}`
+
+	i := &ErrorResponse{}
+	err := json.Unmarshal([]byte(response), i)
+	if err != nil {
+		t.Errorf("ErrorResponse Unmarshal failed")
+	}
+
+	if i.Name != "USER_BUSINESS_ERROR" ||
+		i.Message != "User business error." ||
+		i.DebugID != "f05063556a338" ||
+		i.InformationLink != "https://developer.paypal.com/docs/api/payments.payouts-batch/#errors" ||
+		len(i.Details) != 1 ||
+		i.Details[0].Field != "SENDER_BATCH_ID" ||
+		i.Details[0].Issue != "Batch with given sender_batch_id already exists" ||
+		len(i.Details[0].Links) != 1 ||
+		i.Details[0].Links[0].Href != "https://api.sandbox.paypal.com/v1/payments/payouts/CR9VS2K4X4846" {
+		t.Errorf("ErrorResponse decoded result is incorrect, Given: %v", i)
+	}
+}
+
+func TestTypeErrorResponseTwo(t *testing.T) {
+	response := `{
+		"name":"VALIDATION_ERROR",
+		"message":"Invalid request - see details.",
+		"debug_id":"662121ee369c0",
+		"information_link":"https://developer.paypal.com/docs/api/payments.payouts-batch/#errors",
+		"details":[
+			{
+				"field":"items[0].recipient_type",
+				"issue":"Value is invalid (must be EMAILor PAYPAL_ID or PHONE)"
+			}
+		]
+	}`
+
+	i := &ErrorResponse{}
+	err := json.Unmarshal([]byte(response), i)
+	if err != nil {
+		t.Errorf("ErrorResponse Unmarshal failed")
+	}
+
+	if i.Name != "VALIDATION_ERROR" ||
+		i.Message != "Invalid request - see details." ||
+		len(i.Details) != 1 ||
+		i.Details[0].Field != "items[0].recipient_type" {
+		t.Errorf("ErrorResponse decoded result is incorrect, Given: %v", i)
+	}
+}
+
 // ServeHTTP implements http.Handler
 func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ts.t.Log(r.RequestURI)

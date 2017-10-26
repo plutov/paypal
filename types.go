@@ -222,14 +222,20 @@ type (
 		GiftWrap         string `json:"gift_wrap,omitempty"`
 	}
 
+	ErrorResponseDetail struct {
+		Field string `json:"field"`
+		Issue string `json:"issue"`
+		Links []Link `json:"link"`
+	}
+
 	// ErrorResponse https://developer.paypal.com/docs/api/errors/
 	ErrorResponse struct {
-		Response        *http.Response    `json:"-"`
-		Name            string            `json:"name"`
-		DebugID         string            `json:"debug_id"`
-		Message         string            `json:"message"`
-		InformationLink string            `json:"information_link"`
-		Details         map[string]string `json:"details"`
+		Response        *http.Response        `json:"-"`
+		Name            string                `json:"name"`
+		DebugID         string                `json:"debug_id"`
+		Message         string                `json:"message"`
+		InformationLink string                `json:"information_link"`
+		Details         []ErrorResponseDetail `json:"details"`
 	}
 
 	// ExecuteAgreementResponse struct
