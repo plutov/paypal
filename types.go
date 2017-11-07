@@ -381,14 +381,15 @@ type (
 
 	// PayoutItemResponse struct
 	PayoutItemResponse struct {
-		PayoutItemID      string        `json:"payout_item_id"`
-		TransactionID     string        `json:"transaction_id"`
-		TransactionStatus string        `json:"transaction_status"`
-		PayoutBatchID     string        `json:"payout_batch_id,omitempty"`
-		PayoutItemFee     *AmountPayout `json:"payout_item_fee,omitempty"`
-		PayoutItem        *PayoutItem   `json:"payout_item"`
-		TimeProcessed     *time.Time    `json:"time_processed,omitempty"`
-		Links             []Link        `json:"links"`
+		PayoutItemID      string         `json:"payout_item_id"`
+		TransactionID     string         `json:"transaction_id"`
+		TransactionStatus string         `json:"transaction_status"`
+		PayoutBatchID     string         `json:"payout_batch_id,omitempty"`
+		PayoutItemFee     *AmountPayout  `json:"payout_item_fee,omitempty"`
+		PayoutItem        *PayoutItem    `json:"payout_item"`
+		TimeProcessed     *time.Time     `json:"time_processed,omitempty"`
+		Links             []Link         `json:"links"`
+		Error             *ErrorResponse `json:"errors,omitempty"`
 	}
 
 	// PayoutResponse struct
