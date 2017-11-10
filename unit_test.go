@@ -144,6 +144,148 @@ func TestTypeErrorResponseTwo(t *testing.T) {
 	}
 }
 
+func TestTypePayoutResponse(t *testing.T) {
+	response := `{
+		"batch_header":{
+			"payout_batch_id":"G4E6WJE6Y4853",
+			"batch_status":"SUCCESS",
+			"time_created":"2017-11-01T23:08:25Z",
+			"time_completed":"2017-11-01T23:08:46Z",
+			"sender_batch_header":{
+				"sender_batch_id":"2017110109",
+				"email_subject":"Payment"
+			},
+			"amount":{
+				"currency":"USD",
+				"value":"6.37"
+			},
+			"fees":{
+				"currency":"USD",
+				"value":"0.25"
+			}
+		},
+		"items":[
+			{
+				"payout_item_id":"9T35G83YA546X",
+				"transaction_id":"4T328230B1D337285",
+				"transaction_status":"UNCLAIMED",
+				"payout_item_fee":{
+					"currency":"USD",
+					"value":"0.25"
+				},
+				"payout_batch_id":"G4E6WJE6Y4853",
+				"payout_item":{
+					"recipient_type":"EMAIL",
+					"amount":{
+						"currency":"USD",
+						"value":"6.37"
+					},
+					"note":"Optional note",
+					"receiver":"ppuser@example.com",
+					"sender_item_id":"1"
+				},
+				"time_processed":"2017-11-01T23:08:43Z",
+				"errors":{
+					"name":"RECEIVER_UNREGISTERED",
+					"message":"Receiver is unregistered",
+					"information_link":"https://developer.paypal.com/docs/api/payments.payouts-batch/#errors",
+					"details":[]
+				},
+				"links":[
+					{
+						"href":"https://api.sandbox.paypal.com/v1/payments/payouts-item/9T35G83YA546X",
+						"rel":"item",
+						"method":"GET",
+						"encType":"application/json"
+					}
+				]
+			}
+		],
+		"links":[
+			{
+				"href":"https://api.sandbox.paypal.com/v1/payments/payouts/G4E6WJE6Y4853?page_size=1000&page=1",
+				"rel":"self",
+				"method":"GET",
+				"encType":"application/json"
+			}
+		]
+	}`
+
+	pr := &PayoutResponse{}
+	err := json.Unmarshal([]byte(response), pr)
+	if err != nil {
+		t.Errorf("PayoutResponse Unmarshal failed")
+	}
+
+	if pr.BatchHeader.BatchStatus != "SUCCESS" ||
+		pr.BatchHeader.PayoutBatchID != "G4E6WJE6Y4853" ||
+		len(pr.Items) != 1 ||
+		pr.Items[0].PayoutItemID != "9T35G83YA546X" ||
+		pr.Items[0].TransactionID != "4T328230B1D337285" ||
+		pr.Items[0].TransactionStatus != "UNCLAIMED" ||
+		pr.Items[0].Error.Name != "RECEIVER_UNREGISTERED" {
+		t.Errorf("PayoutResponse decoded result is incorrect, Given: %v", pr)
+	}
+}
+
+func TestTypePayoutItemResponse(t *testing.T) {
+	response := `{
+		"payout_item_id":"9T35G83YA546X",
+		"transaction_id":"4T328230B1D337285",
+		"transaction_status":"UNCLAIMED",
+		"payout_item_fee":{
+			"currency":"USD",
+			"value":"0.25"
+		},
+		"payout_batch_id":"G4E6WJE6Y4853",
+		"payout_item":{
+			"recipient_type":"EMAIL",
+			"amount":{
+				"currency":"USD",
+				"value":"6.37"
+			},
+			"note":"Optional note",
+			"receiver":"ppuser@example.com",
+			"sender_item_id":"1"
+		},
+		"time_processed":"2017-11-01T23:08:43Z",
+		"errors":{
+			"name":"RECEIVER_UNREGISTERED",
+			"message":"Receiver is unregistered",
+			"information_link":"https://developer.paypal.com/docs/api/payments.payouts-batch/#errors",
+			"details":[]
+		},
+		"links":[
+			{
+				"href":"https://api.sandbox.paypal.com/v1/payments/payouts-item/3YA546X9T35G8",
+				"rel":"self",
+				"method":"GET",
+				"encType":"application/json"
+			},
+			{
+				"href":"https://api.sandbox.paypal.com/v1/payments/payouts/6Y4853G4E6WJE",
+				"rel":"batch",
+				"method":"GET",
+				"encType":"application/json"
+			}
+		]
+	}`
+
+	pir := &PayoutItemResponse{}
+	err := json.Unmarshal([]byte(response), pir)
+	if err != nil {
+		t.Errorf("PayoutItemResponse Unmarshal failed")
+	}
+
+	if pir.PayoutItemID != "9T35G83YA546X" ||
+		pir.PayoutBatchID != "G4E6WJE6Y4853" ||
+		pir.TransactionID != "4T328230B1D337285" ||
+		pir.TransactionStatus != "UNCLAIMED" ||
+		pir.Error.Name != "RECEIVER_UNREGISTERED" {
+		t.Errorf("PayoutItemResponse decoded result is incorrect, Given: %+v", pir)
+	}
+}
+
 // ServeHTTP implements http.Handler
 func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ts.t.Log(r.RequestURI)

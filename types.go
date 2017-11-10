@@ -389,6 +389,7 @@ type (
 		PayoutItem        *PayoutItem   `json:"payout_item"`
 		TimeProcessed     *time.Time    `json:"time_processed,omitempty"`
 		Links             []Link        `json:"links"`
+		Error             ErrorResponse `json:"errors,omitempty"`
 	}
 
 	// PayoutResponse struct

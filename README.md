@@ -25,6 +25,9 @@
  * POST /v1/identity/openidconnect/tokenservice
  * GET /v1/identity/openidconnect/userinfo/?schema=**SCHEMA**
  * POST /v1/payments/payouts
+ * GET /v1/payments/payouts/**ID**
+ * GET /v1/payments/payouts-item/**ID**
+ * POST /v1/payments/payouts-item/**ID**/cancel
  * GET /v1/payment-experience/web-profiles
  * POST /v1/payment-experience/web-profiles
  * GET /v1/payment-experience/web-profiles/**ID**
@@ -226,6 +229,24 @@ payout := paypalsdk.Payout{
 }
 
 payoutResp, err := c.CreateSinglePayout(payout)
+```
+
+### Get payout by ID
+
+```go
+payout, err := c.GetPayout("PayoutBatchID")
+```
+
+### Get payout item by ID
+
+```go
+payoutItem, err := c.GetPayoutItem("PayoutItemID")
+```
+
+### Cancel unclaimed payout item by ID
+
+```go
+payoutItem, err := c.CancelPayoutItem("PayoutItemID")
 ```
 
 ### Create web experience profile
