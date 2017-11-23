@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"strconv"
 )
 
 // GetAuthorization returns an authorization by ID
@@ -17,8 +18,7 @@ func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 
 	auth := &Authorization{}
 
-	err = c.SendWithAuth(req, auth)
-	if err != nil {
+	if err = c.SendWithAuth(req, auth); err != nil {
 		return auth, err
 	}
 
@@ -29,10 +29,8 @@ func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 // To use this method, the original payment must have Intent set to "authorize"
 // Endpoint: POST /v1/payments/authorization/ID/capture
 func (c *Client) CaptureAuthorization(authID string, a *Amount, isFinalCapture bool) (*Capture, error) {
-	isFinalStr := "false"
-	if isFinalCapture {
-		isFinalStr = "true"
-	}
+	isFinalStr := strconv.FormatBool(isFinalCapture)
+
 	buf := bytes.NewBuffer([]byte("{\"amount\":{\"currency\":\"" + a.Currency + "\",\"total\":\"" + a.Total + "\"},\"is_final_capture\":" + isFinalStr + "}"))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/authorization/"+authID+"/capture"), buf)
 	if err != nil {
@@ -41,8 +39,7 @@ func (c *Client) CaptureAuthorization(authID string, a *Amount, isFinalCapture b
 
 	capture := &Capture{}
 
-	err = c.SendWithAuth(req, capture)
-	if err != nil {
+	if err = c.SendWithAuth(req, capture); err != nil {
 		return capture, err
 	}
 
@@ -60,8 +57,7 @@ func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 
 	auth := &Authorization{}
 
-	err = c.SendWithAuth(req, auth)
-	if err != nil {
+	if err = c.SendWithAuth(req, auth); err != nil {
 		return auth, err
 	}
 
@@ -80,8 +76,7 @@ func (c *Client) ReauthorizeAuthorization(authID string, a *Amount) (*Authorizat
 
 	auth := &Authorization{}
 
-	err = c.SendWithAuth(req, auth)
-	if err != nil {
+	if err = c.SendWithAuth(req, auth); err != nil {
 		return auth, err
 	}
 

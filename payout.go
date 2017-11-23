@@ -15,8 +15,7 @@ func (c *Client) CreateSinglePayout(p Payout) (*PayoutResponse, error) {
 
 	response := &PayoutResponse{}
 
-	err = c.SendWithAuth(req, response)
-	if err != nil {
+	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
 	}
 
@@ -35,8 +34,7 @@ func (c *Client) GetPayout(payoutBatchID string) (*PayoutResponse, error) {
 
 	response := &PayoutResponse{}
 
-	err = c.SendWithAuth(req, response)
-	if err != nil {
+	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
 	}
 
@@ -55,8 +53,7 @@ func (c *Client) GetPayoutItem(payoutItemID string) (*PayoutItemResponse, error)
 
 	response := &PayoutItemResponse{}
 
-	err = c.SendWithAuth(req, response)
-	if err != nil {
+	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
 	}
 
@@ -75,8 +72,7 @@ func (c *Client) CancelPayoutItem(payoutItemID string) (*PayoutItemResponse, err
 
 	response := &PayoutItemResponse{}
 
-	err = c.SendWithAuth(req, response)
-	if err != nil {
+	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
 	}
 

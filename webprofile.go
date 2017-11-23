@@ -19,8 +19,7 @@ func (c *Client) CreateWebProfile(wp WebProfile) (*WebProfile, error) {
 
 	response := &WebProfile{}
 
-	err = c.SendWithAuth(req, response)
-	if err != nil {
+	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
 	}
 
@@ -40,8 +39,7 @@ func (c *Client) GetWebProfile(profileID string) (*WebProfile, error) {
 		return &wp, err
 	}
 
-	err = c.SendWithAuth(req, &wp)
-	if err != nil {
+	if err = c.SendWithAuth(req, &wp); err != nil {
 		return &wp, err
 	}
 
@@ -65,8 +63,7 @@ func (c *Client) GetWebProfiles() ([]WebProfile, error) {
 		return wps, err
 	}
 
-	err = c.SendWithAuth(req, &wps)
-	if err != nil {
+	if err = c.SendWithAuth(req, &wps); err != nil {
 		return wps, err
 	}
 
@@ -90,8 +87,7 @@ func (c *Client) SetWebProfile(wp WebProfile) error {
 		return err
 	}
 
-	err = c.SendWithAuth(req, nil)
-	if err != nil {
+	if err = c.SendWithAuth(req, nil); err != nil {
 		return err
 	}
 
@@ -111,8 +107,7 @@ func (c *Client) DeleteWebProfile(profileID string) error {
 		return err
 	}
 
-	err = c.SendWithAuth(req, nil)
-	if err != nil {
+	if err = c.SendWithAuth(req, nil); err != nil {
 		return err
 	}
 

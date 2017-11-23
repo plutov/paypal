@@ -85,8 +85,8 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
 	e := ExecuteAgreementResponse{}
-	err = c.SendWithAuth(req, &e)
-	if err != nil {
+
+	if err = c.SendWithAuth(req, &e); err != nil {
 		return &e, err
 	}
 
