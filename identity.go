@@ -24,8 +24,7 @@ func (c *Client) GrantNewAccessTokenFromAuthCode(code string, redirectURI string
 
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	err = c.SendWithBasicAuth(req, token)
-	if err != nil {
+	if err = c.SendWithBasicAuth(req, token); err != nil {
 		return token, err
 	}
 
@@ -47,8 +46,7 @@ func (c *Client) GrantNewAccessTokenFromRefreshToken(refreshToken string) (*Toke
 		return token, err
 	}
 
-	err = c.SendWithAuth(req, token)
-	if err != nil {
+	if err = c.SendWithAuth(req, token); err != nil {
 		return token, err
 	}
 
@@ -66,8 +64,7 @@ func (c *Client) GetUserInfo(schema string) (*UserInfo, error) {
 		return &u, err
 	}
 
-	err = c.SendWithAuth(req, &u)
-	if err != nil {
+	if err = c.SendWithAuth(req, &u); err != nil {
 		return &u, err
 	}
 

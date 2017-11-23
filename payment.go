@@ -35,8 +35,8 @@ func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string, ca
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
 	p := PaymentResponse{}
-	err = c.SendWithAuth(req, &p)
-	if err != nil {
+
+	if err = c.SendWithAuth(req, &p); err != nil {
 		return &p, err
 	}
 
@@ -58,8 +58,7 @@ func (c *Client) CreatePayment(p Payment) (*CreatePaymentResp, error) {
 
 	response := &CreatePaymentResp{}
 
-	err = c.SendWithAuth(req, response)
-	if err != nil {
+	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
 	}
 
@@ -79,8 +78,8 @@ func (c *Client) ExecuteApprovedPayment(paymentID string, payerID string) (*Exec
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
 	e := ExecuteResponse{}
-	err = c.SendWithAuth(req, &e)
-	if err != nil {
+
+	if err = c.SendWithAuth(req, &e); err != nil {
 		return &e, err
 	}
 
@@ -101,8 +100,7 @@ func (c *Client) GetPayment(paymentID string) (*Payment, error) {
 		return &p, err
 	}
 
-	err = c.SendWithAuth(req, &p)
-	if err != nil {
+	if err = c.SendWithAuth(req, &p); err != nil {
 		return &p, err
 	}
 
@@ -123,8 +121,7 @@ func (c *Client) GetPayments() ([]Payment, error) {
 		return p.Payments, err
 	}
 
-	err = c.SendWithAuth(req, &p)
-	if err != nil {
+	if err = c.SendWithAuth(req, &p); err != nil {
 		return p.Payments, err
 	}
 

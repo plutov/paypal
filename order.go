@@ -12,8 +12,7 @@ func (c *Client) GetOrder(orderID string) (*Order, error) {
 		return order, err
 	}
 
-	err = c.SendWithAuth(req, order)
-	if err != nil {
+	if err = c.SendWithAuth(req, order); err != nil {
 		return order, err
 	}
 
@@ -34,8 +33,7 @@ func (c *Client) AuthorizeOrder(orderID string, amount *Amount) (*Authorization,
 		return auth, err
 	}
 
-	err = c.SendWithAuth(req, auth)
-	if err != nil {
+	if err = c.SendWithAuth(req, auth); err != nil {
 		return auth, err
 	}
 
@@ -58,8 +56,7 @@ func (c *Client) CaptureOrder(orderID string, amount *Amount, isFinalCapture boo
 		return capture, err
 	}
 
-	err = c.SendWithAuth(req, capture)
-	if err != nil {
+	if err = c.SendWithAuth(req, capture); err != nil {
 		return capture, err
 	}
 
@@ -77,8 +74,7 @@ func (c *Client) VoidOrder(orderID string) (*Order, error) {
 		return order, err
 	}
 
-	err = c.SendWithAuth(req, order)
-	if err != nil {
+	if err = c.SendWithAuth(req, order); err != nil {
 		return order, err
 	}
 

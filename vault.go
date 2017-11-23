@@ -13,8 +13,8 @@ func (c *Client) StoreCreditCard(cc CreditCard) (*CreditCard, error) {
 	}
 
 	response := CreditCard{}
-	err = c.SendWithAuth(req, &response)
-	if err != nil {
+
+	if err = c.SendWithAuth(req, &response); err != nil {
 		return nil, err
 	}
 
@@ -29,8 +29,7 @@ func (c *Client) DeleteCreditCard(id string) error {
 		return err
 	}
 
-	err = c.SendWithAuth(req, nil)
-	if err != nil {
+	if err = c.SendWithAuth(req, nil); err != nil {
 		return err
 	}
 
@@ -46,8 +45,8 @@ func (c *Client) GetCreditCard(id string) (*CreditCard, error) {
 	}
 
 	response := CreditCard{}
-	err = c.SendWithAuth(req, &response)
-	if err != nil {
+
+	if err = c.SendWithAuth(req, &response); err != nil {
 		return nil, err
 	}
 
@@ -72,8 +71,8 @@ func (c *Client) GetCreditCards(ccf *CreditCardsFilter) (*CreditCards, error) {
 	}
 
 	response := CreditCards{}
-	err = c.SendWithAuth(req, &response)
-	if err != nil {
+
+	if err = c.SendWithAuth(req, &response); err != nil {
 		return nil, err
 	}
 
@@ -89,8 +88,8 @@ func (c *Client) PatchCreditCard(id string, ccf []CreditCardField) (*CreditCard,
 	}
 
 	response := CreditCard{}
-	err = c.SendWithAuth(req, &response)
-	if err != nil {
+
+	if err = c.SendWithAuth(req, &response); err != nil {
 		return nil, err
 	}
 

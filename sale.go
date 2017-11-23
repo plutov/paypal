@@ -14,8 +14,7 @@ func (c *Client) GetSale(saleID string) (*Sale, error) {
 		return sale, err
 	}
 
-	err = c.SendWithAuth(req, sale)
-	if err != nil {
+	if err = c.SendWithAuth(req, sale); err != nil {
 		return sale, err
 	}
 
@@ -37,8 +36,7 @@ func (c *Client) RefundSale(saleID string, a *Amount) (*Refund, error) {
 		return refund, err
 	}
 
-	err = c.SendWithAuth(req, refund)
-	if err != nil {
+	if err = c.SendWithAuth(req, refund); err != nil {
 		return refund, err
 	}
 
@@ -56,8 +54,7 @@ func (c *Client) GetRefund(refundID string) (*Refund, error) {
 		return refund, err
 	}
 
-	err = c.SendWithAuth(req, refund)
-	if err != nil {
+	if err = c.SendWithAuth(req, refund); err != nil {
 		return refund, err
 	}
 
