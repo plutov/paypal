@@ -257,6 +257,7 @@ type (
 		ID           string        `json:"id"`
 		Links        []Link        `json:"links"`
 		State        string        `json:"state"`
+		Payer        PaymentPayer  `json:"payer"`
 		Transactions []Transaction `json:"transactions,omitempty"`
 	}
 
@@ -321,6 +322,13 @@ type (
 		Status             string              `json:"payer_status,omitempty"`
 	}
 
+	// PaymentPayer struct
+	PaymentPayer struct {
+		PaymentMethod      string              `json:"payment_method"`
+		Status             string              `json:"status,omitempty"`
+		PayerInfo          *PayerInfo          `json:"payer_info,omitempty"`
+	}
+
 	// PayerInfo struct
 	PayerInfo struct {
 		Email           string           `json:"email,omitempty"`
@@ -331,6 +339,7 @@ type (
 		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
 		TaxIDType       string           `json:"tax_id_type,omitempty"`
 		TaxID           string           `json:"tax_id,omitempty"`
+		CountryCode   	string 			 `json:"country_code"`
 	}
 
 	// Payment struct
