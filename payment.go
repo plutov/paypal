@@ -111,6 +111,23 @@ func (c *Client) GetPayment(paymentID string) (*Payment, error) {
 	return &p, nil
 }
 
+// PatchPayment modifies some fields of a payment prior to execution
+// Endpoint: PATCH /v1/payments/payment/ID
+func (c *Client) PatchPayment(paymentID string, p []PaymentPatch) (*Payment, error) {
+	req, err := c.NewRequest("PATCH", fmt.Sprintf("%s/v1/payments/payment/%s", c.APIBase, paymentID), p)
+	if err != nil {
+		return nil, err
+	}
+
+	response := Payment{}
+
+	if err = c.SendWithAuth(req, &response); err != nil {
+		return nil, err
+	}
+
+	return &response, nil
+}
+
 // GetPayments retrieve payments resources from Paypal
 // Endpoint: GET /v1/payments/payment/
 func (c *Client) GetPayments() ([]Payment, error) {
