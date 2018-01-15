@@ -286,6 +286,46 @@ func TestTypePayoutItemResponse(t *testing.T) {
 	}
 }
 
+func TestTypePaymentPatch(t *testing.T) {
+	// test unmarshaling
+	response := `{
+		"op": "replace",
+		"path": "/transactions/0/amount",
+		"value": "5"
+	}`
+	pp := &PaymentPatch{}
+	err := json.Unmarshal([]byte(response), pp)
+	if err != nil {
+		t.Errorf("TestTypePaymentPatch Unmarshal failed")
+	}
+	if pp.Operation != "replace" ||
+		pp.Path != "/transactions/0/amount" ||
+		pp.Value != "5" {
+		t.Errorf("PaymentPatch decoded result is incorrect, Given: %+v", pp)
+	}
+}
+
+func TestTypePaymentPatchMarshal(t *testing.T) {
+	// test marshalling
+	p2 := &PaymentPatch{
+		Operation: "add",
+		Path:      "/transactions/0/amount",
+		Value: map[string]interface{}{
+			"total":    "18.37",
+			"currency": "EUR",
+			"details": map[string]interface{}{
+				"subtotal": "13.37",
+				"shipping": "5.00",
+			},
+		},
+	}
+	p2expectedresponse := `{"op":"add","path":"/transactions/0/amount","value":{"currency":"EUR","details":{"shipping":"5.00","subtotal":"13.37"},"total":"18.37"}}`
+	response2, _ := json.Marshal(p2)
+	if string(response2) != string(p2expectedresponse) {
+		t.Errorf("PaymentPatch response2 is incorrect,\n Given:    %+v\n Expected: %+v", string(response2), string(p2expectedresponse))
+	}
+}
+
 // ServeHTTP implements http.Handler
 func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ts.t.Log(r.RequestURI)

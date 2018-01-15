@@ -257,6 +257,7 @@ type (
 		ID           string        `json:"id"`
 		Links        []Link        `json:"links"`
 		State        string        `json:"state"`
+		Payer        PaymentPayer  `json:"payer"`
 		Transactions []Transaction `json:"transactions,omitempty"`
 	}
 
@@ -331,6 +332,7 @@ type (
 		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
 		TaxIDType       string           `json:"tax_id_type,omitempty"`
 		TaxID           string           `json:"tax_id,omitempty"`
+		CountryCode     string           `json:"country_code"`
 	}
 
 	// Payment struct
@@ -356,6 +358,20 @@ type (
 		Amount            AmountPayout  `json:"amount,omitempty"`
 		Cycles            string        `json:"cycles,omitempty"`
 		ChargeModels      []ChargeModel `json:"charge_models,omitempty"`
+	}
+
+	// PaymentPatch PATCH /v1/payments/payment/{payment_id)
+	PaymentPatch struct {
+		Operation string      `json:"op"`
+		Path      string      `json:"path"`
+		Value     interface{} `json:"value"`
+	}
+
+	// PaymentPayer struct
+	PaymentPayer struct {
+		PaymentMethod string     `json:"payment_method"`
+		Status        string     `json:"status,omitempty"`
+		PayerInfo     *PayerInfo `json:"payer_info,omitempty"`
 	}
 
 	// PaymentResponse structure

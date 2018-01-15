@@ -229,6 +229,67 @@ func TestGetPayments(t *testing.T) {
 	}
 }
 
+func TestPatchPayment(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	p := Payment{
+		Intent: "sale",
+		Payer: &Payer{
+			PaymentMethod: "paypal",
+		},
+		Transactions: []Transaction{{
+			Amount: &Amount{
+				Currency: "USD",
+				Total:    "10.00", // total cost including shipping
+				Details: Details{
+					Shipping: "3.00", // total shipping cost
+					Subtotal: "7.00", // total cost without shipping
+				},
+			},
+			Description: "My Payment",
+			ItemList: &ItemList{
+				Items: []Item{
+					Item{
+						Quantity: 2,
+						Price:    "3.50",
+						Currency: "USD",
+						Name:     "Product 1",
+					},
+				},
+			},
+			Custom: "First value",
+		}},
+		RedirectURLs: &RedirectURLs{
+			ReturnURL: "http://..",
+			CancelURL: "http://..",
+		},
+	}
+	NewPayment, err := c.CreatePayment(p)
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
+	PaymentID := NewPayment.ID
+	pp := []PaymentPatch{
+		{
+			Operation: "replace",
+			Path:      "/transactions/0/custom",
+			Value:     "Replaced Value",
+		},
+	}
+	RevisedPayment, errpp := c.PatchPayment(PaymentID, pp)
+	if errpp != nil {
+		t.Errorf("Unexpected error when patching %v", errpp)
+	}
+	if RevisedPayment.Transactions != nil &&
+		len(RevisedPayment.Transactions) > 0 &&
+		RevisedPayment.Transactions[0].Custom != "" {
+		if RevisedPayment.Transactions[0].Custom != "Replaced Value" {
+			t.Errorf("Patched payment value failed to be patched %v", RevisedPayment.Transactions[0].Custom)
+		}
+	}
+}
+
 func TestExecuteApprovedPayment(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
