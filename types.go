@@ -443,21 +443,21 @@ type (
 
 	// Sale struct
 	Sale struct {
-		ID                        string          `json:"id,omitempty"`
-		Amount                    *Amount         `json:"amount,omitempty"`
-		TransactionFee            *TransactionFee `json:"transaction_fee,omitempty"`
-		Description               string          `json:"description,omitempty"`
-		CreateTime                *time.Time      `json:"create_time,omitempty"`
-		State                     string          `json:"state,omitempty"`
-		ParentPayment             string          `json:"parent_payment,omitempty"`
-		UpdateTime                *time.Time      `json:"update_time,omitempty"`
-		PaymentMode               string          `json:"payment_mode,omitempty"`
-		PendingReason             string          `json:"pending_reason,omitempty"`
-		ReasonCode                string          `json:"reason_code,omitempty"`
-		ClearingTime              string          `json:"clearing_time,omitempty"`
-		ProtectionEligibility     string          `json:"protection_eligibility,omitempty"`
-		ProtectionEligibilityType string          `json:"protection_eligibility_type,omitempty"`
-		Links                     []Link          `json:"links,omitempty"`
+		ID                        string     `json:"id,omitempty"`
+		Amount                    *Amount    `json:"amount,omitempty"`
+		TransactionFee            *Currency  `json:"transaction_fee,omitempty"`
+		Description               string     `json:"description,omitempty"`
+		CreateTime                *time.Time `json:"create_time,omitempty"`
+		State                     string     `json:"state,omitempty"`
+		ParentPayment             string     `json:"parent_payment,omitempty"`
+		UpdateTime                *time.Time `json:"update_time,omitempty"`
+		PaymentMode               string     `json:"payment_mode,omitempty"`
+		PendingReason             string     `json:"pending_reason,omitempty"`
+		ReasonCode                string     `json:"reason_code,omitempty"`
+		ClearingTime              string     `json:"clearing_time,omitempty"`
+		ProtectionEligibility     string     `json:"protection_eligibility,omitempty"`
+		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
+		Links                     []Link     `json:"links,omitempty"`
 	}
 
 	// SenderBatchHeader struct
@@ -498,12 +498,6 @@ type (
 		Custom           string    `json:"custom,omitempty"`
 		SoftDescriptor   string    `json:"soft_descriptor,omitempty"`
 		RelatedResources []Related `json:"related_resources,omitempty"`
-	}
-
-	// TransactionFee struct
-	TransactionFee struct {
-		Value    string `json:"value"`
-		Currency string `json:"currency"`
 	}
 
 	// UserInfo struct
