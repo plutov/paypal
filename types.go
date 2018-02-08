@@ -458,6 +458,7 @@ type (
 	Sale struct {
 		ID                        string     `json:"id,omitempty"`
 		Amount                    *Amount    `json:"amount,omitempty"`
+		TransactionFee            *Currency  `json:"transaction_fee,omitempty"`
 		Description               string     `json:"description,omitempty"`
 		CreateTime                *time.Time `json:"create_time,omitempty"`
 		State                     string     `json:"state,omitempty"`
