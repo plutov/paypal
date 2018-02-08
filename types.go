@@ -44,6 +44,15 @@ const (
 	LandingPageTypeLogin   string = "Login"
 )
 
+// Possible value for `allowed_payment_method` in PaymentOptions
+//
+// https://developer.paypal.com/docs/api/payments/#definition-payment_options
+const (
+	AllowedPaymentUnrestricted         string = "UNRESTRICTED"
+	AllowedPaymentInstantFundingSource string = "INSTANT_FUNDING_SOURCE"
+	AllowedPaymentImmediatePay         string = "IMMEDIATE_PAY"
+)
+
 type (
 	// JSONTime overrides MarshalJson method to format in ISO8601
 	JSONTime time.Time
@@ -360,6 +369,10 @@ type (
 		ChargeModels      []ChargeModel `json:"charge_models,omitempty"`
 	}
 
+	PaymentOptions struct {
+		AllowedPaymentMethod string `json:"allowed_payment_method,omitempty"`
+	}
+
 	// PaymentPatch PATCH /v1/payments/payment/{payment_id)
 	PaymentPatch struct {
 		Operation string      `json:"op"`
@@ -490,13 +503,14 @@ type (
 
 	// Transaction struct
 	Transaction struct {
-		Amount           *Amount   `json:"amount"`
-		Description      string    `json:"description,omitempty"`
-		ItemList         *ItemList `json:"item_list,omitempty"`
-		InvoiceNumber    string    `json:"invoice_number,omitempty"`
-		Custom           string    `json:"custom,omitempty"`
-		SoftDescriptor   string    `json:"soft_descriptor,omitempty"`
-		RelatedResources []Related `json:"related_resources,omitempty"`
+		Amount           *Amount         `json:"amount"`
+		Description      string          `json:"description,omitempty"`
+		ItemList         *ItemList       `json:"item_list,omitempty"`
+		InvoiceNumber    string          `json:"invoice_number,omitempty"`
+		Custom           string          `json:"custom,omitempty"`
+		SoftDescriptor   string          `json:"soft_descriptor,omitempty"`
+		RelatedResources []Related       `json:"related_resources,omitempty"`
+		PaymentOptions   *PaymentOptions `json:"payment_options,omitempty"`
 	}
 
 	// UserInfo struct
