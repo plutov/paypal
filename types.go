@@ -512,6 +512,8 @@ type (
 		SoftDescriptor   string          `json:"soft_descriptor,omitempty"`
 		RelatedResources []Related       `json:"related_resources,omitempty"`
 		PaymentOptions   *PaymentOptions `json:"payment_options,omitempty"`
+		NotifyURL        string          `json:"notify_url,omitempty"`
+		OrderURL         string          `json:"order_url,omitempty"`
 	}
 
 	// UserInfo struct
