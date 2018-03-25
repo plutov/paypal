@@ -73,6 +73,19 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 	return response, err
 }
 
+// DeletePlan deletes a billing plan
+// Endpoint: PATCH /v1/payments/billing-plans/
+func (c *Client) DeletePlan(planID string) error {
+	buf := bytes.NewBuffer([]byte("[{\"op\":\"replace\",\"path\":\"/\",\"value\":{\"state\":\"DELETED\"}}]"))
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans/"+planID), buf)
+	if err != nil {
+		return err
+	}
+	req.SetBasicAuth(c.ClientID, c.Secret)
+	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
+	return c.SendWithAuth(req, nil)
+}
+
 // ExecuteApprovedAgreement - Use this call to execute (complete) a PayPal agreement that has been approved by the payer.
 // Endpoint: POST /v1/payments/billing-agreements/token/agreement-execute
 func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
