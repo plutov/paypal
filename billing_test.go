@@ -105,4 +105,6 @@ func BillingExample() {
 	}
 	resp, err := c.CreateBillingAgreement(agreement)
 	fmt.Println(err, resp)
+	err = c.DeletePlan(planResp.ID)
+	fmt.Println(err)
 }
