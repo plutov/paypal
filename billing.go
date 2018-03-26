@@ -16,20 +16,17 @@ func (c *Client) ActivatePlan(planID string) error {
 	if err != nil {
 		return err
 	}
-	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	return c.SendWithAuth(req, nil)
 }
 
 // CancelAgreement cancels a billing agreement.
 // Endpoint: POST /v1/payments/billing-agreements/{agreement_id}/cancel
 func (c *Client) CancelAgreement(agreementID string) error {
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+agreementID+"/cancel"), nil)
+	buf := bytes.NewBuffer([]byte(`{"note": "Canceling the profile."}`))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+agreementID+"/cancel"), buf)
 	if err != nil {
 		return err
 	}
-	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
 	err = c.SendWithAuth(req, nil)
 
@@ -79,8 +76,6 @@ func (c *Client) DeletePlan(planID string) error {
 	if err != nil {
 		return err
 	}
-	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	return c.SendWithAuth(req, nil)
 }
 
@@ -91,9 +86,6 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*BillingAgreement, erro
 	if err != nil {
 		return &BillingAgreement{}, err
 	}
-
-	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
 	e := BillingAgreement{}
 
@@ -123,9 +115,6 @@ func (c *Client) ListBillingPlans(status interface{}, page interface{}) (*ListBi
 		return &ListBillingPlansResp{}, err
 	}
 
-	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
-
 	l := ListBillingPlansResp{}
 
 	err = c.SendWithAuth(req, &l)
@@ -137,4 +126,44 @@ func (c *Client) ListBillingPlans(status interface{}, page interface{}) (*ListBi
 	}
 
 	return &l, err
+}
+
+// ReactivateAgreement reactivates a suspended billing agreement.
+// Endpoint: POST /v1/payments/billing-agreements/{agreement_id}/re-activate
+func (c *Client) ReactivateAgreement(agreementID string) error {
+	buf := bytes.NewBuffer([]byte(`{"note": "Reactivating the profile."}`))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+agreementID+"/re-activate"), buf)
+	if err != nil {
+		return err
+	}
+
+	err = c.SendWithAuth(req, nil)
+
+	// A successful request returns the HTTP 204 No Content status code with no JSON response body.
+	// This raises error "EOF"
+	if err != nil && err.Error() == "EOF" {
+		return nil
+	}
+
+	return err
+}
+
+// SuspendAgreement suspends a billing agreement.
+// Endpoint: POST /v1/payments/billing-agreements/{agreement_id}/suspend
+func (c *Client) SuspendAgreement(agreementID string) error {
+	buf := bytes.NewBuffer([]byte(`{"note": "Suspending the profile."}`))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+agreementID+"/suspend"), buf)
+	if err != nil {
+		return err
+	}
+
+	err = c.SendWithAuth(req, nil)
+
+	// A successful request returns the HTTP 204 No Content status code with no JSON response body.
+	// This raises error "EOF"
+	if err != nil && err.Error() == "EOF" {
+		return nil
+	}
+
+	return err
 }
