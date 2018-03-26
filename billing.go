@@ -8,26 +8,6 @@ import (
 	"time"
 )
 
-type (
-	// CreateAgreementResp struct
-	CreateAgreementResp struct {
-		ID          string      `json:"id,omitempty"`
-		Name        string      `json:"name,omitempty"`
-		Description string      `json:"description,omitempty"`
-		Plan        BillingPlan `json:"plan,omitempty"`
-		Links       []Link      `json:"links,omitempty"`
-		StartTime   time.Time   `json:"start_time,omitempty"`
-	}
-
-	// ListBillingPlansResp struct
-	ListBillingPlansResp struct {
-		TotalItems string        `json:"total_items,omitempty"`
-		TotalPages string        `json:"total_pages,omitempty"`
-		Plans      []BillingPlan `json:"plans,omitempty"`
-		Links      []Link        `json:"links,omitempty"`
-	}
-)
-
 // ActivatePlan activates a billing plan.
 // By default, a new plan is not activated.
 // Endpoint: PATCH /v1/payments/billing-plans/
@@ -77,14 +57,14 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*BillingPlan, error) {
 
 // CreateBillingAgreement creates an agreement for specified plan.
 // Endpoint: POST /v1/payments/billing-agreements
-func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementResp, error) {
+func (c *Client) CreateBillingAgreement(a BillingAgreement) (*BillingAgreement, error) {
 	// PayPal needs only ID, so we will remove all fields except Plan ID
 	a.Plan = BillingPlan{
 		ID: a.Plan.ID,
 	}
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
-	response := &CreateAgreementResp{}
+	response := &BillingAgreement{}
 	if err != nil {
 		return response, err
 	}
@@ -107,16 +87,16 @@ func (c *Client) DeletePlan(planID string) error {
 
 // ExecuteApprovedAgreement - Use this call to execute (complete) a PayPal agreement that has been approved by the payer.
 // Endpoint: POST /v1/payments/billing-agreements/token/agreement-execute
-func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
+func (c *Client) ExecuteApprovedAgreement(token string) (*BillingAgreement, error) {
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+token+"/agreement-execute"), nil)
 	if err != nil {
-		return &ExecuteAgreementResponse{}, err
+		return &BillingAgreement{}, err
 	}
 
 	req.SetBasicAuth(c.ClientID, c.Secret)
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
-	e := ExecuteAgreementResponse{}
+	e := BillingAgreement{}
 
 	if err = c.SendWithAuth(req, &e); err != nil {
 		return &e, err
