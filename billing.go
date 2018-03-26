@@ -28,18 +28,6 @@ type (
 	}
 )
 
-// CreateBillingPlan creates a billing plan in Paypal.
-// Endpoint: POST /v1/payments/billing-plans
-func (c *Client) CreateBillingPlan(plan BillingPlan) (*BillingPlan, error) {
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
-	response := &BillingPlan{}
-	if err != nil {
-		return response, err
-	}
-	err = c.SendWithAuth(req, response)
-	return response, err
-}
-
 // ActivatePlan activates a billing plan.
 // By default, a new plan is not activated.
 // Endpoint: PATCH /v1/payments/billing-plans/
@@ -52,6 +40,39 @@ func (c *Client) ActivatePlan(planID string) error {
 	req.SetBasicAuth(c.ClientID, c.Secret)
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	return c.SendWithAuth(req, nil)
+}
+
+// CancelAgreement cancels a billing agreement.
+// Endpoint: POST /v1/payments/billing-agreements/{agreement_id}/cancel
+func (c *Client) CancelAgreement(agreementID string) error {
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+agreementID+"/cancel"), nil)
+	if err != nil {
+		return err
+	}
+	req.SetBasicAuth(c.ClientID, c.Secret)
+	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
+
+	err = c.SendWithAuth(req, nil)
+
+	// A successful request returns the HTTP 204 No Content status code with no JSON response body.
+	// This raises error "EOF"
+	if err.Error() == "EOF" {
+		return nil
+	}
+
+	return err
+}
+
+// CreateBillingPlan creates a billing plan in Paypal.
+// Endpoint: POST /v1/payments/billing-plans
+func (c *Client) CreateBillingPlan(plan BillingPlan) (*BillingPlan, error) {
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
+	response := &BillingPlan{}
+	if err != nil {
+		return response, err
+	}
+	err = c.SendWithAuth(req, response)
+	return response, err
 }
 
 // CreateBillingAgreement creates an agreement for specified plan.
@@ -129,6 +150,12 @@ func (c *Client) ListBillingPlans(status interface{}, page interface{}) (*ListBi
 	l := ListBillingPlansResp{}
 
 	err = c.SendWithAuth(req, &l)
+
+	// A successful request for empty list returns the HTTP 204 No Content status code with no JSON response body.
+	// This raises error "EOF"
+	if err.Error() == "EOF" {
+		return &l, nil
+	}
 
 	return &l, err
 }
