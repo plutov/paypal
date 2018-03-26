@@ -137,6 +137,10 @@ type (
 		Type                string               `json:"type,omitempty"`
 		PaymentDefinitions  []PaymentDefinition  `json:"payment_definitions,omitempty"`
 		MerchantPreferences *MerchantPreferences `json:"merchant_preferences,omitempty"`
+		State               string               `json:"state,omitempty"`
+		CreateTime          string               `json:"create_time,omitempty"`
+		UpdateTime          string               `json:"update_time,omitempty"`
+		Links               []Link               `json:"links,omitempty"`
 	}
 
 	// Capture struct

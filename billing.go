@@ -9,17 +9,6 @@ import (
 )
 
 type (
-	// CreateBillingResp struct
-	CreateBillingResp struct {
-		ID                  string              `json:"id,omitempty"`
-		State               string              `json:"state,omitempty"`
-		PaymentDefinitions  []PaymentDefinition `json:"payment_definitions,omitempty"`
-		MerchantPreferences MerchantPreferences `json:"merchant_preferences,omitempty"`
-		CreateTime          time.Time           `json:"create_time,omitempty"`
-		UpdateTime          time.Time           `json:"update_time,omitempty"`
-		Links               []Link              `json:"links,omitempty"`
-	}
-
 	// CreateAgreementResp struct
 	CreateAgreementResp struct {
 		ID          string      `json:"id,omitempty"`
@@ -29,13 +18,21 @@ type (
 		Links       []Link      `json:"links,omitempty"`
 		StartTime   time.Time   `json:"start_time,omitempty"`
 	}
+
+	// ListBillingPlansResp struct
+	ListBillingPlansResp struct {
+		TotalItems string        `json:"total_items,omitempty"`
+		TotalPages string        `json:"total_pages,omitempty"`
+		Plans      []BillingPlan `json:"plans,omitempty"`
+		Links      []Link        `json:"links,omitempty"`
+	}
 )
 
-// CreateBillingPlan creates a billing plan in Paypal
+// CreateBillingPlan creates a billing plan in Paypal.
 // Endpoint: POST /v1/payments/billing-plans
-func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error) {
+func (c *Client) CreateBillingPlan(plan BillingPlan) (*BillingPlan, error) {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
-	response := &CreateBillingResp{}
+	response := &BillingPlan{}
 	if err != nil {
 		return response, err
 	}
@@ -43,8 +40,8 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 	return response, err
 }
 
-// ActivatePlan activates a billing plan
-// By default, a new plan is not activated
+// ActivatePlan activates a billing plan.
+// By default, a new plan is not activated.
 // Endpoint: PATCH /v1/payments/billing-plans/
 func (c *Client) ActivatePlan(planID string) error {
 	buf := bytes.NewBuffer([]byte("[{\"op\":\"replace\",\"path\":\"/\",\"value\":{\"state\":\"ACTIVE\"}}]"))
@@ -57,7 +54,7 @@ func (c *Client) ActivatePlan(planID string) error {
 	return c.SendWithAuth(req, nil)
 }
 
-// CreateBillingAgreement creates an agreement for specified plan
+// CreateBillingAgreement creates an agreement for specified plan.
 // Endpoint: POST /v1/payments/billing-agreements
 func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementResp, error) {
 	// PayPal needs only ID, so we will remove all fields except Plan ID
@@ -74,7 +71,7 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 	return response, err
 }
 
-// DeletePlan deletes a billing plan
+// DeletePlan deletes a billing plan.
 // Endpoint: PATCH /v1/payments/billing-plans/
 func (c *Client) DeletePlan(planID string) error {
 	buf := bytes.NewBuffer([]byte("[{\"op\":\"replace\",\"path\":\"/\",\"value\":{\"state\":\"DELETED\"}}]"))
@@ -109,4 +106,29 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 	}
 
 	return &e, err
+}
+
+// ListBillingPlans - Lists billing plans.
+// Valid values for status: "CREATED", "ACTIVE", "INACTIVE".
+// Endpoint: GET /v1/payments/billing-plans/
+func (c *Client) ListBillingPlans(status interface{}, page interface{}) (*ListBillingPlansResp, error) {
+	if status == nil {
+		status = "CREATED"
+	}
+	if page == nil {
+		page = "0"
+	}
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans?total_required=yes&status="+status.(string)+"&page="+page.(string)), nil)
+	if err != nil {
+		return &ListBillingPlansResp{}, err
+	}
+
+	req.SetBasicAuth(c.ClientID, c.Secret)
+	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
+
+	l := ListBillingPlansResp{}
+
+	err = c.SendWithAuth(req, &l)
+
+	return &l, err
 }

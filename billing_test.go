@@ -94,6 +94,8 @@ func BillingExample() {
 	}
 	err = c.ActivatePlan(planResp.ID)
 	fmt.Println(err)
+	plans, err := c.ListBillingPlans("ACTIVE", nil)
+	fmt.Println(err, plans)
 	agreement := pp.BillingAgreement{
 		Name:        "Fast Speed Agreement",
 		Description: "Agreement for Fast Speed Plan",
