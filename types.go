@@ -54,9 +54,6 @@ const (
 )
 
 type (
-	// JSONTime overrides MarshalJson method to format in ISO8601
-	JSONTime time.Time
-
 	// Address struct
 	Address struct {
 		Line1       string `json:"line1"`
@@ -121,16 +118,16 @@ type (
 
 	// BillingAgreement struct
 	BillingAgreement struct {
-		ID               string           `json:"id,omitempty"`
-		Name             string           `json:"name,omitempty"`
-		Description      string           `json:"description,omitempty"`
-		StartDate        JSONTime         `json:"start_date,omitempty"`
-		Plan             BillingPlan      `json:"plan,omitempty"`
-		Payer            Payer            `json:"payer,omitempty"`
-		ShippingAddress  *ShippingAddress `json:"shipping_address,omitempty"`
-		State            string           `json:"state,omitempty"`
-		AgreementDetails AgreementDetails `json:"agreement_details"`
-		Links            []Link           `json:"links"`
+		ID               string            `json:"id,omitempty"`
+		Name             string            `json:"name,omitempty"`
+		Description      string            `json:"description,omitempty"`
+		StartDate        string            `json:"start_date,omitempty"`
+		Plan             BillingPlan       `json:"plan,omitempty"`
+		Payer            Payer             `json:"payer,omitempty"`
+		ShippingAddress  *ShippingAddress  `json:"shipping_address,omitempty"`
+		State            string            `json:"state,omitempty"`
+		AgreementDetails *AgreementDetails `json:"agreement_details,omitempty"`
+		Links            []Link            `json:"links,omitempty"`
 	}
 
 	// BillingPlan struct
@@ -583,12 +580,6 @@ type (
 // Error method implementation for ErrorResponse struct
 func (r *ErrorResponse) Error() string {
 	return fmt.Sprintf("%v %v: %d %s", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
-}
-
-// MarshalJSON for JSONTime
-func (t JSONTime) MarshalJSON() ([]byte, error) {
-	stamp := fmt.Sprintf(`"%s"`, time.Time(t).UTC().Format(time.RFC3339))
-	return []byte(stamp), nil
 }
 
 func (e *expirationTime) UnmarshalJSON(b []byte) error {

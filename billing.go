@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"time"
 )
 
 // ActivatePlan activates a billing plan.
@@ -36,7 +35,7 @@ func (c *Client) CancelAgreement(agreementID string) error {
 
 	// A successful request returns the HTTP 204 No Content status code with no JSON response body.
 	// This raises error "EOF"
-	if err.Error() == "EOF" {
+	if err != nil && err.Error() == "EOF" {
 		return nil
 	}
 
@@ -133,7 +132,7 @@ func (c *Client) ListBillingPlans(status interface{}, page interface{}) (*ListBi
 
 	// A successful request for empty list returns the HTTP 204 No Content status code with no JSON response body.
 	// This raises error "EOF"
-	if err.Error() == "EOF" {
+	if err != nil && err.Error() == "EOF" {
 		return &l, nil
 	}
 

@@ -99,7 +99,7 @@ func BillingExample() {
 	agreement := pp.BillingAgreement{
 		Name:        "Fast Speed Agreement",
 		Description: "Agreement for Fast Speed Plan",
-		StartDate:   pp.JSONTime(time.Now().Add(time.Hour * 24)),
+		StartDate:   time.Now().UTC().Add(time.Hour * 24).Format(time.RFC3339),
 		Plan:        pp.BillingPlan{ID: planResp.ID},
 		Payer: pp.Payer{
 			PaymentMethod: "paypal",
