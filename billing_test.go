@@ -94,10 +94,12 @@ func BillingExample() {
 	}
 	err = c.ActivatePlan(planResp.ID)
 	fmt.Println(err)
+	plans, err := c.ListBillingPlans("ACTIVE", nil)
+	fmt.Println(err, plans)
 	agreement := pp.BillingAgreement{
 		Name:        "Fast Speed Agreement",
 		Description: "Agreement for Fast Speed Plan",
-		StartDate:   pp.JSONTime(time.Now().Add(time.Hour * 24)),
+		StartDate:   time.Now().UTC().Add(time.Hour * 24).Format(time.RFC3339),
 		Plan:        pp.BillingPlan{ID: planResp.ID},
 		Payer: pp.Payer{
 			PaymentMethod: "paypal",
@@ -105,4 +107,6 @@ func BillingExample() {
 	}
 	resp, err := c.CreateBillingAgreement(agreement)
 	fmt.Println(err, resp)
+	err = c.DeletePlan(planResp.ID)
+	fmt.Println(err)
 }
