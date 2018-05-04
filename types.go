@@ -514,6 +514,12 @@ type (
 		PaymentOptions   *PaymentOptions `json:"payment_options,omitempty"`
 		NotifyURL        string          `json:"notify_url,omitempty"`
 		OrderURL         string          `json:"order_url,omitempty"`
+		Payee            *Payee          `json:"payee,omitempty"`
+	}
+
+	//Payee struct
+	Payee struct {
+		Email string `json:"email"`
 	}
 
 	// UserInfo struct
