@@ -548,6 +548,7 @@ type (
 	WebProfile struct {
 		ID           string       `json:"id,omitempty"`
 		Name         string       `json:"name"`
+		Temporary    bool         `json:"temporary"`
 		Presentation Presentation `json:"presentation,omitempty"`
 		InputFields  InputFields  `json:"input_fields,omitempty"`
 		FlowConfig   FlowConfig   `json:"flow_config,omitempty"`
