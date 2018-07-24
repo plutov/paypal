@@ -121,9 +121,11 @@ type (
 
 	// BillingAgreement struct
 	BillingAgreement struct {
-		Name            string           `json:"name,omitempty"`
-		Description     string           `json:"description,omitempty"`
-		StartDate       JSONTime         `json:"start_date,omitempty"`
+		Name        string `json:"name,omitempty"`
+		Description string `json:"description,omitempty"`
+		// StartDate must be of type JSONTime when creating new billing agreements
+		// When retrieving billing agreement details, StartDate will be of type time.Time
+		StartDate       interface{}      `json:"start_date,omitempty"`
 		Plan            BillingPlan      `json:"plan,omitempty"`
 		Payer           Payer            `json:"payer,omitempty"`
 		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
