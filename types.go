@@ -71,7 +71,7 @@ type (
 	// AgreementDetails struct
 	AgreementDetails struct {
 		OutstandingBalance AmountPayout `json:"outstanding_balance"`
-		CyclesRemaining    float64      `json:"cycles_remaining,string"`
+		CyclesRemaining    uint64       `json:"cycles_remaining,string"`
 		CyclesCompleted    int          `json:"cycles_completed,string"`
 		NextBillingDate    time.Time    `json:"next_billing_date"`
 		LastPaymentDate    time.Time    `json:"last_payment_date"`
