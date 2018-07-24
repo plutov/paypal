@@ -96,3 +96,20 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 
 	return &e, err
 }
+
+// GetBillingAgreement - Use this call to get billing agreement details.
+// Endpoint: GET /v1/payments/billing-agreements/billing-agreements/ID
+func (c *Client) GetBillingAgreement(agreementID string) (*BillingAgreement, error) {
+	agreement := &BillingAgreement{}
+
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+agreementID), nil)
+	if err != nil {
+		return agreement, err
+	}
+
+	if err = c.SendWithAuth(req, agreement); err != nil {
+		return agreement, err
+	}
+
+	return agreement, nil
+}
