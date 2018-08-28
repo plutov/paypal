@@ -93,6 +93,15 @@ type (
 		Value    string `json:"value"`
 	}
 
+	// ApplicationContext struct
+	ApplicationContext struct {
+		BrandName          string `json:"brand_name"`
+		Locale             string `json:"locale"`
+		LandingPage        string `json:"landing_page"`
+		ShippingPreference string `json:"shipping_preference"`
+		UserAction         string `json:"user_action"`
+	}
+
 	// Authorization struct
 	Authorization struct {
 		Amount                    *Amount    `json:"amount,omitempty"`
@@ -232,6 +241,7 @@ type (
 		GiftWrap         string `json:"gift_wrap,omitempty"`
 	}
 
+	// ErrorResponseDetail struct
 	ErrorResponseDetail struct {
 		Field string `json:"field"`
 		Issue string `json:"issue"`
@@ -346,15 +356,16 @@ type (
 
 	// Payment struct
 	Payment struct {
-		Intent              string        `json:"intent"`
-		Payer               *Payer        `json:"payer"`
-		Transactions        []Transaction `json:"transactions"`
-		RedirectURLs        *RedirectURLs `json:"redirect_urls,omitempty"`
-		ID                  string        `json:"id,omitempty"`
-		CreateTime          *time.Time    `json:"create_time,omitempty"`
-		State               string        `json:"state,omitempty"`
-		UpdateTime          *time.Time    `json:"update_time,omitempty"`
-		ExperienceProfileID string        `json:"experience_profile_id,omitempty"`
+		Intent              string              `json:"intent"`
+		Payer               *Payer              `json:"payer"`
+		ApplicationContext  *ApplicationContext `json:"application_context,omitempty"`
+		Transactions        []Transaction       `json:"transactions"`
+		RedirectURLs        *RedirectURLs       `json:"redirect_urls,omitempty"`
+		ID                  string              `json:"id,omitempty"`
+		CreateTime          *time.Time          `json:"create_time,omitempty"`
+		State               string              `json:"state,omitempty"`
+		UpdateTime          *time.Time          `json:"update_time,omitempty"`
+		ExperienceProfileID string              `json:"experience_profile_id,omitempty"`
 	}
 
 	// PaymentDefinition struct
@@ -369,6 +380,7 @@ type (
 		ChargeModels      []ChargeModel `json:"charge_models,omitempty"`
 	}
 
+	// PaymentOptions struct
 	PaymentOptions struct {
 		AllowedPaymentMethod string `json:"allowed_payment_method,omitempty"`
 	}
@@ -548,7 +560,6 @@ type (
 	WebProfile struct {
 		ID           string       `json:"id,omitempty"`
 		Name         string       `json:"name"`
-		Temporary    bool         `json:"temporary"`
 		Presentation Presentation `json:"presentation,omitempty"`
 		InputFields  InputFields  `json:"input_fields,omitempty"`
 		FlowConfig   FlowConfig   `json:"flow_config,omitempty"`
