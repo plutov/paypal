@@ -17,12 +17,8 @@ func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 	}
 
 	auth := &Authorization{}
-
-	if err = c.SendWithAuth(req, auth); err != nil {
-		return auth, err
-	}
-
-	return auth, nil
+	err = c.SendWithAuth(req, auth)
+	return auth, err
 }
 
 // CaptureAuthorization captures and process an existing authorization.
@@ -38,12 +34,8 @@ func (c *Client) CaptureAuthorization(authID string, a *Amount, isFinalCapture b
 	}
 
 	capture := &Capture{}
-
-	if err = c.SendWithAuth(req, capture); err != nil {
-		return capture, err
-	}
-
-	return capture, nil
+	err = c.SendWithAuth(req, capture)
+	return capture, err
 }
 
 // VoidAuthorization voids a previously authorized payment
@@ -56,12 +48,8 @@ func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 	}
 
 	auth := &Authorization{}
-
-	if err = c.SendWithAuth(req, auth); err != nil {
-		return auth, err
-	}
-
-	return auth, nil
+	err = c.SendWithAuth(req, auth)
+	return auth, err
 }
 
 // ReauthorizeAuthorization reauthorize a Paypal account payment.
@@ -75,10 +63,6 @@ func (c *Client) ReauthorizeAuthorization(authID string, a *Amount) (*Authorizat
 	}
 
 	auth := &Authorization{}
-
-	if err = c.SendWithAuth(req, auth); err != nil {
-		return auth, err
-	}
-
-	return auth, nil
+	err = c.SendWithAuth(req, auth)
+	return auth, err
 }

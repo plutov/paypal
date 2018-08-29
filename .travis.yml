@@ -9,4 +9,4 @@ go:
 install:
  - export PATH=$PATH:$HOME/gopath/bin
 script:
- - go test
+ - go test -v -race

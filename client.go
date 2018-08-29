@@ -52,26 +52,22 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 }
 
 // SetHTTPClient sets *http.Client to current client
-func (c *Client) SetHTTPClient(client *http.Client) error {
+func (c *Client) SetHTTPClient(client *http.Client) {
 	c.Client = client
-	return nil
 }
 
 // SetAccessToken sets saved token to current client
-func (c *Client) SetAccessToken(token string) error {
+func (c *Client) SetAccessToken(token string) {
 	c.Token = &TokenResponse{
 		Token: token,
 	}
 	c.tokenExpiresAt = time.Time{}
-
-	return nil
 }
 
 // SetLog will set/change the output destination.
 // If log file is set paypalsdk will log all requests and responses to this Writer
-func (c *Client) SetLog(log io.Writer) error {
+func (c *Client) SetLog(log io.Writer) {
 	c.Log = log
-	return nil
 }
 
 // Send makes a request to the API, the response body will be
@@ -112,18 +108,16 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 		return errResp
 	}
 
-	if v != nil {
-		if w, ok := v.(io.Writer); ok {
-			io.Copy(w, resp.Body)
-		} else {
-			err = json.NewDecoder(resp.Body).Decode(v)
-			if err != nil {
-				return err
-			}
-		}
+	if v == nil {
+		return nil
 	}
 
-	return nil
+	if w, ok := v.(io.Writer); ok {
+		io.Copy(w, resp.Body)
+		return nil
+	}
+
+	return json.NewDecoder(resp.Body).Decode(v)
 }
 
 // SendWithAuth makes a request to the API and apply OAuth2 header automatically.
