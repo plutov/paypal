@@ -188,7 +188,7 @@ func TestCreatePayment(t *testing.T) {
 			ItemList: &ItemList{
 				Items: []Item{
 					Item{
-						Quantity: 2,
+						Quantity: "2",
 						Price:    "3.50",
 						Currency: "USD",
 						Name:     "Product 1",
@@ -251,7 +251,7 @@ func TestPatchPayment(t *testing.T) {
 			ItemList: &ItemList{
 				Items: []Item{
 					Item{
-						Quantity: 2,
+						Quantity: "2",
 						Price:    "3.50",
 						Currency: "USD",
 						Name:     "Product 1",
