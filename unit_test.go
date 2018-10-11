@@ -59,7 +59,7 @@ func TestTypeItem(t *testing.T) {
     "name":"Item",
     "price":"22.99",
     "currency":"GBP",
-    "quantity":1
+    "quantity":"1"
 }`
 
 	i := &Item{}
@@ -71,7 +71,7 @@ func TestTypeItem(t *testing.T) {
 	if i.Name != "Item" ||
 		i.Price != "22.99" ||
 		i.Currency != "GBP" ||
-		i.Quantity != 1 {
+		i.Quantity != "1" {
 		t.Errorf("Item decoded result is incorrect, Given: %v", i)
 	}
 }
