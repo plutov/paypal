@@ -133,7 +133,7 @@ filter.AddTextField("sort_order").Is = "desc"
 
 //And time fields
 filter.AddTimeField("start_time").Is = time.Now().Add(-time.Hour * 24 * 30)
-filter.AddTimeField("stop_time").Is = time.Now()
+filter.AddTimeField("end_time").Is = time.Now()
 
 payments, err := c.GetPaymentsWithFilter(filter)
 ```
