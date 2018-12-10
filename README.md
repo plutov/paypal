@@ -122,6 +122,20 @@ payment, err := c.GetPayment("PAY-17S8410768582940NKEE66EQ")
 
 ```go
 payments, err := c.GetPayments()
+
+//Or list payments with filters
+filter := &paypalsdk.Filter{}
+
+//With text fields
+filter.AddTextField("sort_by").Is = "create_time"
+filter.AddTextField("count").Is = "30"
+filter.AddTextField("sort_order").Is = "desc"
+
+//And time fields
+filter.AddTimeField("start_time").Is = time.Now().Add(-time.Hour * 24 * 30)
+filter.AddTimeField("stop_time").Is = time.Now()
+
+payments, err := c.GetPaymentsWithFilter(filter)
 ```
 
 ### Get authorization by ID

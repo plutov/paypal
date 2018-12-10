@@ -131,9 +131,19 @@ func (c *Client) PatchPayment(paymentID string, p []PaymentPatch) (*Payment, err
 // GetPayments retrieve payments resources from Paypal
 // Endpoint: GET /v1/payments/payment/
 func (c *Client) GetPayments() ([]Payment, error) {
+	return c.getPayments(nil)
+}
+
+// GetPayments retrieve payments resources from Paypal by the provided filter
+// Endpoint: GET /v1/payments/payment/
+func (c *Client) GetPaymentsWithFilter(filter *Filter) ([]Payment, error) {
+	return c.getPayments(filter)
+}
+
+func (c *Client) getPayments(filter *Filter) ([]Payment, error) {
 	var p ListPaymentsResp
 
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment/"), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/payment/", filter), nil)
 	if err != nil {
 		return p.Payments, err
 	}
