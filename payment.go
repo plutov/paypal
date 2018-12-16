@@ -22,10 +22,10 @@ type CreatePaymentResp struct {
 // CreatePayment is more common function for any kind of payment
 // Endpoint: POST /v1/payments/payment
 func (c *Client) CreateDirectPaypalPayment(amount Amount, redirectURI string, cancelURI string, description string) (*PaymentResponse, error) {
-	buf := bytes.NewBuffer([]byte("{\"intent\":\"sale\",\"payer\":{\"payment_method\":\"paypal\"}," +
-		"\"transactions\":[{\"amount\":{\"total\":\"" + amount.Total +
-		"\",\"currency\":\"" + amount.Currency + "\"},\"description\":\"" + description + "\"}],\"redirect_urls\":{\"return_url\":\"" +
-		redirectURI + "\",\"cancel_url\":\"" + cancelURI + "\"}}"))
+	buf := bytes.NewBuffer([]byte(`{"intent":"sale","payer":{"payment_method":"paypal"},` +
+		`"transactions":[{"amount":{"total":"` + amount.Total +
+		`","currency":"` + amount.Currency + `"},"description":"` + description + `"}],"redirect_urls":{"return_url":"` +
+		redirectURI + `","cancel_url":"` + cancelURI + `"}}`))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment"), buf)
 	if err != nil {
 		return &PaymentResponse{}, err
@@ -68,7 +68,7 @@ func (c *Client) CreatePayment(p Payment) (*CreatePaymentResp, error) {
 // ExecuteApprovedPayment - Use this call to execute (complete) a PayPal payment that has been approved by the payer. You can optionally update transaction information when executing the payment by passing in one or more transactions.
 // Endpoint: POST /v1/payments/payment/paymentID/execute
 func (c *Client) ExecuteApprovedPayment(paymentID string, payerID string) (*ExecuteResponse, error) {
-	buf := bytes.NewBuffer([]byte("{\"payer_id\":\"" + payerID + "\"}"))
+	buf := bytes.NewBuffer([]byte(`{"payer_id":"` + payerID + `"}`))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payment/"+paymentID+"/execute"), buf)
 	if err != nil {
 		return &ExecuteResponse{}, err

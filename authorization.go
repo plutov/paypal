@@ -27,7 +27,7 @@ func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 func (c *Client) CaptureAuthorization(authID string, a *Amount, isFinalCapture bool) (*Capture, error) {
 	isFinalStr := strconv.FormatBool(isFinalCapture)
 
-	buf := bytes.NewBuffer([]byte("{\"amount\":{\"currency\":\"" + a.Currency + "\",\"total\":\"" + a.Total + "\"},\"is_final_capture\":" + isFinalStr + "}"))
+	buf := bytes.NewBuffer([]byte(`{"amount":{"currency":"` + a.Currency + `,"total":"` + a.Total + `"},"is_final_capture":` + isFinalStr + `}`))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/authorization/"+authID+"/capture"), buf)
 	if err != nil {
 		return &Capture{}, err
@@ -56,7 +56,7 @@ func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 // PayPal recommends to reauthorize payment after ~3 days
 // Endpoint: POST /v1/payments/authorization/ID/reauthorize
 func (c *Client) ReauthorizeAuthorization(authID string, a *Amount) (*Authorization, error) {
-	buf := bytes.NewBuffer([]byte("{\"amount\":{\"currency\":\"" + a.Currency + "\",\"total\":\"" + a.Total + "\"}}"))
+	buf := bytes.NewBuffer([]byte(`{"amount":{"currency":"` + a.Currency + `","total":"` + a.Total + `"}}`))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/authorization/"+authID+"/reauthorize"), buf)
 	if err != nil {
 		return &Authorization{}, err
