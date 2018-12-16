@@ -401,8 +401,12 @@ type (
 
 	// PaymentResponse structure
 	PaymentResponse struct {
-		ID    string `json:"id"`
-		Links []Link `json:"links"`
+		ID           string        `json:"id"`
+		State        string        `json:"state"`
+		Intent       string        `json:"intent"`
+		Payer        Payer         `json:"payer"`
+		Transactions []Transaction `json:"transactions"`
+		Links        []Link        `json:"links"`
 	}
 
 	// Payout struct
