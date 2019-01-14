@@ -28,6 +28,23 @@ type (
 		Links       []Link      `json:"links,omitempty"`
 		StartTime   time.Time   `json:"start_time,omitempty"`
 	}
+
+	// BillingPlanListParams struct
+	BillingPlanListParams struct {
+		Page          string `json:"page,omitempty"`           //Default: 0.
+		Status        string `json:"status,omitempty"`         //Allowed values: CREATED, ACTIVE, INACTIVE, ALL.
+		PageSize      string `json:"page_size,omitempty"`      //Default: 10.
+		TotalRequired string `json:"total_required,omitempty"` //Default: no.
+
+	}
+
+	//BillingPlanListResp struct
+	BillingPlanListResp struct {
+		Plans      []BillingPlan `json:"plans,omitempty"`
+		TotalItems string        `json:"total_items,omitempty"`
+		TotalPages string        `json:"total_pages,omitempty"`
+		Links      []Link        `json:"links,omitempty"`
+	}
 )
 
 // CreateBillingPlan creates a billing plan in Paypal
@@ -95,4 +112,22 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 	}
 
 	return &e, err
+}
+
+// ListBillingPlans lists billing-plans
+// Endpoint: GET /v1/payments/billing-plans
+func (c *Client) ListBillingPlans(bplp BillingPlanListParams) (*BillingPlanListResp, error) {
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), nil)
+	q := req.URL.Query()
+	q.Add("page", bplp.Page)
+	q.Add("page_size", bplp.PageSize)
+	q.Add("status", bplp.Status)
+	q.Add("total_required", bplp.TotalRequired)
+	req.URL.RawQuery = q.Encode()
+	response := &BillingPlanListResp{}
+	if err != nil {
+		return response, err
+	}
+	err = c.SendWithAuth(req, response)
+	return response, err
 }

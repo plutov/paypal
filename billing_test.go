@@ -105,4 +105,7 @@ func BillingExample() {
 	}
 	resp, err := c.CreateBillingAgreement(agreement)
 	fmt.Println(err, resp)
+
+	bps, err := c.ListBillingPlans(pp.BillingPlanListParams{Status: "ACTIVE"})
+	fmt.Println(err, bps)
 }
