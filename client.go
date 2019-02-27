@@ -125,10 +125,12 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 // making the main request
 // client.Token will be updated when changed
 func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
+	c.Lock()
 	if c.Token != nil {
 		if !c.tokenExpiresAt.IsZero() && c.tokenExpiresAt.Sub(time.Now()) < RequestNewTokenBeforeExpiresIn {
 			// c.Token will be updated in GetAccessToken call
 			if _, err := c.GetAccessToken(); err != nil {
+				c.Unlock()
 				return err
 			}
 		}
@@ -136,6 +138,7 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 		req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	}
 
+	c.Unlock()
 	return c.Send(req, v)
 }
 

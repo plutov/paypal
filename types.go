@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -168,6 +169,7 @@ type (
 
 	// Client represents a Paypal REST API Client
 	Client struct {
+		sync.Mutex
 		Client         *http.Client
 		ClientID       string
 		Secret         string
