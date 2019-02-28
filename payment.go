@@ -134,7 +134,7 @@ func (c *Client) GetPayments() ([]Payment, error) {
 	return c.getPayments(nil)
 }
 
-// GetPayments retrieve payments resources from Paypal by the provided filter
+// GetPaymentsWithFilter retrieve payments resources from Paypal by the provided filter
 // Endpoint: GET /v1/payments/payment/
 func (c *Client) GetPaymentsWithFilter(filter *Filter) ([]Payment, error) {
 	return c.getPayments(filter)
