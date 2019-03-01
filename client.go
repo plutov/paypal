@@ -126,6 +126,9 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 // client.Token will be updated when changed
 func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	c.Lock()
+	// Note: Here we do not want to `defer c.Unlock()` because we need `c.Send(...)`
+	// to happen outside of the locked section.
+
 	if c.Token != nil {
 		if !c.tokenExpiresAt.IsZero() && c.tokenExpiresAt.Sub(time.Now()) < RequestNewTokenBeforeExpiresIn {
 			// c.Token will be updated in GetAccessToken call
@@ -138,6 +141,8 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 		req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	}
 
+	// Unlock the client mutex before sending the request, this allows multiple requests
+	// to be in progress at the same time.
 	c.Unlock()
 	return c.Send(req, v)
 }
