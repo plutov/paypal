@@ -6,24 +6,11 @@
 
 ### Go client for PayPal REST API
 
-Currently supports **v1** only, v2 is in progress.
+Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git tag.
 
 ### Coverage
+
  * POST /v1/oauth2/token
- * POST /v1/payments/payment
- * GET /v1/payments/payment/**ID**
- * GET /v1/payments/payment
- * GET /v1/payments/authorization/**ID**
- * POST /v1/payments/authorization/**ID**/capture
- * POST /v1/payments/authorization/**ID**/void
- * POST /v1/payments/authorization/**ID**/reauthorize
- * GET /v1/payments/sale/**ID**
- * POST /v1/payments/sale/**ID**/refund
- * GET /v1/payments/refund/**ID**
- * GET /v1/payments/orders/**ID**
- * POST /v1/payments/orders/**ID**/authorize
- * POST /v1/payments/orders/**ID**/capture
- * POST /v1/payments/orders/**ID**/do-void
  * POST /v1/identity/openidconnect/tokenservice
  * GET /v1/identity/openidconnect/userinfo/?schema=**SCHEMA**
  * POST /v1/payments/payouts
@@ -40,10 +27,21 @@ Currently supports **v1** only, v2 is in progress.
  * PATCH /v1/vault/credit-cards/**ID**
  * GET /v1/vault/credit-cards/**ID**
  * GET /v1/vault/credit-cards
- * POST /v1/payments/billing-plans
- * PATCH /v1/payments/billing-plans/***ID***
- * POST /v1/payments/billing-agreements
- * POST /v1/payments/billing-agreements/***TOKEN***/agreement-execute
+ * GET /v2/payments/authorization/**ID**
+ * POST /v2/payments/authorization/**ID**/capture
+ * POST /v2/payments/authorization/**ID**/void
+ * POST /v2/payments/authorization/**ID**/reauthorize
+ * GET /v2/payments/sale/**ID**
+ * POST /v2/payments/sale/**ID**/refund
+ * GET /v2/payments/refund/**ID**
+ * GET /v2/payments/orders/**ID**
+ * POST /v2/payments/orders/**ID**/authorize
+ * POST /v2/payments/orders/**ID**/capture
+ * POST /v2/payments/orders/**ID**/do-void
+ * POST /v2/payments/billing-plans
+ * PATCH /v2/payments/billing-plans/***ID***
+ * POST /v2/payments/billing-agreements
+ * POST /v2/payments/billing-agreements/***TOKEN***/agreement-execute
 
 ### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
@@ -58,86 +56,6 @@ c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)
 c.SetLog(os.Stdout) // Set log to terminal stdout
 
 accessToken, err := c.GetAccessToken()
-```
-
-### Create direct paypal payment
-
-```go
-amount := paypalsdk.Amount{
-    Total:    "7.00",
-    Currency: "USD",
-}
-redirectURI := "http://example.com/redirect-uri"
-cancelURI := "http://example.com/cancel-uri"
-description := "Description for this payment"
-paymentResult, err := c.CreateDirectPaypalPayment(amount, redirectURI, cancelURI, description)
-```
-
-### Create custom payment
-```go
-p := paypalsdk.Payment{
-    Intent: "sale",
-    Payer: &paypalsdk.Payer{
-        PaymentMethod: "credit_card",
-        FundingInstruments: []paypalsdk.FundingInstrument{paypalsdk.FundingInstrument{
-            CreditCard: &paypalsdk.CreditCard{
-                Number:      "4111111111111111",
-                Type:        "visa",
-                ExpireMonth: "11",
-                ExpireYear:  "2020",
-                CVV2:        "777",
-                FirstName:   "John",
-                LastName:    "Doe",
-            },
-        }},
-    },
-    Transactions: []paypalsdk.Transaction{paypalsdk.Transaction{
-        Amount: &paypalsdk.Amount{
-            Currency: "USD",
-            Total:    "7.00",
-        },
-        Description: "My Payment",
-    }},
-    RedirectURLs: &paypalsdk.RedirectURLs{
-        ReturnURL: "http://...",
-        CancelURL: "http://...",
-    },
-}
-paymentResponse, err := client.CreatePayment(p)
-```
-
-### Execute approved payment
-
-```go
-paymentID := "PAY-17S8410768582940NKEE66EQ"
-payerID := "7E7MGXCWTTKK2"
-executeResult, err := c.ExecuteApprovedPayment(paymentID, payerID)
-```
-
-### Get payment by ID
-
-```go
-payment, err := c.GetPayment("PAY-17S8410768582940NKEE66EQ")
-```
-
-### Get list of payments
-
-```go
-payments, err := c.GetPayments()
-
-//Or list payments with filters
-filter := &paypalsdk.Filter{}
-
-//With text fields
-filter.AddTextField("sort_by").Is = "create_time"
-filter.AddTextField("count").Is = "30"
-filter.AddTextField("sort_order").Is = "desc"
-
-//And time fields
-filter.AddTimeField("start_time").Is = time.Now().Add(-time.Hour * 24 * 30)
-filter.AddTimeField("end_time").Is = time.Now()
-
-payments, err := c.GetPaymentsWithFilter(filter)
 ```
 
 ### Get authorization by ID

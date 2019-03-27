@@ -356,20 +356,6 @@ type (
 		CountryCode     string           `json:"country_code"`
 	}
 
-	// Payment struct
-	Payment struct {
-		Intent              string              `json:"intent"`
-		Payer               *Payer              `json:"payer"`
-		ApplicationContext  *ApplicationContext `json:"application_context,omitempty"`
-		Transactions        []Transaction       `json:"transactions"`
-		RedirectURLs        *RedirectURLs       `json:"redirect_urls,omitempty"`
-		ID                  string              `json:"id,omitempty"`
-		CreateTime          *time.Time          `json:"create_time,omitempty"`
-		State               string              `json:"state,omitempty"`
-		UpdateTime          *time.Time          `json:"update_time,omitempty"`
-		ExperienceProfileID string              `json:"experience_profile_id,omitempty"`
-	}
-
 	// PaymentDefinition struct
 	PaymentDefinition struct {
 		ID                string        `json:"id,omitempty"`
@@ -387,7 +373,7 @@ type (
 		AllowedPaymentMethod string `json:"allowed_payment_method,omitempty"`
 	}
 
-	// PaymentPatch PATCH /v1/payments/payment/{payment_id)
+	// PaymentPatch PATCH /v2/payments/payment/{payment_id)
 	PaymentPatch struct {
 		Operation string      `json:"op"`
 		Path      string      `json:"path"`

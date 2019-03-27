@@ -48,9 +48,9 @@ type (
 )
 
 // CreateBillingPlan creates a billing plan in Paypal
-// Endpoint: POST /v1/payments/billing-plans
+// Endpoint: POST /v2/payments/billing-plans
 func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error) {
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/billing-plans"), plan)
 	response := &CreateBillingResp{}
 	if err != nil {
 		return response, err
@@ -61,10 +61,10 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 
 // ActivatePlan activates a billing plan
 // By default, a new plan is not activated
-// Endpoint: PATCH /v1/payments/billing-plans/
+// Endpoint: PATCH /v2/payments/billing-plans/
 func (c *Client) ActivatePlan(planID string) error {
 	buf := bytes.NewBuffer([]byte(`[{"op":"replace","path":"/","value":{"state":"ACTIVE"}}]`))
-	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans/"+planID), buf)
+	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/billing-plans/"+planID), buf)
 	if err != nil {
 		return err
 	}
@@ -74,14 +74,14 @@ func (c *Client) ActivatePlan(planID string) error {
 }
 
 // CreateBillingAgreement creates an agreement for specified plan
-// Endpoint: POST /v1/payments/billing-agreements
+// Endpoint: POST /v2/payments/billing-agreements
 func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementResp, error) {
 	// PayPal needs only ID, so we will remove all fields except Plan ID
 	a.Plan = BillingPlan{
 		ID: a.Plan.ID,
 	}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/billing-agreements"), a)
 	response := &CreateAgreementResp{}
 	if err != nil {
 		return response, err
@@ -91,9 +91,9 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 }
 
 // ExecuteApprovedAgreement - Use this call to execute (complete) a PayPal agreement that has been approved by the payer.
-// Endpoint: POST /v1/payments/billing-agreements/token/agreement-execute
+// Endpoint: POST /v2/payments/billing-agreements/token/agreement-execute
 func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+token+"/agreement-execute"), nil)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/billing-agreements/"+token+"/agreement-execute"), nil)
 	if err != nil {
 		return &ExecuteAgreementResponse{}, err
 	}
@@ -115,9 +115,9 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 }
 
 // ListBillingPlans lists billing-plans
-// Endpoint: GET /v1/payments/billing-plans
+// Endpoint: GET /v2/payments/billing-plans
 func (c *Client) ListBillingPlans(bplp BillingPlanListParams) (*BillingPlanListResp, error) {
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), nil)
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/billing-plans"), nil)
 	q := req.URL.Query()
 	q.Add("page", bplp.Page)
 	q.Add("page_size", bplp.PageSize)
