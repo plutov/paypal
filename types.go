@@ -94,6 +94,12 @@ type (
 		Value    string `json:"value"`
 	}
 
+	// GrossTotalAmount struct
+	GrossTotalAmount struct {
+		Value    string `json:"value"`
+		Currency string `json:"currency"`
+	}
+
 	// ApplicationContext struct
 	ApplicationContext struct {
 		BrandName          string `json:"brand_name"`
@@ -325,14 +331,13 @@ type (
 
 	// Order struct
 	Order struct {
-		ID            string     `json:"id,omitempty"`
-		CreateTime    *time.Time `json:"create_time,omitempty"`
-		UpdateTime    *time.Time `json:"update_time,omitempty"`
-		State         string     `json:"state,omitempty"`
-		Amount        *Amount    `json:"amount,omitempty"`
-		PendingReason string     `json:"pending_reason,omitempty"`
-		ParentPayment string     `json:"parent_payment,omitempty"`
-		Links         []Link     `json:"links,omitempty"`
+		ID               string            `json:"id,omitempty"`
+		Status           string            `json:"status,omitempty"`
+		Intent           string            `json:"intent,omitempty"`
+		GrossTotalAmount *GrossTotalAmount `json:"gross_total_amount,omitempty"`
+		Links            []Link            `json:"links,omitempty"`
+		CreateTime       *time.Time        `json:"create_time,omitempty"`
+		UpdateTime       *time.Time        `json:"update_time,omitempty"`
 	}
 
 	// Payer struct
