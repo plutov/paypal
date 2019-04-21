@@ -94,12 +94,6 @@ type (
 		Value    string `json:"value"`
 	}
 
-	// GrossTotalAmount struct
-	GrossTotalAmount struct {
-		Value    string `json:"value"`
-		Currency string `json:"currency"`
-	}
-
 	// ApplicationContext struct
 	ApplicationContext struct {
 		BrandName          string `json:"brand_name"`
@@ -319,6 +313,18 @@ type (
 		Enctype string `json:"enctype,omitempty"`
 	}
 
+	// PurchaseUnitAmount struct
+	PurchaseUnitAmount struct {
+		Currency string `json:"currency_code"`
+		Value    string `json:"value"`
+	}
+
+	// PurchaseUnit struct
+	PurchaseUnit struct {
+		ReferenceID string              `json:"reference_id"`
+		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
+	}
+
 	// MerchantPreferences struct
 	MerchantPreferences struct {
 		SetupFee                *AmountPayout `json:"setup_fee,omitempty"`
@@ -331,13 +337,13 @@ type (
 
 	// Order struct
 	Order struct {
-		ID               string            `json:"id,omitempty"`
-		Status           string            `json:"status,omitempty"`
-		Intent           string            `json:"intent,omitempty"`
-		GrossTotalAmount *GrossTotalAmount `json:"gross_total_amount,omitempty"`
-		Links            []Link            `json:"links,omitempty"`
-		CreateTime       *time.Time        `json:"create_time,omitempty"`
-		UpdateTime       *time.Time        `json:"update_time,omitempty"`
+		ID            string         `json:"id,omitempty"`
+		Status        string         `json:"status,omitempty"`
+		Intent        string         `json:"intent,omitempty"`
+		PurchaseUnits []PurchaseUnit `json:"purchase_units,omitempty"`
+		Links         []Link         `json:"links,omitempty"`
+		CreateTime    *time.Time     `json:"create_time,omitempty"`
+		UpdateTime    *time.Time     `json:"update_time,omitempty"`
 	}
 
 	// Payer struct
