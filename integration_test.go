@@ -128,16 +128,6 @@ func TestCaptureOrder(t *testing.T) {
 	}
 }
 
-func TestVoidOrder(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.VoidOrder(testOrderID)
-	if err == nil {
-		t.Errorf("Order is expired, 400 error must be returned")
-	}
-}
-
 func TestCreateSinglePayout(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
