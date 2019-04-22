@@ -34,10 +34,9 @@ Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git ta
  * GET /v2/payments/sale/**ID**
  * POST /v2/payments/sale/**ID**/refund
  * GET /v2/payments/refund/**ID**
- * GET /v2/payments/orders/**ID**
- * POST /v2/payments/orders/**ID**/authorize
- * POST /v2/payments/orders/**ID**/capture
- * POST /v2/payments/orders/**ID**/do-void
+ * GET /v2/checkout/orders/**ID**
+ * POST /v2/checkout/orders/**ID**/authorize
+ * POST /v2/checkout/orders/**ID**/capture
  * POST /v2/payments/billing-plans
  * PATCH /v2/payments/billing-plans/***ID***
  * POST /v2/payments/billing-agreements

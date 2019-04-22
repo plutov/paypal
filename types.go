@@ -313,6 +313,18 @@ type (
 		Enctype string `json:"enctype,omitempty"`
 	}
 
+	// PurchaseUnitAmount struct
+	PurchaseUnitAmount struct {
+		Currency string `json:"currency_code"`
+		Value    string `json:"value"`
+	}
+
+	// PurchaseUnit struct
+	PurchaseUnit struct {
+		ReferenceID string              `json:"reference_id"`
+		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
+	}
+
 	// MerchantPreferences struct
 	MerchantPreferences struct {
 		SetupFee                *AmountPayout `json:"setup_fee,omitempty"`
@@ -325,14 +337,13 @@ type (
 
 	// Order struct
 	Order struct {
-		ID            string     `json:"id,omitempty"`
-		CreateTime    *time.Time `json:"create_time,omitempty"`
-		UpdateTime    *time.Time `json:"update_time,omitempty"`
-		State         string     `json:"state,omitempty"`
-		Amount        *Amount    `json:"amount,omitempty"`
-		PendingReason string     `json:"pending_reason,omitempty"`
-		ParentPayment string     `json:"parent_payment,omitempty"`
-		Links         []Link     `json:"links,omitempty"`
+		ID            string         `json:"id,omitempty"`
+		Status        string         `json:"status,omitempty"`
+		Intent        string         `json:"intent,omitempty"`
+		PurchaseUnits []PurchaseUnit `json:"purchase_units,omitempty"`
+		Links         []Link         `json:"links,omitempty"`
+		CreateTime    *time.Time     `json:"create_time,omitempty"`
+		UpdateTime    *time.Time     `json:"update_time,omitempty"`
 	}
 
 	// Payer struct
