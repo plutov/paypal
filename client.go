@@ -39,16 +39,16 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 
-	t := TokenResponse{}
-	err = c.SendWithBasicAuth(req, &t)
+	response := &TokenResponse{}
+	err = c.SendWithBasicAuth(req, response)
 
 	// Set Token fur current Client
-	if t.Token != "" {
-		c.Token = &t
-		c.tokenExpiresAt = time.Now().Add(time.Duration(t.ExpiresIn) * time.Second)
+	if response.Token != "" {
+		c.Token = response
+		c.tokenExpiresAt = time.Now().Add(time.Duration(response.ExpiresIn) * time.Second)
 	}
 
-	return &t, err
+	return response, err
 }
 
 // SetHTTPClient sets *http.Client to current client
@@ -107,7 +107,6 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 
 		return errResp
 	}
-
 	if v == nil {
 		return nil
 	}
@@ -130,7 +129,7 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	// to happen outside of the locked section.
 
 	if c.Token != nil {
-		if !c.tokenExpiresAt.IsZero() && c.tokenExpiresAt.Sub(time.Now()) < RequestNewTokenBeforeExpiresIn {
+		if !c.tokenExpiresAt.IsZero() && time.Until(c.tokenExpiresAt) < RequestNewTokenBeforeExpiresIn {
 			// c.Token will be updated in GetAccessToken call
 			if _, err := c.GetAccessToken(); err != nil {
 				c.Unlock()
@@ -159,7 +158,6 @@ func (c *Client) SendWithBasicAuth(req *http.Request, v interface{}) error {
 func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Request, error) {
 	var buf io.Reader
 	if payload != nil {
-		var b []byte
 		b, err := json.Marshal(&payload)
 		if err != nil {
 			return nil, err

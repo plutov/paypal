@@ -7,16 +7,13 @@ import (
 
 const format = "2006-01-02T15:04:05Z"
 
-type stringable interface {
-	String() string
-}
 
 type Filter struct {
-	fields []stringable
+	fields []fmt.Stringer
 }
 
 func (s *Filter) String() string {
-	filter := ""
+	var filter string
 	for i, f := range s.fields {
 		if i == 0 {
 			filter = "?" + f.String()
