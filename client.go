@@ -129,7 +129,7 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	// to happen outside of the locked section.
 
 	if c.Token != nil {
-		if !c.tokenExpiresAt.IsZero() && time.Until(c.tokenExpiresAt) < RequestNewTokenBeforeExpiresIn {
+		if !c.tokenExpiresAt.IsZero() && c.tokenExpiresAt.Sub(time.Now()) < RequestNewTokenBeforeExpiresIn {
 			// c.Token will be updated in GetAccessToken call
 			if _, err := c.GetAccessToken(); err != nil {
 				c.Unlock()
