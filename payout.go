@@ -9,11 +9,11 @@ import (
 // Endpoint: POST /v1/payments/payouts
 func (c *Client) CreateSinglePayout(p Payout) (*PayoutResponse, error) {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts"), p)
-	if err != nil {
-		return &PayoutResponse{}, err
-	}
-
 	response := &PayoutResponse{}
+
+	if err != nil {
+		return response, err
+	}
 
 	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
@@ -27,12 +27,11 @@ func (c *Client) CreateSinglePayout(p Payout) (*PayoutResponse, error) {
 // Endpoint: GET /v1/payments/payouts/ID
 func (c *Client) GetPayout(payoutBatchID string) (*PayoutResponse, error) {
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts/"+payoutBatchID), nil)
+	response := &PayoutResponse{}
 
 	if err != nil {
-		return &PayoutResponse{}, err
+		return response, err
 	}
-
-	response := &PayoutResponse{}
 
 	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
@@ -46,12 +45,11 @@ func (c *Client) GetPayout(payoutBatchID string) (*PayoutResponse, error) {
 // Endpoint: GET /v1/payments/payouts-item/ID
 func (c *Client) GetPayoutItem(payoutItemID string) (*PayoutItemResponse, error) {
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts-item/"+payoutItemID), nil)
+	response := &PayoutItemResponse{}
 
 	if err != nil {
-		return &PayoutItemResponse{}, err
+		return response, err
 	}
-
-	response := &PayoutItemResponse{}
 
 	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
@@ -65,12 +63,11 @@ func (c *Client) GetPayoutItem(payoutItemID string) (*PayoutItemResponse, error)
 // Endpoint: POST /v1/payments/payouts-item/ID/cancel
 func (c *Client) CancelPayoutItem(payoutItemID string) (*PayoutItemResponse, error) {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts-item/"+payoutItemID+"/cancel"), nil)
+	response := &PayoutItemResponse{}
 
 	if err != nil {
-		return &PayoutItemResponse{}, err
+		return response, err
 	}
-
-	response := &PayoutItemResponse{}
 
 	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err

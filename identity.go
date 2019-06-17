@@ -9,7 +9,7 @@ import (
 
 // GrantNewAccessTokenFromAuthCode - Use this call to grant a new access token, using the previously obtained authorization code.
 // Endpoint: POST /v1/identity/openidconnect/tokenservice
-func (c *Client) GrantNewAccessTokenFromAuthCode(code string, redirectURI string) (*TokenResponse, error) {
+func (c *Client) GrantNewAccessTokenFromAuthCode(code, redirectURI string) (*TokenResponse, error) {
 	token := &TokenResponse{}
 
 	q := url.Values{}
@@ -57,16 +57,16 @@ func (c *Client) GrantNewAccessTokenFromRefreshToken(refreshToken string) (*Toke
 // Endpoint: GET /v1/identity/openidconnect/userinfo/?schema=<Schema>
 // Pass the schema that is used to return as per openidconnect protocol. The only supported schema value is openid.
 func (c *Client) GetUserInfo(schema string) (*UserInfo, error) {
-	u := UserInfo{}
+	u := &UserInfo{}
 
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/identity/openidconnect/userinfo/?schema=", schema), nil)
 	if err != nil {
-		return &u, err
+		return u, err
 	}
 
-	if err = c.SendWithAuth(req, &u); err != nil {
-		return &u, err
+	if err = c.SendWithAuth(req, u); err != nil {
+		return u, err
 	}
 
-	return &u, nil
+	return u, nil
 }

@@ -39,16 +39,16 @@ func (c *Client) GetAccessToken() (*TokenResponse, error) {
 
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 
-	t := TokenResponse{}
-	err = c.SendWithBasicAuth(req, &t)
+	response := &TokenResponse{}
+	err = c.SendWithBasicAuth(req, response)
 
 	// Set Token fur current Client
-	if t.Token != "" {
-		c.Token = &t
-		c.tokenExpiresAt = time.Now().Add(time.Duration(t.ExpiresIn) * time.Second)
+	if response.Token != "" {
+		c.Token = response
+		c.tokenExpiresAt = time.Now().Add(time.Duration(response.ExpiresIn) * time.Second)
 	}
 
-	return &t, err
+	return response, err
 }
 
 // SetHTTPClient sets *http.Client to current client
@@ -107,7 +107,6 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 
 		return errResp
 	}
-
 	if v == nil {
 		return nil
 	}
@@ -159,7 +158,6 @@ func (c *Client) SendWithBasicAuth(req *http.Request, v interface{}) error {
 func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Request, error) {
 	var buf io.Reader
 	if payload != nil {
-		var b []byte
 		b, err := json.Marshal(&payload)
 		if err != nil {
 			return nil, err

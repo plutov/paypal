@@ -94,24 +94,24 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 // Endpoint: POST /v2/payments/billing-agreements/token/agreement-execute
 func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/billing-agreements/"+token+"/agreement-execute"), nil)
+	response := &ExecuteAgreementResponse{}
+
 	if err != nil {
-		return &ExecuteAgreementResponse{}, err
+		return response, err
 	}
 
 	req.SetBasicAuth(c.ClientID, c.Secret)
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 
-	e := ExecuteAgreementResponse{}
-
-	if err = c.SendWithAuth(req, &e); err != nil {
-		return &e, err
+	if err = c.SendWithAuth(req, response); err != nil {
+		return response, err
 	}
 
-	if e.ID == "" {
-		return &e, errors.New("Unable to execute agreement with token=" + token)
+	if response.ID == "" {
+		return response, errors.New("Unable to execute agreement with token=" + token)
 	}
 
-	return &e, err
+	return response, err
 }
 
 // ListBillingPlans lists billing-plans

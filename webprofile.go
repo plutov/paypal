@@ -13,11 +13,12 @@ import (
 func (c *Client) CreateWebProfile(wp WebProfile) (*WebProfile, error) {
 	url := fmt.Sprintf("%s%s", c.APIBase, "/v1/payment-experience/web-profiles")
 	req, err := c.NewRequest("POST", url, wp)
+	response := &WebProfile{}
+
 	if err != nil {
-		return &WebProfile{}, err
+		return response, err
 	}
 
-	response := &WebProfile{}
 
 	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
