@@ -42,14 +42,10 @@ func (c *Client) CreateOrder(intent string, purchaseUnits []PurchaseUnitRequest,
 
 // AuthorizeOrder - Use this call to authorize an order.
 // Endpoint: POST /v2/checkout/orders/ID/authorize
-func (c *Client) AuthorizeOrder(orderID string, amount *Amount) (*Authorization, error) {
-	type authRequest struct {
-		Amount *Amount `json:"amount"`
-	}
-
+func (c *Client) AuthorizeOrder(orderID string, paymentSource PaymentSource) (*Authorization, error) {
 	auth := &Authorization{}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/authorize"), authRequest{Amount: amount})
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/authorize"), paymentSource)
 	if err != nil {
 		return auth, err
 	}
@@ -61,18 +57,12 @@ func (c *Client) AuthorizeOrder(orderID string, amount *Amount) (*Authorization,
 	return auth, nil
 }
 
-// CaptureOrder - Use this call to capture a payment on an order. To use this call, an original payment call must specify an intent of order.
+// CaptureOrder - Use this call to capture a payment on an order.
 // Endpoint: POST /v2/checkout/orders/ID/capture
-func (c *Client) CaptureOrder(orderID string, amount *Amount, isFinalCapture bool, currency *Currency) (*Capture, error) {
-	type captureRequest struct {
-		Amount         *Amount   `json:"amount"`
-		IsFinalCapture bool      `json:"is_final_capture"`
-		Currency       *Currency `json:"transaction_fee"`
-	}
-
+func (c *Client) CaptureOrder(orderID string, paymentSource PaymentSource) (*Capture, error) {
 	capture := &Capture{}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/capture"), captureRequest{Amount: amount, IsFinalCapture: isFinalCapture, Currency: currency})
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/capture"), paymentSource)
 	if err != nil {
 		return capture, err
 	}

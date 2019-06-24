@@ -122,7 +122,7 @@ func TestAuthorizeOrder(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	_, err := c.AuthorizeOrder(testOrderID, &Amount{Total: "7.00", Currency: "USD"})
+	_, err := c.AuthorizeOrder(testOrderID, PaymentSource{})
 	if err == nil {
 		t.Errorf("Order is expired, 400 error must be returned")
 	}
@@ -132,7 +132,7 @@ func TestCaptureOrder(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	_, err := c.CaptureOrder(testOrderID, &Amount{Total: "100", Currency: "USD"}, true, nil)
+	_, err := c.CaptureOrder(testOrderID, PaymentSource{})
 	if err == nil {
 		t.Errorf("Order is expired, 400 error must be returned")
 	}

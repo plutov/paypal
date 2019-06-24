@@ -118,13 +118,13 @@ order, err := c.CreateOrder(paypalsdk.OrderIntentCapture, []paypalsdk.PurchaseUn
 ### Authorize Order
 
 ```go
-auth, err := c.AuthorizeOrder(orderID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
+auth, err := c.AuthorizeOrder(orderID, paypalsdk.PaymentSource{})
 ```
 
 ### Capture Order
 
 ```go
-capture, err := c.CaptureOrder(orderID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true, nil)
+capture, err := c.CaptureOrder(orderID, paypalsdk.PaymentSource{})
 ```
 
 ### Void Order
