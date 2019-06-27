@@ -335,15 +335,15 @@ type (
 
 	// PurchaseUnitRequest struct
 	PurchaseUnitRequest struct {
-		ReferenceID    string                      `json:"reference_id"`
-		Amount         *PurchaseUnitAmount         `json:"amount"`
-		Payee          PayeeForPurchaseUnitRequest `json:"payee,omitempty"`
-		Description    string                      `json:"description,omitempty"`
-		CustomID       string                      `json:"custom_id,omitempty"`
-		InvoiceID      string                      `json:"invoice_id,omitempty"`
-		SoftDescriptor string                      `json:"soft_descriptor,omitempty"`
-		Items          []Item                      `json:"items,omitempty"`
-		Shipping       ShippingDetail              `json:"shipping,omitempty"`
+		ReferenceID    string              `json:"reference_id,omitempty"`
+		Amount         *PurchaseUnitAmount `json:"amount"`
+		Payee          PayeeForOrders      `json:"payee,omitempty"`
+		Description    string              `json:"description,omitempty"`
+		CustomID       string              `json:"custom_id,omitempty"`
+		InvoiceID      string              `json:"invoice_id,omitempty"`
+		SoftDescriptor string              `json:"soft_descriptor,omitempty"`
+		Items          []Item              `json:"items,omitempty"`
+		Shipping       ShippingDetail      `json:"shipping,omitempty"`
 	}
 
 	// MerchantPreferences struct
@@ -569,10 +569,10 @@ type (
 		Email string `json:"email"`
 	}
 
-	// PayeeForPurchaseUnitRequest struct
-	PayeeForPurchaseUnitRequest struct {
-		EmailAddress string `json:"email_address"`
-		MerchantID   string `json:"merchant_id"`
+	// PayeeForOrders struct
+	PayeeForOrders struct {
+		EmailAddress string `json:"email_address,omitempty"`
+		MerchantID   string `json:"merchant_id,omitempty"`
 	}
 
 	// UserInfo struct
