@@ -228,6 +228,42 @@ func TestTypePayoutResponse(t *testing.T) {
 	}
 }
 
+func TestOrderUnmarshal(t *testing.T) {
+	response := `{
+		"id": "5O190127TN364715T",
+		"status": "CREATED",
+		"links": [
+		  {
+			"href": "https://api.paypal.com/v2/checkout/orders/5O190127TN364715T",
+			"rel": "self",
+			"method": "GET"
+		  },
+		  {
+			"href": "https://api.sandbox.paypal.com/checkoutnow?token=5O190127TN364715T",
+			"rel": "approve",
+			"method": "GET"
+		  },
+		  {
+			"href": "https://api.paypal.com/v2/checkout/orders/5O190127TN364715T/capture",
+			"rel": "capture",
+			"method": "POST"
+		  }
+		]
+	}`
+
+	order := &Order{}
+	err := json.Unmarshal([]byte(response), order)
+	if err != nil {
+		t.Errorf("Order Unmarshal failed")
+	}
+
+	if order.ID != "5O190127TN364715T" ||
+		order.Status != "CREATED" ||
+		order.Links[0].Href != "https://api.paypal.com/v2/checkout/orders/5O190127TN364715T" {
+		t.Errorf("Order decoded result is incorrect, Given: %+v", order)
+	}
+}
+
 func TestTypePayoutItemResponse(t *testing.T) {
 	response := `{
 		"payout_item_id":"9T35G83YA546X",

@@ -19,6 +19,27 @@ func (c *Client) GetOrder(orderID string) (*Order, error) {
 	return order, nil
 }
 
+// Create Order - Use this call to create an order
+// Endpoint: POST /v2/checkout/orders
+func (c *Client) CreateOrder(intent string, purchaseUnits []PurchaseUnitRequest, payer *PayerInfo, appContext *ApplicationContext) (*Order, error) {
+	type createOrderRequest struct {
+		Intent             string                `json:"intent"`
+		Payer              *PayerInfo            `json:"payer,omitempty"`
+		PurchaseUnits      []PurchaseUnitRequest `json:"purchase_units"`
+		ApplicationContext *ApplicationContext   `json:"application_context,omitempty"`
+	}
+
+	order := &Order{}
+
+	req, err := c.NewRequest("POST", "/v2/checkout/orders", createOrderRequest{Intent: intent, PurchaseUnits: purchaseUnits, Payer: payer, ApplicationContext: appContext})
+
+	if err = c.SendWithAuth(req, order); err != nil {
+		return order, err
+	}
+
+	return order, nil
+}
+
 // AuthorizeOrder - Use this call to authorize an order.
 // Endpoint: POST /v2/checkout/orders/ID/authorize
 func (c *Client) AuthorizeOrder(orderID string, amount *Amount) (*Authorization, error) {
