@@ -54,6 +54,14 @@ const (
 	AllowedPaymentImmediatePay         string = "IMMEDIATE_PAY"
 )
 
+// Possible value for `intent` in CreateOrder
+//
+// https://developer.paypal.com/docs/api/orders/v2/#orders_create
+const (
+	OrderIntentCapture   string = "CAPTURE"
+	OrderIntentAuthorize string = "AUTHORIZE"
+)
+
 type (
 	// JSONTime overrides MarshalJson method to format in ISO8601
 	JSONTime time.Time
@@ -325,6 +333,19 @@ type (
 		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
 	}
 
+	// PurchaseUnitRequest struct
+	PurchaseUnitRequest struct {
+		ReferenceID    string              `json:"reference_id"`
+		Amount         *PurchaseUnitAmount `json:"amount"`
+		Payee          Payee               `json:"payee,omitempty"`
+		Description    string              `json:"description,omitempty"`
+		CustomID       string              `json:"custom_id,omitempty"`
+		InvoiceID      string              `json:"invoice_id,omitempty"`
+		SoftDescriptor string              `json:"soft_descriptor,omitempty"`
+		Items          []Item              `json:"items,omitempty"`
+		Shipping       ShippingDetail      `json:"shipping,omitempty"`
+	}
+
 	// MerchantPreferences struct
 	MerchantPreferences struct {
 		SetupFee                *AmountPayout `json:"setup_fee,omitempty"`
@@ -505,6 +526,17 @@ type (
 		PostalCode    string `json:"postal_code,omitempty"`
 		State         string `json:"state,omitempty"`
 		Phone         string `json:"phone,omitempty"`
+	}
+
+	// Name struct
+	Name struct {
+		FullName string `json:"full_name,omitempty"`
+	}
+
+	// ShippingDetail struct
+	ShippingDetail struct {
+		Name    Name    `json:"name,omitempty"`
+		Address Address `json:"address,omitempty"`
 	}
 
 	expirationTime int64

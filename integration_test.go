@@ -108,6 +108,16 @@ func TestGetOrder(t *testing.T) {
 	}
 }
 
+func TestCreateOrder(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	order, err := c.CreateOrder(OrderIntentCapture, nil, nil, nil)
+	if err == nil {
+		t.Errorf("CreateOrder expects error")
+	}
+}
+
 func TestAuthorizeOrder(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
