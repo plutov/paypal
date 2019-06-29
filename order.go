@@ -31,7 +31,7 @@ func (c *Client) CreateOrder(intent string, purchaseUnits []PurchaseUnitRequest,
 
 	order := &Order{}
 
-	req, err := c.NewRequest("POST", "/v2/checkout/orders", createOrderRequest{Intent: intent, PurchaseUnits: purchaseUnits, Payer: payer, ApplicationContext: appContext})
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders"), createOrderRequest{Intent: intent, PurchaseUnits: purchaseUnits, Payer: payer, ApplicationContext: appContext})
 
 	if err = c.SendWithAuth(req, order); err != nil {
 		return order, err
