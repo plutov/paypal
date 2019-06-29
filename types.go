@@ -335,9 +335,9 @@ type (
 
 	// PurchaseUnitRequest struct
 	PurchaseUnitRequest struct {
-		ReferenceID    string              `json:"reference_id"`
+		ReferenceID    string              `json:"reference_id,omitempty"`
 		Amount         *PurchaseUnitAmount `json:"amount"`
-		Payee          *Payee              `json:"payee,omitempty"`
+		Payee          *PayeeForOrders      `json:"payee,omitempty"`
 		Description    string              `json:"description,omitempty"`
 		CustomID       string              `json:"custom_id,omitempty"`
 		InvoiceID      string              `json:"invoice_id,omitempty"`
@@ -567,6 +567,12 @@ type (
 	//Payee struct
 	Payee struct {
 		Email string `json:"email"`
+	}
+
+	// PayeeForOrders struct
+	PayeeForOrders struct {
+		EmailAddress string `json:"email_address,omitempty"`
+		MerchantID   string `json:"merchant_id,omitempty"`
 	}
 
 	// UserInfo struct
