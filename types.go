@@ -337,13 +337,13 @@ type (
 	PurchaseUnitRequest struct {
 		ReferenceID    string              `json:"reference_id"`
 		Amount         *PurchaseUnitAmount `json:"amount"`
-		Payee          Payee               `json:"payee,omitempty"`
+		Payee          *Payee              `json:"payee,omitempty"`
 		Description    string              `json:"description,omitempty"`
 		CustomID       string              `json:"custom_id,omitempty"`
 		InvoiceID      string              `json:"invoice_id,omitempty"`
 		SoftDescriptor string              `json:"soft_descriptor,omitempty"`
 		Items          []Item              `json:"items,omitempty"`
-		Shipping       ShippingDetail      `json:"shipping,omitempty"`
+		Shipping       *ShippingDetail     `json:"shipping,omitempty"`
 	}
 
 	// MerchantPreferences struct
