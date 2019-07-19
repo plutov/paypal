@@ -104,11 +104,11 @@ type (
 
 	// ApplicationContext struct
 	ApplicationContext struct {
-		BrandName          string `json:"brand_name"`
-		Locale             string `json:"locale"`
-		LandingPage        string `json:"landing_page"`
-		ShippingPreference string `json:"shipping_preference"`
-		UserAction         string `json:"user_action"`
+		BrandName          string `json:"brand_name,omitempty"`
+		Locale             string `json:"locale,omitempty"`
+		LandingPage        string `json:"landing_page,omitempty"`
+		ShippingPreference string `json:"shipping_preference,omitempty"`
+		UserAction         string `json:"user_action,omitempty"`
 	}
 
 	// Authorization struct
