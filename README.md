@@ -287,7 +287,7 @@ c.GetCreditCards(nil)
 Current contributors:
 
 - [Roopak Venkatakrishnan](https://github.com/roopakv)
-- [plutov](https://github.com/plutov)
+- [Alex Pliutau](https://github.com/plutov)
 
 ### Tests
 
