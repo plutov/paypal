@@ -284,6 +284,11 @@ c.GetCreditCards(nil)
 * Check that tests are passing
 * Create PR
 
+Current contributors:
+
+- [Roopak Venkatakrishnan](https://github.com/roopakv)
+- [plutov](https://github.com/plutov)
+
 ### Tests
 
 * Unit tests: `go test`
