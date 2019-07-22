@@ -333,6 +333,40 @@ type (
 		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
 	}
 
+	// TaxInfo used for orders.
+	TaxInfo struct {
+		TaxID     string `json:"tax_id,omitempty"`
+		TaxIDType string `json:"tax_id_type,omitempty"`
+	}
+
+	// PhoneWithTypeNumber struct for PhoneWithType
+	PhoneWithTypeNumber struct {
+		NationalNumber string `json:"national_number,omitempty"`
+	}
+
+	// PhoneWithType struct used for orders
+	PhoneWithType struct {
+		PhoneType   string               `json:"phone_type,omitempty"`
+		PhoneNumber *PhoneWithTypeNumber `json:"phone_number,omitempty"`
+	}
+
+	// CreateOrderPayerName create order payer name
+	CreateOrderPayerName struct {
+		GivenName string `json:"given_name,omitempty"`
+		Surname   string `json:"surname,omitempty"`
+	}
+
+	// CreateOrderPayer used with create order requests
+	CreateOrderPayer struct {
+		Name         *CreateOrderPayerName          `json:"name,omitempty"`
+		EmailAddress string                         `json:"email_address,omitempty"`
+		PayerID      string                         `json:"payer_id,omitempty"`
+		Phone        *PhoneWithType                 `json:"phone,omitempty"`
+		BirthDate    string                         `json:"birth_date,omitempty"`
+		TaxInfo      *TaxInfo                       `json:"tax_info,omitempty"`
+		Address      *ShippingDetailAddressPortable `json:"address,omitempty"`
+	}
+
 	// PurchaseUnitRequest struct
 	PurchaseUnitRequest struct {
 		ReferenceID    string              `json:"reference_id,omitempty"`
