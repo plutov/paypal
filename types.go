@@ -333,11 +333,45 @@ type (
 		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
 	}
 
+	// TaxInfo used for orders.
+	TaxInfo struct {
+		TaxID     string `json:"tax_id,omitempty"`
+		TaxIDType string `json:"tax_id_type,omitempty"`
+	}
+
+	// PhoneWithTypeNumber struct for PhoneWithType
+	PhoneWithTypeNumber struct {
+		NationalNumber string `json:"national_number,omitempty"`
+	}
+
+	// PhoneWithType struct used for orders
+	PhoneWithType struct {
+		PhoneType   string               `json:"phone_type,omitempty"`
+		PhoneNumber *PhoneWithTypeNumber `json:"phone_number,omitempty"`
+	}
+
+	// CreateOrderPayerName create order payer name
+	CreateOrderPayerName struct {
+		GivenName string `json:"given_name,omitempty"`
+		Surname   string `json:"surname,omitempty"`
+	}
+
+	// CreateOrderPayer used with create order requests
+	CreateOrderPayer struct {
+		Name         *CreateOrderPayerName          `json:"name,omitempty"`
+		EmailAddress string                         `json:"email_address,omitempty"`
+		PayerID      string                         `json:"payer_id,omitempty"`
+		Phone        *PhoneWithType                 `json:"phone,omitempty"`
+		BirthDate    string                         `json:"birth_date,omitempty"`
+		TaxInfo      *TaxInfo                       `json:"tax_info,omitempty"`
+		Address      *ShippingDetailAddressPortable `json:"address,omitempty"`
+	}
+
 	// PurchaseUnitRequest struct
 	PurchaseUnitRequest struct {
 		ReferenceID    string              `json:"reference_id,omitempty"`
 		Amount         *PurchaseUnitAmount `json:"amount"`
-		Payee          *PayeeForOrders      `json:"payee,omitempty"`
+		Payee          *PayeeForOrders     `json:"payee,omitempty"`
 		Description    string              `json:"description,omitempty"`
 		CustomID       string              `json:"custom_id,omitempty"`
 		InvoiceID      string              `json:"invoice_id,omitempty"`
@@ -528,6 +562,16 @@ type (
 		Phone         string `json:"phone,omitempty"`
 	}
 
+	// ShippingDetailAddressPortable used with create orders
+	ShippingDetailAddressPortable struct {
+		AddressLine1 string `json:"address_line_1,omitempty"`
+		AddressLine2 string `json:"address_line_2,omitempty"`
+		AdminArea1   string `json:"admin_area_1,omitempty"`
+		AdminArea2   string `json:"admin_area_2,omitempty"`
+		PostalCode   string `json:"postal_code,omitempty"`
+		CountryCode  string `json:"country_code,omitempty"`
+	}
+
 	// Name struct
 	Name struct {
 		FullName string `json:"full_name,omitempty"`
@@ -535,8 +579,8 @@ type (
 
 	// ShippingDetail struct
 	ShippingDetail struct {
-		Name    Name    `json:"name,omitempty"`
-		Address Address `json:"address,omitempty"`
+		Name    *Name                          `json:"name,omitempty"`
+		Address *ShippingDetailAddressPortable `json:"address,omitempty"`
 	}
 
 	expirationTime int64
