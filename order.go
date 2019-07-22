@@ -21,10 +21,10 @@ func (c *Client) GetOrder(orderID string) (*Order, error) {
 
 // Create Order - Use this call to create an order
 // Endpoint: POST /v2/checkout/orders
-func (c *Client) CreateOrder(intent string, purchaseUnits []PurchaseUnitRequest, payer *PayerInfo, appContext *ApplicationContext) (*Order, error) {
+func (c *Client) CreateOrder(intent string, purchaseUnits []PurchaseUnitRequest, payer *CreateOrderPayer, appContext *ApplicationContext) (*Order, error) {
 	type createOrderRequest struct {
 		Intent             string                `json:"intent"`
-		Payer              *PayerInfo            `json:"payer,omitempty"`
+		Payer              *CreateOrderPayer     `json:"payer,omitempty"`
 		PurchaseUnits      []PurchaseUnitRequest `json:"purchase_units"`
 		ApplicationContext *ApplicationContext   `json:"application_context,omitempty"`
 	}
