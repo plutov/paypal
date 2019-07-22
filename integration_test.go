@@ -7,13 +7,9 @@ import (
 )
 
 // All test values are defined here
-var testClientID = "AZgwu4yt5Ba0gyTu1dGBH3txHCJbMuFNvrmQxBaQbfDncDiCs6W_rwJD8Ir-0pZrN-_eq7n9zVd8Y-5f"
-var testSecret = "EBzA1wRl5t73OMugOieDj_tI3vihfJmGl47ukQT-cpctooIzDu0K7IPESNC0cKodlLSOXzwI8qXSM0rd"
-var testAuthID = "2DC87612EK520411B"
-var testOrderID = "O-0PW72302W3743444R"
-var testSaleID = "4CF18861HF410323U"
-var testPayerID = "CR87QHB7JTRSC"
-var testUserID = "https://www.paypal.com/webapps/auth/identity/user/WEssgRpQij92sE99_F9MImvQ8FPYgUEjrvCja2qH2H8"
+var testClientID = "AQzSx89isj-yV7BhuN_TY1s4phiQXlcUEwFPUYD7tWFxts-bf2Zf6f_S0K7J_suOkiZuIKSkNnB1rem-"
+var testSecret = "EAW_tyBnkTLxC7RB8CHT39QYZYfT7LwyxPsWle0834O60KGo0A351iMLOFdQBQ5q95DbZM1hOlT9w8Yg"
+var testUserID = "https://www.paypal.com/webapps/auth/identity/user/VBqgHcgZwb1PBs69ybjjXfIW86_Hr93aBvF_Rgbh2II"
 var testCardID = "CARD-54E6956910402550WKGRL6EA"
 
 func TestGetAccessToken(t *testing.T) {
@@ -27,114 +23,13 @@ func TestGetAccessToken(t *testing.T) {
 	}
 }
 
-func TestGetAuthorization(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.GetAuthorization(testAuthID)
-	if err == nil {
-		t.Errorf("GetAuthorization expects error")
-	}
-}
-
-func TestCaptureAuthorization(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.CaptureAuthorization(testAuthID, &Amount{Total: "200", Currency: "USD"}, true)
-
-	if err == nil {
-		t.Errorf("Auth is expired, 400 error must be returned")
-	}
-}
-
-func TestVoidAuthorization(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.VoidAuthorization(testAuthID)
-
-	if err == nil {
-		t.Errorf("Auth is expired, 400 error must be returned")
-	}
-}
-
-func TestReauthorizeAuthorization(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.ReauthorizeAuthorization(testAuthID, &Amount{Total: "200", Currency: "USD"})
-
-	if err == nil {
-		t.Errorf("Reauthorization not allowed for this product, 500 error must be returned")
-	}
-}
-
-func TestGrantNewAccessTokenFromAuthCode(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-
-	_, err := c.GrantNewAccessTokenFromAuthCode("123", "http://example.com/myapp/return.php")
-	if err == nil {
-		t.Errorf("GrantNewAccessTokenFromAuthCode must return error for invalid code")
-	}
-}
-
-func TestGrantNewAccessTokenFromRefreshToken(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-
-	_, err := c.GrantNewAccessTokenFromRefreshToken("123")
-	if err == nil {
-		t.Errorf("GrantNewAccessTokenFromRefreshToken must return error for invalid refresh token")
-	}
-}
-
 func TestGetUserInfo(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
 	u, err := c.GetUserInfo("openid")
 	if u.ID != testUserID || err != nil {
-		t.Errorf("GetUserInfo must return valid test ID=%s, error: %v", testUserID, err)
-	}
-}
-
-func TestGetOrder(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.GetOrder(testOrderID)
-	if err == nil {
-		t.Errorf("GetOrder expects error")
-	}
-}
-
-func TestCreateOrder(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	order, err := c.CreateOrder(OrderIntentCapture, nil, nil, nil)
-	if err == nil {
-		t.Errorf("CreateOrder expects error")
-	}
-}
-
-func TestAuthorizeOrder(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.AuthorizeOrder(testOrderID, &Amount{Total: "7.00", Currency: "USD"})
-	if err == nil {
-		t.Errorf("Order is expired, 400 error must be returned")
-	}
-}
-
-func TestCaptureOrder(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.CaptureOrder(testOrderID, &Amount{Total: "100", Currency: "USD"}, true, nil)
-	if err == nil {
-		t.Errorf("Order is expired, 400 error must be returned")
+		t.Errorf("GetUserInfo must return valid test ID %s, got %s, error: %v", testUserID, u.ID, err)
 	}
 }
 
@@ -160,45 +55,10 @@ func TestCreateSinglePayout(t *testing.T) {
 		},
 	}
 
-	_, err := c.CreateSinglePayout(payout)
+	payoutRes, err := c.CreateSinglePayout(payout)
 
 	if err != nil {
-		t.Errorf("Test single payout is not created, error: %v", err)
-	}
-}
-
-func TestGetSale(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.GetSale(testSaleID)
-	if err == nil {
-		t.Errorf("404 must be returned for ID=%s", testSaleID)
-	}
-}
-
-func TestRefundSale(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.RefundSale(testSaleID, nil)
-	if err == nil {
-		t.Errorf("404 must be returned for ID=%s", testSaleID)
-	}
-
-	_, err = c.RefundSale(testSaleID, &Amount{Total: "7.00", Currency: "USD"})
-	if err == nil {
-		t.Errorf("404 must be returned for ID=%s", testSaleID)
-	}
-}
-
-func TestGetRefund(t *testing.T) {
-	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken()
-
-	_, err := c.GetRefund("1")
-	if err == nil {
-		t.Errorf("404 must be returned for ID=%s", testSaleID)
+		t.Errorf("test single payout is not created, error: %v, payout: %v", err, payoutRes)
 	}
 }
 
