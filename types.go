@@ -126,6 +126,17 @@ type (
 		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
 	}
 
+	// AuthorizeOrderRequest - https://developer.paypal.com/docs/api/orders/v2/#orders_authorize
+	AuthorizeOrderRequest struct {
+		PaymentSource  *PaymentSource `json:"payment_source"`
+		VaultOnCapture bool           `json:"vault_on_capture"`
+	}
+
+	// CaptureOrderRequest - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+	CaptureOrderRequest struct {
+		PaymentSource *PaymentSource `json:"payment_source"`
+	}
+
 	// BatchHeader struct
 	BatchHeader struct {
 		Amount            *AmountPayout      `json:"amount,omitempty"`

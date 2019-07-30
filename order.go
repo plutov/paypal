@@ -40,12 +40,29 @@ func (c *Client) CreateOrder(intent string, purchaseUnits []PurchaseUnitRequest,
 	return order, nil
 }
 
-// AuthorizeOrder - Use this call to authorize an order.
+// UpdateOrder updates the order by ID
+// Endpoint: PATCH /v2/checkout/orders/ID
+func (c *Client) UpdateOrder(orderID string, purchaseUnits []PurchaseUnitRequest) (*Order, error) {
+	order := &Order{}
+
+	req, err := c.NewRequest("PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/checkout/orders/", orderID), purchaseUnits)
+	if err != nil {
+		return order, err
+	}
+
+	if err = c.SendWithAuth(req, order); err != nil {
+		return order, err
+	}
+
+	return order, nil
+}
+
+// AuthorizeOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_authorize
 // Endpoint: POST /v2/checkout/orders/ID/authorize
-func (c *Client) AuthorizeOrder(orderID string, paymentSource PaymentSource) (*Authorization, error) {
+func (c *Client) AuthorizeOrder(orderID string, authorizeOrderRequest AuthorizeOrderRequest) (*Authorization, error) {
 	auth := &Authorization{}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/authorize"), paymentSource)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/authorize"), authorizeOrderRequest)
 	if err != nil {
 		return auth, err
 	}
@@ -57,12 +74,12 @@ func (c *Client) AuthorizeOrder(orderID string, paymentSource PaymentSource) (*A
 	return auth, nil
 }
 
-// CaptureOrder - Use this call to capture a payment on an order.
+// CaptureOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 // Endpoint: POST /v2/checkout/orders/ID/capture
-func (c *Client) CaptureOrder(orderID string, paymentSource PaymentSource) (*Capture, error) {
+func (c *Client) CaptureOrder(orderID string, captureOrderRequest CaptureOrderRequest) (*Capture, error) {
 	capture := &Capture{}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/capture"), paymentSource)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/capture"), captureOrderRequest)
 	if err != nil {
 		return capture, err
 	}

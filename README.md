@@ -36,6 +36,7 @@ Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git ta
  * GET /v2/payments/refund/**ID**
  * POST /v2/checkout/orders
  * GET /v2/checkout/orders/**ID**
+ * PATCH /v2/checkout/orders/**ID**
  * POST /v2/checkout/orders/**ID**/authorize
  * POST /v2/checkout/orders/**ID**/capture
  * POST /v2/payments/billing-plans
@@ -115,22 +116,22 @@ order, err := c.GetOrder("O-4J082351X3132253H")
 order, err := c.CreateOrder(paypalsdk.OrderIntentCapture, []paypalsdk.PurchaseUnitRequest{paypalsdk.PurchaseUnitRequest{ReferenceID: "ref-id", Amount: paypalsdk.Amount{Total: "7.00", Currency: "USD"}}})
 ```
 
+### Update Order by ID
+
+```go
+order, err := c.UpdateOrder("O-4J082351X3132253H", []paypalsdk.PurchaseUnitRequest{})
+```
+
 ### Authorize Order
 
 ```go
-auth, err := c.AuthorizeOrder(orderID, paypalsdk.PaymentSource{})
+auth, err := c.AuthorizeOrder(orderID, paypalsdk.AuthorizeOrderRequest{})
 ```
 
 ### Capture Order
 
 ```go
-capture, err := c.CaptureOrder(orderID, paypalsdk.PaymentSource{})
-```
-
-### Void Order
-
-```go
-order, err := c.VoidOrder(orderID)
+capture, err := c.CaptureOrder(orderID, paypalsdk.CaptureOrderRequest{})
 ```
 
 ### Identity
