@@ -316,6 +316,7 @@ type (
 		SKU         string `json:"sku,omitempty"`
 		Description string `json:"description,omitempty"`
 		Tax         string `json:"tax,omitempty"`
+		UnitAmount  *Money `json:"unit_amount,omitempty"`
 	}
 
 	// ItemList struct
@@ -334,6 +335,25 @@ type (
 
 	// PurchaseUnitAmount struct
 	PurchaseUnitAmount struct {
+		Currency  string                       `json:"currency_code"`
+		Value     string                       `json:"value"`
+		Breakdown *PurchaseUnitAmountBreakdown `json:"breakdown,omitempty"`
+	}
+
+	PurchaseUnitAmountBreakdown struct {
+		ItemTotal        *Money `json:"item_total,omitempty"`
+		Shipping         *Money `json:"shipping,omitempty"`
+		Handling         *Money `json:"handling,omitempty"`
+		TaxTotal         *Money `json:"tax_total,omitempty"`
+		Insurance        *Money `json:"insurance,omitempty"`
+		ShippingDiscount *Money `json:"shipping_discount,omitempty"`
+		Discount         *Money `json:"discount,omitempty"`
+	}
+
+	// Money struct
+	//
+	// https://developer.paypal.com/docs/api/orders/v2/#definition-money
+	Money struct {
 		Currency string `json:"currency_code"`
 		Value    string `json:"value"`
 	}
