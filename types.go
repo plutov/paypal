@@ -62,6 +62,23 @@ const (
 	OrderIntentAuthorize string = "AUTHORIZE"
 )
 
+// Possible values for `category` in Item
+//
+// https://developer.paypal.com/docs/api/orders/v2/#definition-item
+const (
+	ItemCategoryDigitalGood  string = "DIGITAL_GOODS"
+	ItemCategoryPhysicalGood string = "PHYSICAL_GOODS"
+)
+
+// Possible values for `shipping_preference` in ApplicationContext
+//
+// https://developer.paypal.com/docs/api/orders/v2/#definition-application_context
+const (
+	ShippingPreferenceGetFromFile        string = "GET_FROM_FILE"
+	ShippingPreferenceNoShipping         string = "NO_SHIPPING"
+	ShippingPreferenceSetProvidedAddress string = "SET_PROVIDED_ADDRESS"
+)
+
 type (
 	// JSONTime overrides MarshalJson method to format in ISO8601
 	JSONTime time.Time
@@ -317,6 +334,7 @@ type (
 		Description string `json:"description,omitempty"`
 		Tax         string `json:"tax,omitempty"`
 		UnitAmount  *Money `json:"unit_amount,omitempty"`
+		Category    string `json:"category,omitempty"`
 	}
 
 	// ItemList struct
