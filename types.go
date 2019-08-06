@@ -126,6 +126,8 @@ type (
 		LandingPage        string `json:"landing_page,omitempty"`
 		ShippingPreference string `json:"shipping_preference,omitempty"`
 		UserAction         string `json:"user_action,omitempty"`
+		ReturnURL          string `json:"return_url,omitempty"`
+		CancelURL          string `json:"cancel_url,omitempty"`
 	}
 
 	// Authorization struct
