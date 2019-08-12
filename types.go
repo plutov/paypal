@@ -169,12 +169,13 @@ type (
 
 	// BillingAgreement struct
 	BillingAgreement struct {
-		Name            string           `json:"name,omitempty"`
-		Description     string           `json:"description,omitempty"`
-		StartDate       JSONTime         `json:"start_date,omitempty"`
-		Plan            BillingPlan      `json:"plan,omitempty"`
-		Payer           Payer            `json:"payer,omitempty"`
-		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
+		Name                        string               `json:"name,omitempty"`
+		Description                 string               `json:"description,omitempty"`
+		StartDate                   JSONTime             `json:"start_date,omitempty"`
+		Plan                        BillingPlan          `json:"plan,omitempty"`
+		Payer                       Payer                `json:"payer,omitempty"`
+		ShippingAddress             *ShippingAddress     `json:"shipping_address,omitempty"`
+		OverrideMerchantPreferences *MerchantPreferences `json:"override_merchant_preferences,omitempty"`
 	}
 
 	// BillingPlan struct
