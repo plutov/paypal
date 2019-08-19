@@ -19,7 +19,6 @@ func (c *Client) CreateWebProfile(wp WebProfile) (*WebProfile, error) {
 		return response, err
 	}
 
-
 	if err = c.SendWithAuth(req, response); err != nil {
 		return response, err
 	}

@@ -361,6 +361,7 @@ type (
 		Breakdown *PurchaseUnitAmountBreakdown `json:"breakdown,omitempty"`
 	}
 
+	// PurchaseUnitAmountBreakdown struct
 	PurchaseUnitAmountBreakdown struct {
 		ItemTotal        *Money `json:"item_total,omitempty"`
 		Shipping         *Money `json:"shipping,omitempty"`

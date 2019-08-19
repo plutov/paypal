@@ -19,7 +19,7 @@ func (c *Client) GetOrder(orderID string) (*Order, error) {
 	return order, nil
 }
 
-// Create Order - Use this call to create an order
+// CreateOrder - Use this call to create an order
 // Endpoint: POST /v2/checkout/orders
 func (c *Client) CreateOrder(intent string, purchaseUnits []PurchaseUnitRequest, payer *CreateOrderPayer, appContext *ApplicationContext) (*Order, error) {
 	type createOrderRequest struct {
@@ -32,6 +32,9 @@ func (c *Client) CreateOrder(intent string, purchaseUnits []PurchaseUnitRequest,
 	order := &Order{}
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders"), createOrderRequest{Intent: intent, PurchaseUnits: purchaseUnits, Payer: payer, ApplicationContext: appContext})
+	if err != nil {
+		return order, err
+	}
 
 	if err = c.SendWithAuth(req, order); err != nil {
 		return order, err

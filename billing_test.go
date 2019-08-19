@@ -13,7 +13,7 @@ func BillingExample() {
 		Description: "Plan with regular and trial payment definitions.",
 		Type:        "fixed",
 		PaymentDefinitions: []pp.PaymentDefinition{
-			pp.PaymentDefinition{
+			{
 				Name:              "Regular payment definition",
 				Type:              "REGULAR",
 				Frequency:         "MONTH",
@@ -24,14 +24,14 @@ func BillingExample() {
 				},
 				Cycles: "12",
 				ChargeModels: []pp.ChargeModel{
-					pp.ChargeModel{
+					{
 						Type: "SHIPPING",
 						Amount: pp.AmountPayout{
 							Value:    "10",
 							Currency: "USD",
 						},
 					},
-					pp.ChargeModel{
+					{
 						Type: "TAX",
 						Amount: pp.AmountPayout{
 							Value:    "12",
@@ -40,7 +40,7 @@ func BillingExample() {
 					},
 				},
 			},
-			pp.PaymentDefinition{
+			{
 				Name:              "Trial payment definition",
 				Type:              "trial",
 				Frequency:         "week",
@@ -51,14 +51,14 @@ func BillingExample() {
 				},
 				Cycles: "2",
 				ChargeModels: []pp.ChargeModel{
-					pp.ChargeModel{
+					{
 						Type: "SHIPPING",
 						Amount: pp.AmountPayout{
 							Value:    "1",
 							Currency: "USD",
 						},
 					},
-					pp.ChargeModel{
+					{
 						Type: "TAX",
 						Amount: pp.AmountPayout{
 							Value:    "2",
