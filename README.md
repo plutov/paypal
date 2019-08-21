@@ -1,8 +1,8 @@
-[![Go Report Card](https://goreportcard.com/badge/logpacker/PayPal-Go-SDK)](https://goreportcard.com/report/logpacker/PayPal-Go-SDK)
-[![Build Status](https://travis-ci.org/logpacker/PayPal-Go-SDK.svg?branch=master)](https://travis-ci.org/logpacker/PayPal-Go-SDK)
-[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/logpacker/PayPal-Go-SDK)
-[![Chat at https://gitter.im/logpacker/PayPal-Go-SDK](https://img.shields.io/badge/gitter-dev_chat-46bc99.svg)](https://gitter.im/logpacker/PayPal-Go-SDK?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Sourcegraph](https://sourcegraph.com/github.com/logpacker/PayPal-Go-SDK/-/badge.svg)](https://sourcegraph.com/github.com/logpacker/PayPal-Go-SDK?badge)
+[![Go Report Card](https://goreportcard.com/badge/plutov/PayPal-Go-SDK)](https://goreportcard.com/report/plutov/PayPal-Go-SDK)
+[![Build Status](https://travis-ci.org/plutov/PayPal-Go-SDK.svg?branch=master)](https://travis-ci.org/plutov/PayPal-Go-SDK)
+[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/plutov/PayPal-Go-SDK)
+[![Chat at https://gitter.im/plutov/PayPal-Go-SDK](https://img.shields.io/badge/gitter-dev_chat-46bc99.svg)](https://gitter.im/plutov/PayPal-Go-SDK?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Sourcegraph](https://sourcegraph.com/github.com/plutov/PayPal-Go-SDK/-/badge.svg)](https://sourcegraph.com/github.com/plutov/PayPal-Go-SDK?badge)
 
 ### Go client for PayPal REST API
 
@@ -50,7 +50,7 @@ It is possible that some endpoints are missing in this SDK Client, but you can u
 ### New Client
 
 ```go
-import "github.com/logpacker/PayPal-Go-SDK"
+import "github.com/plutov/PayPal-Go-SDK"
 
 // Create a client instance
 c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)

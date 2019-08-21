@@ -1,6 +1,6 @@
 package paypalsdk_test
 
-import paypalsdk "github.com/logpacker/PayPal-Go-SDK"
+import paypalsdk "github.com/plutov/PayPal-Go-SDK"
 
 func Example() {
 	// Initialize client

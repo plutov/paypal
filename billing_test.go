@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	pp "github.com/logpacker/PayPal-Go-SDK"
+	pp "github.com/plutov/PayPal-Go-SDK"
 )
 
 func BillingExample() {
