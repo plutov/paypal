@@ -79,8 +79,8 @@ func (c *Client) AuthorizeOrder(orderID string, authorizeOrderRequest AuthorizeO
 
 // CaptureOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 // Endpoint: POST /v2/checkout/orders/ID/capture
-func (c *Client) CaptureOrder(orderID string, captureOrderRequest CaptureOrderRequest) (*Capture, error) {
-	capture := &Capture{}
+func (c *Client) CaptureOrder(orderID string, captureOrderRequest CaptureOrderRequest) (*CaptureOrderResponse, error) {
+	capture := &CaptureOrderResponse{}
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/capture"), captureOrderRequest)
 	if err != nil {
