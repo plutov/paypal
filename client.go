@@ -1,4 +1,4 @@
-package paypalsdk
+package paypal
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ import (
 )
 
 // NewClient returns new Client struct
-// APIBase is a base API URL, for testing you can use paypalsdk.APIBaseSandBox
+// APIBase is a base API URL, for testing you can use paypal.APIBaseSandBox
 func NewClient(clientID string, secret string, APIBase string) (*Client, error) {
 	if clientID == "" || secret == "" || APIBase == "" {
 		return nil, errors.New("ClientID, Secret and APIBase are required to create a Client")
@@ -65,7 +65,7 @@ func (c *Client) SetAccessToken(token string) {
 }
 
 // SetLog will set/change the output destination.
-// If log file is set paypalsdk will log all requests and responses to this Writer
+// If log file is set paypal will log all requests and responses to this Writer
 func (c *Client) SetLog(log io.Writer) {
 	c.Log = log
 }

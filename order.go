@@ -1,4 +1,4 @@
-package paypalsdk
+package paypal
 
 import "fmt"
 

@@ -1,4 +1,4 @@
-package paypalsdk
+package paypal
 
 import (
 	"fmt"
@@ -44,7 +44,7 @@ func (c *Client) GetWebProfile(profileID string) (*WebProfile, error) {
 	}
 
 	if wp.ID == "" {
-		return &wp, fmt.Errorf("paypalsdk: unable to get web profile with ID = %s", profileID)
+		return &wp, fmt.Errorf("paypal: unable to get web profile with ID = %s", profileID)
 	}
 
 	return &wp, nil
@@ -76,7 +76,7 @@ func (c *Client) GetWebProfiles() ([]WebProfile, error) {
 func (c *Client) SetWebProfile(wp WebProfile) error {
 
 	if wp.ID == "" {
-		return fmt.Errorf("paypalsdk: no ID specified for WebProfile")
+		return fmt.Errorf("paypal: no ID specified for WebProfile")
 	}
 
 	url := fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payment-experience/web-profiles/", wp.ID)

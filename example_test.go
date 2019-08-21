@@ -1,10 +1,10 @@
-package paypalsdk_test
+package paypal_test
 
-import paypalsdk "github.com/plutov/PayPal-Go-SDK"
+import paypal "github.com/plutov/paypal"
 
 func Example() {
 	// Initialize client
-	c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)
+	c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 	if err != nil {
 		panic(err)
 	}

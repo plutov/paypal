@@ -1,6 +1,6 @@
 // +build integration
 
-package paypalsdk
+package paypal
 
 import (
 	"testing"

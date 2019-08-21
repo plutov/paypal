@@ -1,6 +1,6 @@
-[![Go Report Card](https://goreportcard.com/badge/plutov/PayPal-Go-SDK)](https://goreportcard.com/report/plutov/PayPal-Go-SDK)
-[![Build Status](https://travis-ci.org/plutov/PayPal-Go-SDK.svg?branch=master)](https://travis-ci.org/plutov/PayPal-Go-SDK)
-[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/plutov/PayPal-Go-SDK)
+[![Go Report Card](https://goreportcard.com/badge/plutov/paypal)](https://goreportcard.com/report/plutov/paypal)
+[![Build Status](https://travis-ci.org/plutov/paypal.svg?branch=master)](https://travis-ci.org/plutov/paypal)
+[![Godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/plutov/paypal)
 
 ### Go client for PayPal REST API
 
@@ -43,15 +43,15 @@ Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git ta
  * POST /v2/payments/billing-agreements/***TOKEN***/agreement-execute
 
 ### Missing endpoints
-It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypalsdk** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
+It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypal** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
 
 ### New Client
 
 ```go
-import "github.com/plutov/PayPal-Go-SDK"
+import "github.com/plutov/paypal"
 
 // Create a client instance
-c, err := paypalsdk.NewClient("clientID", "secretID", paypalsdk.APIBaseSandBox)
+c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 c.SetLog(os.Stdout) // Set log to terminal stdout
 
 accessToken, err := c.GetAccessToken()
@@ -66,7 +66,7 @@ auth, err := c.GetAuthorization("2DC87612EK520411B")
 ### Capture authorization
 
 ```go
-capture, err := c.CaptureAuthorization(authID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"}, true)
+capture, err := c.CaptureAuthorization(authID, &paypal.Amount{Total: "7.00", Currency: "USD"}, true)
 ```
 
 ### Void authorization
@@ -78,7 +78,7 @@ auth, err := c.VoidAuthorization(authID)
 ### Reauthorize authorization
 
 ```go
-auth, err := c.ReauthorizeAuthorization(authID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
+auth, err := c.ReauthorizeAuthorization(authID, &paypal.Amount{Total: "7.00", Currency: "USD"})
 ```
 
 ### Get Sale by ID
@@ -93,7 +93,7 @@ sale, err := c.GetSale("36C38912MN9658832")
 // Full
 refund, err := c.RefundSale(saleID, nil)
 // Partial
-refund, err := c.RefundSale(saleID, &paypalsdk.Amount{Total: "7.00", Currency: "USD"})
+refund, err := c.RefundSale(saleID, &paypal.Amount{Total: "7.00", Currency: "USD"})
 ```
 
 ### Get Refund by ID
@@ -111,25 +111,25 @@ order, err := c.GetOrder("O-4J082351X3132253H")
 ### Create an Order
 
 ```go
-order, err := c.CreateOrder(paypalsdk.OrderIntentCapture, []paypalsdk.PurchaseUnitRequest{paypalsdk.PurchaseUnitRequest{ReferenceID: "ref-id", Amount: paypalsdk.Amount{Total: "7.00", Currency: "USD"}}})
+order, err := c.CreateOrder(paypal.OrderIntentCapture, []paypal.PurchaseUnitRequest{paypal.PurchaseUnitRequest{ReferenceID: "ref-id", Amount: paypal.Amount{Total: "7.00", Currency: "USD"}}})
 ```
 
 ### Update Order by ID
 
 ```go
-order, err := c.UpdateOrder("O-4J082351X3132253H", []paypalsdk.PurchaseUnitRequest{})
+order, err := c.UpdateOrder("O-4J082351X3132253H", []paypal.PurchaseUnitRequest{})
 ```
 
 ### Authorize Order
 
 ```go
-auth, err := c.AuthorizeOrder(orderID, paypalsdk.AuthorizeOrderRequest{})
+auth, err := c.AuthorizeOrder(orderID, paypal.AuthorizeOrderRequest{})
 ```
 
 ### Capture Order
 
 ```go
-capture, err := c.CaptureOrder(orderID, paypalsdk.CaptureOrderRequest{})
+capture, err := c.CaptureOrder(orderID, paypal.CaptureOrderRequest{})
 ```
 
 ### Identity
@@ -149,15 +149,15 @@ userInfo, err := c.GetUserInfo("openid")
 ### Create single payout to email
 
 ```go
-payout := paypalsdk.Payout{
-    SenderBatchHeader: &paypalsdk.SenderBatchHeader{
+payout := paypal.Payout{
+    SenderBatchHeader: &paypal.SenderBatchHeader{
         EmailSubject: "Subject will be displayed on PayPal",
     },
-    Items: []paypalsdk.PayoutItem{
-        paypalsdk.PayoutItem{
+    Items: []paypal.PayoutItem{
+        paypal.PayoutItem{
             RecipientType: "EMAIL",
             Receiver:      "single-email-payout@mail.com",
-            Amount: &paypalsdk.AmountPayout{
+            Amount: &paypal.AmountPayout{
                 Value:    "15.11",
                 Currency: "USD",
             },
@@ -247,7 +247,7 @@ err := c.DeleteWebProfile("XP-CP6S-W9DY-96H8-MVN2")
 
 ```go
 // Store CC
-c.StoreCreditCard(paypalsdk.CreditCard{
+c.StoreCreditCard(paypal.CreditCard{
     Number:      "4417119669820331",
     Type:        "visa",
     ExpireMonth: "11",
@@ -261,8 +261,8 @@ c.StoreCreditCard(paypalsdk.CreditCard{
 c.DeleteCreditCard("CARD-ID-123")
 
 // Edit it
-c.PatchCreditCard("CARD-ID-123", []paypalsdk.CreditCardField{
-    paypalsdk.CreditCardField{
+c.PatchCreditCard("CARD-ID-123", []paypal.CreditCardField{
+    paypal.CreditCardField{
         Operation: "replace",
         Path:      "/billing_address/line1",
         Value:     "New value",
@@ -290,5 +290,5 @@ Current contributors:
 
 ### Tests
 
-* Unit tests: `go test`
+* Unit tests: `go test -v ./...`
 * Integration tests: `go test -tags=integration`
