@@ -145,6 +145,7 @@ type (
 		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
 	}
 
+	// AuthorizeOrderResponse .
 	AuthorizeOrderResponse struct {
 		CreateTime    *time.Time             `json:"create_time,omitempty"`
 		UpdateTime    *time.Time             `json:"update_time,omitempty"`
@@ -644,6 +645,7 @@ type (
 		UpdateTime    *time.Time `json:"update_time,omitempty"`
 	}
 
+	// RefundResponse .
 	RefundResponse struct {
 		ID     string              `json:"id,omitempty"`
 		Amount *PurchaseUnitAmount `json:"amount,omitempty"`
