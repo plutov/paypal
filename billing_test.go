@@ -3,35 +3,37 @@ package paypal_test
 import (
 	"fmt"
 	"time"
+
+	paypal "github.com/plutov/paypal"
 )
 
 func BillingExample() {
-	plan := BillingPlan{
+	plan := paypal.BillingPlan{
 		Name:        "Plan with Regular and Trial Payment Definitions",
 		Description: "Plan with regular and trial payment definitions.",
 		Type:        "fixed",
-		PaymentDefinitions: []PaymentDefinition{
+		PaymentDefinitions: []paypal.PaymentDefinition{
 			{
 				Name:              "Regular payment definition",
 				Type:              "REGULAR",
 				Frequency:         "MONTH",
 				FrequencyInterval: "2",
-				Amount: AmountPayout{
+				Amount: paypal.AmountPayout{
 					Value:    "100",
 					Currency: "USD",
 				},
 				Cycles: "12",
-				ChargeModels: []ChargeModel{
+				ChargeModels: []paypal.ChargeModel{
 					{
 						Type: "SHIPPING",
-						Amount: AmountPayout{
+						Amount: paypal.AmountPayout{
 							Value:    "10",
 							Currency: "USD",
 						},
 					},
 					{
 						Type: "TAX",
-						Amount: AmountPayout{
+						Amount: paypal.AmountPayout{
 							Value:    "12",
 							Currency: "USD",
 						},
@@ -43,22 +45,22 @@ func BillingExample() {
 				Type:              "trial",
 				Frequency:         "week",
 				FrequencyInterval: "5",
-				Amount: AmountPayout{
+				Amount: paypal.AmountPayout{
 					Value:    "9.19",
 					Currency: "USD",
 				},
 				Cycles: "2",
-				ChargeModels: []ChargeModel{
+				ChargeModels: []paypal.ChargeModel{
 					{
 						Type: "SHIPPING",
-						Amount: AmountPayout{
+						Amount: paypal.AmountPayout{
 							Value:    "1",
 							Currency: "USD",
 						},
 					},
 					{
 						Type: "TAX",
-						Amount: AmountPayout{
+						Amount: paypal.AmountPayout{
 							Value:    "2",
 							Currency: "USD",
 						},
@@ -66,8 +68,8 @@ func BillingExample() {
 				},
 			},
 		},
-		MerchantPreferences: &MerchantPreferences{
-			SetupFee: &AmountPayout{
+		MerchantPreferences: &paypal.MerchantPreferences{
+			SetupFee: &paypal.AmountPayout{
 				Value:    "1",
 				Currency: "USD",
 			},
@@ -78,7 +80,7 @@ func BillingExample() {
 			MaxFailAttempts:         "0",
 		},
 	}
-	c, err := NewClient("clientID", "secretID", APIBaseSandBox)
+	c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 	if err != nil {
 		panic(err)
 	}
@@ -92,18 +94,18 @@ func BillingExample() {
 	}
 	err = c.ActivatePlan(planResp.ID)
 	fmt.Println(err)
-	agreement := BillingAgreement{
+	agreement := paypal.BillingAgreement{
 		Name:        "Fast Speed Agreement",
 		Description: "Agreement for Fast Speed Plan",
-		StartDate:   JSONTime(time.Now().Add(time.Hour * 24)),
-		Plan:        BillingPlan{ID: planResp.ID},
-		Payer: Payer{
+		StartDate:   paypal.JSONTime(time.Now().Add(time.Hour * 24)),
+		Plan:        paypal.BillingPlan{ID: planResp.ID},
+		Payer: paypal.Payer{
 			PaymentMethod: "paypal",
 		},
 	}
 	resp, err := c.CreateBillingAgreement(agreement)
 	fmt.Println(err, resp)
 
-	bps, err := c.ListBillingPlans(BillingPlanListParams{Status: "ACTIVE"})
+	bps, err := c.ListBillingPlans(paypal.BillingPlanListParams{Status: "ACTIVE"})
 	fmt.Println(err, bps)
 }
