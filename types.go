@@ -145,10 +145,20 @@ type (
 		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
 	}
 
+	AuthorizeOrderResponse struct {
+		CreateTime    *time.Time             `json:"create_time,omitempty"`
+		UpdateTime    *time.Time             `json:"update_time,omitempty"`
+		ID            string                 `json:"id,omitempty"`
+		Status        string                 `json:"status,omitempty"`
+		Intent        string                 `json:"intent,omitempty"`
+		PurchaseUnits []PurchaseUnitRequest  `json:"purchase_units,omitempty"`
+		Payer         *PayerWithNameAndPhone `json:"payer,omitempty"`
+	}
+
 	// AuthorizeOrderRequest - https://developer.paypal.com/docs/api/orders/v2/#orders_authorize
 	AuthorizeOrderRequest struct {
-		PaymentSource  *PaymentSource `json:"payment_source"`
-		VaultOnCapture bool           `json:"vault_on_capture"`
+		PaymentSource      *PaymentSource     `json:"payment_source,omitempty"`
+		ApplicationContext ApplicationContext `json:"application_context,omitempty"`
 	}
 
 	// CaptureOrderRequest - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
@@ -454,6 +464,38 @@ type (
 		UpdateTime    *time.Time     `json:"update_time,omitempty"`
 	}
 
+	// CaptureAmount struct
+	CaptureAmount struct {
+		ID     string              `json:"id,omitempty"`
+		Amount *PurchaseUnitAmount `json:"amount,omitempty"`
+	}
+
+	// CapturedPayments has the amounts for a captured order
+	CapturedPayments struct {
+		Captures []CaptureAmount `json:"captures,omitempty"`
+	}
+
+	// CapturedPurchaseUnit are purchase units for a captured order
+	CapturedPurchaseUnit struct {
+		Payments *CapturedPayments `json:"payments,omitempty"`
+	}
+
+	// PayerWithNameAndPhone struct
+	PayerWithNameAndPhone struct {
+		Name         *CreateOrderPayerName `json:"name,omitempty"`
+		EmailAddress string                `json:"email_address,omitempty"`
+		Phone        *PhoneWithType        `json:"phone,omitempty"`
+		PayerID      string                `json:"payer_id,omitempty"`
+	}
+
+	// CaptureOrderResponse is the response for capture order
+	CaptureOrderResponse struct {
+		ID            string                 `json:"id,omitempty"`
+		Status        string                 `json:"status,omitempty"`
+		Payer         *PayerWithNameAndPhone `json:"payer,omitempty"`
+		PurchaseUnits []CapturedPurchaseUnit `json:"purchase_units,omitempty"`
+	}
+
 	// Payer struct
 	Payer struct {
 		PaymentMethod      string              `json:"payment_method"`
@@ -600,6 +642,12 @@ type (
 		CaptureID     string     `json:"capture_id,omitempty"`
 		ParentPayment string     `json:"parent_payment,omitempty"`
 		UpdateTime    *time.Time `json:"update_time,omitempty"`
+	}
+
+	RefundResponse struct {
+		ID     string              `json:"id,omitempty"`
+		Amount *PurchaseUnitAmount `json:"amount,omitempty"`
+		Status string              `json:"status,omitempty"`
 	}
 
 	// Related struct
