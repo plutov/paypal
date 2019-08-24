@@ -1,10 +1,8 @@
-package paypal_test
-
-import paypal "github.com/plutov/paypal/v3"
+package paypal
 
 func Example() {
 	// Initialize client
-	c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
+	c, err := NewClient("clientID", "secretID", APIBaseSandBox)
 	if err != nil {
 		panic(err)
 	}
