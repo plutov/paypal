@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	paypal "github.com/plutov/paypal"
+	paypal "github.com/plutov/paypal/v3"
 )
 
 func BillingExample() {
