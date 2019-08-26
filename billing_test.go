@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func BillingExample() {
+func billingExample() {
 	plan := BillingPlan{
 		Name:        "Plan with Regular and Trial Payment Definitions",
 		Description: "Plan with regular and trial payment definitions.",
