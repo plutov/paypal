@@ -50,6 +50,9 @@ It is possible that some endpoints are missing in this SDK Client, but you can u
 ```go
 import "github.com/plutov/paypal"
 
+// If using Go Modules
+// import "github.com/plutov/paypal/v3" 
+
 // Create a client instance
 c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 c.SetLog(os.Stdout) // Set log to terminal stdout
