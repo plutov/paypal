@@ -467,8 +467,9 @@ type (
 
 	// CaptureAmount struct
 	CaptureAmount struct {
-		ID     string              `json:"id,omitempty"`
-		Amount *PurchaseUnitAmount `json:"amount,omitempty"`
+		ID       string              `json:"id,omitempty"`
+		CustomID string              `json:"custom_id,omitempty"`
+		Amount   *PurchaseUnitAmount `json:"amount,omitempty"`
 	}
 
 	// CapturedPayments has the amounts for a captured order
