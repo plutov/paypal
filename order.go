@@ -86,6 +86,7 @@ func (c *Client) CaptureOrder(orderID string, captureOrderRequest CaptureOrderRe
 	if err != nil {
 		return capture, err
 	}
+	req.Header.Set("Prefer", "return=representation") // Verbose response: https://developer.paypal.com/docs/api/orders/v2/#orders-authorize-header-parameters
 
 	if err = c.SendWithAuth(req, capture); err != nil {
 		return capture, err

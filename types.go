@@ -476,10 +476,18 @@ type (
 		Captures []CaptureAmount `json:"captures,omitempty"`
 	}
 
+	// CapturedPurchaseItem are items for a captured order
+	CapturedPurchaseItem struct {
+		Quantity    string `json:"quantity"`
+		Name        string `json:"name"`
+		SKU         string `json:"sku,omitempty"`
+		Description string `json:"description,omitempty"`
+	}
+
 	// CapturedPurchaseUnit are purchase units for a captured order
 	CapturedPurchaseUnit struct {
-		Items    []Item            `json:"items,omitempty"`
-		Payments *CapturedPayments `json:"payments,omitempty"`
+		Items    []CapturedPurchaseItem `json:"items,omitempty"`
+		Payments *CapturedPayments      `json:"payments,omitempty"`
 	}
 
 	// PayerWithNameAndPhone struct
