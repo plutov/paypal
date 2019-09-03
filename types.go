@@ -478,6 +478,7 @@ type (
 
 	// CapturedPurchaseUnit are purchase units for a captured order
 	CapturedPurchaseUnit struct {
+		Items    []Item            `json:"items,omitempty"`
 		Payments *CapturedPayments `json:"payments,omitempty"`
 	}
 
