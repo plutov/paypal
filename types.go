@@ -162,6 +162,42 @@ type (
 		ApplicationContext ApplicationContext `json:"application_context,omitempty"`
 	}
 
+	// https://developer.paypal.com/docs/api/payments/v2/#definition-platform_fee
+	PlatformFee struct {
+		Amount *Money          `json:"amount,omitempty"`
+		Payee  *PayeeForOrders `json:"payee,omitempty"`
+	}
+
+	// https://developer.paypal.com/docs/api/payments/v2/#definition-payment_instruction
+	PaymentInstruction struct {
+		PlatformFees     []PlatformFee `json:"platform_fees,omitempty"`
+		DisbursementMode string        `json:"disbursement_mode,omitempty"`
+	}
+
+	// https://developer.paypal.com/docs/api/payments/v2/#authorizations_capture
+	PaymentCaptureRequest struct {
+		InvoiceID      string `json:"invoice_id,omitempty"`
+		NoteToPayer    string `json:"note_to_payer,omitempty"`
+		SoftDescriptor string `json:"soft_descriptor,omitempty"`
+		Amount         *Money `json:"amount,omitempty"`
+		FinalCapture   bool   `json:"final_capture,omitempty"`
+	}
+
+	// https://developer.paypal.com/docs/api/payments/v2/#definition-capture_status_details
+	CaptureStatusDetails struct {
+		Reason string `json:"reason,omitempty"`
+	}
+
+	PaymentCaptureResponse struct {
+		Status           string                `json:"status,omitempty"`
+		StatusDetails    *CaptureStatusDetails `json:"status_details,omitempty"`
+		ID               string                `json:"id,omitempty"`
+		Amount           *Money                `json:"amount,omitempty"`
+		InvoiceID        string                `json:"invoice_id,omitempty"`
+		FinalCapture     bool                  `json:"final_capture,omitempty"`
+		DisbursementMode string                `json:"disbursement_mode,omitempty"`
+	}
+
 	// CaptureOrderRequest - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 	CaptureOrderRequest struct {
 		PaymentSource *PaymentSource `json:"payment_source"`

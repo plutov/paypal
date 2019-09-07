@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
-	"strconv"
 )
 
 // GetAuthorization returns an authorization by ID
@@ -24,20 +23,17 @@ func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 
 // CaptureAuthorization captures and process an existing authorization.
 // To use this method, the original payment must have Intent set to "authorize"
-// Endpoint: POST /v2/payments/authorization/ID/capture
-func (c *Client) CaptureAuthorization(authID string, a *Amount, isFinalCapture bool) (*Capture, error) {
-	isFinalStr := strconv.FormatBool(isFinalCapture)
-
-	buf := bytes.NewBuffer([]byte(`{"amount":{"currency":"` + a.Currency + `,"total":"` + a.Total + `"},"is_final_capture":` + isFinalStr + `}`))
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorization/"+authID+"/capture"), buf)
-	capture := &Capture{}
+// Endpoint: POST /v2/payments/authorizations/ID/capture
+func (c *Client) CaptureAuthorization(authID string, paymentCaptureRequest *PaymentCaptureRequest) (*PaymentCaptureResponse, error) {
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorizations/"+authID+"/capture"), paymentCaptureRequest)
+	paymentCaptureResponse := &PaymentCaptureResponse{}
 
 	if err != nil {
-		return capture, err
+		return paymentCaptureResponse, err
 	}
 
-	err = c.SendWithAuth(req, capture)
-	return capture, err
+	err = c.SendWithAuth(req, paymentCaptureResponse)
+	return paymentCaptureResponse, err
 }
 
 // VoidAuthorization voids a previously authorized payment
