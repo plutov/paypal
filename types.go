@@ -852,6 +852,10 @@ type (
 		BankTXNPendingURL string `json:"bank_txn_pending_url,omitempty"`
 		UserAction        string `json:"user_action,omitempty"`
 	}
+
+	VerifyWebhookResponse struct {
+		VerificationStatus string `json:"verification_status,omitempty"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct
