@@ -10,7 +10,7 @@ import (
 // Endpoint: GET /v2/payments/authorization/ID
 func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(""))
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/payments/authorization/", authID), buf)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/payments/authorizations/", authID), buf)
 	auth := &Authorization{}
 
 	if err != nil {
@@ -40,7 +40,7 @@ func (c *Client) CaptureAuthorization(authID string, paymentCaptureRequest *Paym
 // Endpoint: POST /v2/payments/authorization/ID/void
 func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(""))
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorization/"+authID+"/void"), buf)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorizations/"+authID+"/void"), buf)
 	auth := &Authorization{}
 
 	if err != nil {
@@ -56,7 +56,7 @@ func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 // Endpoint: POST /v2/payments/authorization/ID/reauthorize
 func (c *Client) ReauthorizeAuthorization(authID string, a *Amount) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(`{"amount":{"currency":"` + a.Currency + `","total":"` + a.Total + `"}}`))
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorization/"+authID+"/reauthorize"), buf)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorizations/"+authID+"/reauthorize"), buf)
 	auth := &Authorization{}
 
 	if err != nil {

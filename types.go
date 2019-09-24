@@ -132,17 +132,17 @@ type (
 
 	// Authorization struct
 	Authorization struct {
-		Amount                    *Amount    `json:"amount,omitempty"`
-		CreateTime                *time.Time `json:"create_time,omitempty"`
-		UpdateTime                *time.Time `json:"update_time,omitempty"`
-		State                     string     `json:"state,omitempty"`
-		ParentPayment             string     `json:"parent_payment,omitempty"`
-		ID                        string     `json:"id,omitempty"`
-		ValidUntil                *time.Time `json:"valid_until,omitempty"`
-		Links                     []Link     `json:"links,omitempty"`
-		ClearingTime              string     `json:"clearing_time,omitempty"`
-		ProtectionEligibility     string     `json:"protection_eligibility,omitempty"`
-		ProtectionEligibilityType string     `json:"protection_eligibility_type,omitempty"`
+		ID               string                `json:"id,omitempty"`
+		CustomID         string                `json:"custom_id,omitempty"`
+		InvoiceID        string                `json:"invoice_id,omitempty"`
+		Status           string                `json:"status,omitempty"`
+		StatusDetails    *CaptureStatusDetails `json:"status_details,omitempty"`
+		Amount           *PurchaseUnitAmount   `json:"amount,omitempty"`
+		SellerProtection *SellerProtection     `json:"seller_protection,omitempty"`
+		CreateTime       *time.Time            `json:"create_time,omitempty"`
+		UpdateTime       *time.Time            `json:"update_time,omitempty"`
+		ExpirationTime   *time.Time            `json:"expiration_time,omitempty"`
+		Links            []Link                `json:"links,omitempty"`
 	}
 
 	// AuthorizeOrderResponse .
@@ -181,6 +181,11 @@ type (
 		SoftDescriptor string `json:"soft_descriptor,omitempty"`
 		Amount         *Money `json:"amount,omitempty"`
 		FinalCapture   bool   `json:"final_capture,omitempty"`
+	}
+
+	SellerProtection struct {
+		Status            string   `json:"status,omitempty"`
+		DisputeCategories []string `json:"dispute_categories,omitempty"`
 	}
 
 	// https://developer.paypal.com/docs/api/payments/v2/#definition-capture_status_details
