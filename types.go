@@ -132,16 +132,17 @@ type (
 
 	// Authorization struct
 	Authorization struct {
-		ID               string            `json:"id,omitempty"`
-		CustomID         string            `json:"custom_id,omitempty"`
-		InvoiceID        string            `json:"invoice_id,omitempty"`
-		Status           string            `json:"status,omitempty"`
-		Amount           *Amount           `json:"amount,omitempty"`
-		SellerProtection *ProtectionStatus `json:"seller_protection,omitempty"`
-		CreateTime       *time.Time        `json:"create_time,omitempty"`
-		UpdateTime       *time.Time        `json:"update_time,omitempty"`
-		ExpirationTime   *time.Time        `json:"expiration_time,omitempty"`
-		Links            []Link            `json:"links,omitempty"`
+		ID               string                `json:"id,omitempty"`
+		CustomID         string                `json:"custom_id,omitempty"`
+		InvoiceID        string                `json:"invoice_id,omitempty"`
+		Status           string                `json:"status,omitempty"`
+		StatusDetails    *CaptureStatusDetails `json:"status_details,omitempty"`
+		Amount           *PurchaseUnitAmount   `json:"amount,omitempty"`
+		SellerProtection *SellerProtection     `json:"seller_protection,omitempty"`
+		CreateTime       *time.Time            `json:"create_time,omitempty"`
+		UpdateTime       *time.Time            `json:"update_time,omitempty"`
+		ExpirationTime   *time.Time            `json:"expiration_time,omitempty"`
+		Links            []Link                `json:"links,omitempty"`
 	}
 
 	// AuthorizeOrderResponse .
@@ -182,7 +183,7 @@ type (
 		FinalCapture   bool   `json:"final_capture,omitempty"`
 	}
 
-	ProtectionStatus struct {
+	SellerProtection struct {
 		Status            string   `json:"status,omitempty"`
 		DisputeCategories []string `json:"dispute_categories,omitempty"`
 	}
