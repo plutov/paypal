@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -19,15 +20,14 @@ func (c *Client) VerifyWebhookSignature(httpReq *http.Request, webhookID string)
 		WebhookID        string          `json:"webhook_id,omitempty"`
 		WebhookEvent     json.RawMessage `json:"webhook_event"`
 	}
-	getBody := httpReq.GetBody
-	bodyReadCloser, err := getBody()
-	if err != nil {
-		return nil, err
+
+	// Read the content
+	var bodyBytes []byte
+	if httpReq.Body != nil {
+		bodyBytes, _ = ioutil.ReadAll(httpReq.Body)
 	}
-	body, err := ioutil.ReadAll(bodyReadCloser)
-	if err != nil {
-		return nil, err
-	}
+	// Restore the io.ReadCloser to its original state
+	httpReq.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 
 	verifyRequest := verifyWebhookSignatureRequest{
 		AuthAlgo:         httpReq.Header.Get("PAYPAL-AUTH-ALGO"),
@@ -36,7 +36,7 @@ func (c *Client) VerifyWebhookSignature(httpReq *http.Request, webhookID string)
 		TransmissionSig:  httpReq.Header.Get("PAYPAL-TRANSMISSION-SIG"),
 		TransmissionTime: httpReq.Header.Get("PAYPAL-TRANSMISSION-TIME"),
 		WebhookID:        webhookID,
-		WebhookEvent:     json.RawMessage(body),
+		WebhookEvent:     json.RawMessage(bodyBytes),
 	}
 
 	response := &VerifyWebhookResponse{}
