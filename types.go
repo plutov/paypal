@@ -85,7 +85,6 @@ const (
 	EventPaymentCaptureRefunded        string = "PAYMENT.CAPTURE.REFUNDED"
 	EventMerchantOnboardingCompleted   string = "MERCHANT.ONBOARDING.COMPLETED"
 	EventMerchantPartnerConsentRevoked string = "MERCHANT.PARTNER-CONSENT.REVOKED"
-
 )
 
 type (
