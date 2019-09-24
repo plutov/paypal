@@ -137,7 +137,6 @@ type (
 		InvoiceID        string            `json:"invoice_id,omitempty"`
 		Status           string            `json:"status,omitempty"`
 		Amount           *Amount           `json:"amount,omitempty"`
-		InvoiceID        string            `json:"invoice_id,omitempty"`
 		SellerProtection *ProtectionStatus `json:"seller_protection,omitempty"`
 		CreateTime       *time.Time        `json:"create_time,omitempty"`
 		UpdateTime       *time.Time        `json:"update_time,omitempty"`
