@@ -902,7 +902,7 @@ type (
 		Links []Link `json:"links,omitempty"`
 	}
 	
-	type CaptureSellerBreakdown struct {
+	CaptureSellerBreakdown struct {
 		GrossAmount         PurchaseUnitAmount  `json:"gross_amount"`
 		PayPalFee           PurchaseUnitAmount  `json:"paypal_fee"`
 		NetAmount           PurchaseUnitAmount  `json:"net_amount"`
