@@ -192,9 +192,9 @@ type (
 	}
 
 	RefundRequest struct {
-		Amount      PurchaseUnitAmount `json:"amount,omitempty"`
-		InvoiceID   string             `json:"invoice_id,omitempty"`
-		NoteToPayer string             `json:"note_to_payer,omitempty"`
+		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
+		InvoiceID   string              `json:"invoice_id,omitempty"`
+		NoteToPayer string              `json:"note_to_payer,omitempty"`
 	}
 
 	SellerProtection struct {
