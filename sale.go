@@ -21,32 +21,10 @@ func (c *Client) GetSale(saleID string) (*Sale, error) {
 	return sale, nil
 }
 
-// DEPRECATED
 // RefundSale refunds a completed payment.
 // Use this call to refund a completed payment. Provide the sale_id in the URI and an empty JSON payload for a full refund. For partial refunds, you can include an amount.
 // Endpoint: POST /v2/payments/sale/ID/refund
-func (c *Client) RefundSale(saleID string, a *Amount) (*Refund, error) {
-	refund := &Refund{}
-	refundRequest := &RefundRequest{
-		Amount: PurchaseUnitAmount{
-			Currency: a.Currency,
-			Value:    a.Total,
-		},
-	}
-
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/sale/"+saleID+"/refund"), refundRequest)
-	if err != nil {
-		return refund, err
-	}
-
-	if err = c.SendWithAuth(req, refund); err != nil {
-		return refund, err
-	}
-
-	return refund, nil
-}
-
-func (c *Client) Refund(saleID string, r RefundRequest) (*Refund, error) {
+func (c *Client) RefundSale(saleID string, r RefundRequest) (*Refund, error) {
 	refund := &Refund{}
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/sale/"+saleID+"/refund"), &r)
