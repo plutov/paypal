@@ -79,6 +79,14 @@ const (
 	ShippingPreferenceSetProvidedAddress string = "SET_PROVIDED_ADDRESS"
 )
 
+const (
+	EventPaymentCaptureCompleted       string = "PAYMENT.CAPTURE.COMPLETED"
+	EventPaymentCaptureDenied          string = "PAYMENT.CAPTURE.DENIED"
+	EventPaymentCaptureRefunded        string = "PAYMENT.CAPTURE.REFUNDED"
+	EventMerchantOnboardingCompleted   string = "MERCHANT.ONBOARDING.COMPLETED"
+	EventMerchantPartnerConsentRevoked string = "MERCHANT.PARTNER-CONSENT.REVOKED"
+)
+
 type (
 	// JSONTime overrides MarshalJson method to format in ISO8601
 	JSONTime time.Time
@@ -860,6 +868,45 @@ type (
 
 	VerifyWebhookResponse struct {
 		VerificationStatus string `json:"verification_status,omitempty"`
+	}
+	
+	WebhookEvent struct {
+		ID              string           `json:"id"`
+		CreateTime      time.Time        `json:"create_time"`
+		ResourceType    string           `json:"resource_type"`
+		EventType       string           `json:"event_type"`
+		Summary         string           `json:"summary,omitempty"`
+		Resource        Resource         `json:"resource"`
+		Links           []Link           `json:"links"`
+		EventVersion    string           `json:"event_version,omitempty"`
+		ResourceVersion string           `json:"resource_version,omitempty"`
+	}
+	
+	Resource struct {
+		// Payment Resource type
+		ID                     string                  `json:"id,omitempty"`
+		Status                 string                  `json:"status,omitempty"`
+		StatusDetails          *CaptureStatusDetails   `json:"status_details,omitempty"`
+		Amount                 *PurchaseUnitAmount     `json:"amount,omitempty"`
+		UpdateTime             string                  `json:"update_time,omitempty"`
+		CreateTime             string                  `json:"create_time,omitempty"`
+		ExpirationTime         string                  `json:"expiration_time,omitempty"`
+		SellerProtection       *SellerProtection       `json:"seller_protection,omitempty"`
+		FinalCapture           bool                    `json:"final_capture,omitempty"`
+		SellerPayableBreakdown *CaptureSellerBreakdown `json:"seller_payable_breakdown,omitempty"`
+		NoteToPayer            string                  `json:"note_to_payer,omitempty"`
+		// merchant-onboarding Resource type
+		PartnerClientID string `json:"partner_client_id,omitempty"`
+		MerchantID      string `json:"merchant_id,omitempty"`
+		// Common
+		Links []Link `json:"links,omitempty"`
+	}
+	
+	CaptureSellerBreakdown struct {
+		GrossAmount         PurchaseUnitAmount  `json:"gross_amount"`
+		PayPalFee           PurchaseUnitAmount  `json:"paypal_fee"`
+		NetAmount           PurchaseUnitAmount  `json:"net_amount"`
+		TotalRefundedAmount *PurchaseUnitAmount `json:"total_refunded_amount,omitempty"`
 	}
 )
 
