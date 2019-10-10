@@ -87,6 +87,32 @@ const (
 	EventMerchantPartnerConsentRevoked string = "MERCHANT.PARTNER-CONSENT.REVOKED"
 )
 
+const (
+	OperationAPIIntegration   string = "API_INTEGRATION"
+	ProductExpressCheckout    string = "EXPRESS_CHECKOUT"
+	IntegrationMethodPayPal   string = "PAYPAL"
+	IntegrationTypeThirdParty string = "THIRD_PARTY"
+	ConsentShareData          string = "SHARE_DATA_CONSENT"
+)
+
+const (
+	FeaturePayment               string = "PAYMENT"
+	FeatureRefund                string = "REFUND"
+	FeatureFuturePayment         string = "FUTURE_PAYMENT"
+	FeatureDirectPayment         string = "DIRECT_PAYMENT"
+	FeaturePartnerFee            string = "PARTNER_FEE"
+	FeatureDelayFunds            string = "DELAY_FUNDS_DISBURSEMENT"
+	FeatureReadSellerDispute     string = "READ_SELLER_DISPUTE"
+	FeatureUpdateSellerDispute   string = "UPDATE_SELLER_DISPUTE"
+	FeatureDisputeReadBuyer      string = "DISPUTE_READ_BUYER"
+	FeatureUpdateCustomerDispute string = "UPDATE_CUSTOMER_DISPUTES"
+)
+
+const (
+	LinkRelSelf      string = "self"
+	LinkRelActionURL string = "action_url"
+)
+
 type (
 	// JSONTime overrides MarshalJson method to format in ISO8601
 	JSONTime time.Time
@@ -408,10 +434,11 @@ type (
 
 	// Link struct
 	Link struct {
-		Href    string `json:"href"`
-		Rel     string `json:"rel,omitempty"`
-		Method  string `json:"method,omitempty"`
-		Enctype string `json:"enctype,omitempty"`
+		Href        string `json:"href"`
+		Rel         string `json:"rel,omitempty"`
+		Method      string `json:"method,omitempty"`
+		Description string `json:"description,omitempty"`
+		Enctype     string `json:"enctype,omitempty"`
 	}
 
 	// PurchaseUnitAmount struct
@@ -907,6 +934,37 @@ type (
 		PayPalFee           PurchaseUnitAmount  `json:"paypal_fee"`
 		NetAmount           PurchaseUnitAmount  `json:"net_amount"`
 		TotalRefundedAmount *PurchaseUnitAmount `json:"total_refunded_amount,omitempty"`
+	}
+
+	ReferralRequest struct {
+		TrackingID    string      `json:"tracking_id"`
+		Operations    []Operation `json:"operations,omitempty"`
+		Products      []string    `json:"products,omitempty"`
+		LegalConsents []Consent   `json:"legal_consents,omitempty"`
+	}
+
+	Operation struct {
+		Operation                string              `json:"operation"`
+		APIIntegrationPreference *IntegrationDetails `json:"api_integration_preference,omitempty"`
+	}
+
+	IntegrationDetails struct {
+		RestAPIIntegration *RestAPIIntegration `json:"rest_api_integration,omitempty"`
+	}
+
+	RestAPIIntegration struct {
+		IntegrationMethod string            `json:"integration_method"`
+		IntegrationType   string            `json:"integration_type"`
+		ThirdPartyDetails ThirdPartyDetails `json:"third_party_details"`
+	}
+
+	ThirdPartyDetails struct {
+		Features []string `json:"features"`
+	}
+
+	Consent struct {
+		Type    string `json:"type"`
+		Granted bool   `json:"granted"`
 	}
 )
 
