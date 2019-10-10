@@ -949,7 +949,7 @@ type (
 	}
 
 	IntegrationDetails struct {
-		RestAPIIntegration RestAPIIntegration `json:"rest_api_integration"`
+		RestAPIIntegration *RestAPIIntegration `json:"rest_api_integration,omitempty"`
 	}
 
 	RestAPIIntegration struct {
