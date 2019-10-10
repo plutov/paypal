@@ -944,8 +944,8 @@ type (
 	}
 
 	Operation struct {
-		Operation                string             `json:"operation"`
-		APIIntegrationPreference IntegrationDetails `json:"api_integration_preference,omitempty"`
+		Operation                string              `json:"operation"`
+		APIIntegrationPreference *IntegrationDetails `json:"api_integration_preference,omitempty"`
 	}
 
 	IntegrationDetails struct {
