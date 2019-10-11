@@ -937,10 +937,19 @@ type (
 	}
 
 	ReferralRequest struct {
-		TrackingID    string      `json:"tracking_id"`
-		Operations    []Operation `json:"operations,omitempty"`
-		Products      []string    `json:"products,omitempty"`
-		LegalConsents []Consent   `json:"legal_consents,omitempty"`
+		TrackingID            string                 `json:"tracking_id"`
+		PartnerConfigOverride *PartnerConfigOverride `json:"partner_config_override,omitemtpy"`
+		Operations            []Operation            `json:"operations,omitempty"`
+		Products              []string               `json:"products,omitempty"`
+		LegalConsents         []Consent              `json:"legal_consents,omitempty"`
+	}
+	
+	PartnerConfigOverride struct {
+		PartnerLogoURL       string `json:"partner_logo_url,omitempty"`
+		ReturnURL            string `json:"return_url,omitempty"`
+		ReturnURLDescription string `json:"return_url_description,omitempty"`
+		ActionRenewalURL     string `json:"action_renewal_url,omitempty"`
+		ShowAddCreditCard    *bool  `json:"show_add_credit_card,omitempty"`
 	}
 
 	Operation struct {
