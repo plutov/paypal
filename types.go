@@ -945,11 +945,11 @@ type (
 	}
 	
 	PartnerConfigOverride struct {
-		PartnerLogoURL       *string `json:"partner_logo_url,omitempty"`
-		ReturnURL            *string `json:"return_url,omitempty"`
-		ReturnURLDescription *string `json:"return_url_description,omitempty"`
-		ActionRenewalURL     *string `json:"action_renewal_url,omitempty"`
-		ShowAddCreditCard    *bool   `json:"show_add_credit_card,omitempty"`
+		PartnerLogoURL       string `json:"partner_logo_url,omitempty"`
+		ReturnURL            string `json:"return_url,omitempty"`
+		ReturnURLDescription string `json:"return_url_description,omitempty"`
+		ActionRenewalURL     string `json:"action_renewal_url,omitempty"`
+		ShowAddCreditCard    *bool  `json:"show_add_credit_card,omitempty"`
 	}
 
 	Operation struct {
