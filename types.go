@@ -416,14 +416,12 @@ type (
 
 	// Item struct
 	Item struct {
-		Quantity    uint32 `json:"quantity"`
 		Name        string `json:"name"`
-		Price       string `json:"price"`
-		Currency    string `json:"currency"`
-		SKU         string `json:"sku,omitempty"`
-		Description string `json:"description,omitempty"`
-		Tax         string `json:"tax,omitempty"`
 		UnitAmount  *Money `json:"unit_amount,omitempty"`
+		Tax         *Money `json:"tax,omitempty"`
+		Quantity    string `json:"quantity"`
+		Description string `json:"description,omitempty"`
+		SKU         string `json:"sku,omitempty"`
 		Category    string `json:"category,omitempty"`
 	}
 
