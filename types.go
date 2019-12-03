@@ -277,14 +277,24 @@ type (
 
 	// Capture struct
 	Capture struct {
-		Amount         *Amount    `json:"amount,omitempty"`
-		IsFinalCapture bool       `json:"is_final_capture"`
-		CreateTime     *time.Time `json:"create_time,omitempty"`
-		UpdateTime     *time.Time `json:"update_time,omitempty"`
-		State          string     `json:"state,omitempty"`
-		ParentPayment  string     `json:"parent_payment,omitempty"`
-		ID             string     `json:"id,omitempty"`
-		Links          []Link     `json:"links,omitempty"`
+		ID                        string                     `json:"id,omitempty"`
+		Status                    string                     `json:"status,omitempty"`
+		Amount                    *Money                     `json:"amount,omitempty"`
+		IsFinalCapture            bool                       `json:"is_final_capture"`
+		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
+		Links                     []Link                     `json:"links,omitempty"`
+		CreateTime                *time.Time                 `json:"create_time,omitempty"`
+		UpdateTime                *time.Time                 `json:"update_time,omitempty"`
+	}
+
+	// SellerReceivableBreakdown struct
+	SellerReceivableBreakdown struct {
+		GrossAmount      *Money `json:"gross_amount,omitempty"`
+		PaypalFee        *Money `json:"paypal_fee,omitempty"`
+		NetAmount        *Money `json:"net_amount,omitempty"`
+		ReceivableAmount *Money `json:"receivable_amount,omitempty"`
+		ExchangeRate     *Money `json:"exchange_rate,omitempty"`
+		PlatformFees     *Money `json:"platform_fees,omitempty"`
 	}
 
 	// ChargeModel struct
@@ -470,6 +480,12 @@ type (
 	PurchaseUnit struct {
 		ReferenceID string              `json:"reference_id"`
 		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
+		Payments    *Payments           `json:"payments,omitempty"`
+	}
+
+	// Payments struct
+	Payments struct {
+		Captures []Capture `json:"captures,omitempty"`
 	}
 
 	// TaxInfo used for orders.
@@ -713,7 +729,7 @@ type (
 	// Refund struct
 	Refund struct {
 		ID            string     `json:"id,omitempty"`
-		Amount        *Amount    `json:"amount,omitempty"`
+		Amount        *Money     `json:"amount,omitempty"`
 		CreateTime    *time.Time `json:"create_time,omitempty"`
 		State         string     `json:"state,omitempty"`
 		CaptureID     string     `json:"capture_id,omitempty"`
@@ -895,19 +911,19 @@ type (
 	VerifyWebhookResponse struct {
 		VerificationStatus string `json:"verification_status,omitempty"`
 	}
-	
+
 	WebhookEvent struct {
-		ID              string           `json:"id"`
-		CreateTime      time.Time        `json:"create_time"`
-		ResourceType    string           `json:"resource_type"`
-		EventType       string           `json:"event_type"`
-		Summary         string           `json:"summary,omitempty"`
-		Resource        Resource         `json:"resource"`
-		Links           []Link           `json:"links"`
-		EventVersion    string           `json:"event_version,omitempty"`
-		ResourceVersion string           `json:"resource_version,omitempty"`
+		ID              string    `json:"id"`
+		CreateTime      time.Time `json:"create_time"`
+		ResourceType    string    `json:"resource_type"`
+		EventType       string    `json:"event_type"`
+		Summary         string    `json:"summary,omitempty"`
+		Resource        Resource  `json:"resource"`
+		Links           []Link    `json:"links"`
+		EventVersion    string    `json:"event_version,omitempty"`
+		ResourceVersion string    `json:"resource_version,omitempty"`
 	}
-	
+
 	Resource struct {
 		// Payment Resource type
 		ID                     string                  `json:"id,omitempty"`
@@ -927,7 +943,7 @@ type (
 		// Common
 		Links []Link `json:"links,omitempty"`
 	}
-	
+
 	CaptureSellerBreakdown struct {
 		GrossAmount         PurchaseUnitAmount  `json:"gross_amount"`
 		PayPalFee           PurchaseUnitAmount  `json:"paypal_fee"`
@@ -942,7 +958,7 @@ type (
 		Products              []string               `json:"products,omitempty"`
 		LegalConsents         []Consent              `json:"legal_consents,omitempty"`
 	}
-	
+
 	PartnerConfigOverride struct {
 		PartnerLogoURL       string `json:"partner_logo_url,omitempty"`
 		ReturnURL            string `json:"return_url,omitempty"`
