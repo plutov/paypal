@@ -7,7 +7,7 @@ import (
 )
 
 // GetAuthorization returns an authorization by ID
-// Endpoint: GET /v2/payments/authorization/ID
+// Endpoint: GET /v2/payments/authorizations/ID
 func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(""))
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/payments/authorizations/", authID), buf)
@@ -37,7 +37,7 @@ func (c *Client) CaptureAuthorization(authID string, paymentCaptureRequest *Paym
 }
 
 // VoidAuthorization voids a previously authorized payment
-// Endpoint: POST /v2/payments/authorization/ID/void
+// Endpoint: POST /v2/payments/authorizations/ID/void
 func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(""))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorizations/"+authID+"/void"), buf)
@@ -53,7 +53,7 @@ func (c *Client) VoidAuthorization(authID string) (*Authorization, error) {
 
 // ReauthorizeAuthorization reauthorize a Paypal account payment.
 // PayPal recommends to reauthorize payment after ~3 days
-// Endpoint: POST /v2/payments/authorization/ID/reauthorize
+// Endpoint: POST /v2/payments/authorizations/ID/reauthorize
 func (c *Client) ReauthorizeAuthorization(authID string, a *Amount) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(`{"amount":{"currency":"` + a.Currency + `","total":"` + a.Total + `"}}`))
 	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorizations/"+authID+"/reauthorize"), buf)
