@@ -25,10 +25,10 @@ Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git ta
  * PATCH /v1/vault/credit-cards/**ID**
  * GET /v1/vault/credit-cards/**ID**
  * GET /v1/vault/credit-cards
- * GET /v2/payments/authorization/**ID**
- * POST /v2/payments/authorization/**ID**/capture
- * POST /v2/payments/authorization/**ID**/void
- * POST /v2/payments/authorization/**ID**/reauthorize
+ * GET /v2/payments/authorizations/**ID**
+ * POST /v2/payments/authorizations/**ID**/capture
+ * POST /v2/payments/authorizations/**ID**/void
+ * POST /v2/payments/authorizations/**ID**/reauthorize
  * GET /v2/payments/sale/**ID**
  * POST /v2/payments/sale/**ID**/refund
  * GET /v2/payments/refund/**ID**
@@ -37,10 +37,12 @@ Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git ta
  * PATCH /v2/checkout/orders/**ID**
  * POST /v2/checkout/orders/**ID**/authorize
  * POST /v2/checkout/orders/**ID**/capture
+ * GET /v2/payments/billing-plans
  * POST /v2/payments/billing-plans
  * PATCH /v2/payments/billing-plans/***ID***
  * POST /v2/payments/billing-agreements
  * POST /v2/payments/billing-agreements/***TOKEN***/agreement-execute
+ * POST /v1/notifications/verify-webhook-signature
 
 ### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypal** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
