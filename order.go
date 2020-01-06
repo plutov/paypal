@@ -82,6 +82,7 @@ func (c *Client) AuthorizeOrder(orderID string, authorizeOrderRequest AuthorizeO
 func (c *Client) CaptureOrder(orderID string, captureOrderRequest CaptureOrderRequest) (*CaptureOrderResponse, error) {
 	capture := &CaptureOrderResponse{}
 
+	c.SetReturnRepresentation()
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/capture"), captureOrderRequest)
 	if err != nil {
 		return capture, err

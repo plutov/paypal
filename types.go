@@ -296,13 +296,14 @@ type (
 	// Client represents a Paypal REST API Client
 	Client struct {
 		sync.Mutex
-		Client         *http.Client
-		ClientID       string
-		Secret         string
-		APIBase        string
-		Log            io.Writer // If user set log file name all requests will be logged there
-		Token          *TokenResponse
-		tokenExpiresAt time.Time
+		Client               *http.Client
+		ClientID             string
+		Secret               string
+		APIBase              string
+		Log                  io.Writer // If user set log file name all requests will be logged there
+		Token                *TokenResponse
+		tokenExpiresAt       time.Time
+		returnRepresentation bool
 	}
 
 	// CreditCard struct
@@ -552,9 +553,18 @@ type (
 		Captures []CaptureAmount `json:"captures,omitempty"`
 	}
 
+	// CapturedPurchaseItem are items for a captured order
+	CapturedPurchaseItem struct {
+		Quantity    string `json:"quantity"`
+		Name        string `json:"name"`
+		SKU         string `json:"sku,omitempty"`
+		Description string `json:"description,omitempty"`
+	}
+
 	// CapturedPurchaseUnit are purchase units for a captured order
 	CapturedPurchaseUnit struct {
-		Payments *CapturedPayments `json:"payments,omitempty"`
+		Items    []CapturedPurchaseItem `json:"items,omitempty"`
+		Payments *CapturedPayments      `json:"payments,omitempty"`
 	}
 
 	// PayerWithNameAndPhone struct
@@ -895,19 +905,19 @@ type (
 	VerifyWebhookResponse struct {
 		VerificationStatus string `json:"verification_status,omitempty"`
 	}
-	
+
 	WebhookEvent struct {
-		ID              string           `json:"id"`
-		CreateTime      time.Time        `json:"create_time"`
-		ResourceType    string           `json:"resource_type"`
-		EventType       string           `json:"event_type"`
-		Summary         string           `json:"summary,omitempty"`
-		Resource        Resource         `json:"resource"`
-		Links           []Link           `json:"links"`
-		EventVersion    string           `json:"event_version,omitempty"`
-		ResourceVersion string           `json:"resource_version,omitempty"`
+		ID              string    `json:"id"`
+		CreateTime      time.Time `json:"create_time"`
+		ResourceType    string    `json:"resource_type"`
+		EventType       string    `json:"event_type"`
+		Summary         string    `json:"summary,omitempty"`
+		Resource        Resource  `json:"resource"`
+		Links           []Link    `json:"links"`
+		EventVersion    string    `json:"event_version,omitempty"`
+		ResourceVersion string    `json:"resource_version,omitempty"`
 	}
-	
+
 	Resource struct {
 		// Payment Resource type
 		ID                     string                  `json:"id,omitempty"`
@@ -927,7 +937,7 @@ type (
 		// Common
 		Links []Link `json:"links,omitempty"`
 	}
-	
+
 	CaptureSellerBreakdown struct {
 		GrossAmount         PurchaseUnitAmount  `json:"gross_amount"`
 		PayPalFee           PurchaseUnitAmount  `json:"paypal_fee"`
@@ -942,7 +952,7 @@ type (
 		Products              []string               `json:"products,omitempty"`
 		LegalConsents         []Consent              `json:"legal_consents,omitempty"`
 	}
-	
+
 	PartnerConfigOverride struct {
 		PartnerLogoURL       string `json:"partner_logo_url,omitempty"`
 		ReturnURL            string `json:"return_url,omitempty"`
