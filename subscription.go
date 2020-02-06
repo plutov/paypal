@@ -27,13 +27,11 @@ type (
 // GetSubscriptionDetails shows details for a subscription, by ID.
 // Endpoint: GET /v1/billing/subscriptions/
 func (c *Client) GetSubscriptionDetails(subscriptionID string) (*SubscriptionDetailResp, error) {
-	req, err := http.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions/"+subscriptionID), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/v1/billing/subscriptions/%s", c.APIBase, subscriptionID), nil)
 	response := &SubscriptionDetailResp{}
 	if err != nil {
 		return response, err
 	}
-	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	err = c.SendWithAuth(req, response)
 	return response, err
 }
