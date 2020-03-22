@@ -563,8 +563,14 @@ type (
 
 	// CapturedPurchaseUnit are purchase units for a captured order
 	CapturedPurchaseUnit struct {
-		Items    []CapturedPurchaseItem `json:"items,omitempty"`
-		Payments *CapturedPayments      `json:"payments,omitempty"`
+		Items       []CapturedPurchaseItem       `json:"items,omitempty"`
+		ReferenceID string                       `json:"reference_id"`
+		Shipping    CapturedPurchaseUnitShipping `json:"shipping,omitempty"`
+		Payments    *CapturedPayments            `json:"payments,omitempty"`
+	}
+
+	CapturedPurchaseUnitShipping struct {
+		Address ShippingDetailAddressPortable `json:"address,omitempty"`
 	}
 
 	// PayerWithNameAndPhone struct
