@@ -1,3 +1,3 @@
-module github.com/plutov/paypal/v3
+module github.com/inplayer/paypal
 
 go 1.12
