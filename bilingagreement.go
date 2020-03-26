@@ -5,7 +5,7 @@ import (
 )
 
 type AgreementRequest struct {
-	note string
+	Note string
 }
 
 // SuspendAgreement returns status code and message
