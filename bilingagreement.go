@@ -1,0 +1,41 @@
+package paypal
+
+import (
+	"fmt"
+)
+
+type AgreementRequest struct {
+	Note string
+}
+
+// SuspendAgreement returns status code and message
+// pauses billing-agreement
+// Endpoint: GET /v1/payments/billing-agreements/subID/suspend"
+func (c *Client) SuspendAgreement(bAID string, agr AgreementRequest) (*DefaultResponse, error) {
+
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+bAID+"/suspend", ), agr)
+	resp := &DefaultResponse{}
+
+	if err != nil {
+		return resp, err
+	}
+
+	err = c.SendWithAuth(req, resp)
+	return resp, err
+}
+
+// ReActivateAgreement returns status code and message
+// re-activate billing-agreement
+// Endpoint: GET /v1/payments/billing-agreements/subID/suspend"
+func (c *Client) ReActivateAgreement(bAID string, agr AgreementRequest) (*DefaultResponse, error) {
+
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+bAID+"/re-activate", ), agr)
+	resp := &DefaultResponse{}
+
+	if err != nil {
+		return resp, err
+	}
+
+	err = c.SendWithAuth(req, resp)
+	return resp, err
+}

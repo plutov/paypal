@@ -984,6 +984,11 @@ type (
 		Type    string `json:"type"`
 		Granted bool   `json:"granted"`
 	}
+
+	DefaultResponse struct {
+		Code    int    `json:"code"`
+		Message string `json:"message"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct
