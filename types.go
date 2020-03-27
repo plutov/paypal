@@ -1062,6 +1062,15 @@ type (
 		Status           string `json:"status"`
 		StatusUpdateTime string `json:"status_update_time"`
 	}
+
+	CreateSubscription struct {
+
+	}
+
+	Subscription struct {
+		PlanID string `json:"plan_id"`
+
+	}
 )
 
 // Error method implementation for ErrorResponse struct
