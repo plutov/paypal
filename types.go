@@ -1006,42 +1006,56 @@ type (
 	}
 
 	// CreateProduct represents body parameters needed to create PayPal product
+	// Type represents the product type. Indicates whether the product is physical or tangible goods, or a service. The allowed values are:
+	// ---------------------------------------------------------
+	// | PHYSICAL | Physical goods.							   |
+	// | PHYSICAL | Digital goods.							   |
+	// | PHYSICAL | A service. For example, technical support. |
+	// ---------------------------------------------------------
+	// You can see category allowed values in PayPal docs -> https://developer.paypal.com/docs/api/catalog-products/v1/#products-create-request-body
 	CreateProduct struct {
 		Name        string `json:"name"`
 		Description string `json:"description"`
-		Type        string `json:"type"`
+		Type        string `json:"type"` 			    //default: PHYSICAL
 		Category    string `json:"category,omitempty"`
 		ImageUrl    string `json:"image_url,omitempty"`
 		HomeUrl     string `json:"home_url,omitempty"`
 	}
 
 	// Product represents PayPal product
+	// Type represents the product type. Indicates whether the product is physical or tangible goods, or a service. The allowed values are:
+	// ---------------------------------------------------------
+	// | PHYSICAL | Physical goods.							   |
+	// | PHYSICAL | Digital goods.							   |
+	// | PHYSICAL | A service. For example, technical support. |
+	// ---------------------------------------------------------
+	// You can see category allowed values in PayPal docs -> https://developer.paypal.com/docs/api/catalog-products/v1/#products-create-request-body
 	Product struct {
 		ID          string  `json:"id"`
 		Name        string  `json:"name"`
 		Description string  `json:"description"`
-		Type        string  `json:"type"`
+		Type        string  `json:"type"`                 //default: PHYSICAL
 		Category    string  `json:"category,omitempty"`
 		ImageUrl    string  `json:"image_url,omitempty"`
 		HomeUrl     string  `json:"home_url,omitempty"`
-		CreateTime  string  `json:"creat_time,omitempty"`
-		UpdateTime  string  `json:"updat_time,omitempty"`
-		Links       []*Link `json:"links,omitempty"`
+		CreateTime  string  `json:"creat_time,omitempty"` //Read only
+		UpdateTime  string  `json:"updat_time,omitempty"` //Read only
+		Links       []*Link `json:"links,omitempty"`      //Read only
 	}
 
 	// ListProductsParams represents query params for list products call
 	ListProductsParams struct {
-		PageSize      uint64 `json:"page_size"`      //default: 10 min:1 max:20
-		Page          uint64 `json:"page"`           //default: 1 min:1 max:100000
+		PageSize      uint64 `json:"page_size"`      //default: 10, min:1, max:20
+		Page          uint64 `json:"page"`           //default: 1, min:1, max:100000
 		TotalRequired bool   `json:"total_required"` //default: false
 	}
 
 	// ListProductsResponse represents the response od list products
 	ListProductsResponse struct {
-		TotalItems uint64     `json:"total_items"`
-		TotalPages uint64     `json:"total_pages"`
+		TotalItems uint64     `json:"total_items"` //min: 0, max: 500000000
+		TotalPages uint64     `json:"total_pages"` //min: 0, max: 100000000
 		Products   []*Product `json:"products"`
-		Links      []*Link    `json:"links"`
+		Links      []*Link    `json:"links"`       //Read only
 	}
 
 	// PatchObject represents the object used for updating PayPal objects
@@ -1052,6 +1066,12 @@ type (
 	}
 
 	// CreatePlan represents body parameters needed to create PayPal plan
+	// Status represents the initial state of the plan. Allowed input values are CREATED and ACTIVE. The allowed values are:
+	// ----------------------------------------------------------------------------------------------
+	// | CREATED  | The plan was created. You cannot create subscriptions for a plan in this state. |
+	// | INACTIVE | The plan is inactive.															|
+	// | ACTIVE   | The plan is active. You can only create subscriptions for a plan in this state. |
+	// ----------------------------------------------------------------------------------------------
 	CreatePlan struct {
 		ProductID          string              `json:"product_id"`
 		Name               string              `json:"name"`
@@ -1131,6 +1151,28 @@ type (
 	Taxes struct {
 		Percentage string `json:"percentage"`
 		Inclusive  bool   `json:"inclusive,omitempty"` //default: true
+	}
+
+	// Plan represents the details for the subscription plan for paying
+	// Status represents the initial state of the plan. Allowed input values are CREATED and ACTIVE. The allowed values are:
+	// ----------------------------------------------------------------------------------------------
+	// | CREATED  | The plan was created. You cannot create subscriptions for a plan in this state. |
+	// | INACTIVE | The plan is inactive.															|
+	// | ACTIVE   | The plan is active. You can only create subscriptions for a plan in this state. |
+	// ----------------------------------------------------------------------------------------------
+	Plan struct {
+		ID 				   string 			   `json:"id"`
+		ProductID          string              `json:"product_id"`
+		Name               string              `json:"name"`
+		Status             string              `json:"status"`
+		Description        string              `json:"description,omitempty"`
+		BillingCycles      []*BillingCycle     `json:"billing_cycles"`
+		PaymentPreferences *PaymentPreferences `json:"payment_preferences"`
+		Taxes              *Taxes              `json:"taxes,omitempty"`
+		QuantitySupported  bool 			   `json:"quantity_supported,omitempty"`
+		CreateTime 		   string 			   `json:"create_time"` 				 //Read only
+		UpdateTime         string 		   	   `json:"update_time"` 				 //Read only
+		Links         	   []*Link 		   	   `json:"links"` 				 		 //Read only
 	}
 )
 

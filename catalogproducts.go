@@ -7,7 +7,7 @@ import (
 
 // CreateProduct - Use this call to create a catalog product
 // Endpoint: POST /v1/catalogs/products
-func (c *Client) CreateProduct(product CreateProduct) (*Product, error) {
+func (c *Client) CreateProduct(product *CreateProduct) (*Product, error) {
 	resp := &Product{}
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), product)
