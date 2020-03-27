@@ -1134,10 +1134,10 @@ type (
 	// | CANCEL   | Cancels the subscription if the initial payment for the setup fails.   |
 	// -------------------------------------------------------------------------------------
 	PaymentPreferences struct {
-		AutoBillOutstanding     bool        `json:"auto_bill_outstanding,omitempty"`     //default true
-		SetupFee                *FixedPrice `json:"setup_fee,omitempty"`
-		SetupFeeFailureAction   string      `json:"setup_fee_failure_action,omitempty"`  //default: CANCEL
-		PaymentFailureThreshold uint64      `json:"payment_failure_threshold,omitempty"` //default: 0, min: 0, max: 999
+		AutoBillOutstanding     bool   `json:"auto_bill_outstanding,omitempty"`     //default true
+		SetupFee                *Money `json:"setup_fee,omitempty"`
+		SetupFeeFailureAction   string `json:"setup_fee_failure_action,omitempty"`  //default: CANCEL
+		PaymentFailureThreshold uint64 `json:"payment_failure_threshold,omitempty"` //default: 0, min: 0, max: 999
 	}
 
 	// Taxes represents the tax details
