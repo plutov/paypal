@@ -474,8 +474,13 @@ type (
 		Discount         *Money `json:"discount,omitempty"`
 	}
 
-	// Money struct
-	//
+	// Money represents the amount. For regular pricing, it is limited to a 20% increase
+	// from the current amount and the change is applicable for both existing and future subscriptions. For trial period pricing,
+	// there is no limit or constraint in changing the amount and the change is applicable only on future subscriptions.
+	// The value, which might be:
+	// An integer for currencies like JPY that are not typically fractional.
+	// A decimal fraction for currencies like TND that are subdivided into thousandths.
+	// For the required number of decimal places for a currency code, see https://developer.paypal.com/docs/api/reference/currency-codes/.
 	// https://developer.paypal.com/docs/api/orders/v2/#definition-money
 	Money struct {
 		Currency string `json:"currency_code"`
@@ -660,28 +665,31 @@ type (
 		Links        []Link        `json:"links"`
 	}
 
-	// PaymentSource structure
+	// PaymentSource represents the payment source definitions
 	PaymentSource struct {
 		Card  *PaymentSourceCard  `json:"card"`
 		Token *PaymentSourceToken `json:"token"`
 	}
 
-	// PaymentSourceCard structure
+	// PaymentSourceCard represents card details
 	PaymentSourceCard struct {
-		ID             string              `json:"id"`
-		Name           string              `json:"name"`
-		Number         string              `json:"number"`
-		Expiry         string              `json:"expiry"`
-		SecurityCode   string              `json:"security_code"`
-		LastDigits     string              `json:"last_digits"`
-		CardType       string              `json:"card_type"`
-		BillingAddress *CardBillingAddress `json:"billing_address"`
+		ID             string           `json:"id,omitempty"`
+		Name           string           `json:"name,omitempty"`
+		Number         string           `json:"number"`
+		Expiry         string           `json:"expiry"`
+		SecurityCode   string           `json:"security_code,omitempty"`
+		LastDigits     string           `json:"last_digits,omitempty"`
+		CardType       string           `json:"card_type,omitempty"`
+		BillingAddress *AddressPortable `json:"billing_address,omitempty"`
 	}
 
-	// CardBillingAddress structure
-	CardBillingAddress struct {
+	// AddressPortable represents address details
+	AddressPortable struct {
 		AddressLine1 string `json:"address_line_1"`
 		AddressLine2 string `json:"address_line_2"`
+		AddressLine3 string `json:"address_line_3"`
+		AdminArea4   string `json:"admin_area_4"`
+		AdminArea3   string `json:"admin_area_3"`
 		AdminArea2   string `json:"admin_area_2"`
 		AdminArea1   string `json:"admin_area_1"`
 		PostalCode   string `json:"postal_code"`
@@ -800,7 +808,8 @@ type (
 		Phone         string `json:"phone,omitempty"`
 	}
 
-	// ShippingDetailAddressPortable used with create orders
+	// ShippingDetailAddressPortable represents address details
+	// More info -> https://developer.paypal.com/docs/api/subscriptions/v1/#definition-shipping_detail.address_portable
 	ShippingDetailAddressPortable struct {
 		AddressLine1 string `json:"address_line_1,omitempty"`
 		AddressLine2 string `json:"address_line_2,omitempty"`
@@ -810,12 +819,12 @@ type (
 		CountryCode  string `json:"country_code,omitempty"`
 	}
 
-	// Name struct
+	// Name represents users full name
 	Name struct {
 		FullName string `json:"full_name,omitempty"`
 	}
 
-	// ShippingDetail struct
+	// ShippingDetail represents the shipping details
 	ShippingDetail struct {
 		Name    *Name                          `json:"name,omitempty"`
 		Address *ShippingDetailAddressPortable `json:"address,omitempty"`
@@ -1063,13 +1072,33 @@ type (
 		StatusUpdateTime string `json:"status_update_time"`
 	}
 
+	// CreateSubscription represents body parameters needed to create PayPal subscription
 	CreateSubscription struct {
+		PlanID             string              `json:"plan_id"`
+		StartTime          string              `json:"start_time,omitempty"` 		  //default: current time
+		Quantity           string              `json:"quantity,omitempty"`   		  //min: 1, max: 32
+		ShippingAmount     *Money              `json:"shipping_amount,omitempty"`
+		Subscriber         *SubscriberRequest  `json:"subscriber,omitempty"`
+		AutoRenewal        bool                `json:"auto_renewal,omitempty"`
+		ApplicationContext *ApplicationContext `json:"application_context,omitempty"`
+	}
 
+	// SubscriberRequest represents the subscriber details
+	SubscriberRequest struct {
+		Name            *PayerName      `json:"name,omitempty,omitempty"`
+		EmailAddress    string          `json:"email_address,omitempty"`
+		PayerID         string          `json:"payer_id,omitempty"` 		//Read only
+		ShippingAddress *ShippingDetail `json:"shipping_address,omitempty"`
+		PaymentSource   *PaymentSource  `json:"payment_source,omitempty"`
+	}
+
+	// PayerName represents payer name details
+	PayerName struct {
+		GivenName string `json:"given_name,omitempty"`
+		Surname   string `json:"surname,omitempty"`
 	}
 
 	Subscription struct {
-		PlanID string `json:"plan_id"`
-
 	}
 )
 
