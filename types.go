@@ -1049,6 +1049,19 @@ type (
 		Path      string `json:"path"`
 		Value     string `json:"value"`
 	}
+
+	//Resource v1 for old hooks
+	SuspendSubscriptionResponse struct {
+		ID       string              `json:"id"`
+		Resource SuspendSubscription `json:"resource"`
+	}
+
+	SuspendSubscription struct {
+		ID               string `json:"id"`
+		PlanID           string `json:"plan_id"`
+		Status           string `json:"status"`
+		StatusUpdateTime string `json:"status_update_time"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct
