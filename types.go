@@ -474,8 +474,13 @@ type (
 		Discount         *Money `json:"discount,omitempty"`
 	}
 
-	// Money struct
-	//
+	// Money represents the amount. For regular pricing, it is limited to a 20% increase
+	// from the current amount and the change is applicable for both existing and future subscriptions. For trial period pricing,
+	// there is no limit or constraint in changing the amount and the change is applicable only on future subscriptions.
+	// The value, which might be:
+	// An integer for currencies like JPY that are not typically fractional.
+	// A decimal fraction for currencies like TND that are subdivided into thousandths.
+	// For the required number of decimal places for a currency code, see https://developer.paypal.com/docs/api/reference/currency-codes/.
 	// https://developer.paypal.com/docs/api/orders/v2/#definition-money
 	Money struct {
 		Currency string `json:"currency_code"`
@@ -1100,22 +1105,10 @@ type (
 	// PricingScheme represents the active pricing scheme for this billing cycle.
 	// A free trial billing cycle does not require a pricing scheme.
 	PricingScheme struct {
-		Version    uint64     `json:"version,omitempty"`     //Read only
-		FixedPrice FixedPrice `json:"fixed_price"`
-		CreateTime string     `json:"create_time,omitempty"` //Read only
-		UpdateTime string     `json:"update_time,omitempty"` //Read only
-	}
-
-	// FixedPrice represents the fixed amount to charge for the subscription. For regular pricing, it is limited to a 20% increase
-	// from the current amount and the change is applicable for both existing and future subscriptions. For trial period pricing,
-	// there is no limit or constraint in changing the amount and the change is applicable only on future subscriptions.
-	// The value, which might be:
-	// An integer for currencies like JPY that are not typically fractional.
-	// A decimal fraction for currencies like TND that are subdivided into thousandths.
-	// For the required number of decimal places for a currency code, see https://developer.paypal.com/docs/api/reference/currency-codes/.
-	FixedPrice struct {
-		CurrencyCode string `json:"currency_code"` //fixed length 3
-		Value        string `json:"value"`
+		Version    uint64 `json:"version,omitempty"`     //Read only
+		FixedPrice *Money `json:"fixed_price"`
+		CreateTime string `json:"create_time,omitempty"` //Read only
+		UpdateTime string `json:"update_time,omitempty"` //Read only
 	}
 
 	// Frequency represents the frequency details for this billing cycle.
