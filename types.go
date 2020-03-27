@@ -265,6 +265,15 @@ type (
 		OverrideMerchantPreferences *MerchantPreferences `json:"override_merchant_preferences,omitempty"`
 	}
 
+	// BillingInfo struct
+	BillingInfo struct {
+		OutstandingBalance  AmountPayout      `json:"outstanding_balance,omitempty"`
+		CycleExecutions     []CycleExecutions `json:"cycle_executions,omitempty"`
+		LastPayment         LastPayment       `json:"last_payment,omitempty"`
+		NextBillingTime     time.Time         `json:"next_billing_time,omitempty"`
+		FailedPaymentsCount int               `json:"failed_payments_count,omitempty"`
+	}
+
 	// BillingPlan struct
 	BillingPlan struct {
 		ID                  string               `json:"id,omitempty"`
@@ -357,6 +366,21 @@ type (
 	Currency struct {
 		Currency string `json:"currency,omitempty"`
 		Value    string `json:"value,omitempty"`
+	}
+
+	// CycleExecutions struct
+	CycleExecutions struct {
+		TenureType      string `json:"tenure_type,omitempty"`
+		Sequence        int    `json:"sequence,omitempty"`
+		CyclesCompleted int    `json:"cycles_completed,omitempty"`
+		CyclesRemaining int    `json:"cycles_remaining,omitempty"`
+		TotalCycles     int    `json:"total_cycles,omitempty"`
+	}
+
+	// LastPayment struct
+	LastPayment struct {
+		Amount Money     `json:"amount,omitempty"`
+		Time   time.Time `json:"time,omitempty"`
 	}
 
 	// Details structure used in Amount structures as optional value
@@ -778,6 +802,12 @@ type (
 		SenderBatchID string `json:"sender_batch_id,omitempty"`
 	}
 
+	//ShippingAmount struct
+	ShippingAmount struct {
+		CurrencyCode string `json:"currency_code,omitempty"`
+		Value        string `json:"value,omitempty"`
+	}
+
 	// ShippingAddress struct
 	ShippingAddress struct {
 		RecipientName string `json:"recipient_name,omitempty"`
@@ -810,6 +840,13 @@ type (
 	ShippingDetail struct {
 		Name    *Name                          `json:"name,omitempty"`
 		Address *ShippingDetailAddressPortable `json:"address,omitempty"`
+	}
+
+	// Subscriber struct
+	Subscriber struct {
+		ShippingAddress ShippingDetail       `json:"shipping_address,omitempty"`
+		Name            CreateOrderPayerName `json:"name,omitempty"`
+		EmailAddress    string               `json:"email_address,omitempty"`
 	}
 
 	expirationTime int64
