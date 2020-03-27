@@ -62,6 +62,17 @@ const (
 	OrderIntentAuthorize string = "AUTHORIZE"
 )
 
+// Possible value for `status` in GetOrder
+//
+// https://developer.paypal.com/docs/api/orders/v2/#orders-get-response
+const (
+	OrderStatusCreated   string = "CREATED"
+	OrderStatusSaved     string = "SAVED"
+	OrderStatusApproved  string = "APPROVED"
+	OrderStatusVoided    string = "VOIDED"
+	OrderStatusCompleted string = "COMPLETED"
+)
+
 // Possible values for `category` in Item
 //
 // https://developer.paypal.com/docs/api/orders/v2/#definition-item
