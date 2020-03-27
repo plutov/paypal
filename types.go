@@ -1192,7 +1192,7 @@ type (
 	// UpdatePricingSchemaRequest represents a pricing schema to update plans billing cycle
 	UpdatePricingSchemaRequest struct {
 		BillingCycleSequence uint64 `json:"billing_cycle_sequence"` //min: 1, max: 99
-		PricingScheme PricingScheme `json:"pricing_scheme"`
+		PricingScheme *PricingScheme `json:"pricing_scheme"`
 	}
 )
 
