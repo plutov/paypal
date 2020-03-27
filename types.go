@@ -1051,12 +1051,12 @@ type (
 	}
 
 	//Resource v1 for old hooks
-	SuspendSubscriptionResponse struct {
-		ID       string              `json:"id"`
-		Resource SuspendSubscription `json:"resource"`
+	SuspendBillingAgreementV1Response struct {
+		ID       string           `json:"id"`
+		Resource BillingAgreement `json:"resource"`
 	}
 
-	SuspendSubscription struct {
+	BillingAgreementV1 struct {
 		ID               string `json:"id"`
 		PlanID           string `json:"plan_id"`
 		Status           string `json:"status"`
