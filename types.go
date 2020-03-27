@@ -1044,10 +1044,93 @@ type (
 		Links      []*Link    `json:"links"`
 	}
 
+	// PatchObject represents the object used for updating PayPal objects
 	PatchObject struct {
 		Operation string `json:"op"`
 		Path      string `json:"path"`
 		Value     string `json:"value"`
+	}
+
+	// CreatePlan represents body parameters needed to create PayPal plan
+	CreatePlan struct {
+		ProductID          string              `json:"product_id"`
+		Name               string              `json:"name"`
+		Status             string              `json:"status"`                //default: ACTIVE
+		Description        string              `json:"description,omitempty"`
+		BillingCycles      []*BillingCycle     `json:"billing_cycles"`
+		PaymentPreferences *PaymentPreferences `json:"payment_preferences"`
+		Taxes              *Taxes              `json:"taxes,omitempty"`
+		QuantitySupported bool 				   `json:"quantity_supported,omitempty"`
+	}
+
+	// BillingCycle represents the cycles for billing the subscription
+	// The tenure type of the billing cycle. In case of a plan having trial period, only 1 trial period is allowed per plan. The possible values are:
+	// --------------------------------------
+	// | REGULAR | A regular billing cycle. |
+	// | TRIAL   | A trial billing cycle.   |
+	// --------------------------------------
+	BillingCycle struct {
+		PricingScheme *PricingScheme `json:"pricing_scheme,omitempty"` //Free Trial Cycle doesn't require scheme
+		Frequency     Frequency      `json:"frequency"`
+		TenureType    string         `json:"tenure_type"`
+		Sequence      uint64         `json:"sequence"`                 //min: 0, max: 99
+		TotalCycles   uint64         `json:"total_cycles,omitempty"`   //default: 1, min: 0, max: 999
+	}
+
+	// PricingScheme represents the active pricing scheme for this billing cycle.
+	// A free trial billing cycle does not require a pricing scheme.
+	PricingScheme struct {
+		Version    uint64     `json:"version,omitempty"`     //Read only
+		FixedPrice FixedPrice `json:"fixed_price"`
+		CreateTime string     `json:"create_time,omitempty"` //Read only
+		UpdateTime string     `json:"update_time,omitempty"` //Read only
+	}
+
+	// FixedPrice represents the fixed amount to charge for the subscription. For regular pricing, it is limited to a 20% increase
+	// from the current amount and the change is applicable for both existing and future subscriptions. For trial period pricing,
+	// there is no limit or constraint in changing the amount and the change is applicable only on future subscriptions.
+	// The value, which might be:
+	// An integer for currencies like JPY that are not typically fractional.
+	// A decimal fraction for currencies like TND that are subdivided into thousandths.
+	// For the required number of decimal places for a currency code, see https://developer.paypal.com/docs/api/reference/currency-codes/.
+	FixedPrice struct {
+		CurrencyCode string `json:"currency_code"` //fixed length 3
+		Value        string `json:"value"`
+	}
+
+	// Frequency represents the frequency details for this billing cycle.
+	// Interval unit is the interval at which the subscription is charged or billed
+	// These are the possible combinations
+	// --------------------------------------
+	// | Interval unit | Max Interval count |
+	// --------------------------------------
+	// | DAY           | 365                |
+	// | WEEK          | 52                 |
+	// | MONTH         | 12                 |
+	// | YEAR          | 1                  |
+	// --------------------------------------
+	Frequency struct {
+		IntervalUnit  string `json:"interval_unit"`
+		IntervalCount uint64 `json:"interval_count,omitempty"`
+	}
+
+	// PaymentPreferences represents the payment preferences for a subscription
+	// SetupFeeFailureAction represents the action to take on the subscription if the initial payment for the setup fails. The possible values are:
+	// -------------------------------------------------------------------------------------
+	// | CONTINUE | Continues the subscription if the initial payment for the setup fails. |
+	// | CANCEL   | Cancels the subscription if the initial payment for the setup fails.   |
+	// -------------------------------------------------------------------------------------
+	PaymentPreferences struct {
+		AutoBillOutstanding     bool        `json:"auto_bill_outstanding,omitempty"`     //default true
+		SetupFee                *FixedPrice `json:"setup_fee,omitempty"`
+		SetupFeeFailureAction   string      `json:"setup_fee_failure_action,omitempty"`  //default: CANCEL
+		PaymentFailureThreshold uint64      `json:"payment_failure_threshold,omitempty"` //default: 0, min: 0, max: 999
+	}
+
+	// Taxes represents the tax details
+	Taxes struct {
+		Percentage string `json:"percentage"`
+		Inclusive  bool   `json:"inclusive,omitempty"` //default: true
 	}
 )
 
