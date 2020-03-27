@@ -1052,8 +1052,8 @@ type (
 
 	//Resource v1 for old hooks
 	SuspendBillingAgreementV1Response struct {
-		ID       string           `json:"id"`
-		Resource BillingAgreement `json:"resource"`
+		ID       string             `json:"id"`
+		Resource BillingAgreementV1 `json:"resource"`
 	}
 
 	BillingAgreementV1 struct {
