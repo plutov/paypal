@@ -113,6 +113,21 @@ const (
 	LinkRelActionURL string = "action_url"
 )
 
+// Possible values for Operation in PatchObject
+const (
+	Add     string = "add"
+	Replace string = "replace"
+	Remove  string = "remove"
+)
+
+// Possible values for Path in PatchObject
+const (
+	Description string = "/description"
+	Category    string = "/category"
+	ImageUrl    string = "/image_url"
+	HomeUrl     string = "/home_url"
+)
+
 type (
 	// JSONTime overrides MarshalJson method to format in ISO8601
 	JSONTime time.Time
@@ -988,6 +1003,51 @@ type (
 	DefaultResponse struct {
 		Code    int    `json:"code"`
 		Message string `json:"message"`
+	}
+
+	// CreateProduct represents body parameters needed to create PayPal product
+	CreateProduct struct {
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		Type        string `json:"type"`
+		Category    string `json:"category,omitempty"`
+		ImageUrl    string `json:"image_url,omitempty"`
+		HomeUrl     string `json:"home_url,omitempty"`
+	}
+
+	// Product represents PayPal product
+	Product struct {
+		ID          string  `json:"id"`
+		Name        string  `json:"name"`
+		Description string  `json:"description"`
+		Type        string  `json:"type"`
+		Category    string  `json:"category,omitempty"`
+		ImageUrl    string  `json:"image_url,omitempty"`
+		HomeUrl     string  `json:"home_url,omitempty"`
+		CreateTime  string  `json:"creat_time,omitempty"`
+		UpdateTime  string  `json:"updat_time,omitempty"`
+		Links       []*Link `json:"links,omitempty"`
+	}
+
+	// ListProductsParams represents query params for list products call
+	ListProductsParams struct {
+		PageSize      uint64 `json:"page_size"`      //default: 10 min:1 max:20
+		Page          uint64 `json:"page"`           //default: 1 min:1 max:100000
+		TotalRequired bool   `json:"total_required"` //default: false
+	}
+
+	// ListProductsResponse represents the response od list products
+	ListProductsResponse struct {
+		TotalItems uint64     `json:"total_items"`
+		TotalPages uint64     `json:"total_pages"`
+		Products   []*Product `json:"products"`
+		Links      []*Link    `json:"links"`
+	}
+
+	PatchObject struct {
+		Operation string `json:"op"`
+		Path      string `json:"path"`
+		Value     string `json:"value"`
 	}
 )
 
