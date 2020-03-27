@@ -1052,10 +1052,10 @@ type (
 
 	// ListProductsResponse represents the response od list products
 	ListProductsResponse struct {
-		TotalItems uint64     `json:"total_items"` //min: 0, max: 500000000
-		TotalPages uint64     `json:"total_pages"` //min: 0, max: 100000000
+		TotalItems uint64     `json:"total_items,omitempty"` //min: 0, max: 500000000
+		TotalPages uint64     `json:"total_pages,omitempty"` //min: 0, max: 100000000
 		Products   []*Product `json:"products"`
-		Links      []*Link    `json:"links"`       //Read only
+		Links      []*Link    `json:"links"`                 //Read only
 	}
 
 	// PatchObject represents the object used for updating PayPal objects
@@ -1173,6 +1173,22 @@ type (
 		CreateTime 		   string 			   `json:"create_time"` 				 //Read only
 		UpdateTime         string 		   	   `json:"update_time"` 				 //Read only
 		Links         	   []*Link 		   	   `json:"links"` 				 		 //Read only
+	}
+
+	// ListPlansParams represents query params for list products call
+	ListPlansParams struct {
+		ProductID     string `json:"product_id,omitempty"`
+		PageSize      uint64 `json:"page_size,omitempty"`      //default: 10, min:1, max:20
+		Page          uint64 `json:"page,omitempty"`           //default: 1, min:1, max:100000
+		TotalRequired bool   `json:"total_required,omitempty"` //default: false
+	}
+
+	// ListPlansResponse represents the list of the plans
+	ListPlansResponse struct {
+		TotalItems uint64     `json:"total_items,omitempty"` //min: 0, max: 500000000
+		TotalPages uint64     `json:"total_pages,omitempty"` //min: 0, max: 100000000
+		Products   []*Plan    `json:"plans"`
+		Links      []*Link    `json:"links"`                 //Read only
 	}
 )
 
