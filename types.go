@@ -1190,6 +1190,17 @@ type (
 		Products   []*Plan    `json:"plans"`
 		Links      []*Link    `json:"links"`                 //Read only
 	}
+
+	// UpdatePricingSchemasListRequest represents an array of pricing schemes to update plans billing cycles
+	UpdatePricingSchemasListRequest struct {
+		PricingSchemes []*UpdatePricingSchemaRequest `json:"pricing_schemes"`
+	}
+
+	// UpdatePricingSchemaRequest represents a pricing schema to update plans billing cycle
+	UpdatePricingSchemaRequest struct {
+		BillingCycleSequence uint64 `json:"billing_cycle_sequence"` //min: 1, max: 99
+		PricingScheme PricingScheme `json:"pricing_scheme"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct

@@ -65,10 +65,10 @@ func (c *Client) ShowProduct(productID string) (*Product, error) {
 //-----------------------------------------------
 // | Attribute or Object | Operation			|
 // ----------------------------------------------
-// | description         | add, replace, remove |
-// | category       	 | add, replace, remove |
-// | image_url			 | add, replace, remove |
-// | home_url			 | add, replace, remove |
+// | /description         | add, replace, remove |
+// | /category       	 | add, replace, remove |
+// | /image_url			 | add, replace, remove |
+// | /home_url			 | add, replace, remove |
 // ----------------------------------------------
 // Endpoint: PATCH /v1/catalogs/products/{product_id}
 func (c *Client) UpdateProduct(productID string, patchObject []*PatchObject) error {
