@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-// CreatePlan - Use this call to create a plan
+// CreatePlan creates plan
 // Endpoint: POST /v1/billing/plans
 func (c *Client) CreatePlan(plan *CreatePlan) (*Plan, error) {
 	resp := &Plan{}
@@ -61,7 +61,7 @@ func (c *Client) ShowPlan(planID string) (*Plan, error) {
 	return resp, nil
 }
 
-// ActivatePlan shows details for a plan by ID
+// ActivatePlan updates plan status to active
 // Endpoint: POST /v1/billing/plans/{plan_id}/activate
 func (c *Client) ActivatePlan(planID string) error {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans/"+planID+"/activate"), nil)
@@ -72,7 +72,7 @@ func (c *Client) ActivatePlan(planID string) error {
 	return c.SendWithAuth(req, nil)
 }
 
-// DeactivatePlan shows details for a plan by ID
+// DeactivatePlan updates plan status to inactive
 // Endpoint: POST /v1/billing/plans/{plan_id}/deactivate
 func (c *Client) DeactivatePlan(planID string) error {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans/"+planID+"/deactivate"), nil)
