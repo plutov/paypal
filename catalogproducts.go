@@ -7,7 +7,7 @@ import (
 
 // CreateProduct - Use this call to create a catalog product
 // Endpoint: POST /v1/catalogs/products
-func (c *Client) CreateProduct(product CreateProduct) (*Product, error) {
+func (c *Client) CreateProduct(product CreateProductRequest) (*Product, error) {
 	resp := &Product{}
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), product)
@@ -24,7 +24,7 @@ func (c *Client) CreateProduct(product CreateProduct) (*Product, error) {
 
 // ListAllProducts lists all products
 // Endpoint: GET /v1/catalogs/products
-func (c *Client) ListAllProducts(params *ListProductsParams) (*ListProductsResponse, error) {
+func (c *Client) ListAllProducts(params *ListProductsRequest) (*ListProductsResponse, error) {
 	resp := &ListProductsResponse{}
 
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), nil)
@@ -71,8 +71,8 @@ func (c *Client) ShowProduct(productID string) (*Product, error) {
 // | home_url			 | add, replace, remove |
 // ----------------------------------------------
 // Endpoint: PATCH /v1/catalogs/products/{product_id}
-func (c *Client) UpdateProduct(productID string, patchObject []*PatchObject) error {
-	req, err := c.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products/"+productID), patchObject)
+func (c *Client) UpdateProduct(productID string, body []*PatchObject) error {
+	req, err := c.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products/"+productID), body)
 	if err != nil {
 		return err
 	}
