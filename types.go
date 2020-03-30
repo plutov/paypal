@@ -1070,6 +1070,19 @@ type (
 		Value     string `json:"value"`
 	}
 
+	//Resource v1 for old hooks
+	SuspendBillingAgreementV1Response struct {
+		ID       string             `json:"id"`
+		Resource BillingAgreementV1 `json:"resource"`
+	}
+
+	BillingAgreementV1 struct {
+		ID               string `json:"id"`
+		PlanID           string `json:"plan_id"`
+		Status           string `json:"status"`
+		StatusUpdateTime string `json:"status_update_time"`
+	}
+
 	// CreatePlan represents body parameters needed to create PayPal plan
 	// Status represents the initial state of the plan. Allowed input values are CREATED and ACTIVE. The allowed values are:
 	// ----------------------------------------------------------------------------------------------
