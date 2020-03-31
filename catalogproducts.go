@@ -7,6 +7,12 @@ import (
 
 // CreateProduct - Use this call to create a catalog product
 // Endpoint: POST /v1/catalogs/products
+// Type represents the product type. Indicates whether the product is physical or tangible goods, or a service. The allowed values are:
+// -----------------------------
+// | PHYSICAL | Physical goods |
+// | DIGITAL  | Digital goods  |
+// | SERVICE  | Service goods  |
+// -----------------------------
 func (c *Client) CreateProduct(product CreateProductRequest) (*Product, error) {
 	resp := &Product{}
 
@@ -15,7 +21,7 @@ func (c *Client) CreateProduct(product CreateProductRequest) (*Product, error) {
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -36,7 +42,7 @@ func (c *Client) ListAllProducts(params *ListProductsRequest) (*ListProductsResp
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -53,7 +59,7 @@ func (c *Client) ShowProduct(productID string) (*Product, error) {
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -77,5 +83,5 @@ func (c *Client) UpdateProduct(productID string, body []*PatchObject) error {
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
