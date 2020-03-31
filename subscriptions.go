@@ -12,7 +12,7 @@ func (c *Client) CreateSubscription(subscription CreateSubscriptionRequest) (*Su
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -31,7 +31,7 @@ func (c *Client) ShowSubscription(subscriptionID string, params *ShowSubscriptio
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -46,7 +46,7 @@ func (c *Client) ActivateSubscription(subscriptionID string, body UpdateSubscrip
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
 
 // CancelSubscription cancels subscription by ID
@@ -57,7 +57,7 @@ func (c *Client) CancelSubscription(subscriptionID string, body UpdateSubscripti
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
 
 // SuspendSubscription suspends subscription by ID
@@ -68,7 +68,7 @@ func (c *Client) SuspendSubscription(subscriptionID string, body UpdateSubscript
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
 
 // UpdateSubscription updates subscription by ID
@@ -86,7 +86,7 @@ func (c *Client) UpdateSubscription(subscriptionID string, body []*PatchObject) 
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
 
 // CaptureAuthorizedPaymentOnSubscription captures an authorized payment from the subscriber on the subscription
@@ -97,7 +97,7 @@ func (c *Client) CaptureAuthorizedPaymentOnSubscription(subscriptionID string, b
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
 
 // ListTransactionsForSubscription lists transactions for subscription
@@ -113,7 +113,7 @@ func (c *Client) ListTransactionsForSubscription(subscriptionID string, params *
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -131,7 +131,7 @@ func (c *Client) ReviseSubscription(subscriptionID string, body *ReviseSubscript
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
