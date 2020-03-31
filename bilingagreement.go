@@ -5,7 +5,7 @@ import (
 )
 
 type AgreementRequest struct {
-	Note string
+	Note string `json:"note"`
 }
 
 // SuspendAgreement returns status code and message
@@ -20,7 +20,7 @@ func (c *Client) SuspendAgreement(bAID string, agr AgreementRequest) (*DefaultRe
 		return resp, err
 	}
 
-	err = c.SendWithAuth(req, resp)
+	err = c.SendWithBasicAuth(req, resp)
 	return resp, err
 }
 
@@ -36,6 +36,6 @@ func (c *Client) ReActivateAgreement(bAID string, agr AgreementRequest) (*Defaul
 		return resp, err
 	}
 
-	err = c.SendWithAuth(req, resp)
+	err = c.SendWithBasicAuth(req, resp)
 	return resp, err
 }
