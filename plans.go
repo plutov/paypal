@@ -15,7 +15,7 @@ func (c *Client) CreatePlan(plan *CreatePlan) (*Plan, error) {
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -37,7 +37,7 @@ func (c *Client) ListAllPlans(params *ListPlansParams) (*ListPlansResponse, erro
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -54,7 +54,7 @@ func (c *Client) ShowPlan(planID string) (*Plan, error) {
 		return nil, err
 	}
 
-	if err = c.SendWithAuth(req, resp); err != nil {
+	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
 	}
 
@@ -69,7 +69,7 @@ func (c *Client) ActivatePlan(planID string) error {
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
 
 // DeactivatePlan updates plan status to inactive
@@ -80,7 +80,7 @@ func (c *Client) DeactivatePlan(planID string) error {
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
 
 // UpdatePlan updates plan by ID.
@@ -103,7 +103,7 @@ func (c *Client) UpdatePlan(planID string, patchObject []*PatchObject) error {
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
 
 // UpdatePricing updates pricing for a plan
@@ -114,5 +114,5 @@ func (c *Client) UpdatePricing(planID string,updatePricing UpdatePricingSchemasL
 		return err
 	}
 
-	return c.SendWithAuth(req, nil)
+	return c.SendWithBasicAuth(req, nil)
 }
