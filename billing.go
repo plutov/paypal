@@ -62,7 +62,7 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 // ActivatePlan activates a billing plan
 // By default, a new plan is not activated
 // Endpoint: PATCH /v2/payments/billing-plans/
-func (c *Client) ActivatePlan(planID string) error {
+func (c *Client) ActivateBillingPlan(planID string) error {
 	buf := bytes.NewBuffer([]byte(`[{"op":"replace","path":"/","value":{"state":"ACTIVE"}}]`))
 	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/billing-plans/"+planID), buf)
 	if err != nil {

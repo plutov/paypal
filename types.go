@@ -1043,27 +1043,41 @@ type (
 	}
 
 	// CreateProductRequest represents body parameters needed to create PayPal product
+	// Type represents the product type. Indicates whether the product is physical or tangible goods, or a service. The allowed values are:
+	// ---------------------------------------------------------
+	// | PHYSICAL | Physical goods.							   |
+	// | PHYSICAL | Digital goods.							   |
+	// | PHYSICAL | A service. For example, technical support. |
+	// ---------------------------------------------------------
+	// You can see category allowed values in PayPal docs -> https://developer.paypal.com/docs/api/catalog-products/v1/#products-create-request-body
 	CreateProductRequest struct {
 		Name        string `json:"name"`
 		Description string `json:"description"`
-		Type        string `json:"type"`
+		Type        string `json:"type"` 			    //default: PHYSICAL
 		Category    string `json:"category, omitempty"`
 		ImageUrl    string `json:"image_url, omitempty"`
 		HomeUrl     string `json:"home_url, omitempty"`
 	}
 
 	// Product represents PayPal product
+	// Type represents the product type. Indicates whether the product is physical or tangible goods, or a service. The allowed values are:
+	// ---------------------------------------------------------
+	// | PHYSICAL | Physical goods.							   |
+	// | PHYSICAL | Digital goods.							   |
+	// | PHYSICAL | A service. For example, technical support. |
+	// ---------------------------------------------------------
+	// You can see category allowed values in PayPal docs -> https://developer.paypal.com/docs/api/catalog-products/v1/#products-create-request-body
 	Product struct {
 		ID          string  `json:"id"`
 		Name        string  `json:"name"`
 		Description string  `json:"description"`
-		Type        string  `json:"type"`
+		Type        string  `json:"type"`                 //default: PHYSICAL
 		Category    string  `json:"category, omitempty"`
 		ImageUrl    string  `json:"image_url, omitempty"`
 		HomeUrl     string  `json:"home_url, omitempty"`
-		CreateTime  string  `json:"creat_time, omitempty"`
-		UpdateTime  string  `json:"updat_time, omitempty"`
-		Links       []*Link `json:"links, omitempty"`
+		CreateTime  string  `json:"creat_time, omitempty"` //Read only
+		UpdateTime  string  `json:"updat_time, omitempty"` //Read only
+		Links       []*Link `json:"links, omitempty"`      //Read only
 	}
 
 	// ListProductsRequest represents query params for list products call
@@ -1075,12 +1089,13 @@ type (
 
 	// ListProductsResponse represents the response od list products
 	ListProductsResponse struct {
-		TotalItems uint64     `json:"total_items"`
-		TotalPages uint64     `json:"total_pages"`
+		TotalItems uint64     `json:"total_items, omitempty"` //min: 0, max: 500000000
+		TotalPages uint64     `json:"total_pages, omitempty"` //min: 0, max: 100000000
 		Products   []*Product `json:"products"`
-		Links      []*Link    `json:"links"`
+		Links      []*Link    `json:"links"`                 //Read only
 	}
 
+	// PatchObject represents the object used for updating PayPal objects
 	PatchObject struct {
 		Operation string `json:"op"`
 		Path      string `json:"path"`
@@ -1098,6 +1113,131 @@ type (
 		PlanID           string `json:"plan_id"`
 		Status           string `json:"status"`
 		StatusUpdateTime string `json:"status_update_time"`
+	}
+
+	// CreatePlan represents body parameters needed to create PayPal plan
+	// Status represents the initial state of the plan. Allowed input values are CREATED and ACTIVE. The allowed values are:
+	// ----------------------------------------------------------------------------------------------
+	// | CREATED  | The plan was created. You cannot create subscriptions for a plan in this state. |
+	// | INACTIVE | The plan is inactive.															|
+	// | ACTIVE   | The plan is active. You can only create subscriptions for a plan in this state. |
+	// ----------------------------------------------------------------------------------------------
+	CreatePlan struct {
+		ProductID          string              `json:"product_id"`
+		Name               string              `json:"name"`
+		Status             string              `json:"status"`                //default: ACTIVE
+		Description        string              `json:"description, omitempty"`
+		BillingCycles      []*BillingCycle     `json:"billing_cycles"`
+		PaymentPreferences *PaymentPreferences `json:"payment_preferences"`
+		Taxes              *Taxes              `json:"taxes, omitempty"`
+		QuantitySupported bool 				   `json:"quantity_supported, omitempty"`
+	}
+
+	// BillingCycle represents the cycles for billing the subscription
+	// The tenure type of the billing cycle. In case of a plan having trial period, only 1 trial period is allowed per plan. The possible values are:
+	// --------------------------------------
+	// | REGULAR | A regular billing cycle. |
+	// | TRIAL   | A trial billing cycle.   |
+	// --------------------------------------
+	BillingCycle struct {
+		PricingScheme *PricingScheme `json:"pricing_scheme, omitempty"` //Free Trial Cycle doesn't require scheme
+		Frequency     Frequency      `json:"frequency"`
+		TenureType    string         `json:"tenure_type"`
+		Sequence      uint64         `json:"sequence"`                 //min: 0, max: 99
+		TotalCycles   uint64         `json:"total_cycles, omitempty"`   //default: 1, min: 0, max: 999
+	}
+
+	// PricingScheme represents the active pricing scheme for this billing cycle.
+	// A free trial billing cycle does not require a pricing scheme.
+	PricingScheme struct {
+		Version    uint64 `json:"version, omitempty"`     //Read only
+		FixedPrice *Money `json:"fixed_price"`
+		CreateTime string `json:"create_time, omitempty"` //Read only
+		UpdateTime string `json:"update_time, omitempty"` //Read only
+	}
+
+	// Frequency represents the frequency details for this billing cycle.
+	// Interval unit is the interval at which the subscription is charged or billed
+	// These are the possible combinations
+	// --------------------------------------
+	// | Interval unit | Max Interval count |
+	// --------------------------------------
+	// | DAY           | 365                |
+	// | WEEK          | 52                 |
+	// | MONTH         | 12                 |
+	// | YEAR          | 1                  |
+	// --------------------------------------
+	Frequency struct {
+		IntervalUnit  string `json:"interval_unit"`
+		IntervalCount uint64 `json:"interval_count, omitempty"`
+	}
+
+	// PaymentPreferences represents the payment preferences for a subscription
+	// SetupFeeFailureAction represents the action to take on the subscription if the initial payment for the setup fails. The possible values are:
+	// -------------------------------------------------------------------------------------
+	// | CONTINUE | Continues the subscription if the initial payment for the setup fails. |
+	// | CANCEL   | Cancels the subscription if the initial payment for the setup fails.   |
+	// -------------------------------------------------------------------------------------
+	PaymentPreferences struct {
+		AutoBillOutstanding     bool   `json:"auto_bill_outstanding, omitempty"`     //default true
+		SetupFee                *Money `json:"setup_fee, omitempty"`
+		SetupFeeFailureAction   string `json:"setup_fee_failure_action, omitempty"`  //default: CANCEL
+		PaymentFailureThreshold uint64 `json:"payment_failure_threshold, omitempty"` //default: 0, min: 0, max: 999
+	}
+
+	// Taxes represents the tax details
+	Taxes struct {
+		Percentage string `json:"percentage"`
+		Inclusive  bool   `json:"inclusive, omitempty"` //default: true
+	}
+
+	// Plan represents the details for the subscription plan for paying
+	// Status represents the initial state of the plan. Allowed input values are CREATED and ACTIVE. The allowed values are:
+	// ----------------------------------------------------------------------------------------------
+	// | CREATED  | The plan was created. You cannot create subscriptions for a plan in this state. |
+	// | INACTIVE | The plan is inactive.															|
+	// | ACTIVE   | The plan is active. You can only create subscriptions for a plan in this state. |
+	// ----------------------------------------------------------------------------------------------
+	Plan struct {
+		ID 				   string 			   `json:"id"`
+		ProductID          string              `json:"product_id"`
+		Name               string              `json:"name"`
+		Status             string              `json:"status"`
+		Description        string              `json:"description, omitempty"`
+		BillingCycles      []*BillingCycle     `json:"billing_cycles"`
+		PaymentPreferences *PaymentPreferences `json:"payment_preferences"`
+		Taxes              *Taxes              `json:"taxes, omitempty"`
+		QuantitySupported  bool 			   `json:"quantity_supported, omitempty"`
+		CreateTime 		   string 			   `json:"create_time"` 				 //Read only
+		UpdateTime         string 		   	   `json:"update_time"` 				 //Read only
+		Links         	   []*Link 		   	   `json:"links"` 				 		 //Read only
+	}
+
+	// ListPlansParams represents query params for list products call
+	ListPlansParams struct {
+		ProductID     string `json:"product_id, omitempty"`
+		PageSize      uint64 `json:"page_size, omitempty"`      //default: 10, min:1, max:20
+		Page          uint64 `json:"page, omitempty"`           //default: 1, min:1, max:100000
+		TotalRequired bool   `json:"total_required, omitempty"` //default: false
+	}
+
+	// ListPlansResponse represents the list of the plans
+	ListPlansResponse struct {
+		TotalItems uint64     `json:"total_items, omitempty"` //min: 0, max: 500000000
+		TotalPages uint64     `json:"total_pages, omitempty"` //min: 0, max: 100000000
+		Products   []*Plan    `json:"plans"`
+		Links      []*Link    `json:"links"`                 //Read only
+	}
+
+	// UpdatePricingSchemasListRequest represents an array of pricing schemes to update plans billing cycles
+	UpdatePricingSchemasListRequest struct {
+		PricingSchemes []*UpdatePricingSchemaRequest `json:"pricing_schemes"`
+	}
+
+	// UpdatePricingSchemaRequest represents a pricing schema to update plans billing cycle
+	UpdatePricingSchemaRequest struct {
+		BillingCycleSequence uint64 `json:"billing_cycle_sequence"` //min: 1, max: 99
+		PricingScheme *PricingScheme `json:"pricing_scheme"`
 	}
 
 	// PaymentMethod represents the customer and merchant payment preferences
