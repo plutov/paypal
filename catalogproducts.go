@@ -13,7 +13,7 @@ import (
 // | DIGITAL  | Digital goods  |
 // | SERVICE  | Service goods  |
 // -----------------------------
-func (c *Client) CreateProduct(product CreateProductRequest) (*Product, error) {
+func (c *Client) CreateProduct(product *CreateProductRequest) (*Product, error) {
 	resp := &Product{}
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), product)
