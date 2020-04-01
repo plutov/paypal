@@ -4,7 +4,7 @@ import "fmt"
 
 // CreateSubscription - Use this call to create a subscription
 // Endpoint: POST /v1/billing/subscriptions
-func (c *Client) CreateSubscription(subscription CreateSubscriptionRequest) (*Subscription, error) {
+func (c *Client) CreateSubscription(subscription *CreateSubscriptionRequest) (*Subscription, error) {
 	resp := &Subscription{}
 
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions"), subscription)
