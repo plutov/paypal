@@ -168,15 +168,36 @@ type (
 		Value    string `json:"value"`
 	}
 
-	// ApplicationContext struct
+	// ApplicationContext represents the application context, which customizes
+	// the payer experience during the subscription approval process with PayPal.
+	// ShippingPreference represents the location from which the shipping address is derived.
+	// The possible values are:
+	// ------------------------------------------------------------------------------------------------------------
+	// | GET_FROM_FILE        | Get the customer-provided shipping address on the PayPal site.                    |
+	// | NO_SHIPPING          | Redacts the shipping address from the PayPal site. Recommended for digital goods. |
+	// | SET_PROVIDED_ADDRESS | Get the merchant-provided address. The customer cannot change this                |
+	// |                      | address on the PayPal site. If merchant does not pass an address, customer        |
+	// |                      | can choose the address on PayPal pages.                                           |
+	// ------------------------------------------------------------------------------------------------------------
+	// UserAction configures the label name to Continue or Subscribe Now for subscription consent experience.
+	// The possible values are:
+	// ------------------------------------------------------------------------------------------------------
+	// | CONTINUE      | After you redirect the customer to the PayPal subscription consent page,			|
+	// |               | a Continue button appears. Use this option when you want to control the activation |
+	// |               | of the subscription and do not want PayPal to activate the subscription.			|
+	// | SUBSCRIBE_NOW | After you redirect the customer to the PayPal subscription consent page, 			|
+	// |               | a Subscribe Now button appears. Use this option when you want PayPal to activate   |
+	// |               | the subscription.																	|
+	// ------------------------------------------------------------------------------------------------------
 	ApplicationContext struct {
-		BrandName          string `json:"brand_name, omitempty"`
-		Locale             string `json:"locale, omitempty"`
-		LandingPage        string `json:"landing_page, omitempty"`
-		ShippingPreference string `json:"shipping_preference, omitempty"`
-		UserAction         string `json:"user_action, omitempty"`
-		ReturnURL          string `json:"return_url, omitempty"`
-		CancelURL          string `json:"cancel_url, omitempty"`
+		BrandName          string         `json:"brand_name, omitempty"`
+		Locale             string         `json:"locale, omitempty"`
+		LandingPage        string         `json:"landing_page, omitempty"`
+		ShippingPreference string         `json:"shipping_preference, omitempty"` //default: GET_FROM_FILE
+		UserAction         string         `json:"user_action, omitempty"`         //default: SUBSCRIBE_NOW
+		PaymentMethod      *PaymentMethod `json:"payment_method, omitempty"`
+		ReturnURL          string         `json:"return_url"`
+		CancelURL          string         `json:"cancel_url"`
 	}
 
 	// Authorization struct
@@ -665,28 +686,33 @@ type (
 		Links        []Link        `json:"links"`
 	}
 
-	// PaymentSource structure
+	// PaymentSource represents the payment source definitions
 	PaymentSource struct {
 		Card  *PaymentSourceCard  `json:"card"`
 		Token *PaymentSourceToken `json:"token"`
 	}
 
-	// PaymentSourceCard structure
+	// PaymentSourceCard represents card details
+	// SecurityCode represents the three- or four-digit security code of the card. Also known as the CVV, CVC, CVN, CVE, or CID.
 	PaymentSourceCard struct {
-		ID             string              `json:"id"`
-		Name           string              `json:"name"`
-		Number         string              `json:"number"`
-		Expiry         string              `json:"expiry"`
-		SecurityCode   string              `json:"security_code"`
-		LastDigits     string              `json:"last_digits"`
-		CardType       string              `json:"card_type"`
-		BillingAddress *CardBillingAddress `json:"billing_address"`
+		ID             string           `json:"id, omitempty"`
+		Name           string           `json:"name, omitempty"`
+		Number         string           `json:"number"`
+		Expiry         string           `json:"expiry"`
+		SecurityCode   string           `json:"security_code, omitempty"`
+		LastDigits     string           `json:"last_digits, omitempty"`
+		CardType       string           `json:"card_type, omitempty"`
+		BillingAddress *AddressPortable `json:"billing_address, omitempty"`
 	}
 
-	// CardBillingAddress structure
-	CardBillingAddress struct {
+	// AddressPortable represents address details
+	// More info -> https://developer.paypal.com/docs/api/subscriptions/v1/#definition-address_portable
+	AddressPortable struct {
 		AddressLine1 string `json:"address_line_1"`
 		AddressLine2 string `json:"address_line_2"`
+		AddressLine3 string `json:"address_line_3"`
+		AdminArea4   string `json:"admin_area_4"`
+		AdminArea3   string `json:"admin_area_3"`
 		AdminArea2   string `json:"admin_area_2"`
 		AdminArea1   string `json:"admin_area_1"`
 		PostalCode   string `json:"postal_code"`
@@ -805,7 +831,8 @@ type (
 		Phone         string `json:"phone, omitempty"`
 	}
 
-	// ShippingDetailAddressPortable used with create orders
+	// ShippingDetailAddressPortable represents address details
+	// More info -> https://developer.paypal.com/docs/api/subscriptions/v1/#definition-shipping_detail.address_portable
 	ShippingDetailAddressPortable struct {
 		AddressLine1 string `json:"address_line_1, omitempty"`
 		AddressLine2 string `json:"address_line_2, omitempty"`
@@ -815,14 +842,14 @@ type (
 		CountryCode  string `json:"country_code, omitempty"`
 	}
 
-	// Name struct
-	Name struct {
+	// ShippingDetailsName represents shipping details full name
+	ShippingDetailsName struct {
 		FullName string `json:"full_name, omitempty"`
 	}
 
-	// ShippingDetail struct
+	// ShippingDetail represents the shipping details
 	ShippingDetail struct {
-		Name    *Name                          `json:"name, omitempty"`
+		Name    *ShippingDetailsName           `json:"name, omitempty"`
 		Address *ShippingDetailAddressPortable `json:"address, omitempty"`
 	}
 
@@ -836,19 +863,24 @@ type (
 		ExpiresIn    expirationTime `json:"expires_in"`
 	}
 
-	// Transaction struct
+	// Since it is not used i change it @gligor
+	// Transaction represents details about transaction
 	Transaction struct {
-		Amount           *Amount         `json:"amount"`
-		Description      string          `json:"description, omitempty"`
-		ItemList         *ItemList       `json:"item_list, omitempty"`
-		InvoiceNumber    string          `json:"invoice_number, omitempty"`
-		Custom           string          `json:"custom, omitempty"`
-		SoftDescriptor   string          `json:"soft_descriptor, omitempty"`
-		RelatedResources []Related       `json:"related_resources, omitempty"`
-		PaymentOptions   *PaymentOptions `json:"payment_options, omitempty"`
-		NotifyURL        string          `json:"notify_url, omitempty"`
-		OrderURL         string          `json:"order_url, omitempty"`
-		Payee            *Payee          `json:"payee, omitempty"`
+		ID                  string               `json:"id, omitempty"`                    //Read only
+		Status              string               `json:"status, omitempty"`                //Read only
+		AmountWithBreakdown *AmountWithBreakdown `json:"amount_with_breakdown, omitempty"` //Read only
+		PayerName           *Name                `json:"payer_name, omitempty"`            //Read only
+		PayerEmail          string               `json:"payer_email, omitempty"`           //Read only
+		Time                string               `json:"time, omitempty"`                  //Read only
+	}
+
+	// AmountWithBreakdown represents the breakdown details for the amount. Includes the gross, tax, fee, and shipping amounts.
+	AmountWithBreakdown struct {
+		GrossAmount    *Money `json:"gross_amount"`               //Read only
+		FeeAmount      *Money `json:"fee_amount, omitempty"`      //Read only
+		ShippingAmount *Money `json:"shipping_amount, omitempty"` //Read only
+		TaxAmount      *Money `json:"tax_amount, omitempty"`      //Read only
+		NetAmount      *Money `json:"net_amount"`                 //Read only
 	}
 
 	//Payee struct
@@ -1010,7 +1042,7 @@ type (
 		Message string `json:"message"`
 	}
 
-	// CreateProduct represents body parameters needed to create PayPal product
+	// CreateProductRequest represents body parameters needed to create PayPal product
 	// Type represents the product type. Indicates whether the product is physical or tangible goods, or a service. The allowed values are:
 	// ---------------------------------------------------------
 	// | PHYSICAL | Physical goods.							   |
@@ -1018,7 +1050,7 @@ type (
 	// | PHYSICAL | A service. For example, technical support. |
 	// ---------------------------------------------------------
 	// You can see category allowed values in PayPal docs -> https://developer.paypal.com/docs/api/catalog-products/v1/#products-create-request-body
-	CreateProduct struct {
+	CreateProductRequest struct {
 		Name        string `json:"name"`
 		Description string `json:"description"`
 		Type        string `json:"type"` 			    //default: PHYSICAL
@@ -1048,10 +1080,10 @@ type (
 		Links       []*Link `json:"links, omitempty"`      //Read only
 	}
 
-	// ListProductsParams represents query params for list products call
-	ListProductsParams struct {
-		PageSize      uint64 `json:"page_size"`      //default: 10, min:1, max:20
-		Page          uint64 `json:"page"`           //default: 1, min:1, max:100000
+	// ListProductsRequest represents query params for list products call
+	ListProductsRequest struct {
+		PageSize      uint64 `json:"page_size"`      //default: 10 min:1 max:20
+		Page          uint64 `json:"page"`           //default: 1 min:1 max:100000
 		TotalRequired bool   `json:"total_required"` //default: false
 	}
 
@@ -1206,6 +1238,265 @@ type (
 	UpdatePricingSchemaRequest struct {
 		BillingCycleSequence uint64 `json:"billing_cycle_sequence"` //min: 1, max: 99
 		PricingScheme *PricingScheme `json:"pricing_scheme"`
+	}
+
+	// PaymentMethod represents the customer and merchant payment preferences
+	// Currently only PAYPAl payment is supported
+	// PayeePreferred represents the merchant-preferred payment sources. The possible values are:
+	// -------------------------------------------------------------------------------------------------
+	// | UNRESTRICTED 				| Accepts any type of payment from the customer.				   |
+	// | IMMEDIATE_PAYMENT_REQUIRED | Accepts only immediate payment from the customer. For example,   |
+	// | 							| credit card, PayPal balance, or instant ACH. Ensures that at the |
+	// | 							| time of capture, the payment does not have the `pending` status. |
+	// -------------------------------------------------------------------------------------------------
+	// Category provides context (e.g. frequency of payment (Single, Recurring) along with whether
+	// (Customer is Present, Not Present) for the payment being processed. For Card and PayPal Vaulted/Billing
+	// Agreement transactions, this helps specify the appropriate indicators to the networks
+	// (e.g. Mastercard, Visa) which ensures compliance as well as ensure a better auth-rate.
+	// For bank processing, indicates to clearing house whether the transaction is recurring or not depending
+	// on the option chosen. The possible values are:
+	// --------------------------------------------------------------------------------------------------------------
+	// | CUSTOMER_PRESENT_SINGLE_PURCHASE | If the payments is an e-commerce payment initiated by the customer.     |
+	// | 								  | Customer typically enters payment information (e.g. card number,  	 	|
+	// | 								  | approves payment within the PayPal Checkout flow) and such information  |
+	// | 								  | that has not been previously stored on file.							|
+	// | CUSTOMER_NOT_PRESENT_RECURRING   | Subsequent recurring payments (e.g. subscriptions with a fixed amount	|
+	// |				 				  | on a predefined schedule when customer is not present.					|
+	// | CUSTOMER_PRESENT_RECURRING_FIRST | The first payment initiated by the customer which is expected to be		|
+	// | 								  | followed by a series of subsequent recurring payments transactions		|
+	// | 								  | (e.g. subscriptions with a fixed amount on a predefined schedule when	|
+	// | 								  | customer is not present. This is typically used for scenarios where		|
+	// | 								  | customer stores credentials and makes a purchase on a given date and	|
+	// |                                  | also set’s up a subscription.											|
+	// | CUSTOMER_PRESENT_UNSCHEDULED     | Also known as (card-on-file) transactions. Payment details are stored	|
+	// | 								  | to enable checkout with one-click, or simply to streamline the checkout |
+	// | 								  | process. For card transaction customers typically do not enter a CVC	|
+	// | 								  | number as part of the Checkout process.									|
+	// | CUSTOMER_NOT_PRESENT_UNSCHEDULED | Unscheduled payments that are not recurring on a predefined schedule	|
+	// | 								  | (e.g. balance top-up).													|
+	// | MAIL_ORDER_TELEPHONE_ORDER       | Payments that are initiated by the customer via the merchant by mail 	|
+	// | 								  | or telephone.															|
+	// --------------------------------------------------------------------------------------------------------------
+	PaymentMethod struct {
+		PayerSelected  string `json:"payer_selected, omitempty"`  //default: PAYPAL
+		PayeePreferred string `json:"payee_preferred, omitempty"` //default: UNRESTRICTED
+		Category       string `json:"category, omitempty"`        //default: CUSTOMER_PRESENT_SINGLE_PURCHASE
+	}
+
+	// CreateSubscriptionRequest represents body parameters needed to create PayPal subscription
+	CreateSubscriptionRequest struct {
+		PlanID             string              `json:"plan_id"`
+		StartTime          string              `json:"start_time, omitempty"` //default: current time
+		Quantity           string              `json:"quantity, omitempty"`
+		ShippingAmount     *Money              `json:"shipping_amount, omitempty"`
+		Subscriber         *SubscriberRequest  `json:"subscriber, omitempty"`
+		AutoRenewal        bool                `json:"auto_renewal, omitempty"`
+		ApplicationContext *ApplicationContext `json:"application_context, omitempty"`
+	}
+
+	// SubscriberRequest represents the subscriber details
+	SubscriberRequest struct {
+		Name            *PayerName      `json:"name, omitempty, omitempty"`
+		EmailAddress    string          `json:"email_address, omitempty"`
+		PayerID         string          `json:"payer_id, omitempty"` //Read only
+		ShippingAddress *ShippingDetail `json:"shipping_address, omitempty"`
+		PaymentSource   *PaymentSource  `json:"payment_source, omitempty"`
+	}
+
+	// Subscriber represents the subscriber details
+	Subscriber struct {
+		Name            *Name                  `json:"name, omitempty, omitempty"`
+		EmailAddress    string                 `json:"email_address, omitempty"`
+		PayerID         string                 `json:"payer_id, omitempty"` //Read only
+		ShippingAddress *ShippingDetail        `json:"shipping_address, omitempty"`
+		PaymentSource   *PaymentSourceResponse `json:"payment_source, omitempty"`
+	}
+
+	// Name represents payer details
+	Name struct {
+		Prefix            string `json:"prefix, omitempty"`
+		GivenName         string `json:"given_name, omitempty"`
+		Surname           string `json:"surname, omitempty"`
+		MiddleName        string `json:"middle_name, omitempty"`
+		Suffix            string `json:"suffix, omitempty"`
+		AlternateFullName string `json:"alternate_full_name, omitempty"`
+		FullName          string `json:"full_name, omitempty"`
+	}
+
+	// PaymentSourceResponse represents the payment source definitions
+	PaymentSourceResponse struct {
+		Card *CardResponseWithBillingAddress `json:"card"`
+	}
+
+	// CardResponseWithBillingAddress represents card details
+	// Brand represents the card brand or network. Typically used in the response. The possible values are:
+	// ------------------------------------------------------
+	// | VISA			 | Visa card. 						|
+	// | MASTERCARD		 | Mastecard card. 					|
+	// | DISCOVER		 | Discover card. 					|
+	// | AMEX			 | American Express card. 			|
+	// | SOLO			 | Solo debit card. 				|
+	// | JCB			 | Japan Credit Bureau card. 		|
+	// | STAR			 | Military Star card. 				|
+	// | DELTA			 | Delta Airlines card. 			|
+	// | SWITCH			 | Switch credit card. 				|
+	// | MAESTRO 		 | Maestro credit card. 			|
+	// | CB_NATIONALE	 | Carte Bancaire (CB) credit card. |
+	// | CONFIGOGA		 | Configoga credit card. 			|
+	// | CONFIDIS 		 | Confidis credit card. 			|
+	// | ELECTRON 		 | Visa Electron credit card.		|
+	// | CETELEM 		 | Cetelem credit card. 			|
+	// | CHINA_UNION_PAY | China union pay credit card. 	|
+	// ------------------------------------------------------
+	// Type represents the payment card type. The possible values are:
+	// ---------------------------------------------
+	// | CREDIT  | A credit card. 				   |
+	// | DEBIT   | A debit card. 				   |
+	// | PREPAID | A Prepaid card. 				   |
+	// | UNKNOWN | Card type cannot be determined. |
+	// ---------------------------------------------
+	CardResponseWithBillingAddress struct {
+		LastDigit      string           `json:"last_digit, omitempty"` //Read only
+		Brand          string           `json:"brand, omitempty"`      //Read only
+		Type           string           `json:"type, omitempty"`       //Read only
+		Name           string           `json:"name, omitempty"`
+		BillingAddress *AddressPortable `json:"billing_address, omitempty"`
+	}
+
+	// PayerName represents payer name details
+	PayerName struct {
+		GivenName string `json:"given_name, omitempty"`
+		Surname   string `json:"surname, omitempty"`
+	}
+
+	// Subscription represents the subscription details
+	Subscription struct {
+		ID               string                   `json:"id, omitempty"`
+		Status           string                   `json:"status, omitempty"`
+		StatusChangeNote string                   `json:"status_change_note, omitempty"`
+		StatusUpdateTime string                   `json:"status_update_time, omitempty"`
+		PlanID           string                   `json:"plan_id, omitempty"`
+		StartTime        string                   `json:"start_time, omitempty"`
+		Quantity         string                   `json:"quantity, omitempty"`
+		ShippingAmount   *Money                   `json:"shipping_amount, omitempty"`
+		Subscriber       *Subscriber              `json:"subscriber, omitempty"`
+		BillingInfo      *SubscriptionBillingInfo `json:"billing_info, omitempty"` //Read only
+		CreateTime       string                   `json:"created_time"`            //Read only
+		UpdateTime       string                   `json:"update_time"`             //Read only
+		Links            []*Link                  `json:"links"`                   //Read only
+	}
+
+	// SubscriptionBillingInfo represents billing details for subscription
+	// The number of consecutive payment failures. Resets to 0 after a successful payment. If this reaches the payment_failure_threshold value,
+	// the subscription updates to the SUSPENDED state.
+	SubscriptionBillingInfo struct {
+		OutstandingBalance  *Money               `json:"outstanding_balance"`
+		CycleExecutions     []*CycleExecution    `json:"cycle_executions, omitempty"` //Read only
+		LastPayment         LastPaymentDetails   `json:"last_payment, omitempty"`     //Read only
+		NextBillingTime     string               `json:"next_billing_time"`           //Read only
+		FinalPaymentTime    string               `json:"final_payment_time"`          //Read only
+		FailedPaymentsCount uint64               `json:"failed_payments_count"`       //min: 0, max: 999
+		LastFailedPayment   FailedPaymentDetails `json:"last_failed_payment"`         //Read only
+	}
+
+	// CycleExecution represents details about billing cycles executions
+	// The number of times this billing cycle runs. Trial billing cycles can only have a value of 1 for total_cycles. Regular billing cycles
+	// can either have infinite cycles (value of 0 for total_cycles) or a finite number of cycles (value between 1 and 999 for total_cycles).
+	// TenureType represents the type of the billing cycle. The possible values are:
+	// --------------------------------------
+	// | REGULAR | A regular billing cycle. |
+	// | TRIAL   | A trial billing cycle.   |
+	// --------------------------------------
+	CycleExecution struct {
+		TenureType                  string `json:"tenure_type"`                               //Read only
+		Sequence                    uint64 `json:"sequence"`                                  //min: 0, max: 99
+		CyclesCompleted             uint64 `json:"cycles_completed"`                          //min: 0, max: 9999 Read only
+		CyclesRemaining             uint64 `json:"cycles_remaining, omitempty"`               //min: 0, max: 9999 Read only
+		CurrentPricingSchemeVersion uint64 `json:"current_pricing_scheme_version, omitempty"` //min: 0, max: 99 Read only
+		TotalCycles                 uint64 `json:"total_cycles, omitempty"`                   //min: 0, max: 999 Read only
+	}
+
+	// LastPaymentDetails represents details for the last payment
+	LastPaymentDetails struct {
+		Amount *Money `json:"amount"` //Read only
+		Time   string `json:"time"`   //Read only
+	}
+
+	// FailedPaymentDetails represents details about failed payment
+	// ReasonCode represents the reason code for the payment failure. The possible values are:
+	// -----------------------------------------------------------------------------------------------------------------
+	// | PAYMENT_DENIED 		 			  | PayPal declined the payment due to one or more customer issues.        |
+	// | INTERNAL_SERVER_ERROR   			  | An internal server error has occurred.								   |
+	// | PAYEE_ACCOUNT_RESTRICTED			  | The payee account is not in good standing and cannot receive payments. |
+	// | PAYER_ACCOUNT_RESTRICTED			  | The payer account is not in good standing and cannot make payments.	   |
+	// | PAYER_CANNOT_PAY        			  | Payer cannot pay for this transaction. 								   |
+	// | SENDING_LIMIT_EXCEEDED  			  | The transaction exceeds the payer's sending limit.                     |
+	// | TRANSACTION_RECEIVING_LIMIT_EXCEEDED | The transaction exceeds the receiver's receiving limit.				   |
+	// | CURRENCY_MISMATCH                    | The transaction is declined due to a currency mismatch.				   |
+	// -----------------------------------------------------------------------------------------------------------------
+	FailedPaymentDetails struct {
+		Amount               *Money `json:"amount"`                             //Read only
+		Time                 string `json:"time"`                               //Read only
+		ReasonCode           string `json:"reason_code, omitempty"`             //Read only
+		NextPaymentRetryTime string `json:"next_payment_retry_time, omitempty"` //Read only
+	}
+
+	// ShowSubscriptionRequest represents query parameters for show subscription call
+	// Fields represents list of fields that are to be returned in the response.
+	// Possible value for fields is last_failed _payment.
+	ShowSubscriptionRequest struct {
+		Fields string `json:"fields, omitempty"`
+	}
+
+	// UpdateSubscriptionStatusRequest represents body parameters for activate subscription
+	UpdateSubscriptionStatusRequest struct {
+		Reason string `json:"reason"`
+	}
+
+	// CaptureAuthorizedPaymentOnSubscriptionRequest represents body parameter for capturing authorized payment on subscription
+	// CaptureType represents the type of capture. The allowed values are:
+	// ---------------------------------------------------------------------------------
+	// | OUTSTANDING_BALANCE | The outstanding balance that the subscriber must clear. |
+	// ---------------------------------------------------------------------------------
+	CaptureAuthorizedPaymentOnSubscriptionRequest struct {
+		Note        string `json:"note"`
+		CaptureType string `json:"capture_type"`
+		Amount      *Money `json:"amount"`
+	}
+
+	// ListTransactionsForSubscriptionRequest represents query parameters for list transactions for subscription
+	ListTransactionsForSubscriptionRequest struct {
+		StartTime string `json:"start_time"`
+		EndTime   string `json:"end_time"`
+	}
+
+	//TransactionsList represents list of transactions
+	TransactionsList struct {
+		Transactions []*Transaction `json:"transactions, omitempty"`
+		TotalItems   uint64         `json:"total_items, omitempty"`
+		TotalPages   uint64         `json:"total_pages, omitempty"`
+		Links        []*Link        `json:"links, omitempty"` //Read only
+	}
+
+	// ReviseSubscriptionRequest represents body parameters for revise subscription
+	// (update quantity of product or service in subscription)
+	ReviseSubscriptionRequest struct {
+		PlanID             string              `json:"plan_id, omitempty"`
+		Quantity           string              `json:"quantity, omitempty"`
+		ShippingAmount     *Money              `json:"shipping_amount, omitempty"`
+		ShippingAddress    *ShippingDetail     `json:"shipping_address, omitempty"`
+		ApplicationContext *ApplicationContext `json:"application_context, omitempty"`
+	}
+
+	// ReviseSubscriptionResponse represents response from revise subscription
+	// (update quantity of product or service in subscription)
+	ReviseSubscriptionResponse struct {
+		PlanID          string          `json:"plan_id, omitempty"`
+		Quantity        string          `json:"quantity, omitempty"`
+		EffectiveTime   string          `json:"effective_time, omitempty"` //Read only
+		ShippingAmount  *Money          `json:"shipping_amount, omitempty"`
+		ShippingAddress *ShippingDetail `json:"shipping_address, omitempty"`
+		Links           []*Link         `json:"links, omitempty"` //Read only
 	}
 )
 
