@@ -584,11 +584,21 @@ const (
 	WOMEN_CLOTHING                                                string = "WOMEN_CLOTHING"
 )
 
-// Possible values for Plan.Status and Subscription.Status
+// Possible values for Plan.Status
 const (
-	CREATED  string = "CREATED"
-	INACTIVE string = "INACTIVE"
-	ACTIVE   string = "ACTIVE"
+	P_CREATED  string = "CREATED"
+	P_INACTIVE string = "INACTIVE"
+	P_ACTIVE   string = "ACTIVE"
+)
+
+// Possible values for Plan.Status
+const (
+	S_APPROVAL_PENDING string = "APPROVAL_PENDING"
+	S_APPROVED         string = "APPROVED"
+	S_ACTIVE           string = "ACTIVE"
+	S_SUSPENDED        string = "SUSPENDED"
+	S_CANCELLED        string = "CANCELLED"
+	S_EXPIRED          string = "EXPIRED"
 )
 
 // Possible values for BillingCycle.TenureType and CycleExecution.TenureType
