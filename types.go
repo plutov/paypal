@@ -244,7 +244,7 @@ type (
 	}
 
 	// RefundOrderRequest - https://developer.paypal.com/docs/api/payments/v2/#captures_refund
-	RefundOrderRequest struct {
+	RefundCaptureRequest struct {
 		Amount      *Money `json:"amount,omitempty"`
 		InvoiceID   string `json:"invoice_id,omitempty"`
 		NoteToPayer string `json:"note_to_payer,omitempty"`
