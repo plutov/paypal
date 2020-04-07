@@ -1053,7 +1053,7 @@ type (
 	CreateProductRequest struct {
 		Name        string `json:"name"`
 		Description string `json:"description"`
-		Type        string `json:"type"` 			    //default: PHYSICAL
+		Type        string `json:"type"` //default: PHYSICAL
 		Category    string `json:"category, omitempty"`
 		ImageUrl    string `json:"image_url, omitempty"`
 		HomeUrl     string `json:"home_url, omitempty"`
@@ -1071,7 +1071,7 @@ type (
 		ID          string  `json:"id"`
 		Name        string  `json:"name"`
 		Description string  `json:"description"`
-		Type        string  `json:"type"`                 //default: PHYSICAL
+		Type        string  `json:"type"` //default: PHYSICAL
 		Category    string  `json:"category, omitempty"`
 		ImageUrl    string  `json:"image_url, omitempty"`
 		HomeUrl     string  `json:"home_url, omitempty"`
@@ -1092,7 +1092,7 @@ type (
 		TotalItems uint64     `json:"total_items, omitempty"` //min: 0, max: 500000000
 		TotalPages uint64     `json:"total_pages, omitempty"` //min: 0, max: 100000000
 		Products   []*Product `json:"products"`
-		Links      []*Link    `json:"links"`                 //Read only
+		Links      []*Link    `json:"links"` //Read only
 	}
 
 	// PatchObject represents the object used for updating PayPal objects
@@ -1125,12 +1125,12 @@ type (
 	CreatePlan struct {
 		ProductID          string              `json:"product_id"`
 		Name               string              `json:"name"`
-		Status             string              `json:"status"`                //default: ACTIVE
+		Status             string              `json:"status"` //default: ACTIVE
 		Description        string              `json:"description, omitempty"`
 		BillingCycles      []*BillingCycle     `json:"billing_cycles"`
 		PaymentPreferences *PaymentPreferences `json:"payment_preferences"`
 		Taxes              *Taxes              `json:"taxes, omitempty"`
-		QuantitySupported bool 				   `json:"quantity_supported, omitempty"`
+		QuantitySupported  bool                `json:"quantity_supported, omitempty"`
 	}
 
 	// BillingCycle represents the cycles for billing the subscription
@@ -1141,16 +1141,16 @@ type (
 	// --------------------------------------
 	BillingCycle struct {
 		PricingScheme *PricingScheme `json:"pricing_scheme, omitempty"` //Free Trial Cycle doesn't require scheme
-		Frequency     Frequency      `json:"frequency"`
+		Frequency     *Frequency     `json:"frequency"`
 		TenureType    string         `json:"tenure_type"`
-		Sequence      uint64         `json:"sequence"`                 //min: 0, max: 99
-		TotalCycles   uint64         `json:"total_cycles, omitempty"`   //default: 1, min: 0, max: 999
+		Sequence      uint64         `json:"sequence"`                //min: 0, max: 99
+		TotalCycles   uint64         `json:"total_cycles, omitempty"` //default: 1, min: 0, max: 999
 	}
 
 	// PricingScheme represents the active pricing scheme for this billing cycle.
 	// A free trial billing cycle does not require a pricing scheme.
 	PricingScheme struct {
-		Version    uint64 `json:"version, omitempty"`     //Read only
+		Version    uint64 `json:"version, omitempty"` //Read only
 		FixedPrice *Money `json:"fixed_price"`
 		CreateTime string `json:"create_time, omitempty"` //Read only
 		UpdateTime string `json:"update_time, omitempty"` //Read only
@@ -1179,8 +1179,9 @@ type (
 	// | CANCEL   | Cancels the subscription if the initial payment for the setup fails.   |
 	// -------------------------------------------------------------------------------------
 	PaymentPreferences struct {
-		AutoBillOutstanding     bool   `json:"auto_bill_outstanding, omitempty"`     //default true
+		AutoBillOutstanding     bool   `json:"auto_bill_outstanding, omitempty"` //default true
 		SetupFee                *Money `json:"setup_fee, omitempty"`
+		ServiceType             string `json:"service_type, omitempty"`              //Read only
 		SetupFeeFailureAction   string `json:"setup_fee_failure_action, omitempty"`  //default: CANCEL
 		PaymentFailureThreshold uint64 `json:"payment_failure_threshold, omitempty"` //default: 0, min: 0, max: 999
 	}
@@ -1199,7 +1200,7 @@ type (
 	// | ACTIVE   | The plan is active. You can only create subscriptions for a plan in this state. |
 	// ----------------------------------------------------------------------------------------------
 	Plan struct {
-		ID 				   string 			   `json:"id"`
+		ID                 string              `json:"id"`
 		ProductID          string              `json:"product_id"`
 		Name               string              `json:"name"`
 		Status             string              `json:"status"`
@@ -1207,10 +1208,12 @@ type (
 		BillingCycles      []*BillingCycle     `json:"billing_cycles"`
 		PaymentPreferences *PaymentPreferences `json:"payment_preferences"`
 		Taxes              *Taxes              `json:"taxes, omitempty"`
-		QuantitySupported  bool 			   `json:"quantity_supported, omitempty"`
-		CreateTime 		   string 			   `json:"create_time"` 				 //Read only
-		UpdateTime         string 		   	   `json:"update_time"` 				 //Read only
-		Links         	   []*Link 		   	   `json:"links"` 				 		 //Read only
+		QuantitySupported  bool                `json:"quantity_supported, omitempty"`
+		CreateTime         string              `json:"create_time"`           //Read only
+		UpdateTime         string              `json:"update_time"`           //Read only
+		Version            uint64              `json:"version, omitempty"`    //Read only
+		UsageType          string              `json:"usage_type, omitempty"` //Read only
+		Links              []*Link             `json:"links"`                 //Read only
 	}
 
 	// ListPlansParams represents query params for list products call
@@ -1223,10 +1226,10 @@ type (
 
 	// ListPlansResponse represents the list of the plans
 	ListPlansResponse struct {
-		TotalItems uint64     `json:"total_items, omitempty"` //min: 0, max: 500000000
-		TotalPages uint64     `json:"total_pages, omitempty"` //min: 0, max: 100000000
-		Products   []*Plan    `json:"plans"`
-		Links      []*Link    `json:"links"`                 //Read only
+		TotalItems uint64  `json:"total_items, omitempty"` //min: 0, max: 500000000
+		TotalPages uint64  `json:"total_pages, omitempty"` //min: 0, max: 100000000
+		Products   []*Plan `json:"plans"`
+		Links      []*Link `json:"links"` //Read only
 	}
 
 	// UpdatePricingSchemasListRequest represents an array of pricing schemes to update plans billing cycles
@@ -1236,8 +1239,8 @@ type (
 
 	// UpdatePricingSchemaRequest represents a pricing schema to update plans billing cycle
 	UpdatePricingSchemaRequest struct {
-		BillingCycleSequence uint64 `json:"billing_cycle_sequence"` //min: 1, max: 99
-		PricingScheme *PricingScheme `json:"pricing_scheme"`
+		BillingCycleSequence uint64         `json:"billing_cycle_sequence"` //min: 1, max: 99
+		PricingScheme        *PricingScheme `json:"pricing_scheme"`
 	}
 
 	// PaymentMethod represents the customer and merchant payment preferences
@@ -1497,6 +1500,27 @@ type (
 		ShippingAmount  *Money          `json:"shipping_amount, omitempty"`
 		ShippingAddress *ShippingDetail `json:"shipping_address, omitempty"`
 		Links           []*Link         `json:"links, omitempty"` //Read only
+	}
+
+	// Event represents hook response
+	// The possible values for Resource are:
+	// -----------------------------------------------
+	// | Hook Name  				  | Object 		 |
+	// -----------------------------------------------
+	// | CATALOG.PRODUCT.CREATED 	  | Product 	 |
+	// | BILLING.PLAN.CREATED 		  | Plan 		 |
+	// | BILLING.SUBSCRIPTION.CREATED | Subscription |
+	// -----------------------------------------------
+	Event struct {
+		ID              string          `json:"id"`
+		EventVersion    string          `json:"event_version"`
+		CreateTime      string          `json:"create_time"`
+		ResourceType    string          `json:"resource_type"`
+		ResourceVersion string          `json:"resource_version"`
+		EventType       string          `json:"event_type"`
+		Summary         string          `json:"summary"`
+		Resource        json.RawMessage `json:"resource"`
+		Links           []*Link         `json:"links"`
 	}
 )
 
