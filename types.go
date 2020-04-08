@@ -820,7 +820,7 @@ type (
 		PaymentHoldReasons        []*PaymentHoldReason `json:"payment_hold_reasons, omitempty"`        //Read only
 		TransactionFee            *Currency            `json:"transaction_fee, omitempty"`             //Read only
 		ReceivableAmount          *Currency            `json:"receivable_amount, omitempty"`
-		ExchangeRage              string               `json:"exchange_rage, omitempty"` //Read only
+		ExchangeRate              string               `json:"exchange_rate, omitempty"` //Read only
 		FmfDetails                *FmfDetails          `json:"fmf_details, omitempty"`
 		ReceiptID                 string               `json:"receipt_id, omitempty"`     //Read only
 		ParentPayment             string               `json:"parent_payment, omitempty"` //Read only
