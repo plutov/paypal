@@ -243,6 +243,13 @@ type (
 		PaymentSource *PaymentSource `json:"payment_source"`
 	}
 
+	// RefundOrderRequest - https://developer.paypal.com/docs/api/payments/v2/#captures_refund
+	RefundCaptureRequest struct {
+		Amount      *Money `json:"amount,omitempty"`
+		InvoiceID   string `json:"invoice_id,omitempty"`
+		NoteToPayer string `json:"note_to_payer,omitempty"`
+	}
+
 	// BatchHeader struct
 	BatchHeader struct {
 		Amount            *AmountPayout      `json:"amount,omitempty"`
