@@ -157,9 +157,9 @@ type (
 
 	// Amount struct
 	Amount struct {
-		Currency string  `json:"currency"`
-		Total    string  `json:"total"`
-		Details  Details `json:"details, omitempty"`
+		Currency string   `json:"currency"`
+		Total    string   `json:"total"`
+		Details  *Details `json:"details, omitempty"`
 	}
 
 	// AmountPayout struct
@@ -389,10 +389,10 @@ type (
 		Value     string `json:"value"`
 	}
 
-	// Currency struct
+	// Currency represents fee details (PayPal does not support all currencies.)
 	Currency struct {
-		Currency string `json:"currency, omitempty"`
-		Value    string `json:"value, omitempty"`
+		Currency string `json:"currency"`
+		Value    string `json:"value"`
 	}
 
 	// Details structure used in Amount structures as optional value
@@ -793,23 +793,108 @@ type (
 		Refund        *Refund        `json:"refund, omitempty"`
 	}
 
-	// Sale struct
+	// Sale represents the details for a sale
+	// PaymentMode represents the transaction payment mode. Supported only for PayPal payments.
+	// Possible values: INSTANT_TRANSFER, MANUAL_BANK_TRANSFER, DELAYED_TRANSFER, ECHECK.
+	// State represents the state of the sale transaction. Possible values: completed, partially_refunded, pending, refunded, denied.
+	// ReasonCode represents a code that describes why the transaction state is pending or reversed. Supported only for PayPal payments.
+	// Possible values: CHARGEBACK, GUARANTEE, BUYER_COMPLAINT, REFUND, UNCONFIRMED_SHIPPING_ADDRESS, ECHECK, INTERNATIONAL_WITHDRAWAL,
+	// RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION, PAYMENT_REVIEW, REGULATORY_REVIEW, UNILATERAL, VERIFICATION_REQUIRED, TRANSACTION_APPROVED_AWAITING_FUNDING.
+	// ProtectionEligibility represents the merchant protection level in effect for the transaction. Supported only for PayPal payments.
+	// Possible values: ELIGIBLE, PARTIALLY_ELIGIBLE, INELIGIBLE.
+	// ProtectionEligibilityType represents the merchant protection type in effect for the transaction. Returned only when protection_eligibility is ELIGIBLE or
+	// PARTIALLY_ELIGIBLE. Supported only for PayPal payments. Possible values: ITEM_NOT_RECEIVED_ELIGIBLE, UNAUTHORIZED_PAYMENT_ELIGIBLE,
+	// ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE.
+	// PaymentHoldStatus represents the recipient fund status. Returned only when the fund status is held. Possible values: HELD.
+	// ProcessorResponse represents the processor-provided response codes that describe the submitted payment. Supported only when the payment_method is credit_card.
 	Sale struct {
-		ID                        string     `json:"id, omitempty"`
-		Amount                    *Amount    `json:"amount, omitempty"`
-		TransactionFee            *Currency  `json:"transaction_fee, omitempty"`
-		Description               string     `json:"description, omitempty"`
-		CreateTime                *time.Time `json:"create_time, omitempty"`
-		State                     string     `json:"state, omitempty"`
-		ParentPayment             string     `json:"parent_payment, omitempty"`
-		UpdateTime                *time.Time `json:"update_time, omitempty"`
-		PaymentMode               string     `json:"payment_mode, omitempty"`
-		PendingReason             string     `json:"pending_reason, omitempty"`
-		ReasonCode                string     `json:"reason_code, omitempty"`
-		ClearingTime              string     `json:"clearing_time, omitempty"`
-		ProtectionEligibility     string     `json:"protection_eligibility, omitempty"`
-		ProtectionEligibilityType string     `json:"protection_eligibility_type, omitempty"`
-		Links                     []Link     `json:"links, omitempty"`
+		ID                        string               `json:"id, omitempty"`
+		Amount                    *Amount              `json:"amount, omitempty"`
+		PaymentMode               string               `json:"payment_mode, omitempty"`                //Read only
+		State                     string               `json:"state, omitempty"`                       //Read only
+		ReasonCode                string               `json:"reason_code, omitempty"`                 //Read only
+		ProtectionEligibility     string               `json:"protection_eligibility, omitempty"`      //Read only
+		ProtectionEligibilityType string               `json:"protection_eligibility_type, omitempty"` //Read only
+		ClearingTime              string               `json:"clearing_time, omitempty"`               //Read only
+		PaymentHoldStatus         string               `json:"payment_hold_status, omitempty"`         //Read only
+		PaymentHoldReasons        []*PaymentHoldReason `json:"payment_hold_reasons, omitempty"`        //Read only
+		TransactionFee            *Currency            `json:"transaction_fee, omitempty"`             //Read only
+		ReceivableAmount          *Currency            `json:"receivable_amount, omitempty"`
+		ExchangeRage              string               `json:"exchange_rage, omitempty"` //Read only
+		FmfDetails                *FmfDetails          `json:"fmf_details, omitempty"`
+		ReceiptID                 string               `json:"receipt_id, omitempty"`     //Read only
+		ParentPayment             string               `json:"parent_payment, omitempty"` //Read only
+		ProcessorResponse         *ProcessorResponse   `json:"processor_response, omitempty"`
+		InvoiceNumber             string               `json:"invoice_number, omitempty"`       //Read only
+		BillingAgreementID        string               `json:"billing_agreement_id, omitempty"` //Read only
+		CreateTime                string               `json:"create_time, omitempty"`          //Read only
+		UpdateTime                string               `json:"update_time, omitempty"`          //Read only
+		Links                     []*Link              `json:"links, omitempty"`                //Read only
+	}
+
+	// PaymentHoldReason represents the reason that PayPal holds the recipient fund.  Set only if the payment hold status is HELD.
+	// Possible values: PAYMENT_HOLD, SHIPPING_RISK_HOLD.
+	PaymentHoldReason struct {
+		PaymentHoldReason string `json:"payment_hold_reason, omitempty"`
+	}
+
+	// FmfDetails represents the Fraud Management Filter (FMF) details that are applied to the payment that result in an accept, deny,
+	// or pending action. Returned in a payment response only if the merchant has enabled FMF in the profile settings and one of the
+	// fraud filters was triggered based on those settings. For more information, see Fraud Management Filters Summary.
+	// FilterType represents the filter type. The possible values are:
+	// --------------------------------------
+	// | ACCEPT  | The accept filter type.  |
+	// | PENDING | The pending filter type. |
+	// | DENY    | The deny filter type.    |
+	// | REPORT  | The report filter type.  |
+	// --------------------------------------
+	// FilterID represents the filter ID. The possible values are:
+	// ------------------------------------------------------------------------------------
+	// | AVS_NO_MATCH                       	| AVS no match. 						  |
+	// | AVS_PARTIAL_MATCH 						| AVS partial match.                      |
+	// | AVS_UNAVAILABLE_OR_UNSUPPORTED 		| AVS unavailable or unsupported. 	  	  |
+	// | CARD_SECURITY_CODE_MISMATCH 			| Card security code mismatch. 			  |
+	// | MAXIMUM_TRANSACTION_AMOUNT 			| The maximum transaction amount. 		  |
+	// | UNCONFIRMED_ADDRESS 					| Unconfirmed address. 					  |
+	// | COUNTRY_MONITOR 						| Country monitor. 						  |
+	// | LARGE_ORDER_NUMBER 					| Large order number. 					  |
+	// | BILLING_OR_SHIPPING_ADDRESS_MISMATCH   | Billing or shipping address mismatch.   |
+	// | RISKY_ZIP_CODE    					    | Risky zip code. 						  |
+	// | SUSPECTED_FREIGHT_FORWARDER_CHECK 	    | Suspected freight forwarder check. 	  |
+	// | TOTAL_PURCHASE_PRICE_MINIMUM           | Total purchase price minimum. 		  |
+	// | IP_ADDRESS_VELOCITY                    | IP address velocity. 					  |
+	// | RISKY_EMAIL_ADDRESS_DOMAIN_CHECK	    | Risky email address domain check. 	  |
+	// | RISKY_BANK_IDENTIFICATION_NUMBER_CHECK | Risky bank identification number check. |
+	// | RISKY_IP_ADDRESS_RANGE                 | Risky IP address range. 				  |
+	// | PAYPAL_FRAUD_MODEL 					| PayPal fraud model. 					  |
+	// ------------------------------------------------------------------------------------
+	FmfDetails struct {
+		FilterType  string `json:"filter_type"`            //Read only
+		FilterID    string `json:"filter_id"`              //Read only
+		Name        string `json:"name, omitempty"`        //Read only
+		Description string `json:"description, omitempty"` //Read only
+
+	}
+
+	// ProcessorResponse represents the processor-provided response codes that describe the submitted payment.
+	// Supported only when the payment_method is credit_card.
+	// AdviceCode represents the merchant advice on how to handle declines for recurring payments. The possible values are:
+	// ------------------------------------------------------------------------------------------------------------------------------
+	// | 01_NEW_ACCOUNT_INFORMATION                                  | 01 New account information. 									|
+	// | 02_TRY_AGAIN_LATER 										 | 02 Try again later. 											|
+	// | 02_STOP_SPECIFIC_PAYMENT  									 | 02 Stop specific payment. 									|
+	// | 03_DO_NOT_TRY_AGAIN 										 | 03 Do not try again. 										|
+	// | 03_REVOKE_AUTHORIZATION_FOR_FUTURE_PAYMENT 				 | 03 Revoke authorization for future payment. 					|
+	// | 21_DO_NOT_TRY_AGAIN_CARD_HOLDER_CANCELLED_RECURRRING_CHARGE | 21 Do not try again. Card holder cancelled recurring charge. |
+	// | 21_CANCEL_ALL_RECURRING_PAYMENTS 							 | 21 Cancel all recurring payments. 							|
+	// ------------------------------------------------------------------------------------------------------------------------------
+	ProcessorResponse struct {
+		ResponseCode string `json:"response_code"`            //Read only
+		AvsCode      string `json:"avs_code, omitempty"`      //Read only
+		CvvCode      string `json:"cvv_code, omitempty"`      //Read only
+		AdviceCode   string `json:"advice_code, omitempty"`   //Read only
+		EciSubmitted string `json:"eci_submitted, omitempty"` //Read only
+		Vpas         string `json:"vpas, omitempty"`          //Read only
 	}
 
 	// SenderBatchHeader struct
