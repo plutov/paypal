@@ -28,6 +28,9 @@ func (c *Client) CaptureAuthorization(authID string, paymentCaptureRequest *Paym
 	return c.CaptureAuthorizationWithPaypalRequestId(authID, paymentCaptureRequest, "")
 }
 
+// CaptureAuthorization captures and process an existing authorization with idempotency.
+// To use this method, the original payment must have Intent set to "authorize"
+// Endpoint: POST /v2/payments/authorizations/ID/capture
 func (c *Client) CaptureAuthorizationWithPaypalRequestId(
 	authID string,
 	paymentCaptureRequest *PaymentCaptureRequest,
