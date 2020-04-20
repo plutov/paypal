@@ -80,7 +80,7 @@ func (c *Client) AuthorizeOrder(orderID string, authorizeOrderRequest AuthorizeO
 // CaptureOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 // Endpoint: POST /v2/checkout/orders/ID/capture
 func (c *Client) CaptureOrder(orderID string, captureOrderRequest CaptureOrderRequest) (*CaptureOrderResponse, error) {
-	return c.CaptureIdempotentOrder(orderID, captureOrderRequest, "")
+	return c.CaptureOrderWithPaypalRequestId(orderID, captureOrderRequest, "")
 }
 
 // CaptureOrder with idempotency - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
