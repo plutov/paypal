@@ -86,7 +86,7 @@ func (c *Client) CaptureOrder(orderID string, captureOrderRequest CaptureOrderRe
 // CaptureOrder with idempotency - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 // Endpoint: POST /v2/checkout/orders/ID/capture
 // https://developer.paypal.com/docs/api/reference/api-requests/#http-request-headers
-func (c *Client) CaptureIdempotentOrder(
+func (c *Client) CaptureOrderWithPaypalRequestId(
 	orderID string,
 	captureOrderRequest CaptureOrderRequest,
 	requestID string,
