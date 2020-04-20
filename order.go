@@ -80,19 +80,7 @@ func (c *Client) AuthorizeOrder(orderID string, authorizeOrderRequest AuthorizeO
 // CaptureOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 // Endpoint: POST /v2/checkout/orders/ID/capture
 func (c *Client) CaptureOrder(orderID string, captureOrderRequest CaptureOrderRequest) (*CaptureOrderResponse, error) {
-	capture := &CaptureOrderResponse{}
-
-	c.SetReturnRepresentation()
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/capture"), captureOrderRequest)
-	if err != nil {
-		return capture, err
-	}
-
-	if err = c.SendWithAuth(req, capture); err != nil {
-		return capture, err
-	}
-
-	return capture, nil
+	return c.CaptureIdempotentOrder(orderID, captureOrderRequest, "")
 }
 
 // CaptureOrder with idempotency - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
@@ -111,7 +99,9 @@ func (c *Client) CaptureIdempotentOrder(
 		return capture, err
 	}
 
-	req.Header.Set("PayPal-Request-Id", requestID)
+	if requestID != "" {
+		req.Header.Set("PayPal-Request-Id", requestID)
+	}
 
 	if err = c.SendWithAuth(req, capture); err != nil {
 		return capture, err
