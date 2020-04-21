@@ -25,11 +25,26 @@ func (c *Client) GetAuthorization(authID string) (*Authorization, error) {
 // To use this method, the original payment must have Intent set to "authorize"
 // Endpoint: POST /v2/payments/authorizations/ID/capture
 func (c *Client) CaptureAuthorization(authID string, paymentCaptureRequest *PaymentCaptureRequest) (*PaymentCaptureResponse, error) {
+	return c.CaptureAuthorizationWithPaypalRequestId(authID, paymentCaptureRequest, "")
+}
+
+// CaptureAuthorization captures and process an existing authorization with idempotency.
+// To use this method, the original payment must have Intent set to "authorize"
+// Endpoint: POST /v2/payments/authorizations/ID/capture
+func (c *Client) CaptureAuthorizationWithPaypalRequestId(
+	authID string,
+	paymentCaptureRequest *PaymentCaptureRequest,
+	requestID string,
+) (*PaymentCaptureResponse, error) {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/authorizations/"+authID+"/capture"), paymentCaptureRequest)
 	paymentCaptureResponse := &PaymentCaptureResponse{}
 
 	if err != nil {
 		return paymentCaptureResponse, err
+	}
+
+	if requestID != "" {
+		req.Header.Set("PayPal-Request-Id", requestID)
 	}
 
 	err = c.SendWithAuth(req, paymentCaptureResponse)
