@@ -51,7 +51,7 @@ func (c *Client) ActivateSubscription(subscriptionID string, body UpdateSubscrip
 
 // CancelSubscription cancels subscription by ID
 // Endpoint: POST /v1/billing/subscriptions/{subscription_id}/cancel
-func (c *Client) CancelSubscription(subscriptionID string, body UpdateSubscriptionStatusRequest) error {
+func (c *Client) CancelSubscription(subscriptionID string, body *UpdateSubscriptionStatusRequest) error {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions/"+subscriptionID+"/cancel"), body)
 	if err != nil {
 		return err
@@ -62,7 +62,7 @@ func (c *Client) CancelSubscription(subscriptionID string, body UpdateSubscripti
 
 // SuspendSubscription suspends subscription by ID
 // Endpoint: POST /v1/billing/subscriptions/{subscription_id}/suspend
-func (c *Client) SuspendSubscription(subscriptionID string, body UpdateSubscriptionStatusRequest) error {
+func (c *Client) SuspendSubscription(subscriptionID string, body *UpdateSubscriptionStatusRequest) error {
 	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions/"+subscriptionID+"/suspend"), body)
 	if err != nil {
 		return err
