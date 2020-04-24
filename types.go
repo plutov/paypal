@@ -113,19 +113,578 @@ const (
 	LinkRelActionURL string = "action_url"
 )
 
-// Possible values for Operation in PatchObject
+// Possible values for PatchObject.Operation
 const (
 	Add     string = "add"
 	Replace string = "replace"
 	Remove  string = "remove"
 )
 
-// Possible values for Path in PatchObject
+// Possible values for PatchObject.Path when you update product
 const (
 	Description string = "/description"
 	Category    string = "/category"
 	ImageUrl    string = "/image_url"
 	HomeUrl     string = "/home_url"
+)
+
+// Possible values for CreateProduct.Type
+const (
+	PHYSICAL string = "PHYSICAL"
+	DIGITAL  string = "DIGITAL"
+	SERVICE  string = "SERVICE"
+)
+
+// Possible values for CreateProduct.Category
+const (
+	AC_REFRIGERATION_REPAIR                                       string = "AC_REFRIGERATION_REPAIR"
+	ACADEMIC_SOFTWARE                                             string = "ACADEMIC_SOFTWARE"
+	ACCESSORIES                                                   string = "ACCESSORIES"
+	ACCOUNTING                                                    string = "ACCOUNTING"
+	ADULT                                                         string = "ADULT"
+	ADVERTISING                                                   string = "ADVERTISING"
+	AFFILIATED_AUTO_RENTAL                                        string = "AFFILIATED_AUTO_RENTAL"
+	AGENCIES                                                      string = "AGENCIES"
+	AGGREGATORS                                                   string = "AGGREGATORS"
+	AGRICULTURAL_COOPERATIVE_FOR_MAIL_ORDER                       string = "AGRICULTURAL_COOPERATIVE_FOR_MAIL_ORDER"
+	AIR_CARRIERS_AIRLINES                                         string = "AIR_CARRIERS_AIRLINES"
+	AIRLINES                                                      string = "AIRLINES"
+	AIRPORTS_FLYING_FIELDS                                        string = "AIRPORTS_FLYING_FIELDS"
+	ALCOHOLIC_BEVERAGES                                           string = "ALCOHOLIC_BEVERAGES"
+	AMUSEMENT_PARKS_CARNIVALS                                     string = "AMUSEMENT_PARKS_CARNIVALS"
+	ANIMATION                                                     string = "ANIMATION"
+	ANTIQUES                                                      string = "ANTIQUES"
+	APPLIANCES                                                    string = "APPLIANCES"
+	AQUARIAMS_SEAQUARIUMS_DOLPHINARIUMS                           string = "AQUARIAMS_SEAQUARIUMS_DOLPHINARIUMS"
+	ARCHITECTURAL_ENGINEERING_AND_SURVEYING_SERVICES              string = "ARCHITECTURAL_ENGINEERING_AND_SURVEYING_SERVICES"
+	ART_AND_CRAFT_SUPPLIES                                        string = "ART_AND_CRAFT_SUPPLIES"
+	ART_DEALERS_AND_GALLERIES                                     string = "ART_DEALERS_AND_GALLERIES"
+	ARTIFACTS_GRAVE_RELATED_AND_NATIVE_AMERICAN_CRAFTS            string = "ARTIFACTS_GRAVE_RELATED_AND_NATIVE_AMERICAN_CRAFTS"
+	ARTS_AND_CRAFTS                                               string = "ARTS_AND_CRAFTS"
+	ARTS_CRAFTS_AND_COLLECTIBLES                                  string = "ARTS_CRAFTS_AND_COLLECTIBLES"
+	AUDIO_BOOKS                                                   string = "AUDIO_BOOKS"
+	AUTO_ASSOCIATIONS_CLUBS                                       string = "AUTO_ASSOCIATIONS_CLUBS"
+	AUTO_DEALER_USED_ONLY                                         string = "AUTO_DEALER_USED_ONLY"
+	AUTO_RENTALS                                                  string = "AUTO_RENTALS"
+	AUTO_SERVICE                                                  string = "AUTO_SERVICE"
+	AUTOMATED_FUEL_DISPENSERS                                     string = "AUTOMATED_FUEL_DISPENSERS"
+	AUTOMOBILE_ASSOCIATIONS                                       string = "AUTOMOBILE_ASSOCIATIONS"
+	AUTOMOTIVE                                                    string = "AUTOMOTIVE"
+	AUTOMOTIVE_REPAIR_SHOPS_NON_DEALER                            string = "AUTOMOTIVE_REPAIR_SHOPS_NON_DEALER"
+	AUTOMOTIVE_TOP_AND_BODY_SHOPS                                 string = "AUTOMOTIVE_TOP_AND_BODY_SHOPS"
+	AVIATION                                                      string = "AVIATION"
+	BABIES_CLOTHING_AND_SUPPLIES                                  string = "BABIES_CLOTHING_AND_SUPPLIES"
+	BABY                                                          string = "BABY"
+	BANDS_ORCHESTRAS_ENTERTAINERS                                 string = "BANDS_ORCHESTRAS_ENTERTAINERS"
+	BARBIES                                                       string = "BARBIES"
+	BATH_AND_BODY                                                 string = "BATH_AND_BODY"
+	BATTERIES                                                     string = "BATTERIES"
+	BEAN_BABIES                                                   string = "BEAN_BABIES"
+	BEAUTY                                                        string = "BEAUTY"
+	BEAUTY_AND_FRAGRANCES                                         string = "BEAUTY_AND_FRAGRANCES"
+	BED_AND_BATH                                                  string = "BED_AND_BATH"
+	BICYCLE_SHOPS_SALES_AND_SERVICE                               string = "BICYCLE_SHOPS_SALES_AND_SERVICE"
+	BICYCLES_AND_ACCESSORIES                                      string = "BICYCLES_AND_ACCESSORIES"
+	BILLIARD_POOL_ESTABLISHMENTS                                  string = "BILLIARD_POOL_ESTABLISHMENTS"
+	BOAT_DEALERS                                                  string = "BOAT_DEALERS"
+	BOAT_RENTALS_AND_LEASING                                      string = "BOAT_RENTALS_AND_LEASING"
+	BOATING_SAILING_AND_ACCESSORIES                               string = "BOATING_SAILING_AND_ACCESSORIES"
+	BOOKS                                                         string = "BOOKS"
+	BOOKS_AND_MAGAZINES                                           string = "BOOKS_AND_MAGAZINES"
+	BOOKS_MANUSCRIPTS                                             string = "BOOKS_MANUSCRIPTS"
+	BOOKS_PERIODICALS_AND_NEWSPAPERS                              string = "BOOKS_PERIODICALS_AND_NEWSPAPERS"
+	BOWLING_ALLEYS                                                string = "BOWLING_ALLEYS"
+	BULLETIN_BOARD                                                string = "BULLETIN_BOARD"
+	BUS_LINE                                                      string = "BUS_LINE"
+	BUS_LINES_CHARTERS_TOUR_BUSES                                 string = "BUS_LINES_CHARTERS_TOUR_BUSES"
+	BUSINESS                                                      string = "BUSINESS"
+	BUSINESS_AND_SECRETARIAL_SCHOOLS                              string = "BUSINESS_AND_SECRETARIAL_SCHOOLS"
+	BUYING_AND_SHOPPING_SERVICES_AND_CLUBS                        string = "BUYING_AND_SHOPPING_SERVICES_AND_CLUBS"
+	CABLE_SATELLITE_AND_OTHER_PAY_TELEVISION_AND_RADIO_SERVICES   string = "CABLE_SATELLITE_AND_OTHER_PAY_TELEVISION_AND_RADIO_SERVICES"
+	CABLE_SATELLITE_AND_OTHER_PAY_TV_AND_RADIO                    string = "CABLE_SATELLITE_AND_OTHER_PAY_TV_AND_RADIO"
+	CAMERA_AND_PHOTOGRAPHIC_SUPPLIES                              string = "CAMERA_AND_PHOTOGRAPHIC_SUPPLIES"
+	CAMERAS                                                       string = "CAMERAS"
+	CAMERAS_AND_PHOTOGRAPHY                                       string = "CAMERAS_AND_PHOTOGRAPHY"
+	CAMPER_RECREATIONAL_AND_UTILITY_TRAILER_DEALERS               string = "CAMPER_RECREATIONAL_AND_UTILITY_TRAILER_DEALERS"
+	CAMPING_AND_OUTDOORS                                          string = "CAMPING_AND_OUTDOORS"
+	CAMPING_AND_SURVIVAL                                          string = "CAMPING_AND_SURVIVAL"
+	CAR_AND_TRUCK_DEALERS                                         string = "CAR_AND_TRUCK_DEALERS"
+	CAR_AND_TRUCK_DEALERS_USED_ONLY                               string = "CAR_AND_TRUCK_DEALERS_USED_ONLY"
+	CAR_AUDIO_AND_ELECTRONICS                                     string = "CAR_AUDIO_AND_ELECTRONICS"
+	CAR_RENTAL_AGENCY                                             string = "CAR_RENTAL_AGENCY"
+	CATALOG_MERCHANT                                              string = "CATALOG_MERCHANT"
+	CATALOG_RETAIL_MERCHANT                                       string = "CATALOG_RETAIL_MERCHANT"
+	CATERING_SERVICES                                             string = "CATERING_SERVICES"
+	CHARITY                                                       string = "CHARITY"
+	CHECK_CASHIER                                                 string = "CHECK_CASHIER"
+	CHILD_CARE_SERVICES                                           string = "CHILD_CARE_SERVICES"
+	CHILDREN_BOOKS                                                string = "CHILDREN_BOOKS"
+	CHIROPODISTS_PODIATRISTS                                      string = "CHIROPODISTS_PODIATRISTS"
+	CHIROPRACTORS                                                 string = "CHIROPRACTORS"
+	CIGAR_STORES_AND_STANDS                                       string = "CIGAR_STORES_AND_STANDS"
+	CIVIC_SOCIAL_FRATERNAL_ASSOCIATIONS                           string = "CIVIC_SOCIAL_FRATERNAL_ASSOCIATIONS"
+	CIVIL_SOCIAL_FRAT_ASSOCIATIONS                                string = "CIVIL_SOCIAL_FRAT_ASSOCIATIONS"
+	CLOTHING                                                      string = "CLOTHING"
+	CLOTHING_ACCESSORIES_AND_SHOES                                string = "CLOTHING_ACCESSORIES_AND_SHOES"
+	CLOTHING_RENTAL                                               string = "CLOTHING_RENTAL"
+	COFFEE_AND_TEA                                                string = "COFFEE_AND_TEA"
+	COIN_OPERATED_BANKS_AND_CASINOS                               string = "COIN_OPERATED_BANKS_AND_CASINOS"
+	COLLECTIBLES                                                  string = "COLLECTIBLES"
+	COLLECTION_AGENCY                                             string = "COLLECTION_AGENCY"
+	COLLEGES_AND_UNIVERSITIES                                     string = "COLLEGES_AND_UNIVERSITIES"
+	COMMERCIAL_EQUIPMENT                                          string = "COMMERCIAL_EQUIPMENT"
+	COMMERCIAL_FOOTWEAR                                           string = "COMMERCIAL_FOOTWEAR"
+	COMMERCIAL_PHOTOGRAPHY                                        string = "COMMERCIAL_PHOTOGRAPHY"
+	COMMERCIAL_PHOTOGRAPHY_ART_AND_GRAPHICS                       string = "COMMERCIAL_PHOTOGRAPHY_ART_AND_GRAPHICS"
+	COMMERCIAL_SPORTS_PROFESSIONA                                 string = "COMMERCIAL_SPORTS_PROFESSIONA"
+	COMMODITIES_AND_FUTURES_EXCHANGE                              string = "COMMODITIES_AND_FUTURES_EXCHANGE"
+	COMPUTER_AND_DATA_PROCESSING_SERVICES                         string = "COMPUTER_AND_DATA_PROCESSING_SERVICES"
+	COMPUTER_HARDWARE_AND_SOFTWARE                                string = "COMPUTER_HARDWARE_AND_SOFTWARE"
+	COMPUTER_MAINTENANCE_REPAIR_AND_SERVICES_NOT_ELSEWHERE_CLAS   string = "COMPUTER_MAINTENANCE_REPAIR_AND_SERVICES_NOT_ELSEWHERE_CLAS"
+	CONSTRUCTION                                                  string = "CONSTRUCTION"
+	CONSTRUCTION_MATERIALS_NOT_ELSEWHERE_CLASSIFIED               string = "CONSTRUCTION_MATERIALS_NOT_ELSEWHERE_CLASSIFIED"
+	CONSULTING_SERVICES                                           string = "CONSULTING_SERVICES"
+	CONSUMER_CREDIT_REPORTING_AGENCIES                            string = "CONSUMER_CREDIT_REPORTING_AGENCIES"
+	CONVALESCENT_HOMES                                            string = "CONVALESCENT_HOMES"
+	COSMETIC_STORES                                               string = "COSMETIC_STORES"
+	COUNSELING_SERVICES_DEBT_MARRIAGE_PERSONAL                    string = "COUNSELING_SERVICES_DEBT_MARRIAGE_PERSONAL"
+	COUNTERFEIT_CURRENCY_AND_STAMPS                               string = "COUNTERFEIT_CURRENCY_AND_STAMPS"
+	COUNTERFEIT_ITEMS                                             string = "COUNTERFEIT_ITEMS"
+	COUNTRY_CLUBS                                                 string = "COUNTRY_CLUBS"
+	COURIER_SERVICES                                              string = "COURIER_SERVICES"
+	COURIER_SERVICES_AIR_AND_GROUND_AND_FREIGHT_FORWARDERS        string = "COURIER_SERVICES_AIR_AND_GROUND_AND_FREIGHT_FORWARDERS"
+	COURT_COSTS_ALIMNY_CHILD_SUPT                                 string = "COURT_COSTS_ALIMNY_CHILD_SUPT"
+	COURT_COSTS_INCLUDING_ALIMONY_AND_CHILD_SUPPORT_COURTS_OF_LAW string = "COURT_COSTS_INCLUDING_ALIMONY_AND_CHILD_SUPPORT_COURTS_OF_LAW"
+	CREDIT_CARDS                                                  string = "CREDIT_CARDS"
+	CREDIT_UNION                                                  string = "CREDIT_UNION"
+	CULTURE_AND_RELIGION                                          string = "CULTURE_AND_RELIGION"
+	DAIRY_PRODUCTS_STORES                                         string = "DAIRY_PRODUCTS_STORES"
+	DANCE_HALLS_STUDIOS_AND_SCHOOLS                               string = "DANCE_HALLS_STUDIOS_AND_SCHOOLS"
+	DECORATIVE                                                    string = "DECORATIVE"
+	DENTAL                                                        string = "DENTAL"
+	DENTISTS_AND_ORTHODONTISTS                                    string = "DENTISTS_AND_ORTHODONTISTS"
+	DEPARTMENT_STORES                                             string = "DEPARTMENT_STORES"
+	DESKTOP_PCS                                                   string = "DESKTOP_PCS"
+	DEVICES                                                       string = "DEVICES"
+	DIECAST_TOYS_VEHICLES                                         string = "DIECAST_TOYS_VEHICLES"
+	DIGITAL_GAMES                                                 string = "DIGITAL_GAMES"
+	DIGITAL_MEDIA_BOOKS_MOVIES_MUSIC                              string = "DIGITAL_MEDIA_BOOKS_MOVIES_MUSIC"
+	DIRECT_MARKETING                                              string = "DIRECT_MARKETING"
+	DIRECT_MARKETING_CATALOG_MERCHANT                             string = "DIRECT_MARKETING_CATALOG_MERCHANT"
+	DIRECT_MARKETING_INBOUND_TELE                                 string = "DIRECT_MARKETING_INBOUND_TELE"
+	DIRECT_MARKETING_OUTBOUND_TELE                                string = "DIRECT_MARKETING_OUTBOUND_TELE"
+	DIRECT_MARKETING_SUBSCRIPTION                                 string = "DIRECT_MARKETING_SUBSCRIPTION"
+	DISCOUNT_STORES                                               string = "DISCOUNT_STORES"
+	DOOR_TO_DOOR_SALES                                            string = "DOOR_TO_DOOR_SALES"
+	DRAPERY_WINDOW_COVERING_AND_UPHOLSTERY                        string = "DRAPERY_WINDOW_COVERING_AND_UPHOLSTERY"
+	DRINKING_PLACES                                               string = "DRINKING_PLACES"
+	DRUGSTORE                                                     string = "DRUGSTORE"
+	DURABLE_GOODS                                                 string = "DURABLE_GOODS"
+	ECOMMERCE_DEVELOPMENT                                         string = "ECOMMERCE_DEVELOPMENT"
+	ECOMMERCE_SERVICES                                            string = "ECOMMERCE_SERVICES"
+	EDUCATIONAL_AND_TEXTBOOKS                                     string = "EDUCATIONAL_AND_TEXTBOOKS"
+	ELECTRIC_RAZOR_STORES                                         string = "ELECTRIC_RAZOR_STORES"
+	ELECTRICAL_AND_SMALL_APPLIANCE_REPAIR                         string = "ELECTRICAL_AND_SMALL_APPLIANCE_REPAIR"
+	ELECTRICAL_CONTRACTORS                                        string = "ELECTRICAL_CONTRACTORS"
+	ELECTRICAL_PARTS_AND_EQUIPMENT                                string = "ELECTRICAL_PARTS_AND_EQUIPMENT"
+	ELECTRONIC_CASH                                               string = "ELECTRONIC_CASH"
+	ELEMENTARY_AND_SECONDARY_SCHOOLS                              string = "ELEMENTARY_AND_SECONDARY_SCHOOLS"
+	EMPLOYMENT                                                    string = "EMPLOYMENT"
+	ENTERTAINERS                                                  string = "ENTERTAINERS"
+	ENTERTAINMENT_AND_MEDIA                                       string = "ENTERTAINMENT_AND_MEDIA"
+	EQUIP_TOOL_FURNITURE_AND_APPLIANCE_RENTAL_AND_LEASING         string = "EQUIP_TOOL_FURNITURE_AND_APPLIANCE_RENTAL_AND_LEASING"
+	ESCROW                                                        string = "ESCROW"
+	EVENT_AND_WEDDING_PLANNING                                    string = "EVENT_AND_WEDDING_PLANNING"
+	EXERCISE_AND_FITNESS                                          string = "EXERCISE_AND_FITNESS"
+	EXERCISE_EQUIPMENT                                            string = "EXERCISE_EQUIPMENT"
+	EXTERMINATING_AND_DISINFECTING_SERVICES                       string = "EXTERMINATING_AND_DISINFECTING_SERVICES"
+	FABRICS_AND_SEWING                                            string = "FABRICS_AND_SEWING"
+	FAMILY_CLOTHING_STORES                                        string = "FAMILY_CLOTHING_STORES"
+	FASHION_JEWELRY                                               string = "FASHION_JEWELRY"
+	FAST_FOOD_RESTAURANTS                                         string = "FAST_FOOD_RESTAURANTS"
+	FICTION_AND_NONFICTION                                        string = "FICTION_AND_NONFICTION"
+	FINANCE_COMPANY                                               string = "FINANCE_COMPANY"
+	FINANCIAL_AND_INVESTMENT_ADVICE                               string = "FINANCIAL_AND_INVESTMENT_ADVICE"
+	FINANCIAL_INSTITUTIONS_MERCHANDISE_AND_SERVICES               string = "FINANCIAL_INSTITUTIONS_MERCHANDISE_AND_SERVICES"
+	FIREARM_ACCESSORIES                                           string = "FIREARM_ACCESSORIES"
+	FIREARMS_WEAPONS_AND_KNIVES                                   string = "FIREARMS_WEAPONS_AND_KNIVES"
+	FIREPLACE_AND_FIREPLACE_SCREENS                               string = "FIREPLACE_AND_FIREPLACE_SCREENS"
+	FIREWORKS                                                     string = "FIREWORKS"
+	FISHING                                                       string = "FISHING"
+	FLORISTS                                                      string = "FLORISTS"
+	FLOWERS                                                       string = "FLOWERS"
+	FOOD_DRINK_AND_NUTRITION                                      string = "FOOD_DRINK_AND_NUTRITION"
+	FOOD_PRODUCTS                                                 string = "FOOD_PRODUCTS"
+	FOOD_RETAIL_AND_SERVICE                                       string = "FOOD_RETAIL_AND_SERVICE"
+	FRAGRANCES_AND_PERFUMES                                       string = "FRAGRANCES_AND_PERFUMES"
+	FREEZER_AND_LOCKER_MEAT_PROVISIONERS                          string = "FREEZER_AND_LOCKER_MEAT_PROVISIONERS"
+	FUEL_DEALERS_FUEL_OIL_WOOD_AND_COAL                           string = "FUEL_DEALERS_FUEL_OIL_WOOD_AND_COAL"
+	FUEL_DEALERS_NON_AUTOMOTIVE                                   string = "FUEL_DEALERS_NON_AUTOMOTIVE"
+	FUNERAL_SERVICES_AND_CREMATORIES                              string = "FUNERAL_SERVICES_AND_CREMATORIES"
+	FURNISHING_AND_DECORATING                                     string = "FURNISHING_AND_DECORATING"
+	FURNITURE                                                     string = "FURNITURE"
+	FURRIERS_AND_FUR_SHOPS                                        string = "FURRIERS_AND_FUR_SHOPS"
+	GADGETS_AND_OTHER_ELECTRONICS                                 string = "GADGETS_AND_OTHER_ELECTRONICS"
+	GAMBLING                                                      string = "GAMBLING"
+	GAME_SOFTWARE                                                 string = "GAME_SOFTWARE"
+	GAMES                                                         string = "GAMES"
+	GARDEN_SUPPLIES                                               string = "GARDEN_SUPPLIES"
+	GENERAL                                                       string = "GENERAL"
+	GENERAL_CONTRACTORS                                           string = "GENERAL_CONTRACTORS"
+	GENERAL_GOVERNMENT                                            string = "GENERAL_GOVERNMENT"
+	GENERAL_SOFTWARE                                              string = "GENERAL_SOFTWARE"
+	GENERAL_TELECOM                                               string = "GENERAL_TELECOM"
+	GIFTS_AND_FLOWERS                                             string = "GIFTS_AND_FLOWERS"
+	GLASS_PAINT_AND_WALLPAPER_STORES                              string = "GLASS_PAINT_AND_WALLPAPER_STORES"
+	GLASSWARE_CRYSTAL_STORES                                      string = "GLASSWARE_CRYSTAL_STORES"
+	GOVERNMENT                                                    string = "GOVERNMENT"
+	GOVERNMENT_IDS_AND_LICENSES                                   string = "GOVERNMENT_IDS_AND_LICENSES"
+	GOVERNMENT_LICENSED_ON_LINE_CASINOS_ON_LINE_GAMBLING          string = "GOVERNMENT_LICENSED_ON_LINE_CASINOS_ON_LINE_GAMBLING"
+	GOVERNMENT_OWNED_LOTTERIES                                    string = "GOVERNMENT_OWNED_LOTTERIES"
+	GOVERNMENT_SERVICES                                           string = "GOVERNMENT_SERVICES"
+	GRAPHIC_AND_COMMERCIAL_DESIGN                                 string = "GRAPHIC_AND_COMMERCIAL_DESIGN"
+	GREETING_CARDS                                                string = "GREETING_CARDS"
+	GROCERY_STORES_AND_SUPERMARKETS                               string = "GROCERY_STORES_AND_SUPERMARKETS"
+	HARDWARE_AND_TOOLS                                            string = "HARDWARE_AND_TOOLS"
+	HARDWARE_EQUIPMENT_AND_SUPPLIES                               string = "HARDWARE_EQUIPMENT_AND_SUPPLIES"
+	HAZARDOUS_RESTRICTED_AND_PERISHABLE_ITEMS                     string = "HAZARDOUS_RESTRICTED_AND_PERISHABLE_ITEMS"
+	HEALTH_AND_BEAUTY_SPAS                                        string = "HEALTH_AND_BEAUTY_SPAS"
+	HEALTH_AND_NUTRITION                                          string = "HEALTH_AND_NUTRITION"
+	HEALTH_AND_PERSONAL_CARE                                      string = "HEALTH_AND_PERSONAL_CARE"
+	HEARING_AIDS_SALES_AND_SUPPLIES                               string = "HEARING_AIDS_SALES_AND_SUPPLIES"
+	HEATING_PLUMBING_AC                                           string = "HEATING_PLUMBING_AC"
+	HIGH_RISK_MERCHANT                                            string = "HIGH_RISK_MERCHANT"
+	HIRING_SERVICES                                               string = "HIRING_SERVICES"
+	HOBBIES_TOYS_AND_GAMES                                        string = "HOBBIES_TOYS_AND_GAMES"
+	HOME_AND_GARDEN                                               string = "HOME_AND_GARDEN"
+	HOME_AUDIO                                                    string = "HOME_AUDIO"
+	HOME_DECOR                                                    string = "HOME_DECOR"
+	HOME_ELECTRONICS                                              string = "HOME_ELECTRONICS"
+	HOSPITALS                                                     string = "HOSPITALS"
+	HOTELS_MOTELS_INNS_RESORTS                                    string = "HOTELS_MOTELS_INNS_RESORTS"
+	HOUSEWARES                                                    string = "HOUSEWARES"
+	HUMAN_PARTS_AND_REMAINS                                       string = "HUMAN_PARTS_AND_REMAINS"
+	HUMOROUS_GIFTS_AND_NOVELTIES                                  string = "HUMOROUS_GIFTS_AND_NOVELTIES"
+	HUNTING                                                       string = "HUNTING"
+	IDS_LICENSES_AND_PASSPORTS                                    string = "IDS_LICENSES_AND_PASSPORTS"
+	ILLEGAL_DRUGS_AND_PARAPHERNALIA                               string = "ILLEGAL_DRUGS_AND_PARAPHERNALIA"
+	INDUSTRIAL                                                    string = "INDUSTRIAL"
+	INDUSTRIAL_AND_MANUFACTURING_SUPPLIES                         string = "INDUSTRIAL_AND_MANUFACTURING_SUPPLIES"
+	INSURANCE_AUTO_AND_HOME                                       string = "INSURANCE_AUTO_AND_HOME"
+	INSURANCE_DIRECT                                              string = "INSURANCE_DIRECT"
+	INSURANCE_LIFE_AND_ANNUITY                                    string = "INSURANCE_LIFE_AND_ANNUITY"
+	INSURANCE_SALES_UNDERWRITING                                  string = "INSURANCE_SALES_UNDERWRITING"
+	INSURANCE_UNDERWRITING_PREMIUMS                               string = "INSURANCE_UNDERWRITING_PREMIUMS"
+	INTERNET_AND_NETWORK_SERVICES                                 string = "INTERNET_AND_NETWORK_SERVICES"
+	INTRA_COMPANY_PURCHASES                                       string = "INTRA_COMPANY_PURCHASES"
+	LABORATORIES_DENTAL_MEDICAL                                   string = "LABORATORIES_DENTAL_MEDICAL"
+	LANDSCAPING                                                   string = "LANDSCAPING"
+	LANDSCAPING_AND_HORTICULTURAL_SERVICES                        string = "LANDSCAPING_AND_HORTICULTURAL_SERVICES"
+	LAUNDRY_CLEANING_SERVICES                                     string = "LAUNDRY_CLEANING_SERVICES"
+	LEGAL                                                         string = "LEGAL"
+	LEGAL_SERVICES_AND_ATTORNEYS                                  string = "LEGAL_SERVICES_AND_ATTORNEYS"
+	LOCAL_DELIVERY_SERVICE                                        string = "LOCAL_DELIVERY_SERVICE"
+	LOCKSMITH                                                     string = "LOCKSMITH"
+	LODGING_AND_ACCOMMODATIONS                                    string = "LODGING_AND_ACCOMMODATIONS"
+	LOTTERY_AND_CONTESTS                                          string = "LOTTERY_AND_CONTESTS"
+	LUGGAGE_AND_LEATHER_GOODS                                     string = "LUGGAGE_AND_LEATHER_GOODS"
+	LUMBER_AND_BUILDING_MATERIALS                                 string = "LUMBER_AND_BUILDING_MATERIALS"
+	MAGAZINES                                                     string = "MAGAZINES"
+	MAINTENANCE_AND_REPAIR_SERVICES                               string = "MAINTENANCE_AND_REPAIR_SERVICES"
+	MAKEUP_AND_COSMETICS                                          string = "MAKEUP_AND_COSMETICS"
+	MANUAL_CASH_DISBURSEMENTS                                     string = "MANUAL_CASH_DISBURSEMENTS"
+	MASSAGE_PARLORS                                               string = "MASSAGE_PARLORS"
+	MEDICAL                                                       string = "MEDICAL"
+	MEDICAL_AND_PHARMACEUTICAL                                    string = "MEDICAL_AND_PHARMACEUTICAL"
+	MEDICAL_CARE                                                  string = "MEDICAL_CARE"
+	MEDICAL_EQUIPMENT_AND_SUPPLIES                                string = "MEDICAL_EQUIPMENT_AND_SUPPLIES"
+	MEDICAL_SERVICES                                              string = "MEDICAL_SERVICES"
+	MEETING_PLANNERS                                              string = "MEETING_PLANNERS"
+	MEMBERSHIP_CLUBS_AND_ORGANIZATIONS                            string = "MEMBERSHIP_CLUBS_AND_ORGANIZATIONS"
+	MEMBERSHIP_COUNTRY_CLUBS_GOLF                                 string = "MEMBERSHIP_COUNTRY_CLUBS_GOLF"
+	MEMORABILIA                                                   string = "MEMORABILIA"
+	MEN_AND_BOY_CLOTHING_AND_ACCESSORY_STORES                     string = "MEN_AND_BOY_CLOTHING_AND_ACCESSORY_STORES"
+	MEN_CLOTHING                                                  string = "MEN_CLOTHING"
+	MERCHANDISE                                                   string = "MERCHANDISE"
+	METAPHYSICAL                                                  string = "METAPHYSICAL"
+	MILITARIA                                                     string = "MILITARIA"
+	MILITARY_AND_CIVIL_SERVICE_UNIFORMS                           string = "MILITARY_AND_CIVIL_SERVICE_UNIFORMS"
+	MISC                                                          string = "MISC"
+	MISCELLANEOUS_GENERAL_SERVICES                                string = "MISCELLANEOUS_GENERAL_SERVICES"
+	MISCELLANEOUS_REPAIR_SHOPS_AND_RELATED_SERVICES               string = "MISCELLANEOUS_REPAIR_SHOPS_AND_RELATED_SERVICES"
+	MODEL_KITS                                                    string = "MODEL_KITS"
+	MONEY_TRANSFER_MEMBER_FINANCIAL_INSTITUTION                   string = "MONEY_TRANSFER_MEMBER_FINANCIAL_INSTITUTION"
+	MONEY_TRANSFER_MERCHANT                                       string = "MONEY_TRANSFER_MERCHANT"
+	MOTION_PICTURE_THEATERS                                       string = "MOTION_PICTURE_THEATERS"
+	MOTOR_FREIGHT_CARRIERS_AND_TRUCKING                           string = "MOTOR_FREIGHT_CARRIERS_AND_TRUCKING"
+	MOTOR_HOME_AND_RECREATIONAL_VEHICLE_RENTAL                    string = "MOTOR_HOME_AND_RECREATIONAL_VEHICLE_RENTAL"
+	MOTOR_HOMES_DEALERS                                           string = "MOTOR_HOMES_DEALERS"
+	MOTOR_VEHICLE_SUPPLIES_AND_NEW_PARTS                          string = "MOTOR_VEHICLE_SUPPLIES_AND_NEW_PARTS"
+	MOTORCYCLE_DEALERS                                            string = "MOTORCYCLE_DEALERS"
+	MOTORCYCLES                                                   string = "MOTORCYCLES"
+	MOVIE                                                         string = "MOVIE"
+	MOVIE_TICKETS                                                 string = "MOVIE_TICKETS"
+	MOVING_AND_STORAGE                                            string = "MOVING_AND_STORAGE"
+	MULTI_LEVEL_MARKETING                                         string = "MULTI_LEVEL_MARKETING"
+	MUSIC_CDS_CASSETTES_AND_ALBUMS                                string = "MUSIC_CDS_CASSETTES_AND_ALBUMS"
+	MUSIC_STORE_INSTRUMENTS_AND_SHEET_MUSIC                       string = "MUSIC_STORE_INSTRUMENTS_AND_SHEET_MUSIC"
+	NETWORKING                                                    string = "NETWORKING"
+	NEW_AGE                                                       string = "NEW_AGE"
+	NEW_PARTS_AND_SUPPLIES_MOTOR_VEHICLE                          string = "NEW_PARTS_AND_SUPPLIES_MOTOR_VEHICLE"
+	NEWS_DEALERS_AND_NEWSTANDS                                    string = "NEWS_DEALERS_AND_NEWSTANDS"
+	NON_DURABLE_GOODS                                             string = "NON_DURABLE_GOODS"
+	NON_FICTION                                                   string = "NON_FICTION"
+	NON_PROFIT_POLITICAL_AND_RELIGION                             string = "NON_PROFIT_POLITICAL_AND_RELIGION"
+	NONPROFIT                                                     string = "NONPROFIT"
+	NOVELTIES                                                     string = "NOVELTIES"
+	OEM_SOFTWARE                                                  string = "OEM_SOFTWARE"
+	OFFICE_SUPPLIES_AND_EQUIPMENT                                 string = "OFFICE_SUPPLIES_AND_EQUIPMENT"
+	ONLINE_DATING                                                 string = "ONLINE_DATING"
+	ONLINE_GAMING                                                 string = "ONLINE_GAMING"
+	ONLINE_GAMING_CURRENCY                                        string = "ONLINE_GAMING_CURRENCY"
+	ONLINE_SERVICES                                               string = "ONLINE_SERVICES"
+	OOUTBOUND_TELEMARKETING_MERCH                                 string = "OOUTBOUND_TELEMARKETING_MERCH"
+	OPHTHALMOLOGISTS_OPTOMETRIST                                  string = "OPHTHALMOLOGISTS_OPTOMETRIST"
+	OPTICIANS_AND_DISPENSING                                      string = "OPTICIANS_AND_DISPENSING"
+	ORTHOPEDIC_GOODS_PROSTHETICS                                  string = "ORTHOPEDIC_GOODS_PROSTHETICS"
+	OSTEOPATHS                                                    string = "OSTEOPATHS"
+	OTHER                                                         string = "OTHER"
+	PACKAGE_TOUR_OPERATORS                                        string = "PACKAGE_TOUR_OPERATORS"
+	PAINTBALL                                                     string = "PAINTBALL"
+	PAINTS_VARNISHES_AND_SUPPLIES                                 string = "PAINTS_VARNISHES_AND_SUPPLIES"
+	PARKING_LOTS_AND_GARAGES                                      string = "PARKING_LOTS_AND_GARAGES"
+	PARTS_AND_ACCESSORIES                                         string = "PARTS_AND_ACCESSORIES"
+	PAWN_SHOPS                                                    string = "PAWN_SHOPS"
+	PAYCHECK_LENDER_OR_CASH_ADVANCE                               string = "PAYCHECK_LENDER_OR_CASH_ADVANCE"
+	PERIPHERALS                                                   string = "PERIPHERALS"
+	PERSONALIZED_GIFTS                                            string = "PERSONALIZED_GIFTS"
+	PET_SHOPS_PET_FOOD_AND_SUPPLIES                               string = "PET_SHOPS_PET_FOOD_AND_SUPPLIES"
+	PETROLEUM_AND_PETROLEUM_PRODUCTS                              string = "PETROLEUM_AND_PETROLEUM_PRODUCTS"
+	PETS_AND_ANIMALS                                              string = "PETS_AND_ANIMALS"
+	PHOTOFINISHING_LABORATORIES_PHOTO_DEVELOPING                  string = "PHOTOFINISHING_LABORATORIES_PHOTO_DEVELOPING"
+	PHOTOGRAPHIC_STUDIOS_PORTRAITS                                string = "PHOTOGRAPHIC_STUDIOS_PORTRAITS"
+	PHOTOGRAPHY                                                   string = "PHOTOGRAPHY"
+	PHYSICAL_GOOD                                                 string = "PHYSICAL_GOOD"
+	PICTURE_VIDEO_PRODUCTION                                      string = "PICTURE_VIDEO_PRODUCTION"
+	PIECE_GOODS_NOTIONS_AND_OTHER_DRY_GOODS                       string = "PIECE_GOODS_NOTIONS_AND_OTHER_DRY_GOODS"
+	PLANTS_AND_SEEDS                                              string = "PLANTS_AND_SEEDS"
+	PLUMBING_AND_HEATING_EQUIPMENTS_AND_SUPPLIES                  string = "PLUMBING_AND_HEATING_EQUIPMENTS_AND_SUPPLIES"
+	POLICE_RELATED_ITEMS                                          string = "POLICE_RELATED_ITEMS"
+	POLITICAL_ORGANIZATIONS                                       string = "POLITICAL_ORGANIZATIONS"
+	POSTAL_SERVICES_GOVERNMENT_ONLY                               string = "POSTAL_SERVICES_GOVERNMENT_ONLY"
+	POSTERS                                                       string = "POSTERS"
+	PREPAID_AND_STORED_VALUE_CARDS                                string = "PREPAID_AND_STORED_VALUE_CARDS"
+	PRESCRIPTION_DRUGS                                            string = "PRESCRIPTION_DRUGS"
+	PROMOTIONAL_ITEMS                                             string = "PROMOTIONAL_ITEMS"
+	PUBLIC_WAREHOUSING_AND_STORAGE                                string = "PUBLIC_WAREHOUSING_AND_STORAGE"
+	PUBLISHING_AND_PRINTING                                       string = "PUBLISHING_AND_PRINTING"
+	PUBLISHING_SERVICES                                           string = "PUBLISHING_SERVICES"
+	RADAR_DECTORS                                                 string = "RADAR_DECTORS"
+	RADIO_TELEVISION_AND_STEREO_REPAIR                            string = "RADIO_TELEVISION_AND_STEREO_REPAIR"
+	REAL_ESTATE                                                   string = "REAL_ESTATE"
+	REAL_ESTATE_AGENT                                             string = "REAL_ESTATE_AGENT"
+	REAL_ESTATE_AGENTS_AND_MANAGERS_RENTALS                       string = "REAL_ESTATE_AGENTS_AND_MANAGERS_RENTALS"
+	RELIGION_AND_SPIRITUALITY_FOR_PROFIT                          string = "RELIGION_AND_SPIRITUALITY_FOR_PROFIT"
+	RELIGIOUS                                                     string = "RELIGIOUS"
+	RELIGIOUS_ORGANIZATIONS                                       string = "RELIGIOUS_ORGANIZATIONS"
+	REMITTANCE                                                    string = "REMITTANCE"
+	RENTAL_PROPERTY_MANAGEMENT                                    string = "RENTAL_PROPERTY_MANAGEMENT"
+	RESIDENTIAL                                                   string = "RESIDENTIAL"
+	RETAIL                                                        string = "RETAIL"
+	RETAIL_FINE_JEWELRY_AND_WATCHES                               string = "RETAIL_FINE_JEWELRY_AND_WATCHES"
+	REUPHOLSTERY_AND_FURNITURE_REPAIR                             string = "REUPHOLSTERY_AND_FURNITURE_REPAIR"
+	RINGS                                                         string = "RINGS"
+	ROOFING_SIDING_SHEET_METAL                                    string = "ROOFING_SIDING_SHEET_METAL"
+	RUGS_AND_CARPETS                                              string = "RUGS_AND_CARPETS"
+	SCHOOLS_AND_COLLEGES                                          string = "SCHOOLS_AND_COLLEGES"
+	SCIENCE_FICTION                                               string = "SCIENCE_FICTION"
+	SCRAPBOOKING                                                  string = "SCRAPBOOKING"
+	SCULPTURES                                                    string = "SCULPTURES"
+	SECURITIES_BROKERS_AND_DEALERS                                string = "SECURITIES_BROKERS_AND_DEALERS"
+	SECURITY_AND_SURVEILLANCE                                     string = "SECURITY_AND_SURVEILLANCE"
+	SECURITY_AND_SURVEILLANCE_EQUIPMENT                           string = "SECURITY_AND_SURVEILLANCE_EQUIPMENT"
+	SECURITY_BROKERS_AND_DEALERS                                  string = "SECURITY_BROKERS_AND_DEALERS"
+	SEMINARS                                                      string = "SEMINARS"
+	SERVICE_STATIONS                                              string = "SERVICE_STATIONS"
+	SERVICES                                                      string = "SERVICES"
+	SEWING_NEEDLEWORK_FABRIC_AND_PIECE_GOODS_STORES               string = "SEWING_NEEDLEWORK_FABRIC_AND_PIECE_GOODS_STORES"
+	SHIPPING_AND_PACKING                                          string = "SHIPPING_AND_PACKING"
+	SHOE_REPAIR_HAT_CLEANING                                      string = "SHOE_REPAIR_HAT_CLEANING"
+	SHOE_STORES                                                   string = "SHOE_STORES"
+	SHOES                                                         string = "SHOES"
+	SNOWMOBILE_DEALERS                                            string = "SNOWMOBILE_DEALERS"
+	SOFTWARE                                                      string = "SOFTWARE"
+	SPECIALTY_AND_MISC                                            string = "SPECIALTY_AND_MISC"
+	SPECIALTY_CLEANING_POLISHING_AND_SANITATION_PREPARATIONS      string = "SPECIALTY_CLEANING_POLISHING_AND_SANITATION_PREPARATIONS"
+	SPECIALTY_OR_RARE_PETS                                        string = "SPECIALTY_OR_RARE_PETS"
+	SPORT_GAMES_AND_TOYS                                          string = "SPORT_GAMES_AND_TOYS"
+	SPORTING_AND_RECREATIONAL_CAMPS                               string = "SPORTING_AND_RECREATIONAL_CAMPS"
+	SPORTING_GOODS                                                string = "SPORTING_GOODS"
+	SPORTS_AND_OUTDOORS                                           string = "SPORTS_AND_OUTDOORS"
+	SPORTS_AND_RECREATION                                         string = "SPORTS_AND_RECREATION"
+	STAMP_AND_COIN                                                string = "STAMP_AND_COIN"
+	STATIONARY_PRINTING_AND_WRITING_PAPER                         string = "STATIONARY_PRINTING_AND_WRITING_PAPER"
+	STENOGRAPHIC_AND_SECRETARIAL_SUPPORT_SERVICES                 string = "STENOGRAPHIC_AND_SECRETARIAL_SUPPORT_SERVICES"
+	STOCKS_BONDS_SECURITIES_AND_RELATED_CERTIFICATES              string = "STOCKS_BONDS_SECURITIES_AND_RELATED_CERTIFICATES"
+	STORED_VALUE_CARDS                                            string = "STORED_VALUE_CARDS"
+	SUPPLIES                                                      string = "SUPPLIES"
+	SUPPLIES_AND_TOYS                                             string = "SUPPLIES_AND_TOYS"
+	SURVEILLANCE_EQUIPMENT                                        string = "SURVEILLANCE_EQUIPMENT"
+	SWIMMING_POOLS_AND_SPAS                                       string = "SWIMMING_POOLS_AND_SPAS"
+	SWIMMING_POOLS_SALES_SUPPLIES_SERVICES                        string = "SWIMMING_POOLS_SALES_SUPPLIES_SERVICES"
+	TAILORS_AND_ALTERATIONS                                       string = "TAILORS_AND_ALTERATIONS"
+	TAX_PAYMENTS                                                  string = "TAX_PAYMENTS"
+	TAX_PAYMENTS_GOVERNMENT_AGENCIES                              string = "TAX_PAYMENTS_GOVERNMENT_AGENCIES"
+	TAXICABS_AND_LIMOUSINES                                       string = "TAXICABS_AND_LIMOUSINES"
+	TELECOMMUNICATION_SERVICES                                    string = "TELECOMMUNICATION_SERVICES"
+	TELEPHONE_CARDS                                               string = "TELEPHONE_CARDS"
+	TELEPHONE_EQUIPMENT                                           string = "TELEPHONE_EQUIPMENT"
+	TELEPHONE_SERVICES                                            string = "TELEPHONE_SERVICES"
+	THEATER                                                       string = "THEATER"
+	TIRE_RETREADING_AND_REPAIR                                    string = "TIRE_RETREADING_AND_REPAIR"
+	TOLL_OR_BRIDGE_FEES                                           string = "TOLL_OR_BRIDGE_FEES"
+	TOOLS_AND_EQUIPMENT                                           string = "TOOLS_AND_EQUIPMENT"
+	TOURIST_ATTRACTIONS_AND_EXHIBITS                              string = "TOURIST_ATTRACTIONS_AND_EXHIBITS"
+	TOWING_SERVICE                                                string = "TOWING_SERVICE"
+	TOYS_AND_GAMES                                                string = "TOYS_AND_GAMES"
+	TRADE_AND_VOCATIONAL_SCHOOLS                                  string = "TRADE_AND_VOCATIONAL_SCHOOLS"
+	TRADEMARK_INFRINGEMENT                                        string = "TRADEMARK_INFRINGEMENT"
+	TRAILER_PARKS_AND_CAMPGROUNDS                                 string = "TRAILER_PARKS_AND_CAMPGROUNDS"
+	TRAINING_SERVICES                                             string = "TRAINING_SERVICES"
+	TRANSPORTATION_SERVICES                                       string = "TRANSPORTATION_SERVICES"
+	TRAVEL                                                        string = "TRAVEL"
+	TRUCK_AND_UTILITY_TRAILER_RENTALS                             string = "TRUCK_AND_UTILITY_TRAILER_RENTALS"
+	TRUCK_STOP                                                    string = "TRUCK_STOP"
+	TYPESETTING_PLATE_MAKING_AND_RELATED_SERVICES                 string = "TYPESETTING_PLATE_MAKING_AND_RELATED_SERVICES"
+	USED_MERCHANDISE_AND_SECONDHAND_STORES                        string = "USED_MERCHANDISE_AND_SECONDHAND_STORES"
+	USED_PARTS_MOTOR_VEHICLE                                      string = "USED_PARTS_MOTOR_VEHICLE"
+	UTILITIES                                                     string = "UTILITIES"
+	UTILITIES_ELECTRIC_GAS_WATER_SANITARY                         string = "UTILITIES_ELECTRIC_GAS_WATER_SANITARY"
+	VARIETY_STORES                                                string = "VARIETY_STORES"
+	VEHICLE_SALES                                                 string = "VEHICLE_SALES"
+	VEHICLE_SERVICE_AND_ACCESSORIES                               string = "VEHICLE_SERVICE_AND_ACCESSORIES"
+	VIDEO_EQUIPMENT                                               string = "VIDEO_EQUIPMENT"
+	VIDEO_GAME_ARCADES_ESTABLISH                                  string = "VIDEO_GAME_ARCADES_ESTABLISH"
+	VIDEO_GAMES_AND_SYSTEMS                                       string = "VIDEO_GAMES_AND_SYSTEMS"
+	VIDEO_TAPE_RENTAL_STORES                                      string = "VIDEO_TAPE_RENTAL_STORES"
+	VINTAGE_AND_COLLECTIBLE_VEHICLES                              string = "VINTAGE_AND_COLLECTIBLE_VEHICLES"
+	VINTAGE_AND_COLLECTIBLES                                      string = "VINTAGE_AND_COLLECTIBLES"
+	VITAMINS_AND_SUPPLEMENTS                                      string = "VITAMINS_AND_SUPPLEMENTS"
+	VOCATIONAL_AND_TRADE_SCHOOLS                                  string = "VOCATIONAL_AND_TRADE_SCHOOLS"
+	WATCH_CLOCK_AND_JEWELRY_REPAIR                                string = "WATCH_CLOCK_AND_JEWELRY_REPAIR"
+	WEB_HOSTING_AND_DESIGN                                        string = "WEB_HOSTING_AND_DESIGN"
+	WELDING_REPAIR                                                string = "WELDING_REPAIR"
+	WHOLESALE_CLUBS                                               string = "WHOLESALE_CLUBS"
+	WHOLESALE_FLORIST_SUPPLIERS                                   string = "WHOLESALE_FLORIST_SUPPLIERS"
+	WHOLESALE_PRESCRIPTION_DRUGS                                  string = "WHOLESALE_PRESCRIPTION_DRUGS"
+	WILDLIFE_PRODUCTS                                             string = "WILDLIFE_PRODUCTS"
+	WIRE_TRANSFER                                                 string = "WIRE_TRANSFER"
+	WIRE_TRANSFER_AND_MONEY_ORDER                                 string = "WIRE_TRANSFER_AND_MONEY_ORDER"
+	WOMEN_ACCESSORY_SPECIALITY                                    string = "WOMEN_ACCESSORY_SPECIALITY"
+	WOMEN_CLOTHING                                                string = "WOMEN_CLOTHING"
+)
+
+// Possible values for Plan.Status
+const (
+	P_CREATED  string = "CREATED"
+	P_INACTIVE string = "INACTIVE"
+	P_ACTIVE   string = "ACTIVE"
+)
+
+// Possible values for Plan.Status
+const (
+	S_APPROVAL_PENDING string = "APPROVAL_PENDING"
+	S_APPROVED         string = "APPROVED"
+	S_ACTIVE           string = "ACTIVE"
+	S_SUSPENDED        string = "SUSPENDED"
+	S_CANCELLED        string = "CANCELLED"
+	S_EXPIRED          string = "EXPIRED"
+)
+
+// Possible values for BillingCycle.TenureType and CycleExecution.TenureType
+const (
+	REGULAR string = "REGULAR"
+	TRIAL   string = "TRIAL"
+)
+
+// Possible values for Frequency.IntervalUnit
+const (
+	DAY   string = "DAY"
+	WEEK  string = "WEEK"
+	MONTH string = "MONTH"
+	YEAR  string = "YEAR"
+)
+
+// Possible values for PaymentPreferences.SetupFeeFailureAction
+const (
+	CONTINUE string = "CONTINUE"
+	CANCEL   string = "CANCEL"
+)
+
+// Possible values for PaymentMethod.PayerSelected
+const (
+	PAYPAL string = "PAYPAL"
+)
+
+// Possible values for PaymentMethod.PayeePreferred
+const (
+	UNRESTRICTED               string = "UNRESTRICTED"
+	IMMEDIATE_PAYMENT_REQUIRED string = "IMMEDIATE_PAYMENT_REQUIRED"
+)
+
+// Possible values for PaymentMethod.Category
+const (
+	CUSTOMER_PRESENT_SINGLE_PURCHASE string = "CUSTOMER_PRESENT_SINGLE_PURCHASE"
+	CUSTOMER_NOT_PRESENT_RECURRING   string = "CUSTOMER_NOT_PRESENT_RECURRING"
+	CUSTOMER_PRESENT_RECURRING_FIRST string = "CUSTOMER_PRESENT_RECURRING_FIRST"
+	CUSTOMER_PRESENT_UNSCHEDULED     string = "CUSTOMER_PRESENT_UNSCHEDULED"
+	CUSTOMER_NOT_PRESENT_UNSCHEDULED string = "CUSTOMER_NOT_PRESENT_UNSCHEDULED"
+	MAIL_ORDER_TELEPHONE_ORDER       string = "MAIL_ORDER_TELEPHONE_ORDER"
+)
+
+// Possible values for CardResponseWithBillingAddress.Brand
+const (
+	VISA            string = "VISA"
+	MASTERCARD      string = "MASTERCARD"
+	DISCOVER        string = "DISCOVER"
+	AMEX            string = "AMEX"
+	SOLO            string = "SOLO"
+	JCB             string = "JCB"
+	STAR            string = "STAR"
+	DELTA           string = "DELTA"
+	SWITCH          string = "SWITCH"
+	MAESTRO         string = "MAESTRO"
+	CB_NATIONALE    string = "CB_NATIONALE"
+	CONFIGOGA       string = "CONFIGOGA"
+	CONFIDIS        string = "CONFIDIS"
+	ELECTRON        string = "ELECTRON"
+	CETELEM         string = "CETELEM"
+	CHINA_UNION_PAY string = "CHINA_UNION_PAY"
+)
+
+// Possible values for CardResponseWithBillingAddress.Type
+const (
+	CREDIT  string = "CREDIT"
+	DEBIT   string = "DEBIT"
+	PREPAID string = "PREPAID"
+	UNKNOWN string = "UNKNOWN"
+)
+
+// Possible values for FailedPaymentDetails.ReasonCode
+const (
+	PAYMENT_DENIED                       string = "PAYMENT_DENIED"
+	INTERNAL_SERVER_ERROR                string = "INTERNAL_SERVER_ERROR"
+	PAYEE_ACCOUNT_RESTRICTED             string = "PAYEE_ACCOUNT_RESTRICTED"
+	PAYER_ACCOUNT_RESTRICTED             string = "PAYER_ACCOUNT_RESTRICTED"
+	PAYER_CANNOT_PAY                     string = "PAYER_CANNOT_PAY"
+	SENDING_LIMIT_EXCEEDED               string = "SENDING_LIMIT_EXCEEDED"
+	TRANSACTION_RECEIVING_LIMIT_EXCEEDED string = "TRANSACTION_RECEIVING_LIMIT_EXCEEDED"
+	CURRENCY_MISMATCH                    string = "CURRENCY_MISMATCH"
+)
+
+// Possible values for CaptureAuthorizedPaymentOnSubscriptionRequest.CaptureType
+const (
+	OUTSTANDING_BALANCE string = "OUTSTANDING_BALANCE"
 )
 
 type (
@@ -869,8 +1428,8 @@ type (
 	// | PAYPAL_FRAUD_MODEL 					| PayPal fraud model. 					  |
 	// ------------------------------------------------------------------------------------
 	FmfDetails struct {
-		FilterType  string `json:"filter_type"`            //Read only
-		FilterID    string `json:"filter_id"`              //Read only
+		FilterType  string `json:"filter_type"`           //Read only
+		FilterID    string `json:"filter_id"`             //Read only
 		Name        string `json:"name,omitempty"`        //Read only
 		Description string `json:"description,omitempty"` //Read only
 
@@ -889,7 +1448,7 @@ type (
 	// | 21_CANCEL_ALL_RECURRING_PAYMENTS 							 | 21 Cancel all recurring payments. 							|
 	// ------------------------------------------------------------------------------------------------------------------------------
 	ProcessorResponse struct {
-		ResponseCode string `json:"response_code"`            //Read only
+		ResponseCode string `json:"response_code"`           //Read only
 		AvsCode      string `json:"avs_code,omitempty"`      //Read only
 		CvvCode      string `json:"cvv_code,omitempty"`      //Read only
 		AdviceCode   string `json:"advice_code,omitempty"`   //Read only
@@ -961,11 +1520,11 @@ type (
 
 	// AmountWithBreakdown represents the breakdown details for the amount. Includes the gross, tax, fee, and shipping amounts.
 	AmountWithBreakdown struct {
-		GrossAmount    *Money `json:"gross_amount"`               //Read only
+		GrossAmount    *Money `json:"gross_amount"`              //Read only
 		FeeAmount      *Money `json:"fee_amount,omitempty"`      //Read only
 		ShippingAmount *Money `json:"shipping_amount,omitempty"` //Read only
 		TaxAmount      *Money `json:"tax_amount,omitempty"`      //Read only
-		NetAmount      *Money `json:"net_amount"`                 //Read only
+		NetAmount      *Money `json:"net_amount"`                //Read only
 	}
 
 	//Payee struct
@@ -1131,8 +1690,8 @@ type (
 	// Type represents the product type. Indicates whether the product is physical or tangible goods, or a service. The allowed values are:
 	// ---------------------------------------------------------
 	// | PHYSICAL | Physical goods.							   |
-	// | PHYSICAL | Digital goods.							   |
-	// | PHYSICAL | A service. For example, technical support. |
+	// | DIGITAL  | Digital goods.							   |
+	// | SERVICE  | A service. For example, technical support. |
 	// ---------------------------------------------------------
 	// You can see category allowed values in PayPal docs -> https://developer.paypal.com/docs/api/catalog-products/v1/#products-create-request-body
 	CreateProductRequest struct {
@@ -1148,8 +1707,8 @@ type (
 	// Type represents the product type. Indicates whether the product is physical or tangible goods, or a service. The allowed values are:
 	// ---------------------------------------------------------
 	// | PHYSICAL | Physical goods.							   |
-	// | PHYSICAL | Digital goods.							   |
-	// | PHYSICAL | A service. For example, technical support. |
+	// | DIGITAL  | Digital goods.							   |
+	// | SERVICE  | A service. For example, technical support. |
 	// ---------------------------------------------------------
 	// You can see category allowed values in PayPal docs -> https://developer.paypal.com/docs/api/catalog-products/v1/#products-create-request-body
 	Product struct {
@@ -1228,7 +1787,7 @@ type (
 		PricingScheme *PricingScheme `json:"pricing_scheme,omitempty"` //Free Trial Cycle doesn't require scheme
 		Frequency     *Frequency     `json:"frequency"`
 		TenureType    string         `json:"tenure_type"`
-		Sequence      uint64         `json:"sequence"`                //min: 0, max: 99
+		Sequence      uint64         `json:"sequence"`               //min: 0, max: 99
 		TotalCycles   uint64         `json:"total_cycles,omitempty"` //default: 1, min: 0, max: 999
 	}
 
@@ -1294,11 +1853,11 @@ type (
 		PaymentPreferences *PaymentPreferences `json:"payment_preferences"`
 		Taxes              *Taxes              `json:"taxes,omitempty"`
 		QuantitySupported  bool                `json:"quantity_supported,omitempty"`
-		CreateTime         string              `json:"create_time"`           //Read only
-		UpdateTime         string              `json:"update_time"`           //Read only
-		Version            uint64              `json:"version,omitempty"`    //Read only
-		UsageType          string              `json:"usage_type,omitempty"` //Read only
-		Links              []*Link             `json:"links"`                 //Read only
+		CreateTime         string              `json:"create_time,omitempty"` //Read only
+		UpdateTime         string              `json:"update_time,omitempty"` //Read only
+		Version            uint64              `json:"version,omitempty"`     //Read only
+		UsageType          string              `json:"usage_type,omitempty"`  //Read only
+		Links              []*Link             `json:"links,omitempty"`       //Read only
 	}
 
 	// ListPlansParams represents query params for list products call
@@ -1589,13 +2148,14 @@ type (
 
 	// Event represents hook response
 	// The possible values for Resource are:
-	// -----------------------------------------------
-	// | Hook Name  				  | Object 		 |
-	// -----------------------------------------------
-	// | CATALOG.PRODUCT.CREATED 	  | Product 	 |
-	// | BILLING.PLAN.CREATED 		  | Plan 		 |
-	// | BILLING.SUBSCRIPTION.CREATED | Subscription |
-	// -----------------------------------------------
+	// -------------------------------------------------
+	// | Hook Name  				    | Object 	   |
+	// -------------------------------------------------
+	// | CATALOG.PRODUCT.CREATED 	    | Product 	   |
+	// | BILLING.PLAN.CREATED 		    | Plan 		   |
+	// | BILLING.SUBSCRIPTION.CREATED   | Subscription |
+	// | BILLING.SUBSCRIPTION.ACTIVATED | Subscription |
+	// -------------------------------------------------
 	Event struct {
 		ID              string          `json:"id"`
 		EventVersion    string          `json:"event_version"`
