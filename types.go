@@ -70,13 +70,17 @@ const (
 	ItemCategoryPhysicalGood string = "PHYSICAL_GOODS"
 )
 
-// Possible values for `shipping_preference` in ApplicationContext
-//
-// https://developer.paypal.com/docs/api/orders/v2/#definition-application_context
+// Possible values for ShippingPreference in ApplicationContext
 const (
-	ShippingPreferenceGetFromFile        string = "GET_FROM_FILE"
-	ShippingPreferenceNoShipping         string = "NO_SHIPPING"
-	ShippingPreferenceSetProvidedAddress string = "SET_PROVIDED_ADDRESS"
+	GET_FROM_FILE        string = "GET_FROM_FILE"
+	NO_SHIPPING          string = "NO_SHIPPING"
+	SET_PROVIDED_ADDRESS string = "SET_PROVIDED_ADDRESS"
+)
+
+// Possible values for UserAction in ApplicationContext
+const (
+	UA_CONTINUE      string = "CONTINUE"
+	UA_SUBSCRIBE_NOW string = "SUBSCRIBE_NOW"
 )
 
 const (
@@ -113,29 +117,21 @@ const (
 	LinkRelActionURL string = "action_url"
 )
 
-// Possible values for PatchObject.Operation
+// Possible values for Operation in PatchObject
 const (
-	Add     string = "add"
-	Replace string = "replace"
-	Remove  string = "remove"
+	OP_ADD     string = "add"
+	OP_REPLACE string = "replace"
+	OP_REMOVE  string = "remove"
 )
 
-// Possible values for PatchObject.Path when you update product
+// Possible values for Type in CreateProduct
 const (
-	Description string = "/description"
-	Category    string = "/category"
-	ImageUrl    string = "/image_url"
-	HomeUrl     string = "/home_url"
+	P_TYPE_PHYSICAL string = "PHYSICAL"
+	P_TYPE_DIGITAL  string = "DIGITAL"
+	P_TYPE_SERVICE  string = "SERVICE"
 )
 
-// Possible values for CreateProduct.Type
-const (
-	PHYSICAL string = "PHYSICAL"
-	DIGITAL  string = "DIGITAL"
-	SERVICE  string = "SERVICE"
-)
-
-// Possible values for CreateProduct.Category
+// Possible values for Category in CreateProduct
 const (
 	AC_REFRIGERATION_REPAIR                                       string = "AC_REFRIGERATION_REPAIR"
 	ACADEMIC_SOFTWARE                                             string = "ACADEMIC_SOFTWARE"
@@ -591,7 +587,7 @@ const (
 	P_ACTIVE   string = "ACTIVE"
 )
 
-// Possible values for Plan.Status
+// Possible values for Status in Plan
 const (
 	S_APPROVAL_PENDING string = "APPROVAL_PENDING"
 	S_APPROVED         string = "APPROVED"
@@ -601,21 +597,21 @@ const (
 	S_EXPIRED          string = "EXPIRED"
 )
 
-// Possible values for BillingCycle.TenureType and CycleExecution.TenureType
+// Possible values for TenureType in BillingCycle and TenureType in CycleExecution
 const (
-	REGULAR string = "REGULAR"
-	TRIAL   string = "TRIAL"
+	T_TYPE_REGULAR string = "REGULAR"
+	T_TYPE_TRIAL   string = "TRIAL"
 )
 
-// Possible values for Frequency.IntervalUnit
+// Possible values for IntervalUnit in Frequency
 const (
-	DAY   string = "DAY"
-	WEEK  string = "WEEK"
-	MONTH string = "MONTH"
-	YEAR  string = "YEAR"
+	UNIT_DAY   string = "DAY"
+	UNIT_WEEK  string = "WEEK"
+	UNIT_MONTH string = "MONTH"
+	UNIT_YEAR  string = "YEAR"
 )
 
-// Possible values for PaymentPreferences.SetupFeeFailureAction
+// Possible values for SetupFeeFailureAction in PaymentPreferences
 const (
 	CONTINUE string = "CONTINUE"
 	CANCEL   string = "CANCEL"
@@ -623,16 +619,16 @@ const (
 
 // Possible values for PaymentMethod.PayerSelected
 const (
-	PAYPAL string = "PAYPAL"
+	METHOD_PAYPAL string = "PAYPAL"
 )
 
-// Possible values for PaymentMethod.PayeePreferred
+// Possible values for PayeePreferred in PaymentMethod
 const (
 	UNRESTRICTED               string = "UNRESTRICTED"
 	IMMEDIATE_PAYMENT_REQUIRED string = "IMMEDIATE_PAYMENT_REQUIRED"
 )
 
-// Possible values for PaymentMethod.Category
+// Possible values for Category in PaymentMethod
 const (
 	CUSTOMER_PRESENT_SINGLE_PURCHASE string = "CUSTOMER_PRESENT_SINGLE_PURCHASE"
 	CUSTOMER_NOT_PRESENT_RECURRING   string = "CUSTOMER_NOT_PRESENT_RECURRING"
@@ -642,47 +638,47 @@ const (
 	MAIL_ORDER_TELEPHONE_ORDER       string = "MAIL_ORDER_TELEPHONE_ORDER"
 )
 
-// Possible values for CardResponseWithBillingAddress.Brand
+// Possible values for Brand in CardResponseWithBillingAddress
 const (
-	VISA            string = "VISA"
-	MASTERCARD      string = "MASTERCARD"
-	DISCOVER        string = "DISCOVER"
-	AMEX            string = "AMEX"
-	SOLO            string = "SOLO"
-	JCB             string = "JCB"
-	STAR            string = "STAR"
-	DELTA           string = "DELTA"
-	SWITCH          string = "SWITCH"
-	MAESTRO         string = "MAESTRO"
-	CB_NATIONALE    string = "CB_NATIONALE"
-	CONFIGOGA       string = "CONFIGOGA"
-	CONFIDIS        string = "CONFIDIS"
-	ELECTRON        string = "ELECTRON"
-	CETELEM         string = "CETELEM"
-	CHINA_UNION_PAY string = "CHINA_UNION_PAY"
+	BRAND_VISA            string = "VISA"
+	BRAND_MASTERCARD      string = "MASTERCARD"
+	BRAND_DISCOVER        string = "DISCOVER"
+	BRAND_AMEX            string = "AMEX"
+	BRAND_SOLO            string = "SOLO"
+	BRAND_JCB             string = "JCB"
+	BRAND_STAR            string = "STAR"
+	BRAND_DELTA           string = "DELTA"
+	BRAND_SWITCH          string = "SWITCH"
+	BRAND_MAESTRO         string = "MAESTRO"
+	BRAND_CB_NATIONALE    string = "CB_NATIONALE"
+	BRAND_CONFIGOGA       string = "CONFIGOGA"
+	BRAND_CONFIDIS        string = "CONFIDIS"
+	BRAND_ELECTRON        string = "ELECTRON"
+	BRAND_CETELEM         string = "CETELEM"
+	BRAND_CHINA_UNION_PAY string = "CHINA_UNION_PAY"
 )
 
-// Possible values for CardResponseWithBillingAddress.Type
+// Possible values for Type in CardResponseWithBillingAddress
 const (
-	CREDIT  string = "CREDIT"
-	DEBIT   string = "DEBIT"
-	PREPAID string = "PREPAID"
-	UNKNOWN string = "UNKNOWN"
+	TYPE_CREDIT  string = "CREDIT"
+	TYPE_DEBIT   string = "DEBIT"
+	TYPE_PREPAID string = "PREPAID"
+	TYPE_UNKNOWN string = "UNKNOWN"
 )
 
-// Possible values for FailedPaymentDetails.ReasonCode
+// Possible values for ReasonCode in FailedPaymentDetails
 const (
-	PAYMENT_DENIED                       string = "PAYMENT_DENIED"
-	INTERNAL_SERVER_ERROR                string = "INTERNAL_SERVER_ERROR"
-	PAYEE_ACCOUNT_RESTRICTED             string = "PAYEE_ACCOUNT_RESTRICTED"
-	PAYER_ACCOUNT_RESTRICTED             string = "PAYER_ACCOUNT_RESTRICTED"
-	PAYER_CANNOT_PAY                     string = "PAYER_CANNOT_PAY"
-	SENDING_LIMIT_EXCEEDED               string = "SENDING_LIMIT_EXCEEDED"
-	TRANSACTION_RECEIVING_LIMIT_EXCEEDED string = "TRANSACTION_RECEIVING_LIMIT_EXCEEDED"
-	CURRENCY_MISMATCH                    string = "CURRENCY_MISMATCH"
+	CODE_PAYMENT_DENIED                       string = "PAYMENT_DENIED"
+	CODE_INTERNAL_SERVER_ERROR                string = "INTERNAL_SERVER_ERROR"
+	CODE_PAYEE_ACCOUNT_RESTRICTED             string = "PAYEE_ACCOUNT_RESTRICTED"
+	CODE_PAYER_ACCOUNT_RESTRICTED             string = "PAYER_ACCOUNT_RESTRICTED"
+	CODE_PAYER_CANNOT_PAY                     string = "PAYER_CANNOT_PAY"
+	CODE_SENDING_LIMIT_EXCEEDED               string = "SENDING_LIMIT_EXCEEDED"
+	CODE_TRANSACTION_RECEIVING_LIMIT_EXCEEDED string = "TRANSACTION_RECEIVING_LIMIT_EXCEEDED"
+	CODE_CURRENCY_MISMATCH                    string = "CURRENCY_MISMATCH"
 )
 
-// Possible values for CaptureAuthorizedPaymentOnSubscriptionRequest.CaptureType
+// Possible values for CaptureType in CaptureAuthorizedPaymentOnSubscriptionReques
 const (
 	OUTSTANDING_BALANCE string = "OUTSTANDING_BALANCE"
 )
@@ -2028,9 +2024,9 @@ type (
 		ShippingAmount   *Money                   `json:"shipping_amount,omitempty"`
 		Subscriber       *Subscriber              `json:"subscriber,omitempty"`
 		BillingInfo      *SubscriptionBillingInfo `json:"billing_info,omitempty"` //Read only
-		CreateTime       string                   `json:"created_time"`            //Read only
-		UpdateTime       string                   `json:"update_time"`             //Read only
-		Links            []*Link                  `json:"links"`                   //Read only
+		CreateTime       string                   `json:"created_time"`           //Read only
+		UpdateTime       string                   `json:"update_time"`            //Read only
+		Links            []*Link                  `json:"links"`                  //Read only
 	}
 
 	// SubscriptionBillingInfo represents billing details for subscription
@@ -2040,10 +2036,10 @@ type (
 		OutstandingBalance  *Money               `json:"outstanding_balance"`
 		CycleExecutions     []*CycleExecution    `json:"cycle_executions,omitempty"` //Read only
 		LastPayment         LastPaymentDetails   `json:"last_payment,omitempty"`     //Read only
-		NextBillingTime     string               `json:"next_billing_time"`           //Read only
-		FinalPaymentTime    string               `json:"final_payment_time"`          //Read only
-		FailedPaymentsCount uint64               `json:"failed_payments_count"`       //min: 0, max: 999
-		LastFailedPayment   FailedPaymentDetails `json:"last_failed_payment"`         //Read only
+		NextBillingTime     string               `json:"next_billing_time"`          //Read only
+		FinalPaymentTime    string               `json:"final_payment_time"`         //Read only
+		FailedPaymentsCount uint64               `json:"failed_payments_count"`      //min: 0, max: 999
+		LastFailedPayment   FailedPaymentDetails `json:"last_failed_payment"`        //Read only
 	}
 
 	// CycleExecution represents details about billing cycles executions
@@ -2055,9 +2051,9 @@ type (
 	// | TRIAL   | A trial billing cycle.   |
 	// --------------------------------------
 	CycleExecution struct {
-		TenureType                  string `json:"tenure_type"`                               //Read only
-		Sequence                    uint64 `json:"sequence"`                                  //min: 0, max: 99
-		CyclesCompleted             uint64 `json:"cycles_completed"`                          //min: 0, max: 9999 Read only
+		TenureType                  string `json:"tenure_type"`                              //Read only
+		Sequence                    uint64 `json:"sequence"`                                 //min: 0, max: 99
+		CyclesCompleted             uint64 `json:"cycles_completed"`                         //min: 0, max: 9999 Read only
 		CyclesRemaining             uint64 `json:"cycles_remaining,omitempty"`               //min: 0, max: 9999 Read only
 		CurrentPricingSchemeVersion uint64 `json:"current_pricing_scheme_version,omitempty"` //min: 0, max: 99 Read only
 		TotalCycles                 uint64 `json:"total_cycles,omitempty"`                   //min: 0, max: 999 Read only
@@ -2082,8 +2078,8 @@ type (
 	// | CURRENCY_MISMATCH                    | The transaction is declined due to a currency mismatch.				   |
 	// -----------------------------------------------------------------------------------------------------------------
 	FailedPaymentDetails struct {
-		Amount               *Money `json:"amount"`                             //Read only
-		Time                 string `json:"time"`                               //Read only
+		Amount               *Money `json:"amount"`                            //Read only
+		Time                 string `json:"time"`                              //Read only
 		ReasonCode           string `json:"reason_code,omitempty"`             //Read only
 		NextPaymentRetryTime string `json:"next_payment_retry_time,omitempty"` //Read only
 	}
