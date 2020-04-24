@@ -1008,7 +1008,7 @@ type (
 
 	ReferralRequest struct {
 		TrackingID            string                 `json:"tracking_id"`
-		PartnerConfigOverride *PartnerConfigOverride `json:"partner_config_override,omitemtpy"`
+		PartnerConfigOverride *PartnerConfigOverride `json:"partner_config_override,omitempty"`
 		Operations            []Operation            `json:"operations,omitempty"`
 		Products              []string               `json:"products,omitempty"`
 		LegalConsents         []Consent              `json:"legal_consents,omitempty"`
