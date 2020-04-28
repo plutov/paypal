@@ -1791,7 +1791,7 @@ type (
 	// A free trial billing cycle does not require a pricing scheme.
 	PricingScheme struct {
 		Version    uint64 `json:"version,omitempty"` //Read only
-		FixedPrice *Money `json:"fixed_price"`
+		FixedPrice *Money `json:"fixed_price,omitempty"`
 		CreateTime string `json:"create_time,omitempty"` //Read only
 		UpdateTime string `json:"update_time,omitempty"` //Read only
 	}
