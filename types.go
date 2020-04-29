@@ -787,10 +787,17 @@ type (
 		ApplicationContext ApplicationContext `json:"application_context,omitempty"`
 	}
 
+	// PlatformFee represents platform or partner fees, commissions, or brokerage fees that associated with the captured payment
 	// https://developer.paypal.com/docs/api/payments/v2/#definition-platform_fee
 	PlatformFee struct {
-		Amount *Money          `json:"amount,omitempty"`
-		Payee  *PayeeForOrders `json:"payee,omitempty"`
+		Amount *Money     `json:"amount"`
+		Payee  *PayeeBase `json:"payee,omitempty"`
+	}
+
+	//PayeeBase represents the recipient of the fee for this transaction. If you omit this value, the default is the API caller.
+	PayeeBase struct {
+		EmailAddress string `json:"email_address,omitempty"`
+		MerchantID   string `json:"merchant_id,omitempty"`
 	}
 
 	// https://developer.paypal.com/docs/api/payments/v2/#definition-payment_instruction
@@ -808,11 +815,52 @@ type (
 		FinalCapture   bool   `json:"final_capture,omitempty"`
 	}
 
+	// SellerProtection represents the level of protection offered as defined by [PayPal Seller Protection for Merchants]
+	// (https://www.paypal.com/us/webapps/mpp/security/seller-protection)
+	// Status indicates whether the transaction is eligible for seller protection. For information, see
+	// [PayPal Seller Protection for Merchants](https://www.paypal.com/us/webapps/mpp/security/seller-protection).
+	// The possible values are:
+	// ---------------------------------------------------------------------------------------------------------------------
+	// | ELIGIBLE           | Your PayPal balance remains intact if the customer claims that they did not receive an item  |
+	// |                    | or the account holder claims that they did not authorize the payment.						   |
+	// | PARTIALLY_ELIGIBLE | Your PayPal balance remains intact if the customer claims that they did not receive an item. |
+	// | NOT_ELIGIBLE       | This transaction is not eligible for seller protection.									   |
+	// ---------------------------------------------------------------------------------------------------------------------
+	// DisputeCategory represents the condition that is covered for the transaction. The possible values are:
+	// ------------------------------------------------------------------------------------
+	// | ITEM_NOT_RECEIVED   	  | The payer paid for an item that they did not receive. |
+	// | UNAUTHORIZED_TRANSACTION | The payer did not authorize the payment.			  |
+	// ------------------------------------------------------------------------------------
 	SellerProtection struct {
-		Status            string   `json:"status,omitempty"`
-		DisputeCategories []string `json:"dispute_categories,omitempty"`
+		Status            string   `json:"status,omitempty"`             //Read only
+		DisputeCategories []string `json:"dispute_categories,omitempty"` //Read only
 	}
 
+	// CaptureStatusDetails represents the details of the captured payment status.
+	// Reason represents the reason why the captured payment status is PENDING or DENIED. The possible values are:
+	// ------------------------------------------------------------------------------------------------------------------------
+	// | BUYER_COMPLAINT                               | The payer initiated a dispute for this captured payment with PayPal. |
+	// | CHARGEBACK            					       | The captured funds were reversed in response to the payer disputing  |
+	// | 											   | his captured payment with the issuer of the financial instrument     |
+	// | 											   | used to pay for this captured payment.								  |
+	// | ECHECK	 						  		       | The payer paid by an eCheck that has not yet cleared.				  |
+	// | INTERNATIONAL_WITHDRAWAL                      | Visit your online account. In your **Account Overview**, accept and  |
+	// | 											   | deny this payment. 												  |
+	// | OTHER                                         | No additional specific reason can be provided. For more information  |
+	// | 											   | about this captured payment, visit your account online or contact    |
+	// | 											   | PayPal.															  |
+	// | PENDING_REVIEW 							   | The captured payment is pending manual review. 					  |
+	// | RECEIVING_PREFERENCE_MANDATES_MANUAL_ACTION   | The payee has not yet set up appropriate receiving preferences for   |
+	// | 											   | their account. For more information about how to accept or deny this |
+	// | 											   | payment, visit your account online. This reason is typically offered |
+	// | 											   | in scenarios such as when the currency of the captured payment is    |
+	// | 											   | different from the primary holding currency of the payee.            |
+	// | REFUNDED 								       | The captured funds were refunded.									  |
+	// | TRANSACTION_APPROVED_AWAITING_FUNDING 	       | The payer must send the funds for this captured payment. This code	  |
+	// | 											   | generally appears for manual EFTs.									  |
+	// | UNILATERAL 								   | The payee does not have a PayPal account.							  |
+	// | VERIFICATION_REQUIRED 					       | The payee's PayPal account is not verified.						  |
+	// ------------------------------------------------------------------------------------------------------------------------
 	// https://developer.paypal.com/docs/api/payments/v2/#definition-capture_status_details
 	CaptureStatusDetails struct {
 		Reason string `json:"reason,omitempty"`
@@ -866,16 +914,48 @@ type (
 		MerchantPreferences *MerchantPreferences `json:"merchant_preferences,omitempty"`
 	}
 
-	// Capture struct
+	// Capture represents capture payment details
+	// DisbursementMode represents the funds that are held on behalf of the merchant. The possible values are:
+	// -----------------------------------------------------------------------------------------------------------------
+	// | INSTANT | The funds are released to the merchant immediately.												   |
+	// | DELAYED | The funds are held for a finite number of days. The actual duration depends on the region and type  |
+	// |   	  	 | of integration. You can release the funds through a referenced payout. Otherwise, the funds 		   |
+	// | 		 | disbursed automatically after the specified duration.											   |
+	// -----------------------------------------------------------------------------------------------------------------
 	Capture struct {
-		Amount         *Amount    `json:"amount,omitempty"`
-		IsFinalCapture bool       `json:"is_final_capture"`
-		CreateTime     *time.Time `json:"create_time,omitempty"`
-		UpdateTime     *time.Time `json:"update_time,omitempty"`
-		State          string     `json:"state,omitempty"`
-		ParentPayment  string     `json:"parent_payment,omitempty"`
-		ID             string     `json:"id,omitempty"`
-		Links          []Link     `json:"links,omitempty"`
+		ID                        string                     `json:"id,omitempty"`                          //Read only
+		Status                    string                     `json:"status,omitempty"`                      //Read only
+		StatusDetails             *CaptureStatusDetails      `json:"status_details,omitempty"`              //Read only
+		Amount                    *Money                     `json:"amount,omitempty"`                      //Read only
+		InvoiceID                 string                     `json:"invoice_id,omitempty"`                  //Read only
+		CustomID                  string                     `json:"custom_id,omitempty"`                   //Read only
+		SellerProtection          *SellerProtection          `json:"seller_protection,omitempty"`           //Read only
+		FinalCapture              bool                       `json:"final_capture,omitempty"`               //Read only
+		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"` //Read only
+		DisbursementMode          string                     `json:"disbursement_mode,omitempty"`
+		CreateTime                string                     `json:"create_time,omitempty"` //Read only
+		UpdateTime                string                     `json:"update_time,omitempty"` //Read only
+		Links                     []*Link                    `json:"links,omitempty"`       //Read only
+	}
+
+	// SellerReceivableBreakdown represents the detailed breakdown of the captured payment.
+	// For more information visit https://developer.paypal.com/docs/api/payments/v2/#definition-seller_receivable_breakdown
+	SellerReceivableBreakdown struct {
+		GrossAmount      *Money         `json:"gross_amount,omitempty"`      //Read only
+		PayPalFee        *Money         `json:"paypal_fee,omitempty"`        //Read only
+		NetAmount        *Money         `json:"net_amount,omitempty"`        //Read only
+		ReceivableAmount *Money         `json:"receivable_amount,omitempty"` //Read only
+		ExchangeRate     *ExchangeRate  `json:"exchange_rate,omitempty"`     //Read only
+		PlatformFees     []*PlatformFee `json:"platform_fees,omitempty"`     //Read only
+	}
+
+	// ExchangeRate represents the exchange rate that determines the amount that is credited to the payee's PayPal account.
+	// Returned when the currency of the captured payment is different from the currency of the PayPal account where the
+	// payee wants to credit the funds.
+	ExchangeRate struct {
+		SourceCurrency string `json:"source_currency,omitempty"` //Read only
+		TargetCurrency string `json:"target_currency,omitempty"` //Read only
+		Value          string `json:"value,omitempty"`           //Read only. Formatted as integer or decimal value with one to 15 digits to the right of the decimal point.
 	}
 
 	// ChargeModel struct
@@ -1321,15 +1401,44 @@ type (
 		CancelURL string `json:"cancel_url,omitempty"`
 	}
 
-	// Refund struct
+	// Refund represents refund details
 	Refund struct {
-		ID            string     `json:"id,omitempty"`
-		Amount        *Amount    `json:"amount,omitempty"`
-		CreateTime    *time.Time `json:"create_time,omitempty"`
-		State         string     `json:"state,omitempty"`
-		CaptureID     string     `json:"capture_id,omitempty"`
-		ParentPayment string     `json:"parent_payment,omitempty"`
-		UpdateTime    *time.Time `json:"update_time,omitempty"`
+		ID                     string                  `json:"id,omitempty"`                       // Read only
+		Status                 string                  `json:"status,omitempty"`                   // Read only
+		StatusDetails          *RefundStatusDetails    `json:"status_details,omitempty"`           // Read only
+		Amount                 *Money                  `json:"amount,omitempty"`                   // Read only
+		InvoiceID              string                  `json:"invoice_id,omitempty"`               // Read only
+		NoteToPayer            string                  `json:"note_to_payer,omitempty"`            // Read only
+		SellerPayableBreakdown *SellerPayableBreakdown `json:"seller_payable_breakdown,omitempty"` // Read only
+		Links                  []*Link                 `json:"links,omitempty"`                    // Read only
+		CreateTime             *time.Time              `json:"create_time,omitempty"`
+		UpdateTime             *time.Time              `json:"update_time,omitempty"`
+	}
+
+	// RefundStatusDetails represents the details of the refund status.
+	// Reason represents the reason why the refund has the PENDING or FAILED status. The possible values are:
+	// -------------------------------------------------------------------------------------------
+	// | ECHECK | The customer's account is funded through an eCheck, which has not yet cleared. |
+	// -------------------------------------------------------------------------------------------
+	RefundStatusDetails struct {
+		Reason string `json:"reason,omitempty"`
+	}
+
+	// SellerPayableBreakdown represents the breakdown of the refund.
+	SellerPayableBreakdown struct {
+		GrossAmount         *Money                `json:"gross_amount,omitempty"`          // Read only
+		PayPalFee           *Money                `json:"paypal_fee,omitempty"`            // Read only
+		NetAmount           *Money                `json:"net_amount,omitempty"`            // Read only
+		PlatformFees        []*PlatformFee        `json:"platform_fees,omitempty"`         // Read only
+		NetAmountBreakdowns []*NetAmountBreakdown `json:"net_amount_breakdowns,omitempty"` // Read only
+		TotalRefundedAmount *Money                `json:"total_refunded_amount,omitempty"` // Read only
+	}
+
+	// NetAmountBreakdown represents the breakdown values for the net amount
+	NetAmountBreakdown struct {
+		PayableAmount   *Money        `json:"payable_amount,omitempty"`   // Read only
+		ConvertedAmount *Money        `json:"converted_amount,omitempty"` // Read only
+		ExchangeRate    *ExchangeRate `json:"exchange_rate,omitempty"`    // Read only
 	}
 
 	// RefundResponse .
@@ -2162,6 +2271,13 @@ type (
 		Summary         string          `json:"summary"`
 		Resource        json.RawMessage `json:"resource"`
 		Links           []*Link         `json:"links"`
+	}
+
+	// RefundRequest represents body parameters for refund capture payment
+	RefundRequest struct {
+		Amount      *Money `json:"amount,omitempty"`
+		InvoiceID   string `json:"invoice_id,omitempty"`
+		NoteToPayer string `json:"note_to_payer,omitempty"`
 	}
 )
 

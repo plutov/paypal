@@ -25,11 +25,12 @@ func (c *Client) ShowSubscription(subscriptionID string, params *ShowSubscriptio
 	resp := &Subscription{}
 
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions/"+subscriptionID), nil)
-	q := req.URL.Query()
-	q.Add("fields", params.Fields)
 	if err != nil {
 		return nil, err
 	}
+
+	q := req.URL.Query()
+	q.Add("fields", params.Fields)
 
 	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
