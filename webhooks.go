@@ -8,6 +8,19 @@ import (
 	"net/http"
 )
 
+// CreateWebhook - Subscribes your webhook listener to events.
+// Endpoint: POST /v1/notifications/webhooks
+func (c *Client) CreateWebhook(createWebhookRequest *CreateWebhookRequest) (*CreateWebhookResponse, error) {
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/webhooks"), createWebhookRequest)
+	res := &CreateWebhookResponse{}
+	if err != nil {
+		return res, err
+	}
+
+	err = c.SendWithAuth(req, res)
+	return res, err
+}
+
 // VerifyWebhookSignature - Use this to verify the signature of a webhook recieved from paypal.
 // Endpoint: POST /v1/notifications/verify-webhook-signature
 func (c *Client) VerifyWebhookSignature(httpReq *http.Request, webhookID string) (*VerifyWebhookResponse, error) {

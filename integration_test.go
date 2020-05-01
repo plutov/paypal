@@ -3,7 +3,10 @@
 package paypal
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/brianvoe/gofakeit"
 )
 
 // All test values are defined here
@@ -130,5 +133,24 @@ func TestPatchCreditCard(t *testing.T) {
 	r1, e1 := c.PatchCreditCard(testCardID, nil)
 	if e1 == nil || r1 != nil {
 		t.Errorf("Error is expected for empty update info")
+	}
+}
+
+func TestCreateWebhook(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	payload := &CreateWebhookRequest{
+		URL: fmt.Sprintf("https://%s.com/paypal_webhooks", gofakeit.UUID()),
+		EventTypes: []WebhookEventType{
+			WebhookEventType{
+				Name: "PAYMENT.AUTHORIZATION.CREATED",
+			},
+		},
+	}
+
+	_, err := c.CreateWebhook(payload)
+	if err != nil {
+		t.Errorf("Webhook couldn't be created, error %v", err)
 	}
 }

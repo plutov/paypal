@@ -963,10 +963,12 @@ type (
 		UserAction        string `json:"user_action,omitempty"`
 	}
 
+	// VerifyWebhookResponse struct
 	VerifyWebhookResponse struct {
 		VerificationStatus string `json:"verification_status,omitempty"`
 	}
 
+	// WebhookEvent struct
 	WebhookEvent struct {
 		ID              string    `json:"id"`
 		CreateTime      time.Time `json:"create_time"`
@@ -977,6 +979,26 @@ type (
 		Links           []Link    `json:"links"`
 		EventVersion    string    `json:"event_version,omitempty"`
 		ResourceVersion string    `json:"resource_version,omitempty"`
+	}
+
+	// WebhookEventType struct
+	WebhookEventType struct {
+		Name        string `json:"name"`
+		Description string `json:"description"`
+	}
+
+	// CreateWebhookRequest struct
+	CreateWebhookRequest struct {
+		URL        string             `json:"url"`
+		EventTypes []WebhookEventType `json:"event_types"`
+	}
+
+	// CreateWebhookResponse struct
+	CreateWebhookResponse struct {
+		ID         string             `json:"id"`
+		URL        string             `json:"url"`
+		EventTypes []WebhookEventType `json:"event_types"`
+		Links      []Link             `json:"links"`
 	}
 
 	Resource struct {
