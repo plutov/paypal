@@ -1010,6 +1010,12 @@ type (
 		Webhooks []Webhook `json:"webhooks"`
 	}
 
+	WebhookField struct {
+		Operation string      `json:"op"`
+		Path      string      `json:"path"`
+		Value     interface{} `json:"value"`
+	}
+
 	Resource struct {
 		// Payment Resource type
 		ID                     string                  `json:"id,omitempty"`

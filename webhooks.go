@@ -37,6 +37,22 @@ func (c *Client) GetWebhook(webhookID string) (*Webhook, error) {
 	return webhook, nil
 }
 
+// UpdateWebhook - Updates a webhook to replace webhook fields with new values.
+// Endpoint: PATCH /v1/notifications/webhooks/ID
+func (c *Client) UpdateWebhook(webhookID string, fields []WebhookField) (*Webhook, error) {
+	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s/v1/notifications/webhooks/%s", c.APIBase, webhookID), fields)
+	webhook := &Webhook{}
+	if err != nil {
+		return webhook, err
+	}
+
+	if err = c.SendWithAuth(req, webhook); err != nil {
+		return webhook, err
+	}
+
+	return webhook, nil
+}
+
 // ListWebhooks - Lists webhooks for an app.
 // Endpoint: GET /v1/notifications/webhooks
 func (c *Client) ListWebhooks(anchorType string) (*ListWebhookResponse, error) {
