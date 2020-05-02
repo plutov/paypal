@@ -40,6 +40,21 @@ func (c *Client) ListWebhooks(anchorType string) (*ListWebhookResponse, error) {
 	return resp, err
 }
 
+// DeleteWebhook - Deletes a webhook, by ID.
+// Endpoint: DELETE /v1/notifications/webhooks/ID
+func (c *Client) DeleteWebhook(webhookID string) error {
+	req, err := c.NewRequest(http.MethodDelete, fmt.Sprintf("%s/v1/notifications/webhooks/%s", c.APIBase, webhookID), nil)
+	if err != nil {
+		return err
+	}
+
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // VerifyWebhookSignature - Use this to verify the signature of a webhook recieved from paypal.
 // Endpoint: POST /v1/notifications/verify-webhook-signature
 func (c *Client) VerifyWebhookSignature(httpReq *http.Request, webhookID string) (*VerifyWebhookResponse, error) {

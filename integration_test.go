@@ -136,7 +136,7 @@ func TestPatchCreditCard(t *testing.T) {
 	}
 }
 
-func TestCreateWebhook(t *testing.T) {
+func TestCreateAndDeleteWebhook(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
@@ -149,9 +149,14 @@ func TestCreateWebhook(t *testing.T) {
 		},
 	}
 
-	_, err := c.CreateWebhook(payload)
+	createdWebhook, err := c.CreateWebhook(payload)
 	if err != nil {
 		t.Errorf("Webhook couldn't be created, error %v", err)
+	}
+
+	err = c.DeleteWebhook(createdWebhook.ID)
+	if err != nil {
+		t.Errorf("An error occurred while webhooks deletion, error %v", err)
 	}
 }
 
@@ -159,9 +164,8 @@ func TestListWebhooks(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
-	resp, err := c.ListWebhooks(AncorTypeApplication)
+	_, err := c.ListWebhooks(AncorTypeApplication)
 	if err != nil {
-		fmt.Println(err)
 		t.Errorf("Cannot registered list webhooks, error %v", err)
 	}
 }
