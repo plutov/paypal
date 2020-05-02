@@ -30,11 +30,8 @@ func (c *Client) GetWebhook(webhookID string) (*Webhook, error) {
 		return webhook, err
 	}
 
-	if err = c.SendWithAuth(req, webhook); err != nil {
-		return webhook, err
-	}
-
-	return webhook, nil
+	err = c.SendWithAuth(req, webhook)
+	return webhook, err
 }
 
 // UpdateWebhook - Updates a webhook to replace webhook fields with new values.
@@ -46,11 +43,8 @@ func (c *Client) UpdateWebhook(webhookID string, fields []WebhookField) (*Webhoo
 		return webhook, err
 	}
 
-	if err = c.SendWithAuth(req, webhook); err != nil {
-		return webhook, err
-	}
-
-	return webhook, nil
+	err = c.SendWithAuth(req, webhook)
+	return webhook, err
 }
 
 // ListWebhooks - Lists webhooks for an app.
@@ -65,7 +59,7 @@ func (c *Client) ListWebhooks(anchorType string) (*ListWebhookResponse, error) {
 	req.URL.RawQuery = q.Encode()
 	resp := &ListWebhookResponse{}
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 
 	err = c.SendWithAuth(req, resp)
@@ -80,11 +74,8 @@ func (c *Client) DeleteWebhook(webhookID string) error {
 		return err
 	}
 
-	if err = c.SendWithAuth(req, nil); err != nil {
-		return err
-	}
-
-	return nil
+	err = c.SendWithAuth(req, nil)
+	return err
 }
 
 // VerifyWebhookSignature - Use this to verify the signature of a webhook recieved from paypal.

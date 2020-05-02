@@ -3,10 +3,7 @@
 package paypal
 
 import (
-	"fmt"
 	"testing"
-
-	"github.com/brianvoe/gofakeit"
 )
 
 // All test values are defined here
@@ -142,7 +139,7 @@ func TestCreateAndGetWebhook(t *testing.T) {
 	c.GetAccessToken()
 
 	payload := &CreateWebhookRequest{
-		URL: fmt.Sprintf("https://%s.com/paypal_webhooks", gofakeit.UUID()),
+		URL: "https://example.com/paypal_webhooks",
 		EventTypes: []WebhookEventType{
 			WebhookEventType{
 				Name: "PAYMENT.AUTHORIZATION.CREATED",
@@ -172,7 +169,7 @@ func TestCreateAndUpdateWebhook(t *testing.T) {
 	c.GetAccessToken()
 
 	creationPayload := &CreateWebhookRequest{
-		URL: fmt.Sprintf("https://%s.com/paypal_webhooks", gofakeit.UUID()),
+		URL: "https://example.com/paypal_webhooks",
 		EventTypes: []WebhookEventType{
 			WebhookEventType{
 				Name: "PAYMENT.AUTHORIZATION.CREATED",

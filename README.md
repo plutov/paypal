@@ -291,16 +291,16 @@ c.GetCreditCards(nil)
 // Create a webhook
 c.CreateWebhook(paypal.CreateWebhookRequest{
     URL: "webhook URL",
-    EventTypes: []WebhookEventType{
-        WebhookEventType{
+    EventTypes: []paypal.WebhookEventType{
+        paypal.WebhookEventType{
             Name: "PAYMENT.AUTHORIZATION.CREATED",
             },
     },
 })
 
 // Update a registered webhook
-c.UpdateWebhook("WebhookID", []WebhookField{
-    WebhookField{
+c.UpdateWebhook("WebhookID", []paypal.WebhookField{
+    paypal.WebhookField{
         Operation: "replace",
         Path:      "/event_types",
         Value: []interface{}{
