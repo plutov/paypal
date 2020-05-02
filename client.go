@@ -70,6 +70,12 @@ func (c *Client) SetLog(log io.Writer) {
 	c.Log = log
 }
 
+// SetReturnRepresentation enables verbose response
+// Verbose response: https://developer.paypal.com/docs/api/orders/v2/#orders-authorize-header-parameters
+func (c *Client) SetReturnRepresentation() {
+	c.returnRepresentation = true
+}
+
 // Send makes a request to the API, the response body will be
 // unmarshaled into v, or if v is an io.Writer, the response will
 // be written to it without decoding
@@ -87,6 +93,9 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	// Default values for headers
 	if req.Header.Get("Content-type") == "" {
 		req.Header.Set("Content-type", "application/json")
+	}
+	if c.returnRepresentation {
+		req.Header.Set("Prefer", "return=representation")
 	}
 
 	resp, err = c.Client.Do(req)

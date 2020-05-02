@@ -5,11 +5,11 @@ import "fmt"
 // GetSale returns a sale by ID
 // Use this call to get details about a sale transaction.
 // Note: This call returns only the sales that were created via the REST API.
-// Endpoint: GET /v2/payments/sale/ID
+// Endpoint: GET /v1/payments/sale/ID
 func (c *Client) GetSale(saleID string) (*Sale, error) {
 	sale := &Sale{}
 
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/sale/"+saleID), nil)
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/sale/"+saleID), nil)
 	if err != nil {
 		return sale, err
 	}
@@ -23,11 +23,10 @@ func (c *Client) GetSale(saleID string) (*Sale, error) {
 
 // RefundSale refunds a completed payment.
 // Use this call to refund a completed payment. Provide the sale_id in the URI and an empty JSON payload for a full refund. For partial refunds, you can include an amount.
-// Endpoint: POST /v2/payments/sale/ID/refund
 func (c *Client) RefundSale(saleID string, r RefundRequest) (*Refund, error) {
 	refund := &Refund{}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/sale/"+saleID+"/refund"), &r)
+	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/sale/"+saleID+"/refund"), &r)
 	if err != nil {
 		return refund, err
 	}

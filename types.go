@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 )
@@ -62,6 +63,17 @@ const (
 	OrderIntentAuthorize string = "AUTHORIZE"
 )
 
+// Possible value for `status` in GetOrder
+//
+// https://developer.paypal.com/docs/api/orders/v2/#orders-get-response
+const (
+	OrderStatusCreated   string = "CREATED"
+	OrderStatusSaved     string = "SAVED"
+	OrderStatusApproved  string = "APPROVED"
+	OrderStatusVoided    string = "VOIDED"
+	OrderStatusCompleted string = "COMPLETED"
+)
+
 // Possible values for `category` in Item
 //
 // https://developer.paypal.com/docs/api/orders/v2/#definition-item
@@ -85,6 +97,37 @@ const (
 	EventPaymentCaptureRefunded        string = "PAYMENT.CAPTURE.REFUNDED"
 	EventMerchantOnboardingCompleted   string = "MERCHANT.ONBOARDING.COMPLETED"
 	EventMerchantPartnerConsentRevoked string = "MERCHANT.PARTNER-CONSENT.REVOKED"
+)
+
+const (
+	OperationAPIIntegration   string = "API_INTEGRATION"
+	ProductExpressCheckout    string = "EXPRESS_CHECKOUT"
+	IntegrationMethodPayPal   string = "PAYPAL"
+	IntegrationTypeThirdParty string = "THIRD_PARTY"
+	ConsentShareData          string = "SHARE_DATA_CONSENT"
+)
+
+const (
+	FeaturePayment               string = "PAYMENT"
+	FeatureRefund                string = "REFUND"
+	FeatureFuturePayment         string = "FUTURE_PAYMENT"
+	FeatureDirectPayment         string = "DIRECT_PAYMENT"
+	FeaturePartnerFee            string = "PARTNER_FEE"
+	FeatureDelayFunds            string = "DELAY_FUNDS_DISBURSEMENT"
+	FeatureReadSellerDispute     string = "READ_SELLER_DISPUTE"
+	FeatureUpdateSellerDispute   string = "UPDATE_SELLER_DISPUTE"
+	FeatureDisputeReadBuyer      string = "DISPUTE_READ_BUYER"
+	FeatureUpdateCustomerDispute string = "UPDATE_CUSTOMER_DISPUTES"
+)
+
+const (
+	LinkRelSelf      string = "self"
+	LinkRelActionURL string = "action_url"
+)
+
+const (
+	AncorTypeApplication string = "APPLICATION"
+	AncorTypeAccount     string = "ACCOUNT"
 )
 
 type (
@@ -219,11 +262,19 @@ type (
 		InvoiceID        string                `json:"invoice_id,omitempty"`
 		FinalCapture     bool                  `json:"final_capture,omitempty"`
 		DisbursementMode string                `json:"disbursement_mode,omitempty"`
+		Links            []Link                `json:"links,omitempty"`
 	}
 
 	// CaptureOrderRequest - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 	CaptureOrderRequest struct {
 		PaymentSource *PaymentSource `json:"payment_source"`
+	}
+
+	// RefundOrderRequest - https://developer.paypal.com/docs/api/payments/v2/#captures_refund
+	RefundCaptureRequest struct {
+		Amount      *Money `json:"amount,omitempty"`
+		InvoiceID   string `json:"invoice_id,omitempty"`
+		NoteToPayer string `json:"note_to_payer,omitempty"`
 	}
 
 	// BatchHeader struct
@@ -246,6 +297,15 @@ type (
 		Payer                       Payer                `json:"payer,omitempty"`
 		ShippingAddress             *ShippingAddress     `json:"shipping_address,omitempty"`
 		OverrideMerchantPreferences *MerchantPreferences `json:"override_merchant_preferences,omitempty"`
+	}
+
+	// BillingInfo struct
+	BillingInfo struct {
+		OutstandingBalance  AmountPayout      `json:"outstanding_balance,omitempty"`
+		CycleExecutions     []CycleExecutions `json:"cycle_executions,omitempty"`
+		LastPayment         LastPayment       `json:"last_payment,omitempty"`
+		NextBillingTime     time.Time         `json:"next_billing_time,omitempty"`
+		FailedPaymentsCount int               `json:"failed_payments_count,omitempty"`
 	}
 
 	// BillingPlan struct
@@ -279,13 +339,14 @@ type (
 	// Client represents a Paypal REST API Client
 	Client struct {
 		sync.Mutex
-		Client         *http.Client
-		ClientID       string
-		Secret         string
-		APIBase        string
-		Log            io.Writer // If user set log file name all requests will be logged there
-		Token          *TokenResponse
-		tokenExpiresAt time.Time
+		Client               *http.Client
+		ClientID             string
+		Secret               string
+		APIBase              string
+		Log                  io.Writer // If user set log file name all requests will be logged there
+		Token                *TokenResponse
+		tokenExpiresAt       time.Time
+		returnRepresentation bool
 	}
 
 	// CreditCard struct
@@ -339,6 +400,21 @@ type (
 	Currency struct {
 		Currency string `json:"currency,omitempty"`
 		Value    string `json:"value,omitempty"`
+	}
+
+	// CycleExecutions struct
+	CycleExecutions struct {
+		TenureType      string `json:"tenure_type,omitempty"`
+		Sequence        int    `json:"sequence,omitempty"`
+		CyclesCompleted int    `json:"cycles_completed,omitempty"`
+		CyclesRemaining int    `json:"cycles_remaining,omitempty"`
+		TotalCycles     int    `json:"total_cycles,omitempty"`
+	}
+
+	// LastPayment struct
+	LastPayment struct {
+		Amount Money     `json:"amount,omitempty"`
+		Time   time.Time `json:"time,omitempty"`
 	}
 
 	// Details structure used in Amount structures as optional value
@@ -399,14 +475,12 @@ type (
 
 	// Item struct
 	Item struct {
-		Quantity    uint32 `json:"quantity"`
 		Name        string `json:"name"`
-		Price       string `json:"price"`
-		Currency    string `json:"currency"`
-		SKU         string `json:"sku,omitempty"`
-		Description string `json:"description,omitempty"`
-		Tax         string `json:"tax,omitempty"`
 		UnitAmount  *Money `json:"unit_amount,omitempty"`
+		Tax         *Money `json:"tax,omitempty"`
+		Quantity    string `json:"quantity"`
+		Description string `json:"description,omitempty"`
+		SKU         string `json:"sku,omitempty"`
 		Category    string `json:"category,omitempty"`
 	}
 
@@ -418,10 +492,11 @@ type (
 
 	// Link struct
 	Link struct {
-		Href    string `json:"href"`
-		Rel     string `json:"rel,omitempty"`
-		Method  string `json:"method,omitempty"`
-		Enctype string `json:"enctype,omitempty"`
+		Href        string `json:"href"`
+		Rel         string `json:"rel,omitempty"`
+		Method      string `json:"method,omitempty"`
+		Description string `json:"description,omitempty"`
+		Enctype     string `json:"enctype,omitempty"`
 	}
 
 	// PurchaseUnitAmount struct
@@ -536,9 +611,24 @@ type (
 		Captures []CaptureAmount `json:"captures,omitempty"`
 	}
 
+	// CapturedPurchaseItem are items for a captured order
+	CapturedPurchaseItem struct {
+		Quantity    string `json:"quantity"`
+		Name        string `json:"name"`
+		SKU         string `json:"sku,omitempty"`
+		Description string `json:"description,omitempty"`
+	}
+
 	// CapturedPurchaseUnit are purchase units for a captured order
 	CapturedPurchaseUnit struct {
-		Payments *CapturedPayments `json:"payments,omitempty"`
+		Items       []CapturedPurchaseItem       `json:"items,omitempty"`
+		ReferenceID string                       `json:"reference_id"`
+		Shipping    CapturedPurchaseUnitShipping `json:"shipping,omitempty"`
+		Payments    *CapturedPayments            `json:"payments,omitempty"`
+	}
+
+	CapturedPurchaseUnitShipping struct {
+		Address ShippingDetailAddressPortable `json:"address,omitempty"`
 	}
 
 	// PayerWithNameAndPhone struct
@@ -746,7 +836,14 @@ type (
 	// SenderBatchHeader struct
 	SenderBatchHeader struct {
 		EmailSubject  string `json:"email_subject"`
+		EmailMessage  string `json:"email_message"`
 		SenderBatchID string `json:"sender_batch_id,omitempty"`
+	}
+
+	//ShippingAmount struct
+	ShippingAmount struct {
+		CurrencyCode string `json:"currency_code,omitempty"`
+		Value        string `json:"value,omitempty"`
 	}
 
 	// ShippingAddress struct
@@ -781,6 +878,13 @@ type (
 	ShippingDetail struct {
 		Name    *Name                          `json:"name,omitempty"`
 		Address *ShippingDetailAddressPortable `json:"address,omitempty"`
+	}
+
+	// Subscriber struct
+	Subscriber struct {
+		ShippingAddress ShippingDetail       `json:"shipping_address,omitempty"`
+		Name            CreateOrderPayerName `json:"name,omitempty"`
+		EmailAddress    string               `json:"email_address,omitempty"`
 	}
 
 	expirationTime int64
@@ -879,8 +983,17 @@ type (
 		UserAction        string `json:"user_action,omitempty"`
 	}
 
+	// VerifyWebhookResponse struct
 	VerifyWebhookResponse struct {
 		VerificationStatus string `json:"verification_status,omitempty"`
+	}
+
+	// Webhook strunct
+	Webhook struct {
+		ID         string             `json:"id"`
+		URL        string             `json:"url"`
+		EventTypes []WebhookEventType `json:"event_types"`
+		Links      []Link             `json:"links"`
 	}
 
 	WebhookEvent struct {
@@ -893,6 +1006,28 @@ type (
 		Links           []Link    `json:"links"`
 		EventVersion    string    `json:"event_version,omitempty"`
 		ResourceVersion string    `json:"resource_version,omitempty"`
+	}
+
+	// WebhookEventType struct
+	WebhookEventType struct {
+		Name        string `json:"name"`
+		Description string `json:"description"`
+	}
+
+	// CreateWebhookRequest struct
+	CreateWebhookRequest struct {
+		URL        string             `json:"url"`
+		EventTypes []WebhookEventType `json:"event_types"`
+	}
+
+	ListWebhookResponse struct {
+		Webhooks []Webhook `json:"webhooks"`
+	}
+
+	WebhookField struct {
+		Operation string      `json:"op"`
+		Path      string      `json:"path"`
+		Value     interface{} `json:"value"`
 	}
 
 	Resource struct {
@@ -921,17 +1056,165 @@ type (
 		NetAmount           PurchaseUnitAmount  `json:"net_amount"`
 		TotalRefundedAmount *PurchaseUnitAmount `json:"total_refunded_amount,omitempty"`
 	}
+
+	ReferralRequest struct {
+		TrackingID            string                 `json:"tracking_id"`
+		PartnerConfigOverride *PartnerConfigOverride `json:"partner_config_override,omitempty"`
+		Operations            []Operation            `json:"operations,omitempty"`
+		Products              []string               `json:"products,omitempty"`
+		LegalConsents         []Consent              `json:"legal_consents,omitempty"`
+	}
+
+	PartnerConfigOverride struct {
+		PartnerLogoURL       string `json:"partner_logo_url,omitempty"`
+		ReturnURL            string `json:"return_url,omitempty"`
+		ReturnURLDescription string `json:"return_url_description,omitempty"`
+		ActionRenewalURL     string `json:"action_renewal_url,omitempty"`
+		ShowAddCreditCard    *bool  `json:"show_add_credit_card,omitempty"`
+	}
+
+	Operation struct {
+		Operation                string              `json:"operation"`
+		APIIntegrationPreference *IntegrationDetails `json:"api_integration_preference,omitempty"`
+	}
+
+	IntegrationDetails struct {
+		RestAPIIntegration *RestAPIIntegration `json:"rest_api_integration,omitempty"`
+	}
+
+	RestAPIIntegration struct {
+		IntegrationMethod string            `json:"integration_method"`
+		IntegrationType   string            `json:"integration_type"`
+		ThirdPartyDetails ThirdPartyDetails `json:"third_party_details"`
+	}
+
+	ThirdPartyDetails struct {
+		Features []string `json:"features"`
+	}
+
+	Consent struct {
+		Type    string `json:"type"`
+		Granted bool   `json:"granted"`
+	}
+
+	SearchItemDetails struct {
+		ItemCode            string                 `json:"item_code"`
+		ItemName            string                 `json:"item_name"`
+		ItemDescription     string                 `json:"item_description"`
+		ItemOptions         string                 `json:"item_options"`
+		ItemQuantity        string                 `json:"item_quantity"`
+		ItemUnitPrice       Money                  `json:"item_unit_price"`
+		ItemAmount          Money                  `json:"item_amount"`
+		DiscountAmount      *Money                 `json:"discount_amount"`
+		AdjustmentAmount    *Money                 `json:"adjustment_amount"`
+		GiftWrapAmount      *Money                 `json:"gift_wrap_amount"`
+		TaxPercentage       string                 `json:"tax_percentage"`
+		TaxAmounts          []SearchTaxAmount      `json:"tax_amounts"`
+		BasicShippingAmount *Money                 `json:"basic_shipping_amount"`
+		ExtraShippingAmount *Money                 `json:"extra_shipping_amount"`
+		HandlingAmount      *Money                 `json:"handling_amount"`
+		InsuranceAmount     *Money                 `json:"insurance_amount"`
+		TotalItemAmount     Money                  `json:"total_item_amount"`
+		InvoiceNumber       string                 `json:"invoice_number"`
+		CheckoutOptions     []SearchCheckoutOption `json:"checkout_options"`
+	}
+
+	SearchCheckoutOption struct {
+		CheckoutOptionName  string `json:"checkout_option_name"`
+		CheckoutOptionValue string `json:"checkout_option_value"`
+	}
+
+	SearchCartInfo struct {
+		ItemDetails     []SearchItemDetails `json:"item_details"`
+		TaxInclusive    *bool               `json:"tax_inclusive"`
+		PayPalInvoiceID string              `json:"paypal_invoice_id"`
+	}
+
+	SearchShippingInfo struct {
+		Name                     string   `json:"name"`
+		Method                   string   `json:"method"`
+		Address                  Address  `json:"address"`
+		SecondaryShippingAddress *Address `json:"secondary_shipping_address"`
+	}
+
+	SearchPayerName struct {
+		GivenName string `json:"given_name"`
+		Surname   string `json:"surname"`
+	}
+
+	SearchPayerInfo struct {
+		AccountID     string               `json:"account_id"`
+		EmailAddress  string               `json:"email_address"`
+		PhoneNumber   *PhoneWithTypeNumber `json:"phone_number"`
+		AddressStatus string               `json:"address_status"`
+		PayerStatus   string               `json:"payer_status"`
+		PayerName     SearchPayerName      `json:"payer_name"`
+		CountryCode   string               `json:"country_code"`
+		Address       *Address             `json:"address"`
+	}
+
+	SearchTaxAmount struct {
+		TaxAmount Money `json:"tax_amount"`
+	}
+
+	SearchTransactionInfo struct {
+		PayPalAccountID           string   `json:"paypal_account_id"`
+		TransactionID             string   `json:"transaction_id"`
+		PayPalReferenceID         string   `json:"paypal_reference_id"`
+		PayPalReferenceIDType     string   `json:"paypal_reference_id_type"`
+		TransactionEventCode      string   `json:"transaction_event_code"`
+		TransactionInitiationDate JSONTime `json:"transaction_initiation_date"`
+		TransactionUpdatedDate    JSONTime `json:"transaction_updated_date"`
+		TransactionAmount         Money    `json:"transaction_amount"`
+		FeeAmount                 *Money   `json:"fee_amount"`
+		InsuranceAmount           *Money   `json:"insurance_amount"`
+		ShippingAmount            *Money   `json:"shipping_amount"`
+		ShippingDiscountAmount    *Money   `json:"shipping_discount_amount"`
+		ShippingTaxAmount         *Money   `json:"shipping_tax_amount"`
+		OtherAmount               *Money   `json:"other_amount"`
+		TipAmount                 *Money   `json:"tip_amount"`
+		TransactionStatus         string   `json:"transaction_status"`
+		TransactionSubject        string   `json:"transaction_subject"`
+		PaymentTrackingID         string   `json:"payment_tracking_id"`
+		BankReferenceID           string   `json:"bank_reference_id"`
+		TransactionNote           string   `json:"transaction_note"`
+		EndingBalance             *Money   `json:"ending_balance"`
+		AvailableBalance          *Money   `json:"available_balance"`
+		InvoiceID                 string   `json:"invoice_id"`
+		CustomField               string   `json:"custom_field"`
+		ProtectionEligibility     string   `json:"protection_eligibility"`
+		CreditTerm                string   `json:"credit_term"`
+		CreditTransactionalFee    *Money   `json:"credit_transactional_fee"`
+		CreditPromotionalFee      *Money   `json:"credit_promotional_fee"`
+		AnnualPercentageRate      string   `json:"annual_percentage_rate"`
+		PaymentMethodType         string   `json:"payment_method_type"`
+	}
+
+	SearchTransactionDetails struct {
+		TransactionInfo SearchTransactionInfo `json:"transaction_info"`
+		PayerInfo       *SearchPayerInfo      `json:"payer_info"`
+		ShippingInfo    *SearchShippingInfo   `json:"shipping_info"`
+		CartInfo        *SearchCartInfo       `json:"cart_info"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%v %v: %d %s", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message)
+	return fmt.Sprintf("%v %v: %d %s, %+v", r.Response.Request.Method, r.Response.Request.URL, r.Response.StatusCode, r.Message, r.Details)
 }
 
 // MarshalJSON for JSONTime
 func (t JSONTime) MarshalJSON() ([]byte, error) {
 	stamp := fmt.Sprintf(`"%s"`, time.Time(t).UTC().Format(time.RFC3339))
 	return []byte(stamp), nil
+}
+
+// UnmarshalJSON for JSONTime, timezone offset is missing a colon ':"
+func (t *JSONTime) UnmarshalJSON(b []byte) error {
+	s := strings.Trim(string(b), `"`)
+	nt, err := time.Parse("2006-01-02T15:04:05Z0700", s)
+	*t = JSONTime(nt)
+	return err
 }
 
 func (e *expirationTime) UnmarshalJSON(b []byte) error {

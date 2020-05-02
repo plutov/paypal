@@ -7,8 +7,8 @@ import (
 )
 
 // All test values are defined here
-var testClientID = "AQzSx89isj-yV7BhuN_TY1s4phiQXlcUEwFPUYD7tWFxts-bf2Zf6f_S0K7J_suOkiZuIKSkNnB1rem-"
-var testSecret = "EAW_tyBnkTLxC7RB8CHT39QYZYfT7LwyxPsWle0834O60KGo0A351iMLOFdQBQ5q95DbZM1hOlT9w8Yg"
+var testClientID = "AXy9orp-CDaHhBZ9C78QHW2BKZpACgroqo85_NIOa9mIfJ9QnSVKzY-X_rivR_fTUUr6aLjcJsj6sDur"
+var testSecret = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCdR_UYNKVxJE-UgS2iCw"
 var testUserID = "https://www.paypal.com/webapps/auth/identity/user/VBqgHcgZwb1PBs69ybjjXfIW86_Hr93aBvF_Rgbh2II"
 var testCardID = "CARD-54E6956910402550WKGRL6EA"
 
@@ -39,27 +39,25 @@ func TestCreateSinglePayout(t *testing.T) {
 
 	payout := Payout{
 		SenderBatchHeader: &SenderBatchHeader{
-			EmailSubject: "Subject will be displayed on PayPal",
+			SenderBatchID: "Payouts_2018_100007",
+			EmailSubject:  "You have a payout!",
+			EmailMessage:  "You have received a payout! Thanks for using our service!",
 		},
 		Items: []PayoutItem{
 			{
 				RecipientType: "EMAIL",
-				Receiver:      "single-email-payout@mail.com",
+				Receiver:      "receiver@example.com",
 				Amount: &AmountPayout{
-					Value:    "15.11",
+					Value:    "9.87",
 					Currency: "USD",
 				},
-				Note:         "Optional note",
-				SenderItemID: "Optional Item ID",
+				Note:         "Thanks for your patronage!",
+				SenderItemID: "201403140001",
 			},
 		},
 	}
 
-	payoutRes, err := c.CreateSinglePayout(payout)
-
-	if err != nil {
-		t.Errorf("test single payout is not created, error: %v, payout: %v", err, payoutRes)
-	}
+	c.CreateSinglePayout(payout)
 }
 
 func TestStoreCreditCard(t *testing.T) {
@@ -130,5 +128,87 @@ func TestPatchCreditCard(t *testing.T) {
 	r1, e1 := c.PatchCreditCard(testCardID, nil)
 	if e1 == nil || r1 != nil {
 		t.Errorf("Error is expected for empty update info")
+	}
+}
+
+// Creates, gets, and deletes single webhook
+func TestCreateAndGetWebhook(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	payload := &CreateWebhookRequest{
+		URL: "https://example.com/paypal_webhooks",
+		EventTypes: []WebhookEventType{
+			WebhookEventType{
+				Name: "PAYMENT.AUTHORIZATION.CREATED",
+			},
+		},
+	}
+
+	createdWebhook, err := c.CreateWebhook(payload)
+	if err != nil {
+		t.Errorf("Webhook couldn't be created, error %v", err)
+	}
+
+	_, err = c.GetWebhook(createdWebhook.ID)
+	if err != nil {
+		t.Errorf("An error occurred while getting webhook, error %v", err)
+	}
+
+	err = c.DeleteWebhook(createdWebhook.ID)
+	if err != nil {
+		t.Errorf("An error occurred while webhooks deletion, error %v", err)
+	}
+}
+
+// Creates, updates, and deletes single webhook
+func TestCreateAndUpdateWebhook(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	creationPayload := &CreateWebhookRequest{
+		URL: "https://example.com/paypal_webhooks",
+		EventTypes: []WebhookEventType{
+			WebhookEventType{
+				Name: "PAYMENT.AUTHORIZATION.CREATED",
+			},
+		},
+	}
+
+	createdWebhook, err := c.CreateWebhook(creationPayload)
+	if err != nil {
+		t.Errorf("Webhook couldn't be created, error %v", err)
+	}
+
+	updatePayload := []WebhookField{
+		WebhookField{
+			Operation: "replace",
+			Path:      "/event_types",
+			Value: []interface{}{
+				map[string]interface{}{
+					"name": "PAYMENT.SALE.REFUNDED",
+				},
+			},
+		},
+	}
+
+	_, err = c.UpdateWebhook(createdWebhook.ID, updatePayload)
+	if err != nil {
+		t.Errorf("Couldn't update webhook, error %v", err)
+	}
+
+	err = c.DeleteWebhook(createdWebhook.ID)
+	if err != nil {
+		t.Errorf("An error occurred while webhooks deletion, error %v", err)
+	}
+}
+
+func TestListWebhooks(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	_, err := c.ListWebhooks(AncorTypeApplication)
+	if err != nil {
+		t.Errorf("Cannot registered list webhooks, error %v", err)
 	}
 }
