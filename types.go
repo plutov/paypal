@@ -823,6 +823,7 @@ type (
 	// SenderBatchHeader struct
 	SenderBatchHeader struct {
 		EmailSubject  string `json:"email_subject"`
+		EmailMessage  string `json:"email_message"`
 		SenderBatchID string `json:"sender_batch_id,omitempty"`
 	}
 

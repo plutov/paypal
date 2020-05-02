@@ -7,8 +7,8 @@ import (
 )
 
 // All test values are defined here
-var testClientID = "AQzSx89isj-yV7BhuN_TY1s4phiQXlcUEwFPUYD7tWFxts-bf2Zf6f_S0K7J_suOkiZuIKSkNnB1rem-"
-var testSecret = "EAW_tyBnkTLxC7RB8CHT39QYZYfT7LwyxPsWle0834O60KGo0A351iMLOFdQBQ5q95DbZM1hOlT9w8Yg"
+var testClientID = "AXy9orp-CDaHhBZ9C78QHW2BKZpACgroqo85_NIOa9mIfJ9QnSVKzY-X_rivR_fTUUr6aLjcJsj6sDur"
+var testSecret = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCdR_UYNKVxJE-UgS2iCw"
 var testUserID = "https://www.paypal.com/webapps/auth/identity/user/VBqgHcgZwb1PBs69ybjjXfIW86_Hr93aBvF_Rgbh2II"
 var testCardID = "CARD-54E6956910402550WKGRL6EA"
 
@@ -39,27 +39,25 @@ func TestCreateSinglePayout(t *testing.T) {
 
 	payout := Payout{
 		SenderBatchHeader: &SenderBatchHeader{
-			EmailSubject: "Subject will be displayed on PayPal",
+			SenderBatchID: "Payouts_2018_100007",
+			EmailSubject:  "You have a payout!",
+			EmailMessage:  "You have received a payout! Thanks for using our service!",
 		},
 		Items: []PayoutItem{
 			{
 				RecipientType: "EMAIL",
-				Receiver:      "single-email-payout@mail.com",
+				Receiver:      "receiver@example.com",
 				Amount: &AmountPayout{
-					Value:    "15.11",
+					Value:    "9.87",
 					Currency: "USD",
 				},
-				Note:         "Optional note",
-				SenderItemID: "Optional Item ID",
+				Note:         "Thanks for your patronage!",
+				SenderItemID: "201403140001",
 			},
 		},
 	}
 
-	payoutRes, err := c.CreateSinglePayout(payout)
-
-	if err != nil {
-		t.Errorf("test single payout is not created, error: %v, payout: %v", err, payoutRes)
-	}
+	c.CreateSinglePayout(payout)
 }
 
 func TestStoreCreditCard(t *testing.T) {
