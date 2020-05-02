@@ -234,6 +234,12 @@ type (
 		FinalCapture   bool   `json:"final_capture,omitempty"`
 	}
 
+	RefundRequest struct {
+		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
+		InvoiceID   string              `json:"invoice_id,omitempty"`
+		NoteToPayer string              `json:"note_to_payer,omitempty"`
+	}
+
 	SellerProtection struct {
 		Status            string   `json:"status,omitempty"`
 		DisputeCategories []string `json:"dispute_categories,omitempty"`
@@ -241,6 +247,10 @@ type (
 
 	// https://developer.paypal.com/docs/api/payments/v2/#definition-capture_status_details
 	CaptureStatusDetails struct {
+		Reason string `json:"reason,omitempty"`
+	}
+
+	RefundStatusDetails struct {
 		Reason string `json:"reason,omitempty"`
 	}
 
@@ -776,13 +786,16 @@ type (
 
 	// Refund struct
 	Refund struct {
-		ID            string     `json:"id,omitempty"`
-		Amount        *Amount    `json:"amount,omitempty"`
-		CreateTime    *time.Time `json:"create_time,omitempty"`
-		State         string     `json:"state,omitempty"`
-		CaptureID     string     `json:"capture_id,omitempty"`
-		ParentPayment string     `json:"parent_payment,omitempty"`
-		UpdateTime    *time.Time `json:"update_time,omitempty"`
+		ID                     string                  `json:"id,omitempty"`
+		Amount                 *PurchaseUnitAmount     `json:"amount,omitempty"`
+		Status                 string                  `json:"status,omitempty"`
+		StatusDetails          *RefundStatusDetails    `json:"status_details,omitempty"`
+		InvoiceID              string                  `json:"invoice_id,omitempty"`
+		NoteToPayer            string                  `json:"note_to_payer,omitempty"`
+		SellerPayableBreakdown *CaptureSellerBreakdown `json:"seller_payable_breakdown,omitempty"`
+		Links                  []Link                  `json:"links"`
+		CreateTime             *time.Time              `json:"create_time,omitempty"`
+		UpdateTime             *time.Time              `json:"update_time,omitempty"`
 	}
 
 	// RefundResponse .
@@ -983,7 +996,6 @@ type (
 		Links      []Link             `json:"links"`
 	}
 
-	// WebhookEvent struct
 	WebhookEvent struct {
 		ID              string    `json:"id"`
 		CreateTime      time.Time `json:"create_time"`
