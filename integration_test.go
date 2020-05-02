@@ -136,7 +136,8 @@ func TestPatchCreditCard(t *testing.T) {
 	}
 }
 
-func TestCreateAndDeleteWebhook(t *testing.T) {
+// Creates, gets, and deletes single webhook.
+func TestWebhook(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
@@ -152,6 +153,11 @@ func TestCreateAndDeleteWebhook(t *testing.T) {
 	createdWebhook, err := c.CreateWebhook(payload)
 	if err != nil {
 		t.Errorf("Webhook couldn't be created, error %v", err)
+	}
+
+	_, err = c.GetWebhook(createdWebhook.ID)
+	if err != nil {
+		t.Errorf("An error occurred while getting webhook, error %v", err)
 	}
 
 	err = c.DeleteWebhook(createdWebhook.ID)

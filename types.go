@@ -1006,14 +1006,6 @@ type (
 		EventTypes []WebhookEventType `json:"event_types"`
 	}
 
-	// CreateWebhookResponse struct
-	CreateWebhookResponse struct {
-		ID         string             `json:"id"`
-		URL        string             `json:"url"`
-		EventTypes []WebhookEventType `json:"event_types"`
-		Links      []Link             `json:"links"`
-	}
-
 	ListWebhookResponse struct {
 		Webhooks []Webhook `json:"webhooks"`
 	}

@@ -10,15 +10,31 @@ import (
 
 // CreateWebhook - Subscribes your webhook listener to events.
 // Endpoint: POST /v1/notifications/webhooks
-func (c *Client) CreateWebhook(createWebhookRequest *CreateWebhookRequest) (*CreateWebhookResponse, error) {
+func (c *Client) CreateWebhook(createWebhookRequest *CreateWebhookRequest) (*Webhook, error) {
 	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/webhooks"), createWebhookRequest)
-	res := &CreateWebhookResponse{}
+	webhook := &Webhook{}
 	if err != nil {
-		return res, err
+		return webhook, err
 	}
 
-	err = c.SendWithAuth(req, res)
-	return res, err
+	err = c.SendWithAuth(req, webhook)
+	return webhook, err
+}
+
+// GetWebhook - Shows details for a webhook, by ID.
+// Endpoint: GET /v1/notifications/webhooks/ID
+func (c *Client) GetWebhook(webhookID string) (*Webhook, error) {
+	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/notifications/webhooks/", webhookID), nil)
+	webhook := &Webhook{}
+	if err != nil {
+		return webhook, err
+	}
+
+	if err = c.SendWithAuth(req, webhook); err != nil {
+		return webhook, err
+	}
+
+	return webhook, nil
 }
 
 // ListWebhooks - Lists webhooks for an app.
