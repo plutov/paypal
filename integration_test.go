@@ -154,3 +154,14 @@ func TestCreateWebhook(t *testing.T) {
 		t.Errorf("Webhook couldn't be created, error %v", err)
 	}
 }
+
+func TestListWebhooks(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	resp, err := c.ListWebhooks(AncorTypeApplication)
+	if err != nil {
+		fmt.Println(err)
+		t.Errorf("Cannot registered list webhooks, error %v", err)
+	}
+}

@@ -21,6 +21,25 @@ func (c *Client) CreateWebhook(createWebhookRequest *CreateWebhookRequest) (*Cre
 	return res, err
 }
 
+// ListWebhooks - Lists webhooks for an app.
+// Endpoint: GET /v1/notifications/webhooks
+func (c *Client) ListWebhooks(anchorType string) (*ListWebhookResponse, error) {
+	if len(anchorType) == 0 {
+		anchorType = AncorTypeApplication
+	}
+	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/webhooks"), nil)
+	q := req.URL.Query()
+	q.Add("anchor_type", anchorType)
+	req.URL.RawQuery = q.Encode()
+	resp := &ListWebhookResponse{}
+	if err != nil {
+		return resp, err
+	}
+
+	err = c.SendWithAuth(req, resp)
+	return resp, err
+}
+
 // VerifyWebhookSignature - Use this to verify the signature of a webhook recieved from paypal.
 // Endpoint: POST /v1/notifications/verify-webhook-signature
 func (c *Client) VerifyWebhookSignature(httpReq *http.Request, webhookID string) (*VerifyWebhookResponse, error) {
