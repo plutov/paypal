@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"sync"
 	"time"
 )
@@ -1082,6 +1083,106 @@ type (
 		Type    string `json:"type"`
 		Granted bool   `json:"granted"`
 	}
+
+	SearchItemDetails struct {
+		ItemCode            string                 `json:"item_code"`
+		ItemName            string                 `json:"item_name"`
+		ItemDescription     string                 `json:"item_description"`
+		ItemOptions         string                 `json:"item_options"`
+		ItemQuantity        string                 `json:"item_quantity"`
+		ItemUnitPrice       Money                  `json:"item_unit_price"`
+		ItemAmount          Money                  `json:"item_amount"`
+		DiscountAmount      *Money                 `json:"discount_amount"`
+		AdjustmentAmount    *Money                 `json:"adjustment_amount"`
+		GiftWrapAmount      *Money                 `json:"gift_wrap_amount"`
+		TaxPercentage       string                 `json:"tax_percentage"`
+		TaxAmounts          []SearchTaxAmount      `json:"tax_amounts"`
+		BasicShippingAmount *Money                 `json:"basic_shipping_amount"`
+		ExtraShippingAmount *Money                 `json:"extra_shipping_amount"`
+		HandlingAmount      *Money                 `json:"handling_amount"`
+		InsuranceAmount     *Money                 `json:"insurance_amount"`
+		TotalItemAmount     Money                  `json:"total_item_amount"`
+		InvoiceNumber       string                 `json:"invoice_number"`
+		CheckoutOptions     []SearchCheckoutOption `json:"checkout_options"`
+	}
+
+	SearchCheckoutOption struct {
+		CheckoutOptionName  string `json:"checkout_option_name"`
+		CheckoutOptionValue string `json:"checkout_option_value"`
+	}
+
+	SearchCartInfo struct {
+		ItemDetails     []SearchItemDetails `json:"item_details"`
+		TaxInclusive    *bool               `json:"tax_inclusive"`
+		PayPalInvoiceID string              `json:"paypal_invoice_id"`
+	}
+
+	SearchShippingInfo struct {
+		Name                     string   `json:"name"`
+		Method                   string   `json:"method"`
+		Address                  Address  `json:"address"`
+		SecondaryShippingAddress *Address `json:"secondary_shipping_address"`
+	}
+
+	SearchPayerName struct {
+		GivenName string `json:"given_name"`
+		Surname   string `json:"surname"`
+	}
+
+	SearchPayerInfo struct {
+		AccountID     string               `json:"account_id"`
+		EmailAddress  string               `json:"email_address"`
+		PhoneNumber   *PhoneWithTypeNumber `json:"phone_number"`
+		AddressStatus string               `json:"address_status"`
+		PayerStatus   string               `json:"payer_status"`
+		PayerName     SearchPayerName      `json:"payer_name"`
+		CountryCode   string               `json:"country_code"`
+		Address       *Address             `json:"address"`
+	}
+
+	SearchTaxAmount struct {
+		TaxAmount Money `json:"tax_amount"`
+	}
+
+	SearchTransactionInfo struct {
+		PayPalAccountID           string   `json:"paypal_account_id"`
+		TransactionID             string   `json:"transaction_id"`
+		PayPalReferenceID         string   `json:"paypal_reference_id"`
+		PayPalReferenceIDType     string   `json:"paypal_reference_id_type"`
+		TransactionEventCode      string   `json:"transaction_event_code"`
+		TransactionInitiationDate JSONTime `json:"transaction_initiation_date"`
+		TransactionUpdatedDate    JSONTime `json:"transaction_updated_date"`
+		TransactionAmount         Money    `json:"transaction_amount"`
+		FeeAmount                 *Money   `json:"fee_amount"`
+		InsuranceAmount           *Money   `json:"insurance_amount"`
+		ShippingAmount            *Money   `json:"shipping_amount"`
+		ShippingDiscountAmount    *Money   `json:"shipping_discount_amount"`
+		ShippingTaxAmount         *Money   `json:"shipping_tax_amount"`
+		OtherAmount               *Money   `json:"other_amount"`
+		TipAmount                 *Money   `json:"tip_amount"`
+		TransactionStatus         string   `json:"transaction_status"`
+		TransactionSubject        string   `json:"transaction_subject"`
+		PaymentTrackingID         string   `json:"payment_tracking_id"`
+		BankReferenceID           string   `json:"bank_reference_id"`
+		TransactionNote           string   `json:"transaction_note"`
+		EndingBalance             *Money   `json:"ending_balance"`
+		AvailableBalance          *Money   `json:"available_balance"`
+		InvoiceID                 string   `json:"invoice_id"`
+		CustomField               string   `json:"custom_field"`
+		ProtectionEligibility     string   `json:"protection_eligibility"`
+		CreditTerm                string   `json:"credit_term"`
+		CreditTransactionalFee    *Money   `json:"credit_transactional_fee"`
+		CreditPromotionalFee      *Money   `json:"credit_promotional_fee"`
+		AnnualPercentageRate      string   `json:"annual_percentage_rate"`
+		PaymentMethodType         string   `json:"payment_method_type"`
+	}
+
+	SearchTransactionDetails struct {
+		TransactionInfo SearchTransactionInfo `json:"transaction_info"`
+		PayerInfo       *SearchPayerInfo      `json:"payer_info"`
+		ShippingInfo    *SearchShippingInfo   `json:"shipping_info"`
+		CartInfo        *SearchCartInfo       `json:"cart_info"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct
@@ -1093,6 +1194,14 @@ func (r *ErrorResponse) Error() string {
 func (t JSONTime) MarshalJSON() ([]byte, error) {
 	stamp := fmt.Sprintf(`"%s"`, time.Time(t).UTC().Format(time.RFC3339))
 	return []byte(stamp), nil
+}
+
+// UnmarshalJSON for JSONTime, timezone offset is missing a colon ':"
+func (t *JSONTime) UnmarshalJSON(b []byte) error {
+	s := strings.Trim(string(b), `"`)
+	nt, err := time.Parse("2006-01-02T15:04:05Z0700", s)
+	*t = JSONTime(nt)
+	return err
 }
 
 func (e *expirationTime) UnmarshalJSON(b []byte) error {

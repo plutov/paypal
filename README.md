@@ -48,6 +48,7 @@ Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git ta
  * PATCH /v1/notifications/webhooks/**ID**
  * DELETE /v1/notifications/webhooks/**ID**
  * POST /v1/notifications/verify-webhook-signature
+ * POST /v1/reporting/transactions
 
 ### Missing endpoints
 It is possible that some endpoints are missing in this SDK Client, but you can use built-in **paypal** functions to perform a request: **NewClient -> NewRequest -> SendWithAuth**
