@@ -42,6 +42,11 @@ Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git ta
  * PATCH /v2/payments/billing-plans/***ID***
  * POST /v2/payments/billing-agreements
  * POST /v2/payments/billing-agreements/***TOKEN***/agreement-execute
+ * POST /v1/notifications/webhooks
+ * GET /v1/notifications/webhooks
+ * GET /v1/notifications/webhooks/**ID**
+ * PATCH /v1/notifications/webhooks/**ID**
+ * DELETE /v1/notifications/webhooks/**ID**
  * POST /v1/notifications/verify-webhook-signature
 
 ### Missing endpoints
@@ -279,6 +284,42 @@ c.GetCreditCard("CARD-ID-123")
 
 // Get all stored credit cards
 c.GetCreditCards(nil)
+```
+
+### Webhooks
+```go
+// Create a webhook
+c.CreateWebhook(paypal.CreateWebhookRequest{
+    URL: "webhook URL",
+    EventTypes: []paypal.WebhookEventType{
+        paypal.WebhookEventType{
+            Name: "PAYMENT.AUTHORIZATION.CREATED",
+            },
+    },
+})
+
+// Update a registered webhook
+c.UpdateWebhook("WebhookID", []paypal.WebhookField{
+    paypal.WebhookField{
+        Operation: "replace",
+        Path:      "/event_types",
+        Value: []interface{}{
+            map[string]interface{}{
+                "name": "PAYMENT.SALE.REFUNDED",
+            },
+        },
+    },
+})
+
+// Get a registered webhook
+c.GetWebhook("WebhookID")
+
+// Delete a webhook
+c.DeleteWebhook("WebhookID")
+
+// List registered webhooks
+c.ListWebhooks(paypal.AncorTypeApplication)
+
 ```
 
 ### How to Contribute

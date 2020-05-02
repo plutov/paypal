@@ -132,3 +132,85 @@ func TestPatchCreditCard(t *testing.T) {
 		t.Errorf("Error is expected for empty update info")
 	}
 }
+
+// Creates, gets, and deletes single webhook
+func TestCreateAndGetWebhook(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	payload := &CreateWebhookRequest{
+		URL: "https://example.com/paypal_webhooks",
+		EventTypes: []WebhookEventType{
+			WebhookEventType{
+				Name: "PAYMENT.AUTHORIZATION.CREATED",
+			},
+		},
+	}
+
+	createdWebhook, err := c.CreateWebhook(payload)
+	if err != nil {
+		t.Errorf("Webhook couldn't be created, error %v", err)
+	}
+
+	_, err = c.GetWebhook(createdWebhook.ID)
+	if err != nil {
+		t.Errorf("An error occurred while getting webhook, error %v", err)
+	}
+
+	err = c.DeleteWebhook(createdWebhook.ID)
+	if err != nil {
+		t.Errorf("An error occurred while webhooks deletion, error %v", err)
+	}
+}
+
+// Creates, updates, and deletes single webhook
+func TestCreateAndUpdateWebhook(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	creationPayload := &CreateWebhookRequest{
+		URL: "https://example.com/paypal_webhooks",
+		EventTypes: []WebhookEventType{
+			WebhookEventType{
+				Name: "PAYMENT.AUTHORIZATION.CREATED",
+			},
+		},
+	}
+
+	createdWebhook, err := c.CreateWebhook(creationPayload)
+	if err != nil {
+		t.Errorf("Webhook couldn't be created, error %v", err)
+	}
+
+	updatePayload := []WebhookField{
+		WebhookField{
+			Operation: "replace",
+			Path:      "/event_types",
+			Value: []interface{}{
+				map[string]interface{}{
+					"name": "PAYMENT.SALE.REFUNDED",
+				},
+			},
+		},
+	}
+
+	_, err = c.UpdateWebhook(createdWebhook.ID, updatePayload)
+	if err != nil {
+		t.Errorf("Couldn't update webhook, error %v", err)
+	}
+
+	err = c.DeleteWebhook(createdWebhook.ID)
+	if err != nil {
+		t.Errorf("An error occurred while webhooks deletion, error %v", err)
+	}
+}
+
+func TestListWebhooks(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	_, err := c.ListWebhooks(AncorTypeApplication)
+	if err != nil {
+		t.Errorf("Cannot registered list webhooks, error %v", err)
+	}
+}

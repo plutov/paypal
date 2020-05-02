@@ -124,6 +124,11 @@ const (
 	LinkRelActionURL string = "action_url"
 )
 
+const (
+	AncorTypeApplication string = "APPLICATION"
+	AncorTypeAccount     string = "ACCOUNT"
+)
+
 type (
 	// JSONTime overrides MarshalJson method to format in ISO8601
 	JSONTime time.Time
@@ -963,10 +968,20 @@ type (
 		UserAction        string `json:"user_action,omitempty"`
 	}
 
+	// VerifyWebhookResponse struct
 	VerifyWebhookResponse struct {
 		VerificationStatus string `json:"verification_status,omitempty"`
 	}
 
+	// Webhook strunct
+	Webhook struct {
+		ID         string             `json:"id"`
+		URL        string             `json:"url"`
+		EventTypes []WebhookEventType `json:"event_types"`
+		Links      []Link             `json:"links"`
+	}
+
+	// WebhookEvent struct
 	WebhookEvent struct {
 		ID              string    `json:"id"`
 		CreateTime      time.Time `json:"create_time"`
@@ -977,6 +992,28 @@ type (
 		Links           []Link    `json:"links"`
 		EventVersion    string    `json:"event_version,omitempty"`
 		ResourceVersion string    `json:"resource_version,omitempty"`
+	}
+
+	// WebhookEventType struct
+	WebhookEventType struct {
+		Name        string `json:"name"`
+		Description string `json:"description"`
+	}
+
+	// CreateWebhookRequest struct
+	CreateWebhookRequest struct {
+		URL        string             `json:"url"`
+		EventTypes []WebhookEventType `json:"event_types"`
+	}
+
+	ListWebhookResponse struct {
+		Webhooks []Webhook `json:"webhooks"`
+	}
+
+	WebhookField struct {
+		Operation string      `json:"op"`
+		Path      string      `json:"path"`
+		Value     interface{} `json:"value"`
 	}
 
 	Resource struct {
