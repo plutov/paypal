@@ -25,11 +25,12 @@ func (c *Client) ShowSubscription(subscriptionID string, params *ShowSubscriptio
 	resp := &Subscription{}
 
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions/"+subscriptionID), nil)
-	q := req.URL.Query()
-	q.Add("fields", params.Fields)
 	if err != nil {
 		return nil, err
 	}
+
+	q := req.URL.Query()
+	q.Add("fields", params.Fields)
 
 	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
@@ -106,12 +107,13 @@ func (c *Client) ListTransactionsForSubscription(subscriptionID string, params *
 	resp := &TransactionsList{}
 
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions/"+subscriptionID+"/transactions"), nil)
-	q := req.URL.Query()
-	q.Add("start_time", params.StartTime)
-	q.Add("end_time", params.EndTime)
 	if err != nil {
 		return nil, err
 	}
+
+	q := req.URL.Query()
+	q.Add("start_time", params.StartTime)
+	q.Add("end_time", params.EndTime)
 
 	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err

@@ -34,13 +34,14 @@ func (c *Client) ListAllProducts(params *ListProductsRequest) (*ListProductsResp
 	resp := &ListProductsResponse{}
 
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), nil)
+	if err != nil {
+		return nil, err
+	}
+
 	q := req.URL.Query()
 	q.Add("page_size", strconv.FormatUint(params.PageSize, 10))
 	q.Add("page", strconv.FormatUint(params.Page, 10))
 	q.Add("total_required", strconv.FormatBool(params.TotalRequired))
-	if err != nil {
-		return nil, err
-	}
 
 	if err = c.SendWithBasicAuth(req, resp); err != nil {
 		return nil, err
