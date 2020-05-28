@@ -59,6 +59,17 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 	return response, err
 }
 
+// UpdateBillingPlan creates a billing plan in Paypal
+// Endpoint: POST /v1/payments/billing-plans
+func (c *Client) UpdateBillingPlan(plan BillingPlan) error {
+	req, err := c.NewRequest("PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", plan.ID), plan)
+	if err != nil {
+		return err
+	}
+	err = c.SendWithAuth(req, nil)
+	return err
+}
+
 // ActivatePlan activates a billing plan
 // By default, a new plan is not activated
 // Endpoint: PATCH /v1/payments/billing-plans/
@@ -117,7 +128,7 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 // ListBillingPlans lists billing-plans
 // Endpoint: GET /v1/payments/billing-plans
 func (c *Client) ListBillingPlans(bplp BillingPlanListParams) (*BillingPlanListResp, error) {
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), nil)
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), nil)
 	q := req.URL.Query()
 	q.Add("page", bplp.Page)
 	q.Add("page_size", bplp.PageSize)
