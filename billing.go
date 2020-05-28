@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -50,7 +51,7 @@ type (
 // CreateBillingPlan creates a billing plan in Paypal
 // Endpoint: POST /v1/payments/billing-plans
 func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error) {
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), plan)
 	response := &CreateBillingResp{}
 	if err != nil {
 		return response, err
@@ -72,7 +73,9 @@ func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[stri
 	}
 
 	jsonData, err := json.Marshal(patchData)
-	req, err := c.NewRequest("PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), jsonData)
+	//buf := bytes.NewBuffer([]byte(`[{"op":"replace","path":"/","value":{"state":"ACTIVE"}}]`))
+	buf := bytes.NewBuffer(jsonData)
+	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), buf)
 	if err != nil {
 		return err
 	}
@@ -97,7 +100,7 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 		ID: a.Plan.ID,
 	}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
 	response := &CreateAgreementResp{}
 	if err != nil {
 		return response, err
@@ -109,7 +112,7 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 // ExecuteApprovedAgreement - Use this call to execute (complete) a PayPal agreement that has been approved by the payer.
 // Endpoint: POST /v1/payments/billing-agreements/token/agreement-execute
 func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+token+"/agreement-execute"), nil)
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+token+"/agreement-execute"), nil)
 	response := &ExecuteAgreementResponse{}
 
 	if err != nil {
@@ -133,7 +136,7 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 // ListBillingPlans lists billing-plans
 // Endpoint: GET /v1/payments/billing-plans
 func (c *Client) ListBillingPlans(bplp BillingPlanListParams) (*BillingPlanListResp, error) {
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), nil)
+	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), nil)
 	q := req.URL.Query()
 	q.Add("page", bplp.Page)
 	q.Add("page_size", bplp.PageSize)
