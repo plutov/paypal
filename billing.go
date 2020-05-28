@@ -1,7 +1,7 @@
 package paypal
 
 import (
-	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -59,10 +59,20 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 	return response, err
 }
 
-// UpdateBillingPlan creates a billing plan in Paypal
-// Endpoint: POST /v1/payments/billing-plans
-func (c *Client) UpdateBillingPlan(plan BillingPlan) error {
-	req, err := c.NewRequest("PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", plan.ID), plan)
+// UpdateBillingPlan updates values inside a billing plan
+// Endpoint: PATCH /v1/payments/billing-plans
+func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[string]interface{}) error {
+	patchData := []Patch{}
+	for path, data := range pathValues {
+		patchData = append(patchData, Patch{
+			Operation: "replace",
+			Path:      path,
+			Values:    data,
+		})
+	}
+
+	jsonData, err := json.Marshal(patchData)
+	req, err := c.NewRequest("PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), jsonData)
 	if err != nil {
 		return err
 	}
@@ -74,14 +84,9 @@ func (c *Client) UpdateBillingPlan(plan BillingPlan) error {
 // By default, a new plan is not activated
 // Endpoint: PATCH /v1/payments/billing-plans/
 func (c *Client) ActivatePlan(planID string) error {
-	buf := bytes.NewBuffer([]byte(`[{"op":"replace","path":"/","value":{"state":"ACTIVE"}}]`))
-	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans/"+planID), buf)
-	if err != nil {
-		return err
-	}
-	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
-	return c.SendWithAuth(req, nil)
+	return c.UpdateBillingPlan(planID, map[string]map[string]interface{}{
+		"/": {"state": "active"},
+	})
 }
 
 // CreateBillingAgreement creates an agreement for specified plan
