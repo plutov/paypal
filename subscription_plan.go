@@ -44,6 +44,11 @@ type (
 		UpdateTime time.Time `json:"update_time"`
 	}
 
+	PricingSchemeUpdate struct {
+		BillingCycleSequence int `json:"billing_cycle_sequence"`
+		PricingScheme PricingScheme `json:"pricing_scheme"`
+	}
+
 	Frequency struct {
 		IntervalUnit IntervalUnit `json:"interval_unit"`
 		IntervalCount int `json:"interval_count"`
@@ -193,4 +198,44 @@ func (c *Client) ListSubscriptionPlans(params *SubscriptionPlanListParameters) (
 
 	err = c.SendWithAuth(req, response)
 	return response, err
+}
+
+
+// Activates a plan
+// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_activate
+// Endpoint: POST /v1/billing/plans/{id}/activate
+func (c *Client) ActivateSubscriptionPlans(planId string) error {
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/activate", c.APIBase, planId), nil)
+	if err != nil {
+		return err
+	}
+
+	err = c.SendWithAuth(req, nil)
+	return err
+}
+
+// Deactivates a plan
+// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_deactivate
+// Endpoint: POST /v1/billing/plans/{id}/deactivate
+func (c *Client) DeactivateSubscriptionPlans(planId string) error {
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/deactivate", c.APIBase, planId), nil)
+	if err != nil {
+		return err
+	}
+
+	err = c.SendWithAuth(req, nil)
+	return err
+}
+
+// Updates pricing for a plan. For example, you can update a regular billing cycle from $5 per month to $7 per month.
+// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_update-pricing-schemes
+// Endpoint: POST  /v1/billing/plans/{id}/update-pricing-schemes
+func (c *Client) UpdateSubscriptionPlanPricing(planId string, pricingSchemes []PricingSchemeUpdate) error {
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/update-pricing-schemes", c.APIBase, planId), pricingSchemes)
+	if err != nil {
+		return err
+	}
+
+	err = c.SendWithAuth(req, nil)
+	return err
 }
