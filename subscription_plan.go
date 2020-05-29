@@ -77,7 +77,7 @@ type (
 
 	ListSubscriptionPlansResponse struct {
 		Plans []SubscriptionPlan `json:"plans"`
-		ListResponse
+		SharedListResponse
 	}
 )
 
@@ -121,37 +121,6 @@ func (self *SubscriptionPlan) GetUpdatePatch() []Patch {
 
 	return result
 }
-
-type SubscriptionPlanStatus string
-
-const (
-	SUBSCRIPTION_PLAN_STATUS_CREATED  SubscriptionPlanStatus = "CREATED"
-	SUBSCRIPTION_PLAN_STATUS_INACTIVE SubscriptionPlanStatus = "INACTIVE"
-	SUBSCRIPTION_PLAN_STATUS_ACTIVE   SubscriptionPlanStatus = "ACTIVE"
-)
-
-type IntervalUnit string
-
-const (
-	INTERVAL_UNIT_DAY   IntervalUnit = "DAY"
-	INTERVAL_UNIT_WEEK  IntervalUnit = "WEEK"
-	INTERVAL_UNIT_MONTH IntervalUnit = "MONTH"
-	INTERVAL_UNIT_YEAR  IntervalUnit = "YEAR"
-)
-
-type TenureType string
-
-const (
-	TENURE_TYPE_REGULAR TenureType = "REGULAR"
-	TENURE_TYPE_TRIAL   TenureType = "TRIAL"
-)
-
-type SetupFeeFailureAction string
-
-const (
-	SETUP_FEE_FAILURE_ACTION_CONTINUE SetupFeeFailureAction = "CONTINUE"
-	SETUP_FEE_FAILURE_ACTION_CANCEL   SetupFeeFailureAction = "CANCEL"
-)
 
 // CreateSubscriptionPlan creates a subscriptionPlan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_create
@@ -243,7 +212,7 @@ func (c *Client) DeactivateSubscriptionPlans(planId string) error {
 
 // Updates pricing for a plan. For example, you can update a regular billing cycle from $5 per month to $7 per month.
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_update-pricing-schemes
-// Endpoint: POST  /v1/billing/plans/{id}/update-pricing-schemes
+// Endpoint: POST /v1/billing/plans/{id}/update-pricing-schemes
 func (c *Client) UpdateSubscriptionPlanPricing(planId string, pricingSchemes []PricingSchemeUpdate) error {
 	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/update-pricing-schemes", c.APIBase, planId), PricingSchemeUpdateRequest{
 		Schemes: pricingSchemes,

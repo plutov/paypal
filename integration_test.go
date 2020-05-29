@@ -15,6 +15,7 @@ var testUserID = "https://www.paypal.com/webapps/auth/identity/user/VBqgHcgZwb1P
 var testCardID = "CARD-54E6956910402550WKGRL6EA"
 
 var testProductId = "" // will be fetched in  func TestProduct(t *testing.T)
+var testBillingPlan = "" // will be fetched in  func TestSubscriptionPlans(t *testing.T)
 
 func TestGetAccessToken(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
@@ -300,6 +301,7 @@ func TestSubscriptionPlans(t *testing.T) {
 	//test create new plan
 	planCreateResponse, err := c.CreateSubscriptionPlan(newSubscriptionPlan)
 	assert.Equal(t, nil, err)
+	testBillingPlan = planCreateResponse.ID // for next test
 
 	//test update the newly created plan
 	newSubscriptionPlan.ID = planCreateResponse.ID
@@ -318,6 +320,10 @@ func TestSubscriptionPlans(t *testing.T) {
 
 	//test deactivate plan
 	err = c.DeactivateSubscriptionPlans(newSubscriptionPlan.ID)
+	assert.Equal(t, nil, err)
+
+	//reactivate this plan for next next (subscription)
+	err = c.ActivateSubscriptionPlan(newSubscriptionPlan.ID)
 	assert.Equal(t, nil, err)
 
 	//test upadte plan pricing
@@ -341,5 +347,25 @@ func TestSubscriptionPlans(t *testing.T) {
 	updatedPricingPlan, err := c.GetSubscriptionPlan(newSubscriptionPlan.ID)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "6.0", updatedPricingPlan.BillingCycles[0].PricingScheme.FixedPrice.Value)
+
+}
+
+func TestSubscription(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	newSubscription := SubscriptionBase{
+		PlanID:             testBillingPlan,
+	}
+
+	//create new subscription
+	newSubResponse, err := c.CreateSubscription(newSubscription)
+	assert.Equal(t, nil, err)
+	assert.NotEqual(t, "", newSubResponse.ID)
+
+	//get subscription details
+	subDetails, err := c.GetSubscriptionDetails(newSubResponse.ID)
+	assert.Equal(t, nil, err)
+	assert.NotEqual(t, "", subDetails.ID)
 
 }

@@ -26,8 +26,8 @@ type (
 	}
 
 	ListProductsResponse struct {
-		ListResponse
 		Products []Product `json:"products"`
+		SharedListResponse
 	}
 
 	ProductListParameters struct {

@@ -38,7 +38,7 @@ type (
 
 	//BillingPlanListResp struct
 	BillingPlanListResp struct {
-		ListResponse
+		SharedListResponse
 		Plans []BillingPlan `json:"plans,omitempty"`
 	}
 )
