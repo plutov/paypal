@@ -130,7 +130,7 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 // ListBillingPlans lists billing-plans
 // Endpoint: GET /v1/payments/billing-plans
 func (c *Client) ListBillingPlans(bplp BillingPlanListParams) (*BillingPlanListResp, error) {
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), nil)
+	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), nil)
 	response := &BillingPlanListResp{}
 	if err != nil {
 		return response, err
