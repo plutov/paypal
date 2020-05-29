@@ -63,7 +63,7 @@ func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[stri
 		patchData = append(patchData, Patch{
 			Operation: "replace",
 			Path:      path,
-			Values:    data,
+			Value:     data,
 		})
 	}
 

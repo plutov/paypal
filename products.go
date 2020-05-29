@@ -40,22 +40,22 @@ func (self *Product) GetUpdatePatch() []Patch {
 		{
 			Operation: "replace",
 			Path:      "/description",
-			Values:    self.Description,
+			Value:     self.Description,
 		},
 		{
 			Operation: "replace",
 			Path:      "/category",
-			Values:    self.Category,
+			Value:     self.Category,
 		},
 		{
 			Operation: "replace",
 			Path:      "/image_url",
-			Values:    self.ImageUrl,
+			Value:     self.ImageUrl,
 		},
 		{
 			Operation: "replace",
 			Path:      "/home_url",
-			Values:    self.HomeUrl,
+			Value:     self.HomeUrl,
 		},
 	}
 }

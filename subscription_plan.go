@@ -32,7 +32,7 @@ type (
 	// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-payment_preferences
 	PaymentPreferences struct{
 		AutoBillOutstanding     bool                  `json:"auto_bill_outstanding"`
-		SetupFee                Money                 `json:"setup_fee"`
+		SetupFee                *Money                 `json:"setup_fee"`
 		SetupFeeFailureAction   SetupFeeFailureAction `json:"setup_fee_failure_action"`
 		PaymentFailureThreshold int                   `json:"payment_failure_threshold"`
 	}
@@ -44,14 +44,19 @@ type (
 		UpdateTime time.Time `json:"update_time"`
 	}
 
+	PricingSchemeUpdateRequest struct {
+		Schemes []PricingSchemeUpdate `json:"pricing_schemes"`
+	}
+
 	PricingSchemeUpdate struct {
 		BillingCycleSequence int `json:"billing_cycle_sequence"`
 		PricingScheme PricingScheme `json:"pricing_scheme"`
 	}
 
+	//doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-frequency
 	Frequency struct {
 		IntervalUnit IntervalUnit `json:"interval_unit"`
-		IntervalCount int `json:"interval_count"`
+		IntervalCount int `json:"interval_count"` //different per unit. check documentation
 	}
 
 	Taxes struct {
@@ -77,38 +82,44 @@ type (
 )
 
 func (self *SubscriptionPlan) GetUpdatePatch() []Patch {
-	return []Patch{
+	result :=  []Patch{
 		{
 			Operation: "replace",
 			Path:      "/description",
-			Values:    self.Description,
+			Value:     self.Description,
 		},
 		{
 			Operation: "replace",
 			Path:      "/payment_preferences/auto_bill_outstanding",
-			Values:    self.PaymentPreferences.AutoBillOutstanding,
+			Value:     self.PaymentPreferences.AutoBillOutstanding,
 		},
 		{
 			Operation: "replace",
 			Path:      "/payment_preferences/payment_failure_threshold",
-			Values:    self.PaymentPreferences.PaymentFailureThreshold,
-		},
-		{
-			Operation: "replace",
-			Path:      "/payment_preferences/setup_fee",
-			Values:    self.PaymentPreferences.SetupFee,
+			Value:     self.PaymentPreferences.PaymentFailureThreshold,
 		},
 		{
 			Operation: "replace",
 			Path:      "/payment_preferences/setup_fee_failure_action",
-			Values:    self.PaymentPreferences.SetupFeeFailureAction,
+			Value:     self.PaymentPreferences.SetupFeeFailureAction,
 		},
 		{
 			Operation: "replace",
 			Path:      "/taxes/percentage",
-			Values:    self.Taxes.Percentage,
+			Value:     self.Taxes.Percentage,
 		},
 	}
+
+	if self.PaymentPreferences.SetupFee != nil{
+		result = append(result, Patch{
+		Operation: "replace",
+			Path:      "/payment_preferences/setup_fee",
+				Value:     self.PaymentPreferences.SetupFee,
+		},
+		)
+	}
+
+	return result
 }
 
 type SubscriptionPlanStatus string
@@ -204,7 +215,7 @@ func (c *Client) ListSubscriptionPlans(params *SubscriptionPlanListParameters) (
 // Activates a plan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_activate
 // Endpoint: POST /v1/billing/plans/{id}/activate
-func (c *Client) ActivateSubscriptionPlans(planId string) error {
+func (c *Client) ActivateSubscriptionPlan(planId string) error {
 	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/activate", c.APIBase, planId), nil)
 	if err != nil {
 		return err
@@ -231,7 +242,9 @@ func (c *Client) DeactivateSubscriptionPlans(planId string) error {
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_update-pricing-schemes
 // Endpoint: POST  /v1/billing/plans/{id}/update-pricing-schemes
 func (c *Client) UpdateSubscriptionPlanPricing(planId string, pricingSchemes []PricingSchemeUpdate) error {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/update-pricing-schemes", c.APIBase, planId), pricingSchemes)
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/update-pricing-schemes", c.APIBase, planId), PricingSchemeUpdateRequest{
+		Schemes: pricingSchemes,
+	})
 	if err != nil {
 		return err
 	}
