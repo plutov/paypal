@@ -46,7 +46,7 @@ type (
 // CreateBillingPlan creates a billing plan in Paypal
 // Endpoint: POST /v1/payments/billing-plans
 func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error) {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), plan)
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
 	response := &CreateBillingResp{}
 	if err != nil {
 		return response, err
