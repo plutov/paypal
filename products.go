@@ -6,18 +6,18 @@ import (
 )
 
 type (
-	ProductType string
+	ProductType     string
 	ProductCategory string
 
 	// Product struct
 	Product struct {
-		ID          string      `json:"id,omitempty"`
-		Name        string      `json:"name,omitempty"`
-		Description string      `json:"description"`
+		ID          string          `json:"id,omitempty"`
+		Name        string          `json:"name,omitempty"`
+		Description string          `json:"description"`
 		Category    ProductCategory `json:"category"`
-		Type        ProductType `json:"type"`
-		ImageUrl    string      `json:"image_url"`
-		HomeUrl     string      `json:"home_url"`
+		Type        ProductType     `json:"type"`
+		ImageUrl    string          `json:"image_url"`
+		HomeUrl     string          `json:"home_url"`
 	}
 
 	CreateProductResponse struct {
@@ -25,7 +25,7 @@ type (
 		SharedResponse
 	}
 
-	ListProductsResponse struct{
+	ListProductsResponse struct {
 		ListResponse
 		Products []Product `json:"products"`
 	}
@@ -84,7 +84,7 @@ func (c *Client) CreateProduct(product Product) (*CreateProductResponse, error) 
 // UpdateProduct. updates a product information
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_patch
 // Endpoint: PATCH /v1/catalogs/products/:product_id
-func (c *Client) UpdateProduct(product Product) (error) {
+func (c *Client) UpdateProduct(product Product) error {
 	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/catalogs/products/", product.ID), product.GetUpdatePatch())
 	if err != nil {
 		return err

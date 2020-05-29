@@ -33,13 +33,13 @@ type (
 	// BillingPlanListParams struct
 	BillingPlanListParams struct {
 		ListParams
-		Status        string `json:"status,omitempty"`         //Allowed values: CREATED, ACTIVE, INACTIVE, ALL.
+		Status string `json:"status,omitempty"` //Allowed values: CREATED, ACTIVE, INACTIVE, ALL.
 	}
 
 	//BillingPlanListResp struct
 	BillingPlanListResp struct {
 		ListResponse
-		Plans      []BillingPlan `json:"plans,omitempty"`
+		Plans []BillingPlan `json:"plans,omitempty"`
 	}
 )
 

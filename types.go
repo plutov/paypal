@@ -1187,21 +1187,20 @@ type (
 	SharedResponse struct {
 		CreateTime string `json:"create_time"`
 		UpdateTime string `json:"update_time"`
-		Links []Link `json:"links"`
+		Links      []Link `json:"links"`
 	}
 
-	ListParams struct{
+	ListParams struct {
 		Page          string `json:"page,omitempty"`           //Default: 0.
 		PageSize      string `json:"page_size,omitempty"`      //Default: 10.
 		TotalRequired string `json:"total_required,omitempty"` //Default: no.
 	}
 
-	ListResponse struct{
-		TotalItems string        `json:"total_items,omitempty"`
-		TotalPages string        `json:"total_pages,omitempty"`
-		Links      []Link        `json:"links,omitempty"`
+	ListResponse struct {
+		TotalItems string `json:"total_items,omitempty"`
+		TotalPages string `json:"total_pages,omitempty"`
+		Links      []Link `json:"links,omitempty"`
 	}
-
 )
 
 // Error method implementation for ErrorResponse struct

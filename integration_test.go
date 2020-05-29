@@ -3,8 +3,8 @@
 package paypal
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 	"time"
 )
 
@@ -225,7 +225,7 @@ func TestProduct(t *testing.T) {
 	productData := Product{
 		Name:        "Test Product",
 		Description: "A Test Product",
-		Category: PRODUCT_CATEGORY_SOFTWARE,
+		Category:    PRODUCT_CATEGORY_SOFTWARE,
 		Type:        PRODUCT_TYPE_SERVICE,
 		ImageUrl:    "https://example.com/image.png",
 		HomeUrl:     "https://example.com",
@@ -249,12 +249,12 @@ func TestProduct(t *testing.T) {
 	assert.Equal(t, productFetched.Description, "Updated product")
 
 	//test that lising products have more than one product
-	productList , err := c.ListProducts(nil)
+	productList, err := c.ListProducts(nil)
 	assert.Equal(t, nil, err)
 	assert.NotEqual(t, len(productList.Products), 0)
 }
 
-func TestSubscriptionPlans (t *testing.T) {
+func TestSubscriptionPlans(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken()
 
@@ -324,7 +324,7 @@ func TestSubscriptionPlans (t *testing.T) {
 	err = c.UpdateSubscriptionPlanPricing(newSubscriptionPlan.ID, []PricingSchemeUpdate{
 		{
 			BillingCycleSequence: 1,
-			PricingScheme:        PricingScheme{
+			PricingScheme: PricingScheme{
 				Version: 1,
 				FixedPrice: Money{
 					Currency: "EUR",
