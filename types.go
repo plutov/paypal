@@ -829,8 +829,7 @@ type (
 
 	//ShippingAmount struct
 	ShippingAmount struct {
-		CurrencyCode string `json:"currency_code,omitempty"`
-		Value        string `json:"value,omitempty"`
+		Money
 	}
 
 	// ShippingAddress struct
@@ -1184,6 +1183,25 @@ type (
 		ShippingInfo    *SearchShippingInfo   `json:"shipping_info"`
 		CartInfo        *SearchCartInfo       `json:"cart_info"`
 	}
+
+	SharedResponse struct {
+		CreateTime string `json:"create_time"`
+		UpdateTime string `json:"update_time"`
+		Links []Link `json:"links"`
+	}
+
+	ListParams struct{
+		Page          string `json:"page,omitempty"`           //Default: 0.
+		PageSize      string `json:"page_size,omitempty"`      //Default: 10.
+		TotalRequired string `json:"total_required,omitempty"` //Default: no.
+	}
+
+	ListResponse struct{
+		TotalItems string        `json:"total_items,omitempty"`
+		TotalPages string        `json:"total_pages,omitempty"`
+		Links      []Link        `json:"links,omitempty"`
+	}
+
 )
 
 // Error method implementation for ErrorResponse struct

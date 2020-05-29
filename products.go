@@ -22,9 +22,7 @@ type (
 
 	CreateProductResponse struct {
 		Product
-		CreateTime string `json:"create_time"`
-		UpdateTime string `json:"update_time"`
-		Links []Link `json:"links"`
+		SharedResponse
 	}
 
 	ListProductsResponse struct{
@@ -85,7 +83,7 @@ func (c *Client) CreateProduct(product Product) (*CreateProductResponse, error) 
 
 // UpdateProduct. updates a product information
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_patch
-// Endpoint: POST /v1/catalogs/products
+// Endpoint: PATCH /v1/catalogs/products/:product_id
 func (c *Client) UpdateProduct(product Product) (error) {
 	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/catalogs/products/", product.ID), product.GetUpdatePatch())
 	if err != nil {
@@ -97,7 +95,7 @@ func (c *Client) UpdateProduct(product Product) (error) {
 
 // Get product details
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_get
-// Endpoint: POST /v1/catalogs/products
+// Endpoint: GET /v1/catalogs/products/:product_id
 func (c *Client) GetProduct(productId string) (*Product, error) {
 	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/catalogs/products/", productId), nil)
 	response := &Product{}
@@ -110,7 +108,7 @@ func (c *Client) GetProduct(productId string) (*Product, error) {
 
 // List all products
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_list
-// Endpoint: POST /v1/catalogs/products
+// Endpoint: GET /v1/catalogs/products
 func (c *Client) ListProducts(params *ProductListParameters) (*ListProductsResponse, error) {
 	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), nil)
 	response := &ListProductsResponse{}
