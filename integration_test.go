@@ -241,6 +241,10 @@ func TestProduct(t *testing.T) {
 	//get product data
 	productFetched, err := c.GetProduct(productData.ID)
 	assert.Equal(t, err, nil)
-
 	assert.Equal(t, productFetched.Description, "Updated product")
+
+	//test that lising products have more than one product
+	productList , err := c.ListProducts(nil)
+	assert.Equal(t, err, nil)
+	assert.NotEqual(t, len(productList.Products), 0)
 }
