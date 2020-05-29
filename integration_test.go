@@ -4,6 +4,7 @@ package paypal
 
 import (
 	"testing"
+	"github.com/stretchr/testify/assert"
 )
 
 // All test values are defined here
@@ -211,4 +212,35 @@ func TestListWebhooks(t *testing.T) {
 	if err != nil {
 		t.Errorf("Cannot registered list webhooks, error %v", err)
 	}
+}
+
+func TestProduct(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	//create a product
+	productData := Product{
+		Name:        "Test Product",
+		Description: "A Test Product",
+		Category: PRODUCT_CATEGORY_SOFTWARE,
+		Type:        PRODUCT_TYPE_SERVICE,
+		ImageUrl:    "https://example.com/image.png",
+		HomeUrl:     "https://example.com",
+	}
+
+	productCreateResponse, err := c.CreateProduct(productData)
+	assert.Equal(t, err, nil)
+
+	//update the product
+	productData.ID = productCreateResponse.ID
+	productData.Description = "Updated product"
+
+	err = c.UpdateProduct(productData)
+	assert.Equal(t, err, nil)
+
+	//get product data
+	productFetched, err := c.GetProduct(productData.ID)
+	assert.Equal(t, err, nil)
+
+	assert.Equal(t, productFetched.Description, "Updated product")
 }

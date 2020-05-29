@@ -73,7 +73,6 @@ func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[stri
 	}
 
 	jsonData, err := json.Marshal(patchData)
-	//buf := bytes.NewBuffer([]byte(`[{"op":"replace","path":"/","value":{"state":"ACTIVE"}}]`))
 	buf := bytes.NewBuffer(jsonData)
 	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), buf)
 	if err != nil {

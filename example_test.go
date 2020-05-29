@@ -1,6 +1,6 @@
 package paypal_test
 
-import "github.com/rami-dabain/paypal/v3"
+import "github.com/plutov/paypal/v3"
 
 func Example() {
 	// Initialize client
