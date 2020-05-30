@@ -14,7 +14,7 @@ type (
 		ID          string          `json:"id,omitempty"`
 		Name        string          `json:"name,omitempty"`
 		Description string          `json:"description"`
-		Category    ProductCategory `json:"category"`
+		Category    ProductCategory `json:"category,omitempty"`
 		Type        ProductType     `json:"type"`
 		ImageUrl    string          `json:"image_url"`
 		HomeUrl     string          `json:"home_url"`

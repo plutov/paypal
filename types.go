@@ -85,11 +85,6 @@ const (
 // Possible values for `shipping_preference` in ApplicationContext
 //
 // https://developer.paypal.com/docs/api/orders/v2/#definition-application_context
-const (
-	ShippingPreferenceGetFromFile        string = "GET_FROM_FILE"
-	ShippingPreferenceNoShipping         string = "NO_SHIPPING"
-	ShippingPreferenceSetProvidedAddress string = "SET_PROVIDED_ADDRESS"
-)
 
 const (
 	EventPaymentCaptureCompleted       string = "PAYMENT.CAPTURE.COMPLETED"

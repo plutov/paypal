@@ -263,7 +263,7 @@ func TestSubscriptionPlans(t *testing.T) {
 	newSubscriptionPlan := SubscriptionPlan{
 		ProductId:   testProductId,
 		Name:        "Test subscription plan",
-		Status:      SUBSCRIPTION_PLAN_STATUS_CREATED,
+		Status:      SubscriptionPlanStatusCreated,
 		Description: "Integration test subscription plan",
 		BillingCycles: []BillingCycle{
 			{
@@ -277,10 +277,10 @@ func TestSubscriptionPlans(t *testing.T) {
 					UpdateTime: time.Now(),
 				},
 				Frequency: Frequency{
-					IntervalUnit:  INTERVAL_UNIT_YEAR,
+					IntervalUnit:  IntervalUnitYear,
 					IntervalCount: 1,
 				},
-				TenureType:  TENURE_TYPE_REGULAR,
+				TenureType:  TenureTypeRegular,
 				Sequence:    1,
 				TotalCycles: 0,
 			},
@@ -288,7 +288,7 @@ func TestSubscriptionPlans(t *testing.T) {
 		PaymentPreferences: PaymentPreferences{
 			AutoBillOutstanding:     false,
 			SetupFee:                nil,
-			SetupFeeFailureAction:   SETUP_FEE_FAILURE_ACTION_CANCEL,
+			SetupFeeFailureAction:   SetupFeeFailureActionCancel,
 			PaymentFailureThreshold: 0,
 		},
 		Taxes: Taxes{

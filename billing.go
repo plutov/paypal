@@ -82,7 +82,7 @@ func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[stri
 // Endpoint: PATCH /v1/payments/billing-plans/
 func (c *Client) ActivatePlan(planID string) error {
 	return c.UpdateBillingPlan(planID, map[string]map[string]interface{}{
-		"/": {"state": "active"},
+		"/": {"state": BillingPlanStatusActive},
 	})
 }
 
@@ -106,7 +106,7 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 // ExecuteApprovedAgreement - Use this call to execute (complete) a PayPal agreement that has been approved by the payer.
 // Endpoint: POST /v1/payments/billing-agreements/token/agreement-execute
 func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+token+"/agreement-execute"), nil)
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/payments/billing-agreements/%s/agreement-execute", c.APIBase, token), nil)
 	response := &ExecuteAgreementResponse{}
 
 	if err != nil {
