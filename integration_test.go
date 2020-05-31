@@ -226,8 +226,8 @@ func TestProduct(t *testing.T) {
 	productData := Product{
 		Name:        "Test Product",
 		Description: "A Test Product",
-		Category:    PRODUCT_CATEGORY_SOFTWARE,
-		Type:        PRODUCT_TYPE_SERVICE,
+		Category:    ProductCategorySoftware,
+		Type:        ProductTypeService,
 		ImageUrl:    "https://example.com/image.png",
 		HomeUrl:     "https://example.com",
 	}

@@ -55,7 +55,7 @@ type (
 
 	//doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-frequency
 	Frequency struct {
-		IntervalUnit  IntervalUnit `json:"interval_unit"`
+		IntervalUnit  IntervalUnit `json:"integit merge upstream/masterrval_unit"`
 		IntervalCount int          `json:"interval_count"` //different per unit. check documentation
 	}
 
@@ -163,9 +163,9 @@ func (c *Client) GetSubscriptionPlan(planId string) (*SubscriptionPlan, error) {
 // List all plans
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_list
 // Endpoint: GET /v1/billing/plans
-func (c *Client) ListSubscriptionPlans(params *SubscriptionPlanListParameters) (*ListProductsResponse, error) {
+func (c *Client) ListSubscriptionPlans(params *SubscriptionPlanListParameters) (*ListSubscriptionPlansResponse, error) {
 	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), nil)
-	response := &ListProductsResponse{}
+	response := &ListSubscriptionPlansResponse{}
 	if err != nil {
 		return response, err
 	}

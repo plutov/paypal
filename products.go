@@ -6,9 +6,6 @@ import (
 )
 
 type (
-	ProductType     string
-	ProductCategory string
-
 	// Product struct
 	Product struct {
 		ID          string          `json:"id,omitempty"`
@@ -60,13 +57,7 @@ func (self *Product) GetUpdatePatch() []Patch {
 	}
 }
 
-const (
-	PRODUCT_TYPE_PHYSICAL ProductType = "PHYSICAL"
-	PRODUCT_TYPE_DIGITAL  ProductType = "DIGITAL"
-	PRODUCT_TYPE_SERVICE  ProductType = "SERVICE"
 
-	PRODUCT_CATEGORY_SOFTWARE ProductCategory = "software"
-)
 
 // CreateProduct creates a product
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_create

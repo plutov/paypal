@@ -77,3 +77,25 @@ type CaptureType string
 const (
 	CaptureTypeOutstandingBalance CaptureType = "OUTSTANDING_BALANCE"
 )
+
+type ProductType     string
+type ProductCategory string //Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#definition-product_category
+const (
+	ProductTypePhysical ProductType = "PHYSICAL"
+	ProductTypeDigital  ProductType = "DIGITAL"
+	ProductTypeService  ProductType = "SERVICE"
+
+	ProductCategorySoftware                                  ProductCategory = "SOFTWARE"
+	ProductCategorySoftwareComputerAndDataProcessingServices ProductCategory = "COMPUTER_AND_DATA_PROCESSING_SERVICES"
+	ProductCategorySoftwareDigitalGames               ProductCategory = "DIGITAL_GAMES"
+	ProductCategorySoftwareGameSoftware               ProductCategory = "GAME_SOFTWARE"
+	ProductCategorySoftwareGames                      ProductCategory = "GAMES"
+	ProductCategorySoftwareGeneral                    ProductCategory = "GENERAL"
+	ProductCategorySoftwareGraphicAndCommercialDesign ProductCategory = "GRAPHIC_AND_COMMERCIAL_DESIGN"
+	ProductCategorySoftwareOemSoftware                ProductCategory = "OEM_SOFTWARE"
+	ProductCategorySoftwareOnlineGaming               ProductCategory = "ONLINE_GAMING"
+	ProductCategorySoftwareOnlineGamingCurrency       ProductCategory = "ONLINE_GAMING_CURRENCY"
+	ProductCategorySoftwareOnlineServices             ProductCategory = "ONLINE_SERVICES"
+	ProductCategorySoftwareOther                      ProductCategory = "OTHER"
+	ProductCategorySoftwareServices                   ProductCategory = "SERVICES"
+)
