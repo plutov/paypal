@@ -30,9 +30,7 @@ type TransactionSearchResponse struct {
 	EndDate             JSONTime                   `json:"end_date"`
 	LastRefreshDatetime JSONTime                   `json:"last_refreshed_datetime"`
 	Page                int                        `json:"page"`
-	TotalItems          int                        `json:"total_items"`
-	TotalPages          int                        `json:"total_pages"`
-	Links               []Link                     `json:"links"`
+	SharedListResponse
 }
 
 // ListTransactions - Use this to search PayPal transactions from the last 31 days.

@@ -85,11 +85,6 @@ const (
 // Possible values for `shipping_preference` in ApplicationContext
 //
 // https://developer.paypal.com/docs/api/orders/v2/#definition-application_context
-const (
-	ShippingPreferenceGetFromFile        string = "GET_FROM_FILE"
-	ShippingPreferenceNoShipping         string = "NO_SHIPPING"
-	ShippingPreferenceSetProvidedAddress string = "SET_PROVIDED_ADDRESS"
-)
 
 const (
 	EventPaymentCaptureCompleted       string = "PAYMENT.CAPTURE.COMPLETED"
@@ -171,14 +166,15 @@ type (
 	}
 
 	// ApplicationContext struct
+	//Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-application_context
 	ApplicationContext struct {
-		BrandName          string `json:"brand_name,omitempty"`
-		Locale             string `json:"locale,omitempty"`
-		LandingPage        string `json:"landing_page,omitempty"`
-		ShippingPreference string `json:"shipping_preference,omitempty"`
-		UserAction         string `json:"user_action,omitempty"`
-		ReturnURL          string `json:"return_url,omitempty"`
-		CancelURL          string `json:"cancel_url,omitempty"`
+		BrandName          string             `json:"brand_name,omitempty"`
+		Locale             string             `json:"locale,omitempty"`
+		ShippingPreference ShippingPreference `json:"shipping_preference,omitempty"`
+		UserAction         UserAction         `json:"user_action,omitempty"`
+		//LandingPage        string `json:"landing_page,omitempty"` // not found in documentation
+		ReturnURL string `json:"return_url,omitempty"`
+		CancelURL string `json:"cancel_url,omitempty"`
 	}
 
 	// Authorization struct
@@ -358,10 +354,8 @@ type (
 
 	// CreditCards GET /v1/vault/credit-cards
 	CreditCards struct {
-		Items      []CreditCard `json:"items"`
-		Links      []Link       `json:"links"`
-		TotalItems int          `json:"total_items"`
-		TotalPages int          `json:"total_pages"`
+		Items []CreditCard `json:"items"`
+		SharedListResponse
 	}
 
 	// CreditCardToken struct
@@ -829,8 +823,7 @@ type (
 
 	//ShippingAmount struct
 	ShippingAmount struct {
-		CurrencyCode string `json:"currency_code,omitempty"`
-		Value        string `json:"value,omitempty"`
+		Money
 	}
 
 	// ShippingAddress struct
@@ -857,8 +850,14 @@ type (
 	}
 
 	// Name struct
+	//Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-name
 	Name struct {
-		FullName string `json:"full_name,omitempty"`
+		FullName   string `json:"full_name,omitempty"`
+		Suffix     string `json:"suffix,omitempty"`
+		Prefix     string `json:"prefix,omitempty"`
+		GivenName  string `json:"given_name,omitempty"`
+		Surname    string `json:"surname,omitempty"`
+		MiddleName string `json:"middle_name,omitempty"`
 	}
 
 	// ShippingDetail struct
@@ -1183,6 +1182,24 @@ type (
 		PayerInfo       *SearchPayerInfo      `json:"payer_info"`
 		ShippingInfo    *SearchShippingInfo   `json:"shipping_info"`
 		CartInfo        *SearchCartInfo       `json:"cart_info"`
+	}
+
+	SharedResponse struct {
+		CreateTime string `json:"create_time"`
+		UpdateTime string `json:"update_time"`
+		Links      []Link `json:"links"`
+	}
+
+	ListParams struct {
+		Page          string `json:"page,omitempty"`           //Default: 0.
+		PageSize      string `json:"page_size,omitempty"`      //Default: 10.
+		TotalRequired string `json:"total_required,omitempty"` //Default: no.
+	}
+
+	SharedListResponse struct {
+		TotalItems string `json:"total_items,omitempty"`
+		TotalPages string `json:"total_pages,omitempty"`
+		Links      []Link `json:"links,omitempty"`
 	}
 )
 

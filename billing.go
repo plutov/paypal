@@ -2,6 +2,7 @@ package paypal
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -31,26 +32,21 @@ type (
 
 	// BillingPlanListParams struct
 	BillingPlanListParams struct {
-		Page          string `json:"page,omitempty"`           //Default: 0.
-		Status        string `json:"status,omitempty"`         //Allowed values: CREATED, ACTIVE, INACTIVE, ALL.
-		PageSize      string `json:"page_size,omitempty"`      //Default: 10.
-		TotalRequired string `json:"total_required,omitempty"` //Default: no.
-
+		ListParams
+		Status string `json:"status,omitempty"` //Allowed values: CREATED, ACTIVE, INACTIVE, ALL.
 	}
 
 	//BillingPlanListResp struct
 	BillingPlanListResp struct {
-		Plans      []BillingPlan `json:"plans,omitempty"`
-		TotalItems string        `json:"total_items,omitempty"`
-		TotalPages string        `json:"total_pages,omitempty"`
-		Links      []Link        `json:"links,omitempty"`
+		SharedListResponse
+		Plans []BillingPlan `json:"plans,omitempty"`
 	}
 )
 
 // CreateBillingPlan creates a billing plan in Paypal
 // Endpoint: POST /v1/payments/billing-plans
 func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error) {
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
 	response := &CreateBillingResp{}
 	if err != nil {
 		return response, err
@@ -59,18 +55,35 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 	return response, err
 }
 
+// UpdateBillingPlan updates values inside a billing plan
+// Endpoint: PATCH /v1/payments/billing-plans
+func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[string]interface{}) error {
+	patchData := []Patch{}
+	for path, data := range pathValues {
+		patchData = append(patchData, Patch{
+			Operation: "replace",
+			Path:      path,
+			Value:     data,
+		})
+	}
+
+	jsonData, err := json.Marshal(patchData)
+	buf := bytes.NewBuffer(jsonData)
+	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), buf)
+	if err != nil {
+		return err
+	}
+	err = c.SendWithAuth(req, nil)
+	return err
+}
+
 // ActivatePlan activates a billing plan
 // By default, a new plan is not activated
 // Endpoint: PATCH /v1/payments/billing-plans/
 func (c *Client) ActivatePlan(planID string) error {
-	buf := bytes.NewBuffer([]byte(`[{"op":"replace","path":"/","value":{"state":"ACTIVE"}}]`))
-	req, err := http.NewRequest("PATCH", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans/"+planID), buf)
-	if err != nil {
-		return err
-	}
-	req.SetBasicAuth(c.ClientID, c.Secret)
-	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
-	return c.SendWithAuth(req, nil)
+	return c.UpdateBillingPlan(planID, map[string]map[string]interface{}{
+		"/": {"state": BillingPlanStatusActive},
+	})
 }
 
 // CreateBillingAgreement creates an agreement for specified plan
@@ -81,7 +94,7 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 		ID: a.Plan.ID,
 	}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
 	response := &CreateAgreementResp{}
 	if err != nil {
 		return response, err
@@ -93,7 +106,7 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 // ExecuteApprovedAgreement - Use this call to execute (complete) a PayPal agreement that has been approved by the payer.
 // Endpoint: POST /v1/payments/billing-agreements/token/agreement-execute
 func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements/"+token+"/agreement-execute"), nil)
+	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/payments/billing-agreements/%s/agreement-execute", c.APIBase, token), nil)
 	response := &ExecuteAgreementResponse{}
 
 	if err != nil {
@@ -118,16 +131,18 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 // Endpoint: GET /v1/payments/billing-plans
 func (c *Client) ListBillingPlans(bplp BillingPlanListParams) (*BillingPlanListResp, error) {
 	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), nil)
+	response := &BillingPlanListResp{}
+	if err != nil {
+		return response, err
+	}
+
 	q := req.URL.Query()
 	q.Add("page", bplp.Page)
 	q.Add("page_size", bplp.PageSize)
 	q.Add("status", bplp.Status)
 	q.Add("total_required", bplp.TotalRequired)
 	req.URL.RawQuery = q.Encode()
-	response := &BillingPlanListResp{}
-	if err != nil {
-		return response, err
-	}
+
 	err = c.SendWithAuth(req, response)
 	return response, err
 }

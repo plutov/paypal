@@ -3,7 +3,9 @@
 package paypal
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 // All test values are defined here
@@ -11,6 +13,9 @@ var testClientID = "AXy9orp-CDaHhBZ9C78QHW2BKZpACgroqo85_NIOa9mIfJ9QnSVKzY-X_riv
 var testSecret = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCdR_UYNKVxJE-UgS2iCw"
 var testUserID = "https://www.paypal.com/webapps/auth/identity/user/VBqgHcgZwb1PBs69ybjjXfIW86_Hr93aBvF_Rgbh2II"
 var testCardID = "CARD-54E6956910402550WKGRL6EA"
+
+var testProductId = "" // will be fetched in  func TestProduct(t *testing.T)
+var testBillingPlan = "" // will be fetched in  func TestSubscriptionPlans(t *testing.T)
 
 func TestGetAccessToken(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
@@ -211,4 +216,156 @@ func TestListWebhooks(t *testing.T) {
 	if err != nil {
 		t.Errorf("Cannot registered list webhooks, error %v", err)
 	}
+}
+
+func TestProduct(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	//create a product
+	productData := Product{
+		Name:        "Test Product",
+		Description: "A Test Product",
+		Category:    PRODUCT_CATEGORY_SOFTWARE,
+		Type:        PRODUCT_TYPE_SERVICE,
+		ImageUrl:    "https://example.com/image.png",
+		HomeUrl:     "https://example.com",
+	}
+
+	productCreateResponse, err := c.CreateProduct(productData)
+	assert.Equal(t, nil, err)
+
+	testProductId = productCreateResponse.ID
+
+	//update the product
+	productData.ID = productCreateResponse.ID
+	productData.Description = "Updated product"
+
+	err = c.UpdateProduct(productData)
+	assert.Equal(t, nil, err)
+
+	//get product data
+	productFetched, err := c.GetProduct(productData.ID)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, productFetched.Description, "Updated product")
+
+	//test that lising products have more than one product
+	productList, err := c.ListProducts(nil)
+	assert.Equal(t, nil, err)
+	assert.NotEqual(t, len(productList.Products), 0)
+}
+
+func TestSubscriptionPlans(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	//create a product
+	newSubscriptionPlan := SubscriptionPlan{
+		ProductId:   testProductId,
+		Name:        "Test subscription plan",
+		Status:      SubscriptionPlanStatusCreated,
+		Description: "Integration test subscription plan",
+		BillingCycles: []BillingCycle{
+			{
+				PricingScheme: PricingScheme{
+					Version: 1,
+					FixedPrice: Money{
+						Currency: "EUR",
+						Value:    "5",
+					},
+					CreateTime: time.Now(),
+					UpdateTime: time.Now(),
+				},
+				Frequency: Frequency{
+					IntervalUnit:  IntervalUnitYear,
+					IntervalCount: 1,
+				},
+				TenureType:  TenureTypeRegular,
+				Sequence:    1,
+				TotalCycles: 0,
+			},
+		},
+		PaymentPreferences: PaymentPreferences{
+			AutoBillOutstanding:     false,
+			SetupFee:                nil,
+			SetupFeeFailureAction:   SetupFeeFailureActionCancel,
+			PaymentFailureThreshold: 0,
+		},
+		Taxes: Taxes{
+			Percentage: "19",
+			Inclusive:  false,
+		},
+		QuantitySupported: false,
+	}
+
+	//test create new plan
+	planCreateResponse, err := c.CreateSubscriptionPlan(newSubscriptionPlan)
+	assert.Equal(t, nil, err)
+	testBillingPlan = planCreateResponse.ID // for next test
+
+	//test update the newly created plan
+	newSubscriptionPlan.ID = planCreateResponse.ID
+	newSubscriptionPlan.Description = "updated description"
+	err = c.UpdateSubscriptionPlan(newSubscriptionPlan)
+	assert.Equal(t, nil, err)
+
+	//test get plan information
+	existingPlan, err := c.GetSubscriptionPlan(newSubscriptionPlan.ID)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, newSubscriptionPlan.Description, existingPlan.Description)
+
+	//test activate plan
+	err = c.ActivateSubscriptionPlan(newSubscriptionPlan.ID)
+	assert.Equal(t, nil, err)
+
+	//test deactivate plan
+	err = c.DeactivateSubscriptionPlans(newSubscriptionPlan.ID)
+	assert.Equal(t, nil, err)
+
+	//reactivate this plan for next next (subscription)
+	err = c.ActivateSubscriptionPlan(newSubscriptionPlan.ID)
+	assert.Equal(t, nil, err)
+
+	//test upadte plan pricing
+	err = c.UpdateSubscriptionPlanPricing(newSubscriptionPlan.ID, []PricingSchemeUpdate{
+		{
+			BillingCycleSequence: 1,
+			PricingScheme: PricingScheme{
+				Version: 1,
+				FixedPrice: Money{
+					Currency: "EUR",
+					Value:    "6",
+				},
+				CreateTime: time.Now(),
+				UpdateTime: time.Now(),
+			},
+		},
+	})
+	assert.Equal(t, nil, err)
+
+	//test update pricing scheme
+	updatedPricingPlan, err := c.GetSubscriptionPlan(newSubscriptionPlan.ID)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "6.0", updatedPricingPlan.BillingCycles[0].PricingScheme.FixedPrice.Value)
+
+}
+
+func TestSubscription(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	newSubscription := SubscriptionBase{
+		PlanID:             testBillingPlan,
+	}
+
+	//create new subscription
+	newSubResponse, err := c.CreateSubscription(newSubscription)
+	assert.Equal(t, nil, err)
+	assert.NotEqual(t, "", newSubResponse.ID)
+
+	//get subscription details
+	subDetails, err := c.GetSubscriptionDetails(newSubResponse.ID)
+	assert.Equal(t, nil, err)
+	assert.NotEqual(t, "", subDetails.ID)
+
 }
