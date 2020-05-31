@@ -4,8 +4,6 @@
 
 ### Go client for PayPal REST API
 
-Currently supports **v2** only, if you want to use **v1**, use **v1.1.4** git tag.
-
 ### Coverage
 
  * POST /v1/oauth2/token
