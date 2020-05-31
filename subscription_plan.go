@@ -13,10 +13,10 @@ type (
 		ProductId          string                 `json:"product_id"`
 		Name               string                 `json:"name"`
 		Status             SubscriptionPlanStatus `json:"status"`
-		Description        string `json:"description,omitempty"`
+		Description        string                 `json:"description,omitempty"`
 		BillingCycles      []BillingCycle         `json:"billing_cycles"`
-		PaymentPreferences PaymentPreferences     `json:"payment_preferences"`
-		Taxes              Taxes                  `json:"taxes"`
+		PaymentPreferences *PaymentPreferences    `json:"payment_preferences"`
+		Taxes              *Taxes                  `json:"taxes"`
 		QuantitySupported  bool                   `json:"quantity_supported"` //Indicates whether you can subscribe to this plan by providing a quantity for the goods or service.
 	}
 
@@ -55,7 +55,7 @@ type (
 
 	//doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-frequency
 	Frequency struct {
-		IntervalUnit  IntervalUnit `json:"integit merge upstream/masterrval_unit"`
+		IntervalUnit  IntervalUnit `json:"interval_unit"`
 		IntervalCount int          `json:"interval_count"` //different per unit. check documentation
 	}
 
@@ -88,35 +88,41 @@ func (self *SubscriptionPlan) GetUpdatePatch() []Patch {
 			Path:      "/description",
 			Value:     self.Description,
 		},
-		{
+	}
+
+	if self.Taxes != nil {
+		result = append(result, Patch{
+			Operation: "replace",
+			Path:      "/taxes/percentage",
+			Value:     self.Taxes.Percentage,
+		})
+	}
+
+	if self.PaymentPreferences != nil {
+		if self.PaymentPreferences.SetupFee != nil {
+			result = append(result, Patch{
+				Operation: "replace",
+				Path:      "/payment_preferences/setup_fee",
+				Value:     self.PaymentPreferences.SetupFee,
+			},
+			)
+		}
+
+		result = append(result, []Patch{{
 			Operation: "replace",
 			Path:      "/payment_preferences/auto_bill_outstanding",
 			Value:     self.PaymentPreferences.AutoBillOutstanding,
 		},
-		{
-			Operation: "replace",
-			Path:      "/payment_preferences/payment_failure_threshold",
-			Value:     self.PaymentPreferences.PaymentFailureThreshold,
-		},
-		{
-			Operation: "replace",
-			Path:      "/payment_preferences/setup_fee_failure_action",
-			Value:     self.PaymentPreferences.SetupFeeFailureAction,
-		},
-		{
-			Operation: "replace",
-			Path:      "/taxes/percentage",
-			Value:     self.Taxes.Percentage,
-		},
-	}
-
-	if self.PaymentPreferences.SetupFee != nil {
-		result = append(result, Patch{
-			Operation: "replace",
-			Path:      "/payment_preferences/setup_fee",
-			Value:     self.PaymentPreferences.SetupFee,
-		},
-		)
+			{
+				Operation: "replace",
+				Path:      "/payment_preferences/payment_failure_threshold",
+				Value:     self.PaymentPreferences.PaymentFailureThreshold,
+			},
+			{
+				Operation: "replace",
+				Path:      "/payment_preferences/setup_fee_failure_action",
+				Value:     self.PaymentPreferences.SetupFeeFailureAction,
+			}}...)
 	}
 
 	return result
