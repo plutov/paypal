@@ -13,10 +13,10 @@ type (
 		ProductId          string                 `json:"product_id"`
 		Name               string                 `json:"name"`
 		Status             SubscriptionPlanStatus `json:"status"`
-		Description        SubscriptionPlanStatus `json:"description,omitempty"`
+		Description        string                 `json:"description,omitempty"`
 		BillingCycles      []BillingCycle         `json:"billing_cycles"`
-		PaymentPreferences PaymentPreferences     `json:"payment_preferences"`
-		Taxes              Taxes                  `json:"taxes"`
+		PaymentPreferences *PaymentPreferences    `json:"payment_preferences"`
+		Taxes              *Taxes                  `json:"taxes"`
 		QuantitySupported  bool                   `json:"quantity_supported"` //Indicates whether you can subscribe to this plan by providing a quantity for the goods or service.
 	}
 
@@ -88,35 +88,41 @@ func (self *SubscriptionPlan) GetUpdatePatch() []Patch {
 			Path:      "/description",
 			Value:     self.Description,
 		},
-		{
+	}
+
+	if self.Taxes != nil {
+		result = append(result, Patch{
+			Operation: "replace",
+			Path:      "/taxes/percentage",
+			Value:     self.Taxes.Percentage,
+		})
+	}
+
+	if self.PaymentPreferences != nil {
+		if self.PaymentPreferences.SetupFee != nil {
+			result = append(result, Patch{
+				Operation: "replace",
+				Path:      "/payment_preferences/setup_fee",
+				Value:     self.PaymentPreferences.SetupFee,
+			},
+			)
+		}
+
+		result = append(result, []Patch{{
 			Operation: "replace",
 			Path:      "/payment_preferences/auto_bill_outstanding",
 			Value:     self.PaymentPreferences.AutoBillOutstanding,
 		},
-		{
-			Operation: "replace",
-			Path:      "/payment_preferences/payment_failure_threshold",
-			Value:     self.PaymentPreferences.PaymentFailureThreshold,
-		},
-		{
-			Operation: "replace",
-			Path:      "/payment_preferences/setup_fee_failure_action",
-			Value:     self.PaymentPreferences.SetupFeeFailureAction,
-		},
-		{
-			Operation: "replace",
-			Path:      "/taxes/percentage",
-			Value:     self.Taxes.Percentage,
-		},
-	}
-
-	if self.PaymentPreferences.SetupFee != nil {
-		result = append(result, Patch{
-			Operation: "replace",
-			Path:      "/payment_preferences/setup_fee",
-			Value:     self.PaymentPreferences.SetupFee,
-		},
-		)
+			{
+				Operation: "replace",
+				Path:      "/payment_preferences/payment_failure_threshold",
+				Value:     self.PaymentPreferences.PaymentFailureThreshold,
+			},
+			{
+				Operation: "replace",
+				Path:      "/payment_preferences/setup_fee_failure_action",
+				Value:     self.PaymentPreferences.SetupFeeFailureAction,
+			}}...)
 	}
 
 	return result
@@ -163,9 +169,9 @@ func (c *Client) GetSubscriptionPlan(planId string) (*SubscriptionPlan, error) {
 // List all plans
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_list
 // Endpoint: GET /v1/billing/plans
-func (c *Client) ListSubscriptionPlans(params *SubscriptionPlanListParameters) (*ListProductsResponse, error) {
+func (c *Client) ListSubscriptionPlans(params *SubscriptionPlanListParameters) (*ListSubscriptionPlansResponse, error) {
 	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), nil)
-	response := &ListProductsResponse{}
+	response := &ListSubscriptionPlansResponse{}
 	if err != nil {
 		return response, err
 	}
