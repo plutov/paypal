@@ -13,7 +13,7 @@ type (
 		ProductId          string                 `json:"product_id"`
 		Name               string                 `json:"name"`
 		Status             SubscriptionPlanStatus `json:"status"`
-		Description        SubscriptionPlanStatus `json:"description,omitempty"`
+		Description        string `json:"description,omitempty"`
 		BillingCycles      []BillingCycle         `json:"billing_cycles"`
 		PaymentPreferences PaymentPreferences     `json:"payment_preferences"`
 		Taxes              Taxes                  `json:"taxes"`
