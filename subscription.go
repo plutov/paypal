@@ -29,8 +29,7 @@ type (
 	}
 
 	CreateSubscriptionResponse struct {
-		ID                           string             `json:"id,omitempty"`
-		SubscriptionStatus           SubscriptionStatus `json:"status,omitempty"`
+		SubscriptionDetailResp
 		SharedResponse
 	}
 	// SubscriptionDetailResp struct
