@@ -33,6 +33,7 @@ type (
 		SubscriptionBase
 		SubscriptionDetails
 		BillingInfo BillingInfo `json:"billing_info,omitempty"` // not found in documentation
+		SharedResponse
 	}
 
 	SubscriptionCaptureResponse struct {
@@ -85,9 +86,10 @@ func (self *Subscription) GetUpdatePatch() []Patch {
 // CreateSubscriptionPlan creates a subscriptionPlan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_create
 // Endpoint: POST /v1/billing/subscriptions
-func (c *Client) CreateSubscription(newSubscription SubscriptionBase) (*Subscription, error) {
+func (c *Client) CreateSubscription(newSubscription SubscriptionBase) (*SubscriptionDetailResp, error) {
 	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions"), newSubscription)
-	response := &Subscription{}
+	req.Header.Add("Prefer", "return=representation")
+	response := &SubscriptionDetailResp{}
 	if err != nil {
 		return response, err
 	}
