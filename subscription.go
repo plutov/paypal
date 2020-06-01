@@ -28,6 +28,11 @@ type (
 		SubscriptionDetailResp
 	}
 
+	CreateSubscriptionResponse struct {
+		ID                           string             `json:"id,omitempty"`
+		SubscriptionStatus           SubscriptionStatus `json:"status,omitempty"`
+		SharedResponse
+	}
 	// SubscriptionDetailResp struct
 	SubscriptionDetailResp struct {
 		SubscriptionBase
@@ -85,9 +90,10 @@ func (self *Subscription) GetUpdatePatch() []Patch {
 // CreateSubscriptionPlan creates a subscriptionPlan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_create
 // Endpoint: POST /v1/billing/subscriptions
-func (c *Client) CreateSubscription(newSubscription SubscriptionBase) (*Subscription, error) {
+func (c *Client) CreateSubscription(newSubscription SubscriptionBase) (*CreateSubscriptionResponse, error) {
 	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions"), newSubscription)
-	response := &Subscription{}
+	req.Header.Add("Prefer", "return=representation")
+	response := &CreateSubscriptionResponse{}
 	if err != nil {
 		return response, err
 	}
