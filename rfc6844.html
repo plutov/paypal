@@ -1,0 +1,1211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://dublincore.org/documents/2008/08/04/dc-html/">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="index,follow" />
+    <meta name="creator" content="rfcmarkup version 1.129d on tools.ietf.org" />
+    <link rel="schema.DC" href="http://purl.org/dc/elements/1.1/" />
+<meta name="DC.Relation.Replaces" content="draft-hallambaker-donotissue" />
+<meta name="DC.Identifier" content="urn:ietf:rfc:6844" />
+<meta name="DC.Date.Issued" content="January, 2013" />
+<meta name="DC.Creator" content="Hallam-Baker, Phillip" />
+<meta name="DC.Creator" content="Stradling, Rob" />
+<meta name="DC.Description.Abstract" content="The Certification Authority Authorization (CAA) DNS Resource Record
+allows a DNS domain name holder to specify one or more Certification
+Authorities (CAs) authorized to issue certificates for that domain.
+CAA Resource Records allow a public Certification Authority to
+implement additional controls to reduce the risk of unintended
+certificate mis-issue. This document defines the syntax of the CAA
+record and rules for processing CAA records by certificate issuers.
+[STANDARDS-TRACK]" />
+<meta name="DC.Title" content="DNS Certification Authority Authorization (CAA) Resource Record" />
+
+    <link rel="icon" href="/images/rfc.png" type="image/png" />
+    <link rel="shortcut icon" href="/images/rfc.png" type="image/png" />
+    <title>RFC 6844 - DNS Certification Authority Authorization (CAA) Resource Record</title>
+    
+    
+    <style type="text/css">
+	@media only screen 
+	  and (min-width: 992px)
+	  and (max-width: 1199px) {
+	    body { font-size: 14pt; }
+            div.content { width: 96ex; margin: 0 auto; }
+        }
+	@media only screen 
+	  and (min-width: 768px)
+	  and (max-width: 991px) {
+            body { font-size: 14pt; }
+            div.content { width: 96ex; margin: 0 auto; }
+        }
+	@media only screen 
+	  and (min-width: 480px)
+	  and (max-width: 767px) {
+            body { font-size: 11pt; }
+            div.content { width: 96ex; margin: 0 auto; }
+        }
+	@media only screen 
+	  and (max-width: 479px) {
+            body { font-size: 8pt; }
+            div.content { width: 96ex; margin: 0 auto; }
+        }
+	@media only screen 
+	  and (min-device-width : 375px) 
+	  and (max-device-width : 667px) {
+            body { font-size: 9.5pt; }
+            div.content { width: 96ex; margin: 0; }
+        }
+	@media only screen 
+	  and (min-device-width: 1200px) {
+            body { font-size: 10pt; margin: 0 4em; }
+            div.content { width: 96ex; margin: 0; }
+        }
+        h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+	    font-weight: bold;
+            /* line-height: 0pt; */
+            display: inline;
+            white-space: pre;
+            font-family: monospace;
+            font-size: 1em;
+	    font-weight: bold;
+        }
+        pre {
+            font-size: 1em;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+	.pre {
+	    white-space: pre;
+	    font-family: monospace;
+	}
+	.header{
+	    font-weight: bold;
+	}
+        .newpage {
+            page-break-before: always;
+        }
+        .invisible {
+            text-decoration: none;
+            color: white;
+        }
+        a.selflink {
+          color: black;
+          text-decoration: none;
+        }
+        @media print {
+            body {
+                font-family: monospace;
+                font-size: 10.5pt;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-size: 1em;
+            }
+        
+            a:link, a:visited {
+                color: inherit;
+                text-decoration: none;
+            }
+            .noprint {
+                display: none;
+            }
+        }
+	@media screen {
+	    .grey, .grey a:link, .grey a:visited {
+		color: #777;
+	    }
+            .docinfo {
+                background-color: #EEE;
+            }
+            .top {
+                border-top: 7px solid #EEE;
+            }
+            .pad {
+                padding-top: 7px;
+                line-height: 24px;
+                padding-bottom: 4px;
+            }
+            .bgwhite  { background-color: white; }
+            .bgred    { background-color: #F44; }
+            .bggrey   { background-color: #666; }
+            .bgbrown  { background-color: #840; }            
+            .bgorange { background-color: #FA0; }
+            .bgyellow { background-color: #EE0; }
+            .bgmagenta{ background-color: #F4F; }
+            .bgblue   { background-color: #66F; }
+            .bgcyan   { background-color: #4DD; }
+            .bggreen  { background-color: #4F4; }
+
+            .legend   { font-size: 90%; }
+            .cplate   { font-size: 70%; border: solid grey 1px; }
+	}
+    </style>
+    <!--[if IE]>
+    <style>
+    body {
+       font-size: 13px;
+       margin: 10px 10px;
+    }
+    </style>
+    <![endif]-->
+
+    <script type="text/javascript"><!--
+    function addHeaderTags() {
+	var spans = document.getElementsByTagName("span");
+	for (var i=0; i < spans.length; i++) {
+	    var elem = spans[i];
+	    if (elem) {
+		var level = elem.getAttribute("class");
+                if (level == "h1" || level == "h2" || level == "h3" || level == "h4" || level == "h5" || level == "h6") {
+                    elem.innerHTML = "<"+level+">"+elem.innerHTML+"</"+level+">";		
+                }
+	    }
+	}
+    }
+    var legend_html = "Colour legend:<br />      <table>         <tr><td>Unknown:</td>                   <td><span class='cplate bgwhite'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Draft:</td>                     <td><span class='cplate bgred'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Informational:</td>             <td><span class='cplate bgorange'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Experimental:</td>              <td><span class='cplate bgyellow'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Best Common Practice:</td>      <td><span class='cplate bgmagenta'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Proposed Standard:</td>         <td><span class='cplate bgblue'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Draft Standard (old designation):</td> <td><span class='cplate bgcyan'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Internet Standard:</td>         <td><span class='cplate bggreen'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Historic:</td>                  <td><span class='cplate bggrey'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>         <tr><td>Obsolete:</td>                  <td><span class='cplate bgbrown'>&nbsp;&nbsp;&nbsp;&nbsp;</span></td></tr>     </table>";
+    function showElem(id) {
+        var elem = document.getElementById(id);
+        elem.innerHTML = eval(id+"_html");
+        elem.style.visibility='visible';
+    }
+    function hideElem(id) {
+        var elem = document.getElementById(id);
+        elem.style.visibility='hidden';        
+        elem.innerHTML = "";
+    }
+    // -->
+    </script>
+</head>
+<body onload="addHeaderTags()">
+  <div class="content">
+   <div style="height: 13px;">
+      <div onmouseover="this.style.cursor='pointer';"
+         onclick="showElem('legend');"
+         onmouseout="hideElem('legend')"
+	 style="height: 6px; position: absolute;"
+         class="pre noprint docinfo bgbrown"
+         title="Click for colour legend." >                                                                        </div>
+      <div id="legend"
+           class="docinfo noprint pre legend"
+           style="position:absolute; top: 4px; left: 4ex; visibility:hidden; background-color: white; padding: 4px 9px 5px 7px; border: solid #345 1px; "
+           onmouseover="showElem('legend');"
+           onmouseout="hideElem('legend');">
+      </div>
+   </div>
+<span class="pre noprint docinfo top">[<a href="../html/" title="Document search and retrieval page">Docs</a>] [<a href="/rfc/rfc6844.txt" title="Plaintext version of this document">txt</a>|<a href="/pdf/rfc6844" title="PDF version of this document">pdf</a>] [<a href="./draft-ietf-pkix-caa" title="draft-ietf-pkix-caa">draft-ietf-pkix...</a>] [<a href='https://datatracker.ietf.org/doc/rfc6844' title='IESG Datatracker information for this document'>Tracker</a>] [<a href="/rfcdiff?difftype=--hwdiff&amp;url2=rfc6844" title="Inline diff (wdiff)">Diff1</a>] [<a href="/rfcdiff?url2=rfc6844" title="Side-by-side diff">Diff2</a>] [<a href="https://www.rfc-editor.org/errata_search.php?rfc=6844">Errata</a>]</span><br />
+<span class="pre noprint docinfo">                                                                        </span><br />
+<span class="pre noprint docinfo">Obsoleted by: <a href="./rfc8659">8659</a>                                     PROPOSED STANDARD</span><br />
+<span class="pre noprint docinfo">                                                            <span style='color: #C00;'>Errata Exist</span></span><br />
+<pre>
+Internet Engineering Task Force (IETF)                   P. Hallam-Baker
+Request for Comments: 6844                            Comodo Group, Inc.
+Category: Standards Track                                   R. Stradling
+ISSN: 2070-1721                                          Comodo CA, Ltd.
+                                                            January 2013
+
+
+    <span class="h1">DNS Certification Authority Authorization (CAA) Resource Record</span>
+
+Abstract
+
+   The Certification Authority Authorization (CAA) DNS Resource Record
+   allows a DNS domain name holder to specify one or more Certification
+   Authorities (CAs) authorized to issue certificates for that domain.
+   CAA Resource Records allow a public Certification Authority to
+   implement additional controls to reduce the risk of unintended
+   certificate mis-issue.  This document defines the syntax of the CAA
+   record and rules for processing CAA records by certificate issuers.
+
+Status of This Memo
+
+   This is an Internet Standards Track document.
+
+   This document is a product of the Internet Engineering Task Force
+   (IETF).  It represents the consensus of the IETF community.  It has
+   received public review and has been approved for publication by the
+   Internet Engineering Steering Group (IESG).  Further information on
+   Internet Standards is available in <a href="./rfc5741#section-2">Section&nbsp;2 of RFC 5741</a>.
+
+   Information about the current status of this document, any errata,
+   and how to provide feedback on it may be obtained at
+   <a href="http://www.rfc-editor.org/info/rfc6844">http://www.rfc-editor.org/info/rfc6844</a>.
+
+Copyright Notice
+
+   Copyright (c) 2013 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to <a href="./bcp78">BCP 78</a> and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (<a href="http://trustee.ietf.org/license-info">http://trustee.ietf.org/license-info</a>) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 1]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-2" id="page-2" href="#page-2" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+Table of Contents
+
+   <a href="#section-1">1</a>. Introduction ....................................................<a href="#page-2">2</a>
+   <a href="#section-2">2</a>. Definitions .....................................................<a href="#page-3">3</a>
+      <a href="#section-2.1">2.1</a>. Requirements Language ......................................<a href="#page-3">3</a>
+      <a href="#section-2.2">2.2</a>. Defined Terms ..............................................<a href="#page-3">3</a>
+   <a href="#section-3">3</a>. The CAA RR Type .................................................<a href="#page-5">5</a>
+   <a href="#section-4">4</a>. Certification Authority Processing ..............................<a href="#page-7">7</a>
+      <a href="#section-4.1">4.1</a>. Use of DNS Security ........................................<a href="#page-8">8</a>
+   <a href="#section-5">5</a>. Mechanism .......................................................<a href="#page-8">8</a>
+      <a href="#section-5.1">5.1</a>. Syntax .....................................................<a href="#page-8">8</a>
+           <a href="#section-5.1.1">5.1.1</a>. Canonical Presentation Format ......................<a href="#page-10">10</a>
+      <a href="#section-5.2">5.2</a>. CAA issue Property ........................................<a href="#page-10">10</a>
+      <a href="#section-5.3">5.3</a>. CAA issuewild Property ....................................<a href="#page-12">12</a>
+      <a href="#section-5.4">5.4</a>. CAA iodef Property ........................................<a href="#page-12">12</a>
+   <a href="#section-6">6</a>. Security Considerations ........................................<a href="#page-13">13</a>
+      <a href="#section-6.1">6.1</a>. Non-Compliance by Certification Authority .................<a href="#page-13">13</a>
+      <a href="#section-6.2">6.2</a>. Mis-Issue by Authorized Certification Authority ...........<a href="#page-13">13</a>
+      <a href="#section-6.3">6.3</a>. Suppression or Spoofing of CAA Records ....................<a href="#page-13">13</a>
+      <a href="#section-6.4">6.4</a>. Denial of Service .........................................<a href="#page-14">14</a>
+      <a href="#section-6.5">6.5</a>. Abuse of the Critical Flag ................................<a href="#page-14">14</a>
+   <a href="#section-7">7</a>. IANA Considerations ............................................<a href="#page-14">14</a>
+      <a href="#section-7.1">7.1</a>. Registration of the CAA Resource Record Type ..............<a href="#page-14">14</a>
+      <a href="#section-7.2">7.2</a>. Certification Authority Restriction Properties ............<a href="#page-15">15</a>
+      <a href="#section-7.3">7.3</a>. Certification Authority Restriction Flags .................<a href="#page-15">15</a>
+   <a href="#section-8">8</a>. Acknowledgements ...............................................<a href="#page-16">16</a>
+   <a href="#section-9">9</a>. References .....................................................<a href="#page-16">16</a>
+      <a href="#section-9.1">9.1</a>. Normative References ......................................<a href="#page-16">16</a>
+      <a href="#section-9.2">9.2</a>. Informative References ....................................<a href="#page-17">17</a>
+
+<span class="h2"><a class="selflink" name="section-1" href="#section-1">1</a>.  Introduction</span>
+
+   The Certification Authority Authorization (CAA) DNS Resource Record
+   allows a DNS domain name holder to specify the Certification
+   Authorities (CAs) authorized to issue certificates for that domain.
+   Publication of CAA Resource Records allows a public Certification
+   Authority to implement additional controls to reduce the risk of
+   unintended certificate mis-issue.
+
+   Like the TLSA record defined in DNS-Based Authentication of Named
+   Entities (DANE) [<a href="./rfc6698" title="&quot;The DNS-Based Authentication of Named Entities (DANE) Transport Layer Security (TLS) Protocol: TLSA&quot;">RFC6698</a>], CAA records are used as a part of a
+   mechanism for checking PKIX certificate data.  The distinction
+   between the two specifications is that CAA records specify an
+   authorization control to be performed by a certificate issuer before
+   issue of a certificate and TLSA records specify a verification
+   control to be performed by a relying party after the certificate is
+   issued.
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 2]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-3" id="page-3" href="#page-3" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   Conformance with a published CAA record is a necessary but not
+   sufficient condition for issuance of a certificate.  Before issuing a
+   certificate, a PKIX CA is required to validate the request according
+   to the policies set out in its Certificate Policy.  In the case of a
+   public CA that validates certificate requests as a third party, the
+   certificate will typically be issued under a public trust anchor
+   certificate embedded in one or more relevant Relying Applications.
+
+   Criteria for inclusion of embedded trust anchor certificates in
+   applications are outside the scope of this document.  Typically, such
+   criteria require the CA to publish a Certificate Practices Statement
+   (CPS) that specifies how the requirements of the Certificate Policy
+   (CP) are achieved.  It is also common for a CA to engage an
+   independent third-party auditor to prepare an annual audit statement
+   of its performance against its CPS.
+
+   A set of CAA records describes only current grants of authority to
+   issue certificates for the corresponding DNS domain.  Since a
+   certificate is typically valid for at least a year, it is possible
+   that a certificate that is not conformant with the CAA records
+   currently published was conformant with the CAA records published at
+   the time that the certificate was issued.  Relying Applications MUST
+   NOT use CAA records as part of certificate validation.
+
+   CAA records MAY be used by Certificate Evaluators as a possible
+   indicator of a security policy violation.  Such use SHOULD take
+   account of the possibility that published CAA records changed between
+   the time a certificate was issued and the time at which the
+   certificate was observed by the Certificate Evaluator.
+
+<span class="h2"><a class="selflink" name="section-2" href="#section-2">2</a>.  Definitions</span>
+
+<span class="h3"><a class="selflink" name="section-2.1" href="#section-2.1">2.1</a>.  Requirements Language</span>
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in [<a href="./rfc2119" title="&quot;Key words for use in RFCs to Indicate Requirement Levels&quot;">RFC2119</a>].
+
+<span class="h3"><a class="selflink" name="section-2.2" href="#section-2.2">2.2</a>.  Defined Terms</span>
+
+   The following terms are used in this document:
+
+   Authorization Entry:  An authorization assertion that grants or
+      denies a specific set of permissions to a specific group of
+      entities.
+
+   Certificate:  An X.509 Certificate, as specified in [<a href="./rfc5280" title="&quot;Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile&quot;">RFC5280</a>].
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 3]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-4" id="page-4" href="#page-4" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   Certificate Evaluator:  A party other than a relying party that
+      evaluates the trustworthiness of certificates issued by
+      Certification Authorities.
+
+   Certification Authority (CA):  An issuer that issues certificates in
+      accordance with a specified Certificate Policy.
+
+   Certificate Policy (CP):  Specifies the criteria that a Certification
+      Authority undertakes to meet in its issue of certificates.  See
+      [<a href="./rfc3647" title="&quot;Internet X.509 Public Key Infrastructure Certificate Policy and Certification Practices Framework&quot;">RFC3647</a>].
+
+   Certification Practices Statement (CPS):  Specifies the means by
+      which the criteria of the Certificate Policy are met.  In most
+      cases, this will be the document against which the operations of
+      the Certification Authority are audited.  See [<a href="./rfc3647" title="&quot;Internet X.509 Public Key Infrastructure Certificate Policy and Certification Practices Framework&quot;">RFC3647</a>].
+
+   Domain:  A DNS Domain Name.
+
+   Domain Name:  A DNS Domain Name as specified in [<a href="#ref-STD13" title="&quot;Domain names - concepts and facilities&quot;">STD13</a>].
+
+   Domain Name System (DNS):  The Internet naming system specified in
+      [<a href="#ref-STD13" title="&quot;Domain names - concepts and facilities&quot;">STD13</a>].
+
+   DNS Security (DNSSEC):  Extensions to the DNS that provide
+      authentication services as specified in [<a href="./rfc4033" title="&quot;DNS Security Introduction and Requirements&quot;">RFC4033</a>], [<a href="./rfc4034" title="&quot;Resource Records for the DNS Security Extensions&quot;">RFC4034</a>],
+      [<a href="./rfc4035" title="&quot;Protocol Modifications for the DNS Security Extensions&quot;">RFC4035</a>], [<a href="./rfc5155" title="&quot;DNS Security (DNSSEC) Hashed Authenticated Denial of Existence&quot;">RFC5155</a>], and revisions.
+
+   Issuer:  An entity that issues certificates.  See [<a href="./rfc5280" title="&quot;Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile&quot;">RFC5280</a>].
+
+   Property:  The tag-value portion of a CAA Resource Record.
+
+   Property Tag:  The tag portion of a CAA Resource Record.
+
+   Property Value:  The value portion of a CAA Resource Record.
+
+   Public Key Infrastructure X.509 (PKIX):  Standards and specifications
+      issued by the IETF that apply the [<a href="#ref-X.509" title="&quot;ITU-T Recommendation X.509 (11/2008): Information technology - Open systems interconnection - The Directory: Public-key and attribute certificate frameworks&quot;">X.509</a>] certificate standards
+      specified by the ITU to Internet applications as specified in
+      [<a href="./rfc5280" title="&quot;Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile&quot;">RFC5280</a>] and related documents.
+
+   Resource Record (RR):  A particular entry in the DNS including the
+      owner name, class, type, time to live, and data, as defined in
+      [<a href="#ref-STD13" title="&quot;Domain names - concepts and facilities&quot;">STD13</a>] and [<a href="./rfc2181" title="&quot;Clarifications to the DNS Specification&quot;">RFC2181</a>].
+
+   Resource Record Set (RRSet):  A set of Resource Records or a
+      particular owner name, class, and type.  The time to live on all
+      RRs with an RRSet is always the same, but the data may be
+      different among RRs in the RRSet.
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 4]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-5" id="page-5" href="#page-5" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   Relying Party:  A party that makes use of an application whose
+      operation depends on use of a certificate for making a security
+      decision.  See [<a href="./rfc5280" title="&quot;Internet X.509 Public Key Infrastructure Certificate and Certificate Revocation List (CRL) Profile&quot;">RFC5280</a>].
+
+   Relying Application:  An application whose operation depends on use
+      of a certificate for making a security decision.
+
+<span class="h2"><a class="selflink" name="section-3" href="#section-3">3</a>.  The CAA RR Type</span>
+
+   A CAA RR consists of a flags byte and a tag-value pair referred to as
+   a property.  Multiple properties MAY be associated with the same
+   domain name by publishing multiple CAA RRs at that domain name.  The
+   following flag is defined:
+
+   Issuer Critical:  If set to '1', indicates that the corresponding
+      property tag MUST be understood if the semantics of the CAA record
+      are to be correctly interpreted by an issuer.
+
+      Issuers MUST NOT issue certificates for a domain if the relevant
+      CAA Resource Record set contains unknown property tags that have
+      the Critical bit set.
+
+   The following property tags are defined:
+
+   issue &lt;Issuer Domain Name&gt; [; &lt;name&gt;=&lt;value&gt; ]* :  The issue property
+      entry authorizes the holder of the domain name &lt;Issuer Domain
+      Name&gt; or a party acting under the explicit authority of the holder
+      of that domain name to issue certificates for the domain in which
+      the property is published.
+
+   issuewild &lt;Issuer Domain Name&gt; [; &lt;name&gt;=&lt;value&gt; ]* :  The issuewild
+      property entry authorizes the holder of the domain name &lt;Issuer
+      Domain Name&gt; or a party acting under the explicit authority of the
+      holder of that domain name to issue wildcard certificates for the
+      domain in which the property is published.
+
+   iodef &lt;URL&gt; :  Specifies a URL to which an issuer MAY report
+      certificate issue requests that are inconsistent with the issuer's
+      Certification Practices or Certificate Policy, or that a
+      Certificate Evaluator may use to report observation of a possible
+      policy violation.  The Incident Object Description Exchange Format
+      (IODEF) format is used [<a href="./rfc5070" title="&quot;The Incident Object Description Exchange Format&quot;">RFC5070</a>].
+
+   The following example is a DNS zone file (see [<a href="./rfc1035" title="&quot;Domain names - implementation and specification&quot;">RFC1035</a>]) that informs
+   CAs that certificates are not to be issued except by the holder of
+   the domain name 'ca.example.net' or an authorized agent thereof.
+   This policy applies to all subordinate domains under example.com.
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 5]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-6" id="page-6" href="#page-6" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   $ORIGIN example.com
+   .       CAA 0 issue "ca.example.net"
+
+   If the domain name holder specifies one or more iodef properties, a
+   certificate issuer MAY report invalid certificate requests to that
+   address.  In the following example, the domain name holder specifies
+   that reports may be made by means of email with the IODEF data as an
+   attachment, a Web service [<a href="./rfc6546" title="&quot;Transport of Real-time Inter-network Defense (RID) Messages over HTTP/TLS&quot;">RFC6546</a>], or both:
+
+   $ORIGIN example.com
+   .       CAA 0 issue "ca.example.net"
+   .       CAA 0 iodef "mailto:security@example.com"
+   .       CAA 0 iodef "http://iodef.example.com/"
+
+   A certificate issuer MAY specify additional parameters that allow
+   customers to specify additional parameters governing certificate
+   issuance.  This might be the Certificate Policy under which the
+   certificate is to be issued, the authentication process to be used
+   might be specified, or an account number specified by the CA to
+   enable these parameters to be retrieved.
+
+   For example, the CA 'ca.example.net' has requested its customer
+   'example.com' to specify the CA's account number '230123' in each of
+   the customer's CAA records.
+
+   $ORIGIN example.com
+   .       CAA 0 issue "ca.example.net; account=230123"
+
+   The syntax of additional parameters is a sequence of name-value pairs
+   as defined in <a href="#section-5.2">Section 5.2</a>.  The semantics of such parameters is left
+   to site policy and is outside the scope of this document.
+
+   The critical flag is intended to permit future versions CAA to
+   introduce new semantics that MUST be understood for correct
+   processing of the record, preventing conforming CAs that do not
+   recognize the new semantics from issuing certificates for the
+   indicated domains.
+
+   In the following example, the property 'tbs' is flagged as critical.
+   Neither the example.net CA nor any other issuer is authorized to
+   issue under either policy unless the processing rules for the 'tbs'
+   property tag are understood.
+
+   $ORIGIN example.com
+   .       CAA 0 issue "ca.example.net; policy=ev"
+   .       CAA 128 tbs "Unknown"
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 6]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-7" id="page-7" href="#page-7" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   Note that the above restrictions only apply at certificate issue.
+   Since the validity of an end entity certificate is typically a year
+   or more, it is quite possible that the CAA records published at a
+   domain will change between the time a certificate was issued and
+   validation by a relying party.
+
+<span class="h2"><a class="selflink" name="section-4" href="#section-4">4</a>.  Certification Authority Processing</span>
+
+   Before issuing a certificate, a compliant CA MUST check for
+   publication of a relevant CAA Resource Record set.  If such a record
+   set exists, a CA MUST NOT issue a certificate unless the CA
+   determines that either (1) the certificate request is consistent with
+   the applicable CAA Resource Record set or (2) an exception specified
+   in the relevant Certificate Policy or Certification Practices
+   Statement applies.
+
+   A certificate request MAY specify more than one domain name and MAY
+   specify wildcard domains.  Issuers MUST verify authorization for all
+   the domains and wildcard domains specified in the request.
+
+   The search for a CAA record climbs the DNS name tree from the
+   specified label up to but not including the DNS root '.'.
+
+   Given a request for a specific domain X, or a request for a wildcard
+   domain *.X, the relevant record set R(X) is determined as follows:
+
+   Let CAA(X) be the record set returned in response to performing a CAA
+   record query on the label X, P(X) be the DNS label immediately above
+   X in the DNS hierarchy, and A(X) be the target of a CNAME or DNAME
+   alias record specified at the label X.
+
+   o  If CAA(X) is not empty, R(X) = CAA (X), otherwise
+
+   o  If A(X) is not null, and R(A(X)) is not empty, then R(X) =
+      R(A(X)), otherwise
+
+   o  If X is not a top-level domain, then R(X) = R(P(X)), otherwise
+
+   o  R(X) is empty.
+
+   For example, if a certificate is requested for X.Y.Z the issuer will
+   search for the relevant CAA record set in the following order:
+
+      X.Y.Z
+
+      Alias (X.Y.Z)
+
+      Y.Z
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 7]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-8" id="page-8" href="#page-8" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+      Alias (Y.Z)
+
+      Z
+
+      Alias (Z)
+
+      Return Empty
+
+<span class="h3"><a class="selflink" name="section-4.1" href="#section-4.1">4.1</a>.  Use of DNS Security</span>
+
+   Use of DNSSEC to authenticate CAA RRs is strongly RECOMMENDED but not
+   required.  An issuer MUST NOT issue certificates if doing so would
+   conflict with the relevant CAA Resource Record set, irrespective of
+   whether the corresponding DNS records are signed.
+
+   DNSSEC provides a proof of non-existence for both DNS domains and RR
+   set within domains.  DNSSEC verification thus enables an issuer to
+   determine if the answer to a CAA record query is empty because the RR
+   set is empty or if it is non-empty but the response has been
+   suppressed.
+
+   Use of DNSSEC allows an issuer to acquire and archive a proof that
+   they were authorized to issue certificates for the domain.
+   Verification of such archives MAY be an audit requirement to verify
+   CAA record processing compliance.  Publication of such archives MAY
+   be a transparency requirement to verify CAA record processing
+   compliance.
+
+<span class="h2"><a class="selflink" name="section-5" href="#section-5">5</a>.  Mechanism</span>
+
+<span class="h3"><a class="selflink" name="section-5.1" href="#section-5.1">5.1</a>.  Syntax</span>
+
+   A CAA RR contains a single property entry consisting of a tag-value
+   pair.  Each tag represents a property of the CAA record.  The value
+   of a CAA property is that specified in the corresponding value field.
+
+   A domain name MAY have multiple CAA RRs associated with it and a
+   given property MAY be specified more than once.
+
+   The CAA data field contains one property entry.  A property entry
+   consists of the following data fields:
+
+
+
+
+
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 8]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-9" id="page-9" href="#page-9" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   +0-1-2-3-4-5-6-7-|0-1-2-3-4-5-6-7-|
+   | Flags          | Tag Length = n |
+   +----------------+----------------+...+---------------+
+   | Tag char 0     | Tag char 1     |...| Tag char n-1  |
+   +----------------+----------------+...+---------------+
+   +----------------+----------------+.....+----------------+
+   | Value byte 0   | Value byte 1   |.....| Value byte m-1 |
+   +----------------+----------------+.....+----------------+
+
+   Where n is the length specified in the Tag length field and m is the
+   remaining octets in the Value field (m = d - n - 2) where d is the
+   length of the RDATA section.
+
+   The data fields are defined as follows:
+
+   Flags:  One octet containing the following fields:
+
+      Bit 0, Issuer Critical Flag:  If the value is set to '1', the
+         critical flag is asserted and the property MUST be understood
+         if the CAA record is to be correctly processed by a certificate
+         issuer.
+
+         A Certification Authority MUST NOT issue certificates for any
+         Domain that contains a CAA critical property for an unknown or
+         unsupported property tag that for which the issuer critical
+         flag is set.
+
+      Note that according to the conventions set out in [<a href="./rfc1035" title="&quot;Domain names - implementation and specification&quot;">RFC1035</a>], bit 0
+      is the Most Significant Bit and bit 7 is the Least Significant
+      Bit. Thus, the Flags value 1 means that bit 7 is set while a value
+      of 128 means that bit 0 is set according to this convention.
+
+      All other bit positions are reserved for future use.
+
+      To ensure compatibility with future extensions to CAA, DNS records
+      compliant with this version of the CAA specification MUST clear
+      (set to "0") all reserved flags bits.  Applications that interpret
+      CAA records MUST ignore the value of all reserved flag bits.
+
+   Tag Length:  A single octet containing an unsigned integer specifying
+      the tag length in octets.  The tag length MUST be at least 1 and
+      SHOULD be no more than 15.
+
+
+
+
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                    [Page 9]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-10" id="page-10" href="#page-10" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   Tag:  The property identifier, a sequence of US-ASCII characters.
+
+      Tag values MAY contain US-ASCII characters 'a' through 'z', 'A'
+      through 'Z', and the numbers 0 through 9.  Tag values SHOULD NOT
+      contain any other characters.  Matching of tag values is case
+      insensitive.
+
+      Tag values submitted for registration by IANA MUST NOT contain any
+      characters other than the (lowercase) US-ASCII characters 'a'
+      through 'z' and the numbers 0 through 9.
+
+   Value:  A sequence of octets representing the property value.
+      Property values are encoded as binary values and MAY employ sub-
+      formats.
+
+      The length of the value field is specified implicitly as the
+      remaining length of the enclosing Resource Record data field.
+
+<span class="h4"><a class="selflink" name="section-5.1.1" href="#section-5.1.1">5.1.1</a>.  Canonical Presentation Format</span>
+
+   The canonical presentation format of the CAA record is:
+
+   CAA &lt;flags&gt; &lt;tag&gt; &lt;value&gt;
+
+   Where:
+
+   Flags:  Is an unsigned integer between 0 and 255.
+
+   Tag:  Is a non-zero sequence of US-ASCII letters and numbers in lower
+      case.
+
+   Value:  Is the &lt;character-string&gt; encoding of the value field as
+      specified in <a href="./rfc1035#section-5.1">[RFC1035], Section&nbsp;5.1</a>.
+
+<span class="h3"><a class="selflink" name="section-5.2" href="#section-5.2">5.2</a>.  CAA issue Property</span>
+
+   The issue property tag is used to request that certificate issuers
+   perform CAA issue restriction processing for the domain and to grant
+   authorization to specific certificate issuers.
+
+   The CAA issue property value has the following sub-syntax (specified
+   in ABNF as per [<a href="./rfc5234" title="&quot;Augmented BNF for Syntax Specifications: ABNF&quot;">RFC5234</a>]).
+
+
+
+
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                   [Page 10]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-11" id="page-11" href="#page-11" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   issuevalue  = space [domain] space [";" *(space parameter) space]
+
+   domain = label *("." label)
+   label = (ALPHA / DIGIT) *( *("-") (ALPHA / DIGIT))
+
+   space = *(SP / HTAB)
+
+   parameter =  tag "=" value
+
+   tag = 1*(ALPHA / DIGIT)
+
+   value = *VCHAR
+
+   For consistency with other aspects of DNS administration, domain name
+   values are specified in letter-digit-hyphen Label (LDH-Label) form.
+
+   A CAA record with an issue parameter tag that does not specify a
+   domain name is a request that certificate issuers perform CAA issue
+   restriction processing for the corresponding domain without granting
+   authorization to any certificate issuer.
+
+   This form of issue restriction would be appropriate to specify that
+   no certificates are to be issued for the domain in question.
+
+   For example, the following CAA record set requests that no
+   certificates be issued for the domain 'nocerts.example.com' by any
+   certificate issuer.
+
+   nocerts.example.com       CAA 0 issue ";"
+
+   A CAA record with an issue parameter tag that specifies a domain name
+   is a request that certificate issuers perform CAA issue restriction
+   processing for the corresponding domain and grants authorization to
+   the certificate issuer specified by the domain name.
+
+   For example, the following CAA record set requests that no
+   certificates be issued for the domain 'certs.example.com' by any
+   certificate issuer other than the example.net certificate issuer.
+
+   certs.example.com       CAA 0 issue "example.net"
+
+   CAA authorizations are additive; thus, the result of specifying both
+   the empty issuer and a specified issuer is the same as specifying
+   just the specified issuer alone.
+
+
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                   [Page 11]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-12" id="page-12" href="#page-12" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   An issuer MAY choose to specify issuer-parameters that further
+   constrain the issue of certificates by that issuer, for example,
+   specifying that certificates are to be subject to specific validation
+   polices, billed to certain accounts, or issued under specific trust
+   anchors.
+
+   The semantics of issuer-parameters are determined by the issuer
+   alone.
+
+<span class="h3"><a class="selflink" name="section-5.3" href="#section-5.3">5.3</a>.  CAA issuewild Property</span>
+
+   The issuewild property has the same syntax and semantics as the issue
+   property except that issuewild properties only grant authorization to
+   issue certificates that specify a wildcard domain and issuewild
+   properties take precedence over issue properties when specified.
+   Specifically:
+
+      issuewild properties MUST be ignored when processing a request for
+      a domain that is not a wildcard domain.
+
+      If at least one issuewild property is specified in the relevant
+      CAA record set, all issue properties MUST be ignored when
+      processing a request for a domain that is a wildcard domain.
+
+<span class="h3"><a class="selflink" name="section-5.4" href="#section-5.4">5.4</a>.  CAA iodef Property</span>
+
+   The iodef property specifies a means of reporting certificate issue
+   requests or cases of certificate issue for the corresponding domain
+   that violate the security policy of the issuer or the domain name
+   holder.
+
+   The Incident Object Description Exchange Format (IODEF) [<a href="./rfc5070" title="&quot;The Incident Object Description Exchange Format&quot;">RFC5070</a>] is
+   used to present the incident report in machine-readable form.
+
+   The iodef property takes a URL as its parameter.  The URL scheme type
+   determines the method used for reporting:
+
+   mailto:  The IODEF incident report is reported as a MIME email
+      attachment to an SMTP email that is submitted to the mail address
+      specified.  The mail message sent SHOULD contain a brief text
+      message to alert the recipient to the nature of the attachment.
+
+   http or https:  The IODEF report is submitted as a Web service
+      request to the HTTP address specified using the protocol specified
+      in [<a href="./rfc6546" title="&quot;Transport of Real-time Inter-network Defense (RID) Messages over HTTP/TLS&quot;">RFC6546</a>].
+
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                   [Page 12]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-13" id="page-13" href="#page-13" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+<span class="h2"><a class="selflink" name="section-6" href="#section-6">6</a>.  Security Considerations</span>
+
+   CAA records assert a security policy that the holder of a domain name
+   wishes to be observed by certificate issuers.  The effectiveness of
+   CAA records as an access control mechanism is thus dependent on
+   observance of CAA constraints by issuers.
+
+   The objective of the CAA record properties described in this document
+   is to reduce the risk of certificate mis-issue rather than avoid
+   reliance on a certificate that has been mis-issued.  DANE [<a href="./rfc6698" title="&quot;The DNS-Based Authentication of Named Entities (DANE) Transport Layer Security (TLS) Protocol: TLSA&quot;">RFC6698</a>]
+   describes a mechanism for avoiding reliance on mis-issued
+   certificates.
+
+<span class="h3"><a class="selflink" name="section-6.1" href="#section-6.1">6.1</a>.  Non-Compliance by Certification Authority</span>
+
+   CAA records offer CAs a cost-effective means of mitigating the risk
+   of certificate mis-issue: the cost of implementing CAA checks is very
+   small and the potential costs of a mis-issue event include the
+   removal of an embedded trust anchor.
+
+<span class="h3"><a class="selflink" name="section-6.2" href="#section-6.2">6.2</a>.  Mis-Issue by Authorized Certification Authority</span>
+
+   Use of CAA records does not prevent mis-issue by an authorized
+   Certification Authority, i.e., a CA that is authorized to issue
+   certificates for the domain in question by CAA records.
+
+   Domain name holders SHOULD verify that the CAs they authorize to
+   issue certificates for their domains employ appropriate controls to
+   ensure that certificates are issued only to authorized parties within
+   their organization.
+
+   Such controls are most appropriately determined by the domain name
+   holder and the authorized CA(s) directly and are thus out of scope of
+   this document.
+
+<span class="h3"><a class="selflink" name="section-6.3" href="#section-6.3">6.3</a>.  Suppression or Spoofing of CAA Records</span>
+
+   Suppression of the CAA record or insertion of a bogus CAA record
+   could enable an attacker to obtain a certificate from an issuer that
+   was not authorized to issue for that domain name.
+
+   Where possible, issuers SHOULD perform DNSSEC validation to detect
+   missing or modified CAA record sets.
+
+   In cases where DNSSEC is not deployed in a corresponding domain, an
+   issuer SHOULD attempt to mitigate this risk by employing appropriate
+   DNS security controls.  For example, all portions of the DNS lookup
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                   [Page 13]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-14" id="page-14" href="#page-14" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   process SHOULD be performed against the authoritative name server.
+   Data cached by third parties MUST NOT be relied on but MAY be used to
+   support additional anti-spoofing or anti-suppression controls.
+
+<span class="h3"><a class="selflink" name="section-6.4" href="#section-6.4">6.4</a>.  Denial of Service</span>
+
+   Introduction of a malformed or malicious CAA RR could in theory
+   enable a Denial-of-Service (DoS) attack.
+
+   This specific threat is not considered to add significantly to the
+   risk of running an insecure DNS service.
+
+   An attacker could, in principle, perform a DoS attack against an
+   issuer by requesting a certificate with a maliciously long DNS name.
+   In practice, the DNS protocol imposes a maximum name length and CAA
+   processing does not exacerbate the existing need to mitigate DoS
+   attacks to any meaningful degree.
+
+<span class="h3"><a class="selflink" name="section-6.5" href="#section-6.5">6.5</a>.  Abuse of the Critical Flag</span>
+
+   A Certification Authority could make use of the critical flag to
+   trick customers into publishing records that prevent competing
+   Certification Authorities from issuing certificates even though the
+   customer intends to authorize multiple providers.
+
+   In practice, such an attack would be of minimal effect since any
+   competent competitor that found itself unable to issue certificates
+   due to lack of support for a property marked critical SHOULD
+   investigate the cause and report the reason to the customer.  The
+   customer will thus discover that they had been deceived.
+
+<span class="h2"><a class="selflink" name="section-7" href="#section-7">7</a>.  IANA Considerations</span>
+
+<span class="h3"><a class="selflink" name="section-7.1" href="#section-7.1">7.1</a>.  Registration of the CAA Resource Record Type</span>
+
+   IANA has assigned Resource Record Type 257 for the CAA Resource
+   Record Type and added the line depicted below to the registry named
+   "Resource Record (RR) TYPEs" and QTYPEs as defined in <a href="./bcp42">BCP 42</a>
+   [<a href="./rfc6195" title="&quot;Domain Name System (DNS) IANA Considerations&quot;">RFC6195</a>] and located at
+   <a href="http://www.iana.org/assignments/dns-parameters">http://www.iana.org/assignments/dns-parameters</a>.
+
+ RR Name      Value and meaning                                Reference
+ -----------  ---------------------------------------------    ---------
+ CAA          257 Certification Authority Restriction          [<a href="./rfc6844">RFC6844</a>]
+
+
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                   [Page 14]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-15" id="page-15" href="#page-15" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+<span class="h3"><a class="selflink" name="section-7.2" href="#section-7.2">7.2</a>.  Certification Authority Restriction Properties</span>
+
+   IANA has created the "Certification Authority Restriction Properties"
+   registry with the following initial values:
+
+
+   Tag          Meaning                                Reference
+   -----------  -------------------------------------- ---------
+   issue        Authorization Entry by Domain          [<a href="./rfc6844">RFC6844</a>]
+   issuewild    Authorization Entry by Wildcard Domain [<a href="./rfc6844">RFC6844</a>]
+   iodef        Report incident by IODEF report        [<a href="./rfc6844">RFC6844</a>]
+   auth         Reserved                               [<a href="#ref-HB2011" title="&quot;DNS Certification Authority Authorization (CAA) Resource Record&quot;">HB2011</a>]
+   path         Reserved                               [<a href="#ref-HB2011" title="&quot;DNS Certification Authority Authorization (CAA) Resource Record&quot;">HB2011</a>]
+   policy       Reserved                               [<a href="#ref-HB2011" title="&quot;DNS Certification Authority Authorization (CAA) Resource Record&quot;">HB2011</a>]
+
+
+   Although [<a href="#ref-HB2011" title="&quot;DNS Certification Authority Authorization (CAA) Resource Record&quot;">HB2011</a>] has expired, deployed clients implement the CAA
+   properties specified in the document and reuse of these property tags
+   for a different purpose could cause unexpected behavior.
+
+   Addition of tag identifiers requires a public specification and
+   Expert Review as set out in <a href="./rfc6195#section-3.1.1">[RFC6195], Section&nbsp;3.1.1</a>.
+
+   The tag space is designed to be sufficiently large that exhausting
+   the possible tag space need not be a concern.  The scope of Expert
+   Review SHOULD be limited to the question of whether the specification
+   provided is sufficiently clear to permit implementation and to avoid
+   unnecessary duplication of functionality.
+
+<span class="h3"><a class="selflink" name="section-7.3" href="#section-7.3">7.3</a>.  Certification Authority Restriction Flags</span>
+
+   IANA has created the "Certification Authority Restriction Flags"
+   registry with the following initial values:
+
+
+             Flag         Meaning                            Reference
+   -----------  ---------------------------------- ---------
+   0            Issuer Critical Flag               [<a href="./rfc6844">RFC6844</a>]
+   1-7          Reserved&gt;                          [<a href="./rfc6844">RFC6844</a>]
+
+   Assignment of new flags follows the RFC Required policy set out in
+   <a href="./rfc5226#section-4.1">[RFC5226], Section&nbsp;4.1</a>.
+
+
+
+
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                   [Page 15]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-16" id="page-16" href="#page-16" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+<span class="h2"><a class="selflink" name="section-8" href="#section-8">8</a>.  Acknowledgements</span>
+
+   The authors would like to thank the following people who contributed
+   to the design and documentation of this work item: Chris Evans,
+   Stephen Farrell, Jeff Hodges, Paul Hoffman, Stephen Kent, Adam
+   Langley, Ben Laurie, James Manager, Chris Palmer, Scott Schmit, Sean
+   Turner, and Ben Wilson.
+
+<span class="h2"><a class="selflink" name="section-9" href="#section-9">9</a>.  References</span>
+
+<span class="h3"><a class="selflink" name="section-9.1" href="#section-9.1">9.1</a>.  Normative References</span>
+
+   [<a name="ref-RFC1035" id="ref-RFC1035">RFC1035</a>]  Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, <a href="./rfc1035">RFC 1035</a>, November 1987.
+
+   [<a name="ref-RFC2119" id="ref-RFC2119">RFC2119</a>]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", <a href="./bcp14">BCP 14</a>, <a href="./rfc2119">RFC 2119</a>, March 1997.
+
+   [<a name="ref-RFC2181" id="ref-RFC2181">RFC2181</a>]  Elz, R. and R. Bush, "Clarifications to the DNS
+              Specification", <a href="./rfc2181">RFC 2181</a>, July 1997.
+
+   [<a name="ref-RFC4033" id="ref-RFC4033">RFC4033</a>]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
+              Rose, "DNS Security Introduction and Requirements",
+              <a href="./rfc4033">RFC 4033</a>, March 2005.
+
+   [<a name="ref-RFC4034" id="ref-RFC4034">RFC4034</a>]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
+              Rose, "Resource Records for the DNS Security Extensions",
+              <a href="./rfc4034">RFC 4034</a>, March 2005.
+
+   [<a name="ref-RFC4035" id="ref-RFC4035">RFC4035</a>]  Arends, R., Austein, R., Larson, M., Massey, D., and S.
+              Rose, "Protocol Modifications for the DNS Security
+              Extensions", <a href="./rfc4035">RFC 4035</a>, March 2005.
+
+   [<a name="ref-RFC5070" id="ref-RFC5070">RFC5070</a>]  Danyliw, R., Meijer, J., and Y. Demchenko, "The Incident
+              Object Description Exchange Format", <a href="./rfc5070">RFC 5070</a>,
+              December 2007.
+
+   [<a name="ref-RFC5155" id="ref-RFC5155">RFC5155</a>]  Laurie, B., Sisson, G., Arends, R., and D. Blacka, "DNS
+              Security (DNSSEC) Hashed Authenticated Denial of
+              Existence", <a href="./rfc5155">RFC 5155</a>, March 2008.
+
+   [<a name="ref-RFC5226" id="ref-RFC5226">RFC5226</a>]  Narten, T. and H. Alvestrand, "Guidelines for Writing an
+              IANA Considerations Section in RFCs", <a href="./bcp26">BCP 26</a>, <a href="./rfc5226">RFC 5226</a>,
+              May 2008.
+
+   [<a name="ref-RFC5234" id="ref-RFC5234">RFC5234</a>]  Crocker, D. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, <a href="./rfc5234">RFC 5234</a>, January 2008.
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                   [Page 16]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-17" id="page-17" href="#page-17" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+   [<a name="ref-RFC5280" id="ref-RFC5280">RFC5280</a>]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, "Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", <a href="./rfc5280">RFC 5280</a>, May 2008.
+
+   [<a name="ref-RFC6195" id="ref-RFC6195">RFC6195</a>]  Eastlake, D., "Domain Name System (DNS) IANA
+              Considerations", <a href="./bcp42">BCP 42</a>, <a href="./rfc6195">RFC 6195</a>, March 2011.
+
+   [<a name="ref-RFC6546" id="ref-RFC6546">RFC6546</a>]  Trammell, B., "Transport of Real-time Inter-network
+              Defense (RID) Messages over HTTP/TLS", <a href="./rfc6546">RFC 6546</a>,
+              April 2012.
+
+   [<a name="ref-RFC6698" id="ref-RFC6698">RFC6698</a>]  Hoffman, P. and J. Schlyter, "The DNS-Based Authentication
+              of Named Entities (DANE) Transport Layer Security (TLS)
+              Protocol: TLSA", <a href="./rfc6698">RFC 6698</a>, August 2012.
+
+   [<a name="ref-STD13" id="ref-STD13">STD13</a>]    Mockapetris, P., "Domain names - concepts and facilities",
+              STD 13, <a href="./rfc1034">RFC 1034</a>, November 1987.
+
+              Mockapetris, P., "Domain names - implementation and
+              specification", STD 13, <a href="./rfc1035">RFC 1035</a>, November 1987.
+
+   [<a name="ref-X.509" id="ref-X.509">X.509</a>]    International Telecommunication Union, "ITU-T
+              Recommendation X.509 (11/2008): Information technology -
+              Open systems interconnection - The Directory: Public-key
+              and attribute certificate frameworks", ITU-T
+              Recommendation X.509, November 2008.
+
+<span class="h3"><a class="selflink" name="section-9.2" href="#section-9.2">9.2</a>.  Informative References</span>
+
+   [<a name="ref-HB2011" id="ref-HB2011">HB2011</a>]   Hallam-Baker, P., Stradling, R., and B. Laurie, "DNS
+              Certification Authority Authorization (CAA) Resource
+              Record", Work in Progress, May 2011.
+
+   [<a name="ref-RFC3647" id="ref-RFC3647">RFC3647</a>]  Chokhani, S., Ford, W., Sabett, R., Merrill, C., and S.
+              Wu, "Internet X.509 Public Key Infrastructure Certificate
+              Policy and Certification Practices Framework", <a href="./rfc3647">RFC 3647</a>,
+              November 2003.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="grey">Hallam-Baker &amp; Stradling     Standards Track                   [Page 17]</span></pre>
+<hr class='noprint' style='width: 96ex;' align='left'/><!--NewPage--><pre class='newpage'><a name="page-18" id="page-18" href="#page-18" class="invisible"> </a>
+<span class="grey"><a href="./rfc6844">RFC 6844</a>          Certification Authority Authorization     January 2013</span>
+
+
+Authors' Addresses
+
+   Phillip Hallam-Baker
+   Comodo Group, Inc.
+
+   EMail: philliph@comodo.com
+
+
+   Rob Stradling
+   Comodo CA, Ltd.
+
+   EMail: rob.stradling@comodo.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Hallam-Baker &amp; Stradling     Standards Track                   [Page 18]
+
+</pre><br />
+    <span class="noprint"><small><small>Html markup produced by rfcmarkup 1.129d, available from
+      <a href="https://tools.ietf.org/tools/rfcmarkup/">https://tools.ietf.org/tools/rfcmarkup/</a>
+    </small></small></span>
+  </div>
+</body>
+</html>
