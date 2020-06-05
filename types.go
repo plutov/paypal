@@ -798,11 +798,13 @@ type (
 	// Sale struct
 	Sale struct {
 		ID                        string     `json:"id,omitempty"`
+		State                     string     `json:"state,omitempty"`
 		Amount                    *Amount    `json:"amount,omitempty"`
 		TransactionFee            *Currency  `json:"transaction_fee,omitempty"`
+		InvoiceNumber string `json:"invoice_number,omitempty"`
+		BillingAgreementId string `json:"billing_agreement_id,omitempty"`
 		Description               string     `json:"description,omitempty"`
 		CreateTime                *time.Time `json:"create_time,omitempty"`
-		State                     string     `json:"state,omitempty"`
 		ParentPayment             string     `json:"parent_payment,omitempty"`
 		UpdateTime                *time.Time `json:"update_time,omitempty"`
 		PaymentMode               string     `json:"payment_mode,omitempty"`
