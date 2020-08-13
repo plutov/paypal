@@ -3,9 +3,10 @@
 package paypal
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 // All test values are defined here
@@ -36,6 +37,36 @@ func TestGetUserInfo(t *testing.T) {
 	if u.ID != testUserID || err != nil {
 		t.Errorf("GetUserInfo must return valid test ID %s, got %s, error: %v", testUserID, u.ID, err)
 	}
+}
+
+func TestCreateVenmoPayout(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken()
+
+	payout := Payout{
+		SenderBatchHeader: &SenderBatchHeader{
+			SenderBatchID: "Payouts_2018_100007",
+			EmailSubject:  "You have a payout!",
+			EmailMessage:  "You have received a payout! Thanks for using our service!",
+		},
+		Items: []PayoutItem{
+			{
+				RecipientType:   "EMAIL",
+				RecipientWallet: VenmoRecipientWallet,
+				Receiver:        "receiver@example.com",
+				Amount: &AmountPayout{
+					Value:    "9.87",
+					Currency: "USD",
+				},
+				Note:         "Thanks for your patronage!",
+				SenderItemID: "201403140001",
+			},
+		},
+	}
+
+	res, err := c.CreateSinglePayout(payout)
+	assert.NoError(t, err, "should accept venmo wallet")
+	assert.Greater(t, len(res.Items), 0)
 }
 
 func TestCreateSinglePayout(t *testing.T) {
@@ -285,13 +316,13 @@ func TestSubscriptionPlans(t *testing.T) {
 				TotalCycles: 0,
 			},
 		},
-		PaymentPreferences: PaymentPreferences{
+		PaymentPreferences: &PaymentPreferences{
 			AutoBillOutstanding:     false,
 			SetupFee:                nil,
 			SetupFeeFailureAction:   SetupFeeFailureActionCancel,
 			PaymentFailureThreshold: 0,
 		},
-		Taxes: Taxes{
+		Taxes: &Taxes{
 			Percentage: "19",
 			Inclusive:  false,
 		},
