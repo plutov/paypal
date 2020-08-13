@@ -115,6 +115,12 @@ const (
 	FeatureUpdateCustomerDispute string = "UPDATE_CUSTOMER_DISPUTES"
 )
 
+// https://developer.paypal.com/docs/api/payments.payouts-batch/v1/?mark=recipient_wallet#definition-recipient_wallet
+const (
+	PaypalRecipientWallet string = "PAYPAL"
+	VenmoRecipientWallet  string = "VENMO"
+)
+
 const (
 	LinkRelSelf      string = "self"
 	LinkRelActionURL string = "action_url"
@@ -735,11 +741,12 @@ type (
 
 	// PayoutItem struct
 	PayoutItem struct {
-		RecipientType string        `json:"recipient_type"`
-		Receiver      string        `json:"receiver"`
-		Amount        *AmountPayout `json:"amount"`
-		Note          string        `json:"note,omitempty"`
-		SenderItemID  string        `json:"sender_item_id,omitempty"`
+		RecipientType   string        `json:"recipient_type"`
+		RecipientWallet string        `json:"recipient_wallet"`
+		Receiver        string        `json:"receiver"`
+		Amount          *AmountPayout `json:"amount"`
+		Note            string        `json:"note,omitempty"`
+		SenderItemID    string        `json:"sender_item_id,omitempty"`
 	}
 
 	// PayoutItemResponse struct
