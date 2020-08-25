@@ -1204,8 +1204,8 @@ type (
 	}
 
 	SharedListResponse struct {
-		TotalItems string `json:"total_items,omitempty"`
-		TotalPages string `json:"total_pages,omitempty"`
+		TotalItems int    `json:"total_items,omitempty"`
+		TotalPages int    `json:"total_pages,omitempty"`
 		Links      []Link `json:"links,omitempty"`
 	}
 )
