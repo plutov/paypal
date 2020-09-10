@@ -580,20 +580,14 @@ type (
 
 	// Order struct
 	Order struct {
-		ID            string         `json:"id,omitempty"`
-		Status        string         `json:"status,omitempty"`
-		Intent        string         `json:"intent,omitempty"`
-		Payer         *OrderPayer    `json:"payer,omitempty"`
-		PurchaseUnits []PurchaseUnit `json:"purchase_units,omitempty"`
-		Links         []Link         `json:"links,omitempty"`
-		CreateTime    *time.Time     `json:"create_time,omitempty"`
-		UpdateTime    *time.Time     `json:"update_time,omitempty"`
-	}
-
-	// OrderPayer struct
-	OrderPayer struct {
-		PayerID      string `json:"payer_id,omitempty"`
-		EmailAddress string `json:"email_address,omitempty"`
+		ID            string                 `json:"id,omitempty"`
+		Status        string                 `json:"status,omitempty"`
+		Intent        string                 `json:"intent,omitempty"`
+		Payer         *PayerWithNameAndPhone `json:"payer,omitempty"`
+		PurchaseUnits []PurchaseUnit         `json:"purchase_units,omitempty"`
+		Links         []Link                 `json:"links,omitempty"`
+		CreateTime    *time.Time             `json:"create_time,omitempty"`
+		UpdateTime    *time.Time             `json:"update_time,omitempty"`
 	}
 
 	// CaptureAmount struct
