@@ -174,7 +174,7 @@ func TestTypePayoutResponse(t *testing.T) {
 					"recipient_type":"EMAIL",
 					"amount":{
 						"currency":"USD",
-						"value":"6.37"
+						"value":"85.37"
 					},
 					"note":"Optional note",
 					"receiver":"ppuser@example.com",
@@ -230,17 +230,17 @@ func TestOrderUnmarshal(t *testing.T) {
 		"status": "CREATED",
 		"links": [
 		  {
-			"href": "https://api.paypal.com/v2/checkout/orders/5O190127TN364715T",
+			"href": "https://api.paypal.com/v2/checkout/orders/LKWB6KYXY7SXEU55",
 			"rel": "self",
 			"method": "GET"
 		  },
 		  {
-			"href": "https://api.sandbox.paypal.com/checkoutnow?token=5O190127TN364715T",
+			"href": "https://api.sandbox.paypal.com/checkoutnow?token=LKWB6KYXY7SXEU55",
 			"rel": "approve",
 			"method": "GET"
 		  },
 		  {
-			"href": "https://api.paypal.com/v2/checkout/orders/5O190127TN364715T/capture",
+			"href": "https://api.paypal.com/v2/checkout/orders/LKWB6KYXY7SXEU55/capture",
 			"rel": "capture",
 			"method": "POST"
 		  }
@@ -255,7 +255,7 @@ func TestOrderUnmarshal(t *testing.T) {
 
 	if order.ID != "5O190127TN364715T" ||
 		order.Status != "CREATED" ||
-		order.Links[0].Href != "https://api.paypal.com/v2/checkout/orders/5O190127TN364715T" {
+		order.Links[0].Href != "https://api.paypal.com/v2/checkout/orders/LKWB6KYXY7SXEU55" {
 		t.Errorf("Order decoded result is incorrect, Given: %+v", order)
 	}
 }
