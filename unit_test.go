@@ -226,7 +226,7 @@ func TestTypePayoutResponse(t *testing.T) {
 
 func TestOrderUnmarshal(t *testing.T) {
 	response := `{
-		"id": "5O190127TN364715T",
+		"id": "LKWB6KYXY7SXEU55",
 		"status": "CREATED",
 		"links": [
 		  {
