@@ -590,11 +590,19 @@ type (
 		UpdateTime    *time.Time             `json:"update_time,omitempty"`
 	}
 
+	// SellerReceivableBreakdown has the detailed breakdown of the capture activity.
+	SellerReceivableBreakdown struct {
+		GrossAmount *paypal.Money `json:"gross_amount,omitempty"`
+		PaypalFee   *paypal.Money `json:"paypal_fee,omitempty"`
+		NetAmount   *paypal.Money `json:"net_amount,omitempty"`
+	}
+	
 	// CaptureAmount struct
 	CaptureAmount struct {
-		ID       string              `json:"id,omitempty"`
-		CustomID string              `json:"custom_id,omitempty"`
-		Amount   *PurchaseUnitAmount `json:"amount,omitempty"`
+		ID                        string                     `json:"id,omitempty"`
+		CustomID                  string                     `json:"custom_id,omitempty"`
+		Amount                    *paypal.PurchaseUnitAmount `json:"amount,omitempty"`
+		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
 	}
 
 	// CapturedPayments has the amounts for a captured order
