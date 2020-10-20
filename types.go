@@ -590,11 +590,24 @@ type (
 		UpdateTime    *time.Time             `json:"update_time,omitempty"`
 	}
 
+	// ExchangeRate struct
+	//
+	// https://developer.paypal.com/docs/api/orders/v2/#definition-exchange_rate
+	ExchangeRate struct {
+		SourceCurrency string `json:"source_currency"`
+		TargetCurrency string `json:"target_currency"`
+		Value          string `json:"value"`
+	}
+
 	// SellerReceivableBreakdown has the detailed breakdown of the capture activity.
 	SellerReceivableBreakdown struct {
-		GrossAmount *Money `json:"gross_amount,omitempty"`
-		PaypalFee   *Money `json:"paypal_fee,omitempty"`
-		NetAmount   *Money `json:"net_amount,omitempty"`
+		GrossAmount                   *Money        `json:"gross_amount,omitempty"`
+		PaypalFee                     *Money        `json:"paypal_fee,omitempty"`
+		PaypalFeeInReceivableCurrency *Money        `json:"paypal_fee_in_receivable_currency,omitempty"`
+		NetAmount                     *Money        `json:"net_amount,omitempty"`
+		ReceivableAmount              *Money        `json:"receivable_amount,omitempty"`
+		ExchangeRate                  *ExchangeRate `json:"exchange_rate,omitempty"`
+		PlatformFees                  []PlatformFee `json:"platform_fees,omitempty"`
 	}
 	
 	// CaptureAmount struct
