@@ -592,16 +592,16 @@ type (
 
 	// SellerReceivableBreakdown has the detailed breakdown of the capture activity.
 	SellerReceivableBreakdown struct {
-		GrossAmount *paypal.Money `json:"gross_amount,omitempty"`
-		PaypalFee   *paypal.Money `json:"paypal_fee,omitempty"`
-		NetAmount   *paypal.Money `json:"net_amount,omitempty"`
+		GrossAmount *Money `json:"gross_amount,omitempty"`
+		PaypalFee   *Money `json:"paypal_fee,omitempty"`
+		NetAmount   *Money `json:"net_amount,omitempty"`
 	}
 	
 	// CaptureAmount struct
 	CaptureAmount struct {
 		ID                        string                     `json:"id,omitempty"`
 		CustomID                  string                     `json:"custom_id,omitempty"`
-		Amount                    *paypal.PurchaseUnitAmount `json:"amount,omitempty"`
+		Amount                    *PurchaseUnitAmount 	     `json:"amount,omitempty"`
 		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
 	}
 
