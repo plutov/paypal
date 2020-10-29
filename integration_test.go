@@ -15,7 +15,7 @@ var testSecret = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCd
 var testUserID = "https://www.paypal.com/webapps/auth/identity/user/VBqgHcgZwb1PBs69ybjjXfIW86_Hr93aBvF_Rgbh2II"
 var testCardID = "CARD-54E6956910402550WKGRL6EA"
 
-var testProductId = "" // will be fetched in  func TestProduct(t *testing.T)
+var testProductId = ""   // will be fetched in  func TestProduct(t *testing.T)
 var testBillingPlan = "" // will be fetched in  func TestSubscriptionPlans(t *testing.T)
 
 func TestGetAccessToken(t *testing.T) {
@@ -386,7 +386,7 @@ func TestSubscription(t *testing.T) {
 	c.GetAccessToken()
 
 	newSubscription := SubscriptionBase{
-		PlanID:             testBillingPlan,
+		PlanID: testBillingPlan,
 	}
 
 	//create new subscription

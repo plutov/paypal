@@ -519,6 +519,7 @@ type (
 	PurchaseUnit struct {
 		ReferenceID string              `json:"reference_id"`
 		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
+		Payments    *CapturedPayments   `json:"payments,omitempty"`
 	}
 
 	// TaxInfo used for orders.
@@ -609,12 +610,12 @@ type (
 		ExchangeRate                  *ExchangeRate `json:"exchange_rate,omitempty"`
 		PlatformFees                  []PlatformFee `json:"platform_fees,omitempty"`
 	}
-	
+
 	// CaptureAmount struct
 	CaptureAmount struct {
 		ID                        string                     `json:"id,omitempty"`
 		CustomID                  string                     `json:"custom_id,omitempty"`
-		Amount                    *PurchaseUnitAmount 	     `json:"amount,omitempty"`
+		Amount                    *PurchaseUnitAmount        `json:"amount,omitempty"`
 		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
 	}
 
@@ -656,6 +657,7 @@ type (
 		ID            string                 `json:"id,omitempty"`
 		Status        string                 `json:"status,omitempty"`
 		Payer         *PayerWithNameAndPhone `json:"payer,omitempty"`
+		Address       *Address               `json:"address,omitempty"`
 		PurchaseUnits []CapturedPurchaseUnit `json:"purchase_units,omitempty"`
 	}
 

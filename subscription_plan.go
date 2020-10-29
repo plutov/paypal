@@ -16,7 +16,7 @@ type (
 		Description        string                 `json:"description,omitempty"`
 		BillingCycles      []BillingCycle         `json:"billing_cycles"`
 		PaymentPreferences *PaymentPreferences    `json:"payment_preferences"`
-		Taxes              *Taxes                  `json:"taxes"`
+		Taxes              *Taxes                 `json:"taxes"`
 		QuantitySupported  bool                   `json:"quantity_supported"` //Indicates whether you can subscribe to this plan by providing a quantity for the goods or service.
 	}
 

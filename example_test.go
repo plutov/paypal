@@ -28,7 +28,7 @@ func ExampleClient_CreateSinglePayout_Venmo() {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	// Set payout item with Venmo wallet
 	payout := paypal.Payout{
 		SenderBatchHeader: &paypal.SenderBatchHeader{
@@ -38,9 +38,9 @@ func ExampleClient_CreateSinglePayout_Venmo() {
 		},
 		Items: []paypal.PayoutItem{
 			{
-				RecipientType: "EMAIL",
+				RecipientType:   "EMAIL",
 				RecipientWallet: paypal.VenmoRecipientWallet,
-				Receiver:      "receiver@example.com",
+				Receiver:        "receiver@example.com",
 				Amount: &paypal.AmountPayout{
 					Value:    "9.87",
 					Currency: "USD",
