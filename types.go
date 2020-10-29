@@ -137,10 +137,10 @@ type (
 
 	// Address struct
 	Address struct {
-		Line1       string `json:"line1"`
+		Line1       string `json:"line1,omitempty"`
 		Line2       string `json:"line2,omitempty"`
-		City        string `json:"city"`
-		CountryCode string `json:"country_code"`
+		City        string `json:"city,omitempty"`
+		CountryCode string `json:"country_code,omitempty"`
 		PostalCode  string `json:"postal_code,omitempty"`
 		State       string `json:"state,omitempty"`
 		Phone       string `json:"phone,omitempty"`
@@ -650,6 +650,7 @@ type (
 		EmailAddress string                `json:"email_address,omitempty"`
 		Phone        *PhoneWithType        `json:"phone,omitempty"`
 		PayerID      string                `json:"payer_id,omitempty"`
+		Address      Address   			   `json:"address,omitempty"`
 	}
 
 	// CaptureOrderResponse is the response for capture order
