@@ -87,6 +87,7 @@ const (
 // https://developer.paypal.com/docs/api/orders/v2/#definition-application_context
 
 const (
+	EventCheckoutOrderApproved         string = "CHECKOUT.ORDER.APPROVED"
 	EventPaymentCaptureCompleted       string = "PAYMENT.CAPTURE.COMPLETED"
 	EventPaymentCaptureDenied          string = "PAYMENT.CAPTURE.DENIED"
 	EventPaymentCaptureRefunded        string = "PAYMENT.CAPTURE.REFUNDED"
@@ -1064,6 +1065,10 @@ type (
 		// merchant-onboarding Resource type
 		PartnerClientID string `json:"partner_client_id,omitempty"`
 		MerchantID      string `json:"merchant_id,omitempty"`
+		// Checkout Resource type
+		Intent        string                 `json:"intent,omitempty"`
+		PurchaseUnits []*PurchaseUnitRequest `json:"purchase_units,omitempty"`
+		Payer         *PayerWithNameAndPhone `json:"payer,omitempty"`
 		// Common
 		Links []Link `json:"links,omitempty"`
 	}
