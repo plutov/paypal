@@ -616,6 +616,7 @@ type (
 		ID                        string                     `json:"id,omitempty"`
 		CustomID                  string                     `json:"custom_id,omitempty"`
 		Amount                    *PurchaseUnitAmount        `json:"amount,omitempty"`
+		SellerProtection          *SellerProtection          `json:"seller_protection,omitempty"`
 		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
 	}
 
@@ -650,7 +651,7 @@ type (
 		EmailAddress string                `json:"email_address,omitempty"`
 		Phone        *PhoneWithType        `json:"phone,omitempty"`
 		PayerID      string                `json:"payer_id,omitempty"`
-		Address      Address   			   `json:"address,omitempty"`
+		Address      Address               `json:"address,omitempty"`
 	}
 
 	// CaptureOrderResponse is the response for capture order
