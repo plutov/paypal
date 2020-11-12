@@ -115,6 +115,14 @@ const (
 	FeatureUpdateCustomerDispute string = "UPDATE_CUSTOMER_DISPUTES"
 )
 
+// https://developer.paypal.com/docs/api/payments.payouts-batch/v1/?mark=recipient_type#definition-recipient_type
+const (
+	EmailRecipientType    string = "EMAIL"     // An unencrypted email — string of up to 127 single-byte characters.
+	PayPalIdRecipientType string = "PAYPAL_ID" //An encrypted PayPal account number.
+	PhoneRecipientType    string = "PHONE"     // An unencrypted phone number.
+	// Note: The PayPal sandbox doesn't support type PHONE
+)
+
 // https://developer.paypal.com/docs/api/payments.payouts-batch/v1/?mark=recipient_wallet#definition-recipient_wallet
 const (
 	PaypalRecipientWallet string = "PAYPAL"
