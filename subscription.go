@@ -15,6 +15,7 @@ type (
 		Subscriber         *Subscriber         `json:"subscriber,omitempty"`
 		AutoRenewal        bool               `json:"auto_renewal,omitempty"`
 		ApplicationContext *ApplicationContext `json:"application_context,omitempty"`
+		CustomID           string              `json:"custom_id,omitempty"`
 	}
 
 	SubscriptionDetails struct {
