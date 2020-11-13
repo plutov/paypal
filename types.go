@@ -129,6 +129,17 @@ const (
 	VenmoRecipientWallet  string = "VENMO"
 )
 
+// Possible value for `batch_status` in GetPayout
+//
+// https://developer.paypal.com/docs/api/payments.payouts-batch/v1/#definition-batch_status
+const (
+	BatchStatusDenied  string = "DENIED"
+	BatchStatusPending     string = "PENDING"
+	BatchStatusProcessing  string = "PROCESSING"
+	BatchStatusSuccess    string = "SUCCESS"
+	BatchStatusCanceled string = "CANCELED"
+)
+
 const (
 	LinkRelSelf      string = "self"
 	LinkRelActionURL string = "action_url"
