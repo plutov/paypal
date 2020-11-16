@@ -9,12 +9,12 @@ type (
 	// Product struct
 	Product struct {
 		ID          string          `json:"id,omitempty"`
-		Name        string          `json:"name,omitempty"`
-		Description string          `json:"description"`
+		Name        string          `json:"name"`
+		Description string          `json:"description",omitempty`
 		Category    ProductCategory `json:"category,omitempty"`
 		Type        ProductType     `json:"type"`
-		ImageUrl    string          `json:"image_url"`
-		HomeUrl     string          `json:"home_url"`
+		ImageUrl    string          `json:"image_url,omitempty"`
+		HomeUrl     string          `json:"home_url,omitempty"`
 	}
 
 	CreateProductResponse struct {
