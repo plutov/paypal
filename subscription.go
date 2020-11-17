@@ -8,12 +8,12 @@ import (
 
 type (
 	SubscriptionBase struct {
-		PlanID             string             `json:"plan_id"`
-		StartTime          *JSONTime          `json:"start_time,omitempty"`
-		Quantity           string             `json:"quantity,omitempty"`
+		PlanID             string              `json:"plan_id"`
+		StartTime          *JSONTime           `json:"start_time,omitempty"`
+		Quantity           string              `json:"quantity,omitempty"`
 		ShippingAmount     *Money              `json:"shipping_amount,omitempty"`
 		Subscriber         *Subscriber         `json:"subscriber,omitempty"`
-		AutoRenewal        bool               `json:"auto_renewal,omitempty"`
+		AutoRenewal        bool                `json:"auto_renewal,omitempty"`
 		ApplicationContext *ApplicationContext `json:"application_context,omitempty"`
 		CustomID           string              `json:"custom_id,omitempty"`
 	}
@@ -67,9 +67,9 @@ type (
 	}
 
 	CaptureReqeust struct {
-		Note string `json:"note"`
+		Note        string      `json:"note"`
 		CaptureType CaptureType `json:"capture_type"`
-		Amount Money `json:"amount"`
+		Amount      Money       `json:"amount"`
 	}
 )
 
@@ -126,7 +126,7 @@ func (c *Client) GetSubscriptionDetails(subscriptionID string) (*SubscriptionDet
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_activate
 // Endpoint: POST /v1/billing/subscriptions/{id}/activate
 func (c *Client) ActivateSubscription(subscriptionId, activateReason string) error {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/activate", c.APIBase, subscriptionId), map[string]string{"reason":activateReason})
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/activate", c.APIBase, subscriptionId), map[string]string{"reason": activateReason})
 	if err != nil {
 		return err
 	}

@@ -57,8 +57,6 @@ func (self *Product) GetUpdatePatch() []Patch {
 	}
 }
 
-
-
 // CreateProduct creates a product
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_create
 // Endpoint: POST /v1/catalogs/products

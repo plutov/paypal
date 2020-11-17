@@ -116,10 +116,29 @@ const (
 	FeatureUpdateCustomerDispute string = "UPDATE_CUSTOMER_DISPUTES"
 )
 
+// https://developer.paypal.com/docs/api/payments.payouts-batch/v1/?mark=recipient_type#definition-recipient_type
+const (
+	EmailRecipientType    string = "EMAIL"     // An unencrypted email — string of up to 127 single-byte characters.
+	PaypalIdRecipientType string = "PAYPAL_ID" // An encrypted PayPal account number.
+	PhoneRecipientType    string = "PHONE"     // An unencrypted phone number.
+	// Note: The PayPal sandbox doesn't support type PHONE
+)
+
 // https://developer.paypal.com/docs/api/payments.payouts-batch/v1/?mark=recipient_wallet#definition-recipient_wallet
 const (
 	PaypalRecipientWallet string = "PAYPAL"
 	VenmoRecipientWallet  string = "VENMO"
+)
+
+// Possible value for `batch_status` in GetPayout
+//
+// https://developer.paypal.com/docs/api/payments.payouts-batch/v1/#definition-batch_status
+const (
+	BatchStatusDenied  string = "DENIED"
+	BatchStatusPending     string = "PENDING"
+	BatchStatusProcessing  string = "PROCESSING"
+	BatchStatusSuccess    string = "SUCCESS"
+	BatchStatusCanceled string = "CANCELED"
 )
 
 const (
@@ -138,10 +157,10 @@ type (
 
 	// Address struct
 	Address struct {
-		Line1       string `json:"line1"`
+		Line1       string `json:"line1,omitempty"`
 		Line2       string `json:"line2,omitempty"`
-		City        string `json:"city"`
-		CountryCode string `json:"country_code"`
+		City        string `json:"city,omitempty"`
+		CountryCode string `json:"country_code,omitempty"`
 		PostalCode  string `json:"postal_code,omitempty"`
 		State       string `json:"state,omitempty"`
 		Phone       string `json:"phone,omitempty"`
@@ -520,6 +539,7 @@ type (
 	PurchaseUnit struct {
 		ReferenceID string              `json:"reference_id"`
 		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
+		Payments    *CapturedPayments   `json:"payments,omitempty"`
 	}
 
 	// TaxInfo used for orders.
@@ -610,12 +630,13 @@ type (
 		ExchangeRate                  *ExchangeRate `json:"exchange_rate,omitempty"`
 		PlatformFees                  []PlatformFee `json:"platform_fees,omitempty"`
 	}
-	
+
 	// CaptureAmount struct
 	CaptureAmount struct {
 		ID                        string                     `json:"id,omitempty"`
 		CustomID                  string                     `json:"custom_id,omitempty"`
-		Amount                    *PurchaseUnitAmount 	     `json:"amount,omitempty"`
+		Amount                    *PurchaseUnitAmount        `json:"amount,omitempty"`
+		SellerProtection          *SellerProtection          `json:"seller_protection,omitempty"`
 		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
 	}
 
@@ -650,6 +671,7 @@ type (
 		EmailAddress string                `json:"email_address,omitempty"`
 		Phone        *PhoneWithType        `json:"phone,omitempty"`
 		PayerID      string                `json:"payer_id,omitempty"`
+		Address      Address               `json:"address,omitempty"`
 	}
 
 	// CaptureOrderResponse is the response for capture order
@@ -657,6 +679,7 @@ type (
 		ID            string                 `json:"id,omitempty"`
 		Status        string                 `json:"status,omitempty"`
 		Payer         *PayerWithNameAndPhone `json:"payer,omitempty"`
+		Address       *Address               `json:"address,omitempty"`
 		PurchaseUnits []CapturedPurchaseUnit `json:"purchase_units,omitempty"`
 	}
 
