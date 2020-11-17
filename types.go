@@ -1049,17 +1049,19 @@ type (
 
 	Resource struct {
 		// Payment Resource type
-		ID                     string                  `json:"id,omitempty"`
-		Status                 string                  `json:"status,omitempty"`
-		StatusDetails          *CaptureStatusDetails   `json:"status_details,omitempty"`
-		Amount                 *PurchaseUnitAmount     `json:"amount,omitempty"`
-		UpdateTime             string                  `json:"update_time,omitempty"`
-		CreateTime             string                  `json:"create_time,omitempty"`
-		ExpirationTime         string                  `json:"expiration_time,omitempty"`
-		SellerProtection       *SellerProtection       `json:"seller_protection,omitempty"`
-		FinalCapture           bool                    `json:"final_capture,omitempty"`
-		SellerPayableBreakdown *CaptureSellerBreakdown `json:"seller_payable_breakdown,omitempty"`
-		NoteToPayer            string                  `json:"note_to_payer,omitempty"`
+		ID                        string                     `json:"id,omitempty"`
+		Status                    string                     `json:"status,omitempty"`
+		StatusDetails             *CaptureStatusDetails      `json:"status_details,omitempty"`
+		Amount                    *PurchaseUnitAmount        `json:"amount,omitempty"`
+		UpdateTime                string                     `json:"update_time,omitempty"`
+		CreateTime                string                     `json:"create_time,omitempty"`
+		ExpirationTime            string                     `json:"expiration_time,omitempty"`
+		SellerProtection          *SellerProtection          `json:"seller_protection,omitempty"`
+		FinalCapture              bool                       `json:"final_capture,omitempty"`
+		SellerPayableBreakdown    *CaptureSellerBreakdown    `json:"seller_payable_breakdown,omitempty"`
+		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
+		NoteToPayer               string                     `json:"note_to_payer,omitempty"`
+		CustomID                  string                     `json:"custom_id,omitempty"`
 		// merchant-onboarding Resource type
 		PartnerClientID string `json:"partner_client_id,omitempty"`
 		MerchantID      string `json:"merchant_id,omitempty"`
