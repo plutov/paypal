@@ -1,8 +1,6 @@
 package paypal
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -66,10 +64,8 @@ func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[stri
 			Value:     data,
 		})
 	}
-
-	jsonData, err := json.Marshal(patchData)
-	buf := bytes.NewBuffer(jsonData)
-	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), buf)
+	
+	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), patchData)
 	if err != nil {
 		return err
 	}
