@@ -175,15 +175,13 @@ func (c *Client) SuspendSubscription(subscriptionId, reason string) error {
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_transactions
 // Endpoint: GET /v1/billing/subscriptions/{id}/transactions
 func (c *Client) GetSubscriptionTransactions(requestParams SubscriptionTransactionsParams) (*SubscriptionTransactionsResponse, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/v1/billing/subscriptions/%s/transactions", c.APIBase, requestParams.SubscriptionId), nil)
+	startTime := requestParams.StartTime.Format("2006-01-02T15:04:05Z")
+	endTime := requestParams.EndTime.Format("2006-01-02T15:04:05Z")
+	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/v1/billing/subscriptions/%s/transactions?start_time=%s&end_time=%s", c.APIBase, requestParams.SubscriptionId, startTime, endTime), nil)
 	response := &SubscriptionTransactionsResponse{}
 	if err != nil {
 		return response, err
 	}
-
-	q := req.URL.Query()
-	q.Add("start_time", requestParams.StartTime.Format(time.RFC3339Nano))
-	q.Add("end_time", requestParams.EndTime.Format(time.RFC3339Nano))
 
 	err = c.SendWithAuth(req, response)
 	return response, err
