@@ -10,6 +10,7 @@ type (
 	SubscriptionBase struct {
 		PlanID             string              `json:"plan_id"`
 		StartTime          *JSONTime           `json:"start_time,omitempty"`
+		EffectiveTime      *JSONTime           `json:"effective_time,omitempty"`
 		Quantity           string              `json:"quantity,omitempty"`
 		ShippingAmount     *Money              `json:"shipping_amount,omitempty"`
 		Subscriber         *Subscriber         `json:"subscriber,omitempty"`
@@ -184,5 +185,21 @@ func (c *Client) GetSubscriptionTransactions(requestParams SubscriptionTransacti
 	}
 
 	err = c.SendWithAuth(req, response)
+	return response, err
+}
+
+// Revise plan or quantity of subscription
+// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_revise
+// Endpoint: POST /v1/billing/subscriptions/{id}/revise
+func (c *Client) ReviseSubscription(subscriptionId string, reviseSubscription SubscriptionBase) (*SubscriptionDetailResp, error) {
+	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/revise", c.APIBase, subscriptionId), reviseSubscription)
+	response := &SubscriptionDetailResp{}
+	if err != nil {
+		return response, err
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	err = c.SendWithAuth(req, response)
+
 	return response, err
 }

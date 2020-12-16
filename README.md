@@ -70,6 +70,7 @@
  * GET /v1/billing/subscriptions/**ID**
  * POST /v1/billing/subscriptions/**ID**/activate
  * POST /v1/billing/subscriptions/**ID**/cancel
+ * POST /v1/billing/subscriptions/**ID**/revise
  * POST /v1/billing/subscriptions/**ID**/capture
  * POST /v1/billing/subscriptions/**ID**/suspend
  * GET /v1/billing/subscriptions/**ID**/transactions
