@@ -2,6 +2,7 @@ package paypal
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -10,8 +11,8 @@ import (
 
 // CreateWebhook - Subscribes your webhook listener to events.
 // Endpoint: POST /v1/notifications/webhooks
-func (c *Client) CreateWebhook(createWebhookRequest *CreateWebhookRequest) (*Webhook, error) {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/webhooks"), createWebhookRequest)
+func (c *Client) CreateWebhook(ctx context.Context, createWebhookRequest *CreateWebhookRequest) (*Webhook, error) {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/webhooks"), createWebhookRequest)
 	webhook := &Webhook{}
 	if err != nil {
 		return webhook, err
@@ -23,8 +24,8 @@ func (c *Client) CreateWebhook(createWebhookRequest *CreateWebhookRequest) (*Web
 
 // GetWebhook - Shows details for a webhook, by ID.
 // Endpoint: GET /v1/notifications/webhooks/ID
-func (c *Client) GetWebhook(webhookID string) (*Webhook, error) {
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/notifications/webhooks/", webhookID), nil)
+func (c *Client) GetWebhook(ctx context.Context, webhookID string) (*Webhook, error) {
+	req, err := c.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/notifications/webhooks/", webhookID), nil)
 	webhook := &Webhook{}
 	if err != nil {
 		return webhook, err
@@ -36,8 +37,8 @@ func (c *Client) GetWebhook(webhookID string) (*Webhook, error) {
 
 // UpdateWebhook - Updates a webhook to replace webhook fields with new values.
 // Endpoint: PATCH /v1/notifications/webhooks/ID
-func (c *Client) UpdateWebhook(webhookID string, fields []WebhookField) (*Webhook, error) {
-	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s/v1/notifications/webhooks/%s", c.APIBase, webhookID), fields)
+func (c *Client) UpdateWebhook(ctx context.Context, webhookID string, fields []WebhookField) (*Webhook, error) {
+	req, err := c.NewRequest(ctx, http.MethodPatch, fmt.Sprintf("%s/v1/notifications/webhooks/%s", c.APIBase, webhookID), fields)
 	webhook := &Webhook{}
 	if err != nil {
 		return webhook, err
@@ -49,11 +50,11 @@ func (c *Client) UpdateWebhook(webhookID string, fields []WebhookField) (*Webhoo
 
 // ListWebhooks - Lists webhooks for an app.
 // Endpoint: GET /v1/notifications/webhooks
-func (c *Client) ListWebhooks(anchorType string) (*ListWebhookResponse, error) {
+func (c *Client) ListWebhooks(ctx context.Context, anchorType string) (*ListWebhookResponse, error) {
 	if len(anchorType) == 0 {
 		anchorType = AncorTypeApplication
 	}
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/webhooks"), nil)
+	req, err := c.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/webhooks"), nil)
 	q := req.URL.Query()
 	q.Add("anchor_type", anchorType)
 	req.URL.RawQuery = q.Encode()
@@ -68,8 +69,8 @@ func (c *Client) ListWebhooks(anchorType string) (*ListWebhookResponse, error) {
 
 // DeleteWebhook - Deletes a webhook, by ID.
 // Endpoint: DELETE /v1/notifications/webhooks/ID
-func (c *Client) DeleteWebhook(webhookID string) error {
-	req, err := c.NewRequest(http.MethodDelete, fmt.Sprintf("%s/v1/notifications/webhooks/%s", c.APIBase, webhookID), nil)
+func (c *Client) DeleteWebhook(ctx context.Context, webhookID string) error {
+	req, err := c.NewRequest(ctx, http.MethodDelete, fmt.Sprintf("%s/v1/notifications/webhooks/%s", c.APIBase, webhookID), nil)
 	if err != nil {
 		return err
 	}
@@ -80,7 +81,7 @@ func (c *Client) DeleteWebhook(webhookID string) error {
 
 // VerifyWebhookSignature - Use this to verify the signature of a webhook recieved from paypal.
 // Endpoint: POST /v1/notifications/verify-webhook-signature
-func (c *Client) VerifyWebhookSignature(httpReq *http.Request, webhookID string) (*VerifyWebhookResponse, error) {
+func (c *Client) VerifyWebhookSignature(ctx context.Context, httpReq *http.Request, webhookID string) (*VerifyWebhookResponse, error) {
 	type verifyWebhookSignatureRequest struct {
 		AuthAlgo         string          `json:"auth_algo,omitempty"`
 		CertURL          string          `json:"cert_url,omitempty"`
@@ -111,7 +112,7 @@ func (c *Client) VerifyWebhookSignature(httpReq *http.Request, webhookID string)
 
 	response := &VerifyWebhookResponse{}
 
-	req, err := c.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/verify-webhook-signature"), verifyRequest)
+	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/verify-webhook-signature"), verifyRequest)
 	if err != nil {
 		return nil, err
 	}

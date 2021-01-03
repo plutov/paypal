@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -43,8 +44,8 @@ type (
 
 // CreateBillingPlan creates a billing plan in Paypal
 // Endpoint: POST /v1/payments/billing-plans
-func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error) {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
+func (c *Client) CreateBillingPlan(ctx context.Context, plan BillingPlan) (*CreateBillingResp, error) {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
 	response := &CreateBillingResp{}
 	if err != nil {
 		return response, err
@@ -55,7 +56,7 @@ func (c *Client) CreateBillingPlan(plan BillingPlan) (*CreateBillingResp, error)
 
 // UpdateBillingPlan updates values inside a billing plan
 // Endpoint: PATCH /v1/payments/billing-plans
-func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[string]interface{}) error {
+func (c *Client) UpdateBillingPlan(ctx context.Context, planId string, pathValues map[string]map[string]interface{}) error {
 	patchData := []Patch{}
 	for path, data := range pathValues {
 		patchData = append(patchData, Patch{
@@ -64,8 +65,8 @@ func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[stri
 			Value:     data,
 		})
 	}
-	
-	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), patchData)
+
+	req, err := c.NewRequest(ctx, http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payments/billing-plans/", planId), patchData)
 	if err != nil {
 		return err
 	}
@@ -76,21 +77,21 @@ func (c *Client) UpdateBillingPlan(planId string, pathValues map[string]map[stri
 // ActivatePlan activates a billing plan
 // By default, a new plan is not activated
 // Endpoint: PATCH /v1/payments/billing-plans/
-func (c *Client) ActivatePlan(planID string) error {
-	return c.UpdateBillingPlan(planID, map[string]map[string]interface{}{
+func (c *Client) ActivatePlan(ctx context.Context, planID string) error {
+	return c.UpdateBillingPlan(ctx, planID, map[string]map[string]interface{}{
 		"/": {"state": BillingPlanStatusActive},
 	})
 }
 
 // CreateBillingAgreement creates an agreement for specified plan
 // Endpoint: POST /v1/payments/billing-agreements
-func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementResp, error) {
+func (c *Client) CreateBillingAgreement(ctx context.Context, a BillingAgreement) (*CreateAgreementResp, error) {
 	// PayPal needs only ID, so we will remove all fields except Plan ID
 	a.Plan = BillingPlan{
 		ID: a.Plan.ID,
 	}
 
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
 	response := &CreateAgreementResp{}
 	if err != nil {
 		return response, err
@@ -101,8 +102,8 @@ func (c *Client) CreateBillingAgreement(a BillingAgreement) (*CreateAgreementRes
 
 // ExecuteApprovedAgreement - Use this call to execute (complete) a PayPal agreement that has been approved by the payer.
 // Endpoint: POST /v1/payments/billing-agreements/token/agreement-execute
-func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementResponse, error) {
-	req, err := http.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/payments/billing-agreements/%s/agreement-execute", c.APIBase, token), nil)
+func (c *Client) ExecuteApprovedAgreement(ctx context.Context, token string) (*ExecuteAgreementResponse, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, fmt.Sprintf("%s/v1/payments/billing-agreements/%s/agreement-execute", c.APIBase, token), nil)
 	response := &ExecuteAgreementResponse{}
 
 	if err != nil {
@@ -125,8 +126,8 @@ func (c *Client) ExecuteApprovedAgreement(token string) (*ExecuteAgreementRespon
 
 // ListBillingPlans lists billing-plans
 // Endpoint: GET /v1/payments/billing-plans
-func (c *Client) ListBillingPlans(bplp BillingPlanListParams) (*BillingPlanListResp, error) {
-	req, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), nil)
+func (c *Client) ListBillingPlans(ctx context.Context, bplp BillingPlanListParams) (*BillingPlanListResp, error) {
+	req, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), nil)
 	response := &BillingPlanListResp{}
 	if err != nil {
 		return response, err

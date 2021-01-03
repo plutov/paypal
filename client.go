@@ -2,6 +2,7 @@ package paypal
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -30,9 +31,9 @@ func NewClient(clientID string, secret string, APIBase string) (*Client, error) 
 // GetAccessToken returns struct of TokenResponse
 // No need to call SetAccessToken to apply new access token for current Client
 // Endpoint: POST /v1/oauth2/token
-func (c *Client) GetAccessToken() (*TokenResponse, error) {
+func (c *Client) GetAccessToken(ctx context.Context) (*TokenResponse, error) {
 	buf := bytes.NewBuffer([]byte("grant_type=client_credentials"))
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/oauth2/token"), buf)
+	req, err := http.NewRequestWithContext(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/oauth2/token"), buf)
 	if err != nil {
 		return &TokenResponse{}, err
 	}
@@ -140,7 +141,7 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	if c.Token != nil {
 		if !c.tokenExpiresAt.IsZero() && c.tokenExpiresAt.Sub(time.Now()) < RequestNewTokenBeforeExpiresIn {
 			// c.Token will be updated in GetAccessToken call
-			if _, err := c.GetAccessToken(); err != nil {
+			if _, err := c.GetAccessToken(req.Context()); err != nil {
 				c.Unlock()
 				return err
 			}
@@ -164,7 +165,7 @@ func (c *Client) SendWithBasicAuth(req *http.Request, v interface{}) error {
 
 // NewRequest constructs a request
 // Convert payload to a JSON
-func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Request, error) {
+func (c *Client) NewRequest(ctx context.Context, method, url string, payload interface{}) (*http.Request, error) {
 	var buf io.Reader
 	if payload != nil {
 		b, err := json.Marshal(&payload)
@@ -173,7 +174,7 @@ func (c *Client) NewRequest(method, url string, payload interface{}) (*http.Requ
 		}
 		buf = bytes.NewBuffer(b)
 	}
-	return http.NewRequest(method, url, buf)
+	return http.NewRequestWithContext(ctx, method, url, buf)
 }
 
 // log will dump request and response to the log file

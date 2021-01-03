@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -10,9 +11,9 @@ import (
 // Allows for the customisation of the payment experience
 //
 // Endpoint: POST /v1/payment-experience/web-profiles
-func (c *Client) CreateWebProfile(wp WebProfile) (*WebProfile, error) {
+func (c *Client) CreateWebProfile(ctx context.Context, wp WebProfile) (*WebProfile, error) {
 	url := fmt.Sprintf("%s%s", c.APIBase, "/v1/payment-experience/web-profiles")
-	req, err := c.NewRequest("POST", url, wp)
+	req, err := c.NewRequest(ctx, "POST", url, wp)
 	response := &WebProfile{}
 
 	if err != nil {
@@ -29,11 +30,11 @@ func (c *Client) CreateWebProfile(wp WebProfile) (*WebProfile, error) {
 // GetWebProfile gets an exists payment experience from Paypal
 //
 // Endpoint: GET /v1/payment-experience/web-profiles/<profile-id>
-func (c *Client) GetWebProfile(profileID string) (*WebProfile, error) {
+func (c *Client) GetWebProfile(ctx context.Context, profileID string) (*WebProfile, error) {
 	var wp WebProfile
 
 	url := fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payment-experience/web-profiles/", profileID)
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 
 	if err != nil {
 		return &wp, err
@@ -53,11 +54,11 @@ func (c *Client) GetWebProfile(profileID string) (*WebProfile, error) {
 // GetWebProfiles retreieves web experience profiles from Paypal
 //
 // Endpoint: GET /v1/payment-experience/web-profiles
-func (c *Client) GetWebProfiles() ([]WebProfile, error) {
+func (c *Client) GetWebProfiles(ctx context.Context) ([]WebProfile, error) {
 	var wps []WebProfile
 
 	url := fmt.Sprintf("%s%s", c.APIBase, "/v1/payment-experience/web-profiles")
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 
 	if err != nil {
 		return wps, err
@@ -73,7 +74,7 @@ func (c *Client) GetWebProfiles() ([]WebProfile, error) {
 // SetWebProfile sets a web experience profile in Paypal with given id
 //
 // Endpoint: PUT /v1/payment-experience/web-profiles
-func (c *Client) SetWebProfile(wp WebProfile) error {
+func (c *Client) SetWebProfile(ctx context.Context, wp WebProfile) error {
 
 	if wp.ID == "" {
 		return fmt.Errorf("paypal: no ID specified for WebProfile")
@@ -81,7 +82,7 @@ func (c *Client) SetWebProfile(wp WebProfile) error {
 
 	url := fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payment-experience/web-profiles/", wp.ID)
 
-	req, err := c.NewRequest("PUT", url, wp)
+	req, err := c.NewRequest(ctx, "PUT", url, wp)
 
 	if err != nil {
 		return err
@@ -97,11 +98,11 @@ func (c *Client) SetWebProfile(wp WebProfile) error {
 // DeleteWebProfile deletes a web experience profile from Paypal with given id
 //
 // Endpoint: DELETE /v1/payment-experience/web-profiles
-func (c *Client) DeleteWebProfile(profileID string) error {
+func (c *Client) DeleteWebProfile(ctx context.Context, profileID string) error {
 
 	url := fmt.Sprintf("%s%s%s", c.APIBase, "/v1/payment-experience/web-profiles/", profileID)
 
-	req, err := c.NewRequest("DELETE", url, nil)
+	req, err := c.NewRequest(ctx, "DELETE", url, nil)
 
 	if err != nil {
 		return err

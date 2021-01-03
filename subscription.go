@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -88,8 +89,8 @@ func (self *Subscription) GetUpdatePatch() []Patch {
 // CreateSubscriptionPlan creates a subscriptionPlan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_create
 // Endpoint: POST /v1/billing/subscriptions
-func (c *Client) CreateSubscription(newSubscription SubscriptionBase) (*SubscriptionDetailResp, error) {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions"), newSubscription)
+func (c *Client) CreateSubscription(ctx context.Context, newSubscription SubscriptionBase) (*SubscriptionDetailResp, error) {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/subscriptions"), newSubscription)
 	req.Header.Add("Prefer", "return=representation")
 	response := &SubscriptionDetailResp{}
 	if err != nil {
@@ -102,8 +103,8 @@ func (c *Client) CreateSubscription(newSubscription SubscriptionBase) (*Subscrip
 // UpdateSubscriptionPlan. updates a plan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_patch
 // Endpoint: PATCH /v1/billing/subscriptions/:subscription_id
-func (c *Client) UpdateSubscription(updatedSubscription Subscription) error {
-	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/billing/subscriptions/", updatedSubscription.ID), updatedSubscription.GetUpdatePatch())
+func (c *Client) UpdateSubscription(ctx context.Context, updatedSubscription Subscription) error {
+	req, err := c.NewRequest(ctx, http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/billing/subscriptions/", updatedSubscription.ID), updatedSubscription.GetUpdatePatch())
 	if err != nil {
 		return err
 	}
@@ -113,8 +114,8 @@ func (c *Client) UpdateSubscription(updatedSubscription Subscription) error {
 
 // GetSubscriptionDetails shows details for a subscription, by ID.
 // Endpoint: GET /v1/billing/subscriptions/
-func (c *Client) GetSubscriptionDetails(subscriptionID string) (*SubscriptionDetailResp, error) {
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/v1/billing/subscriptions/%s", c.APIBase, subscriptionID), nil)
+func (c *Client) GetSubscriptionDetails(ctx context.Context, subscriptionID string) (*SubscriptionDetailResp, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("%s/v1/billing/subscriptions/%s", c.APIBase, subscriptionID), nil)
 	response := &SubscriptionDetailResp{}
 	if err != nil {
 		return response, err
@@ -126,8 +127,8 @@ func (c *Client) GetSubscriptionDetails(subscriptionID string) (*SubscriptionDet
 // Activates the subscription.
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_activate
 // Endpoint: POST /v1/billing/subscriptions/{id}/activate
-func (c *Client) ActivateSubscription(subscriptionId, activateReason string) error {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/activate", c.APIBase, subscriptionId), map[string]string{"reason": activateReason})
+func (c *Client) ActivateSubscription(ctx context.Context, subscriptionId, activateReason string) error {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/activate", c.APIBase, subscriptionId), map[string]string{"reason": activateReason})
 	if err != nil {
 		return err
 	}
@@ -138,8 +139,8 @@ func (c *Client) ActivateSubscription(subscriptionId, activateReason string) err
 // Cancels the subscription.
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_cancel
 // Endpoint: POST /v1/billing/subscriptions/{id}/cancel
-func (c *Client) CancelSubscription(subscriptionId, cancelReason string) error {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/cancel", c.APIBase, subscriptionId), map[string]string{"reason": cancelReason})
+func (c *Client) CancelSubscription(ctx context.Context, subscriptionId, cancelReason string) error {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/cancel", c.APIBase, subscriptionId), map[string]string{"reason": cancelReason})
 	if err != nil {
 		return err
 	}
@@ -150,8 +151,8 @@ func (c *Client) CancelSubscription(subscriptionId, cancelReason string) error {
 // Captures an authorized payment from the subscriber on the subscription.
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_capture
 // Endpoint: POST /v1/billing/subscriptions/{id}/capture
-func (c *Client) CaptureSubscription(subscriptionId string, request CaptureReqeust) (*SubscriptionCaptureResponse, error) {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/capture", c.APIBase, subscriptionId), request)
+func (c *Client) CaptureSubscription(ctx context.Context, subscriptionId string, request CaptureReqeust) (*SubscriptionCaptureResponse, error) {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/capture", c.APIBase, subscriptionId), request)
 	response := &SubscriptionCaptureResponse{}
 	if err != nil {
 		return response, err
@@ -163,8 +164,8 @@ func (c *Client) CaptureSubscription(subscriptionId string, request CaptureReqeu
 // Suspends the subscription.
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_suspend
 // Endpoint: POST /v1/billing/subscriptions/{id}/suspend
-func (c *Client) SuspendSubscription(subscriptionId, reason string) error {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/suspend", c.APIBase, subscriptionId), map[string]string{"reason": reason})
+func (c *Client) SuspendSubscription(ctx context.Context, subscriptionId, reason string) error {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/suspend", c.APIBase, subscriptionId), map[string]string{"reason": reason})
 	if err != nil {
 		return err
 	}
@@ -175,10 +176,10 @@ func (c *Client) SuspendSubscription(subscriptionId, reason string) error {
 // Lists transactions for a subscription.
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_transactions
 // Endpoint: GET /v1/billing/subscriptions/{id}/transactions
-func (c *Client) GetSubscriptionTransactions(requestParams SubscriptionTransactionsParams) (*SubscriptionTransactionsResponse, error) {
+func (c *Client) GetSubscriptionTransactions(ctx context.Context, requestParams SubscriptionTransactionsParams) (*SubscriptionTransactionsResponse, error) {
 	startTime := requestParams.StartTime.Format("2006-01-02T15:04:05Z")
 	endTime := requestParams.EndTime.Format("2006-01-02T15:04:05Z")
-	req, err := http.NewRequest(http.MethodGet, fmt.Sprintf("%s/v1/billing/subscriptions/%s/transactions?start_time=%s&end_time=%s", c.APIBase, requestParams.SubscriptionId, startTime, endTime), nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("%s/v1/billing/subscriptions/%s/transactions?start_time=%s&end_time=%s", c.APIBase, requestParams.SubscriptionId, startTime, endTime), nil)
 	response := &SubscriptionTransactionsResponse{}
 	if err != nil {
 		return response, err
@@ -191,8 +192,8 @@ func (c *Client) GetSubscriptionTransactions(requestParams SubscriptionTransacti
 // Revise plan or quantity of subscription
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_revise
 // Endpoint: POST /v1/billing/subscriptions/{id}/revise
-func (c *Client) ReviseSubscription(subscriptionId string, reviseSubscription SubscriptionBase) (*SubscriptionDetailResp, error) {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/revise", c.APIBase, subscriptionId), reviseSubscription)
+func (c *Client) ReviseSubscription(ctx context.Context, subscriptionId string, reviseSubscription SubscriptionBase) (*SubscriptionDetailResp, error) {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/revise", c.APIBase, subscriptionId), reviseSubscription)
 	response := &SubscriptionDetailResp{}
 	if err != nil {
 		return response, err

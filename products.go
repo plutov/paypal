@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 )
@@ -60,8 +61,8 @@ func (self *Product) GetUpdatePatch() []Patch {
 // CreateProduct creates a product
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_create
 // Endpoint: POST /v1/catalogs/products
-func (c *Client) CreateProduct(product Product) (*CreateProductResponse, error) {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), product)
+func (c *Client) CreateProduct(ctx context.Context, product Product) (*CreateProductResponse, error) {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), product)
 	response := &CreateProductResponse{}
 	if err != nil {
 		return response, err
@@ -73,8 +74,8 @@ func (c *Client) CreateProduct(product Product) (*CreateProductResponse, error) 
 // UpdateProduct. updates a product information
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_patch
 // Endpoint: PATCH /v1/catalogs/products/:product_id
-func (c *Client) UpdateProduct(product Product) error {
-	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/catalogs/products/", product.ID), product.GetUpdatePatch())
+func (c *Client) UpdateProduct(ctx context.Context, product Product) error {
+	req, err := c.NewRequest(ctx, http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/catalogs/products/", product.ID), product.GetUpdatePatch())
 	if err != nil {
 		return err
 	}
@@ -85,8 +86,8 @@ func (c *Client) UpdateProduct(product Product) error {
 // Get product details
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_get
 // Endpoint: GET /v1/catalogs/products/:product_id
-func (c *Client) GetProduct(productId string) (*Product, error) {
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/catalogs/products/", productId), nil)
+func (c *Client) GetProduct(ctx context.Context, productId string) (*Product, error) {
+	req, err := c.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/catalogs/products/", productId), nil)
 	response := &Product{}
 	if err != nil {
 		return response, err
@@ -98,8 +99,8 @@ func (c *Client) GetProduct(productId string) (*Product, error) {
 // List all products
 // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#products_list
 // Endpoint: GET /v1/catalogs/products
-func (c *Client) ListProducts(params *ProductListParameters) (*ListProductsResponse, error) {
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), nil)
+func (c *Client) ListProducts(ctx context.Context, params *ProductListParameters) (*ListProductsResponse, error) {
+	req, err := c.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/catalogs/products"), nil)
 	response := &ListProductsResponse{}
 	if err != nil {
 		return response, err

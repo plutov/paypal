@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -590,7 +591,7 @@ func TestCreateWebProfile_valid(t *testing.T) {
 		},
 	}
 
-	res, err := c.CreateWebProfile(wp)
+	res, err := c.CreateWebProfile(context.Background(), wp)
 
 	if err != nil {
 		t.Fatal(err)
@@ -609,7 +610,7 @@ func TestCreateWebProfile_invalid(t *testing.T) {
 
 	wp := WebProfile{}
 
-	_, err := c.CreateWebProfile(wp)
+	_, err := c.CreateWebProfile(context.Background(), wp)
 
 	if err == nil {
 		t.Fatalf("expecting an error got nil")
@@ -622,7 +623,7 @@ func TestGetWebProfile_valid(t *testing.T) {
 
 	c, _ := NewClient("foo", "bar", ts.URL)
 
-	res, err := c.GetWebProfile("XP-CP6S-W9DY-96H8-MVN2")
+	res, err := c.GetWebProfile(context.Background(), "XP-CP6S-W9DY-96H8-MVN2")
 
 	if err != nil {
 		t.Fatal(err)
@@ -643,7 +644,7 @@ func TestGetWebProfile_invalid(t *testing.T) {
 
 	c, _ := NewClient("foo", "bar", ts.URL)
 
-	_, err := c.GetWebProfile("foobar")
+	_, err := c.GetWebProfile(context.Background(), "foobar")
 
 	if err == nil {
 		t.Fatalf("expecting an error got nil")
@@ -656,7 +657,7 @@ func TestGetWebProfiles(t *testing.T) {
 
 	c, _ := NewClient("foo", "bar", ts.URL)
 
-	res, err := c.GetWebProfiles()
+	res, err := c.GetWebProfiles(context.Background())
 
 	if err != nil {
 		t.Fatal(err)
@@ -678,7 +679,7 @@ func TestSetWebProfile_valid(t *testing.T) {
 		Name: "Shop T-Shirt YeowZa!",
 	}
 
-	err := c.SetWebProfile(wp)
+	err := c.SetWebProfile(context.Background(), wp)
 
 	if err != nil {
 		t.Fatal(err)
@@ -696,7 +697,7 @@ func TestSetWebProfile_invalid(t *testing.T) {
 		ID: "foobar",
 	}
 
-	err := c.SetWebProfile(wp)
+	err := c.SetWebProfile(context.Background(), wp)
 
 	if err == nil {
 		t.Fatal(err)
@@ -704,7 +705,7 @@ func TestSetWebProfile_invalid(t *testing.T) {
 
 	wp = WebProfile{}
 
-	err = c.SetWebProfile(wp)
+	err = c.SetWebProfile(context.Background(), wp)
 
 	if err == nil {
 		t.Fatal(err)
@@ -722,7 +723,7 @@ func TestDeleteWebProfile_valid(t *testing.T) {
 		Name: "Shop T-Shirt YeowZa!",
 	}
 
-	err := c.SetWebProfile(wp)
+	err := c.SetWebProfile(context.Background(), wp)
 
 	if err != nil {
 		t.Fatal(err)
@@ -736,7 +737,7 @@ func TestDeleteWebProfile_invalid(t *testing.T) {
 
 	c, _ := NewClient("foo", "bar", ts.URL)
 
-	err := c.DeleteWebProfile("foobar")
+	err := c.DeleteWebProfile(context.Background(), "foobar")
 
 	if err == nil {
 		t.Fatal(err)

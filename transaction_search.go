@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"time"
@@ -35,10 +36,10 @@ type TransactionSearchResponse struct {
 
 // ListTransactions - Use this to search PayPal transactions from the last 31 days.
 // Endpoint: GET /v1/reporting/transactions
-func (c *Client) ListTransactions(req *TransactionSearchRequest) (*TransactionSearchResponse, error) {
+func (c *Client) ListTransactions(ctx context.Context, req *TransactionSearchRequest) (*TransactionSearchResponse, error) {
 	response := &TransactionSearchResponse{}
 
-	r, err := c.NewRequest("GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/reporting/transactions"), nil)
+	r, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/reporting/transactions"), nil)
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,10 @@
 package paypal_test
 
-import "github.com/plutov/paypal/v3"
+import (
+	"context"
+
+	"github.com/plutov/paypal/v4"
+)
 
 func Example() {
 	// Initialize client
@@ -10,7 +14,7 @@ func Example() {
 	}
 
 	// Retrieve access token
-	_, err = c.GetAccessToken()
+	_, err = c.GetAccessToken(context.Background())
 	if err != nil {
 		panic(err)
 	}
@@ -24,7 +28,7 @@ func ExampleClient_CreateSinglePayout_Venmo() {
 	}
 
 	// Retrieve access token
-	_, err = c.GetAccessToken()
+	_, err = c.GetAccessToken(context.Background())
 	if err != nil {
 		panic(err)
 	}
@@ -51,5 +55,5 @@ func ExampleClient_CreateSinglePayout_Venmo() {
 		},
 	}
 
-	c.CreateSinglePayout(payout)
+	c.CreateSinglePayout(context.Background(), payout)
 }
