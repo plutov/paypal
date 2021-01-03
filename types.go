@@ -1027,6 +1027,10 @@ type (
 		VerificationStatus string `json:"verification_status,omitempty"`
 	}
 
+	WebhookEventTypesResponse struct {
+		EventTypes []WebhookEventType `json:"event_types"`
+	}
+
 	// Webhook strunct
 	Webhook struct {
 		ID         string             `json:"id"`
@@ -1052,6 +1056,7 @@ type (
 	WebhookEventType struct {
 		Name        string `json:"name"`
 		Description string `json:"description"`
+		Status      string `json:"status,omitempty"`
 	}
 
 	// CreateWebhookRequest struct

@@ -401,3 +401,17 @@ func TestSubscription(t *testing.T) {
 	assert.NotEqual(t, "", subDetails.ID)
 
 }
+
+func TestGetWebhookEventTypes(t *testing.T) {
+	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
+	c.GetAccessToken(context.Background())
+
+	r, err := c.GetWebhookEventTypes(context.Background())
+	assert.Equal(t, nil, err)
+	assert.GreaterOrEqual(t, len(r.EventTypes), 1)
+	for _, v := range r.EventTypes {
+		assert.GreaterOrEqual(t, len(v.Name), 1)
+		assert.GreaterOrEqual(t, len(v.Description), 1)
+		assert.GreaterOrEqual(t, len(v.Status), 1)
+	}
+}
