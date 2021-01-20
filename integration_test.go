@@ -65,12 +65,12 @@ func TestCreateVenmoPayout(t *testing.T) {
 		},
 	}
 
-	res, err := c.CreateSinglePayout(context.Background(), payout)
+	res, err := c.CreatePayout(context.Background(), payout)
 	assert.NoError(t, err, "should accept venmo wallet")
 	assert.Greater(t, len(res.Items), 0)
 }
 
-func TestCreateSinglePayout(t *testing.T) {
+func TestCreatePayout(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken(context.Background())
 
@@ -94,7 +94,7 @@ func TestCreateSinglePayout(t *testing.T) {
 		},
 	}
 
-	c.CreateSinglePayout(context.Background(), payout)
+	c.CreatePayout(context.Background(), payout)
 }
 
 func TestStoreCreditCard(t *testing.T) {

@@ -20,7 +20,7 @@ func Example() {
 	}
 }
 
-func ExampleClient_CreateSinglePayout_Venmo() {
+func ExampleClient_CreatePayout_Venmo() {
 	// Initialize client
 	c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 	if err != nil {
@@ -55,5 +55,5 @@ func ExampleClient_CreateSinglePayout_Venmo() {
 		},
 	}
 
-	c.CreateSinglePayout(context.Background(), payout)
+	c.CreatePayout(context.Background(), payout)
 }

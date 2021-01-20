@@ -5,10 +5,10 @@ import (
 	"fmt"
 )
 
-// CreateSinglePayout submits a payout with an asynchronous API call, which immediately returns the results of a PayPal payment.
+// CreatePayout submits a payout with an asynchronous API call, which immediately returns the results of a PayPal payment.
 // For email payout set RecipientType: "EMAIL" and receiver email into Receiver
 // Endpoint: POST /v1/payments/payouts
-func (c *Client) CreateSinglePayout(ctx context.Context, p Payout) (*PayoutResponse, error) {
+func (c *Client) CreatePayout(ctx context.Context, p Payout) (*PayoutResponse, error) {
 	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/payouts"), p)
 	response := &PayoutResponse{}
 
@@ -21,6 +21,11 @@ func (c *Client) CreateSinglePayout(ctx context.Context, p Payout) (*PayoutRespo
 	}
 
 	return response, nil
+}
+
+// CreateSinglePayout is deprecated, use CreatePayout instead.
+func (c *Client) CreateSinglePayout(ctx context.Context, p Payout) (*PayoutResponse, error) {
+	return c.CreatePayout(ctx, p)
 }
 
 // GetPayout shows the latest status of a batch payout along with the transaction status and other data for individual items.

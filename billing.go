@@ -9,8 +9,8 @@ import (
 )
 
 type (
-	// CreateBillingResp struct
-	CreateBillingResp struct {
+	// CreateBillingResponse struct
+	CreateBillingResponse struct {
 		ID                  string              `json:"id,omitempty"`
 		State               string              `json:"state,omitempty"`
 		PaymentDefinitions  []PaymentDefinition `json:"payment_definitions,omitempty"`
@@ -20,14 +20,20 @@ type (
 		Links               []Link              `json:"links,omitempty"`
 	}
 
-	// CreateAgreementResp struct
-	CreateAgreementResp struct {
+	// CreateBillingResp deprecated, use CreateBillingResponse instead.
+	CreateBillingResp = CreateBillingResponse
+
+	// CreateAgreementResponse struct
+	CreateAgreementResponse struct {
 		Name        string      `json:"name,omitempty"`
 		Description string      `json:"description,omitempty"`
-		Plan        BillingPlan `json:"plan,omitempty"`
+	 	Plan        BillingPlan `json:"plan,omitempty"`
 		Links       []Link      `json:"links,omitempty"`
 		StartTime   time.Time   `json:"start_time,omitempty"`
 	}
+
+	// CreateAgreementResp is deprecated, use CreateAgreementResponse instead.
+	CreateAgreementResp =  CreateAgreementResponse
 
 	// BillingPlanListParams struct
 	BillingPlanListParams struct {
@@ -35,18 +41,21 @@ type (
 		Status string `json:"status,omitempty"` //Allowed values: CREATED, ACTIVE, INACTIVE, ALL.
 	}
 
-	//BillingPlanListResp struct
-	BillingPlanListResp struct {
+	//BillingPlanListResponse struct
+	BillingPlanListResponse struct {
 		SharedListResponse
 		Plans []BillingPlan `json:"plans,omitempty"`
 	}
+
+	// BillingPlanListResp is deprecated, use BillingPlanListResponse instead.
+	BillingPlanListResp = BillingPlanListResponse
 )
 
 // CreateBillingPlan creates a billing plan in Paypal
 // Endpoint: POST /v1/payments/billing-plans
-func (c *Client) CreateBillingPlan(ctx context.Context, plan BillingPlan) (*CreateBillingResp, error) {
+func (c *Client) CreateBillingPlan(ctx context.Context, plan BillingPlan) (*CreateBillingResponse, error) {
 	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), plan)
-	response := &CreateBillingResp{}
+	response := &CreateBillingResponse{}
 	if err != nil {
 		return response, err
 	}
@@ -85,14 +94,14 @@ func (c *Client) ActivatePlan(ctx context.Context, planID string) error {
 
 // CreateBillingAgreement creates an agreement for specified plan
 // Endpoint: POST /v1/payments/billing-agreements
-func (c *Client) CreateBillingAgreement(ctx context.Context, a BillingAgreement) (*CreateAgreementResp, error) {
+func (c *Client) CreateBillingAgreement(ctx context.Context, a BillingAgreement) (*CreateAgreementResponse, error) {
 	// PayPal needs only ID, so we will remove all fields except Plan ID
 	a.Plan = BillingPlan{
 		ID: a.Plan.ID,
 	}
 
 	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"), a)
-	response := &CreateAgreementResp{}
+	response := &CreateAgreementResponse{}
 	if err != nil {
 		return response, err
 	}
@@ -126,9 +135,9 @@ func (c *Client) ExecuteApprovedAgreement(ctx context.Context, token string) (*E
 
 // ListBillingPlans lists billing-plans
 // Endpoint: GET /v1/payments/billing-plans
-func (c *Client) ListBillingPlans(ctx context.Context, bplp BillingPlanListParams) (*BillingPlanListResp, error) {
+func (c *Client) ListBillingPlans(ctx context.Context, bplp BillingPlanListParams) (*BillingPlanListResponse, error) {
 	req, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-plans"), nil)
-	response := &BillingPlanListResp{}
+	response := &BillingPlanListResponse{}
 	if err != nil {
 		return response, err
 	}
