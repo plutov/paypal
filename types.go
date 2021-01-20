@@ -134,11 +134,11 @@ const (
 //
 // https://developer.paypal.com/docs/api/payments.payouts-batch/v1/#definition-batch_status
 const (
-	BatchStatusDenied  string = "DENIED"
-	BatchStatusPending     string = "PENDING"
-	BatchStatusProcessing  string = "PROCESSING"
+	BatchStatusDenied     string = "DENIED"
+	BatchStatusPending    string = "PENDING"
+	BatchStatusProcessing string = "PROCESSING"
 	BatchStatusSuccess    string = "SUCCESS"
-	BatchStatusCanceled string = "CANCELED"
+	BatchStatusCanceled   string = "CANCELED"
 )
 
 const (
@@ -1027,6 +1027,10 @@ type (
 		VerificationStatus string `json:"verification_status,omitempty"`
 	}
 
+	WebhookEventTypesResponse struct {
+		EventTypes []WebhookEventType `json:"event_types"`
+	}
+
 	// Webhook strunct
 	Webhook struct {
 		ID         string             `json:"id"`
@@ -1052,6 +1056,7 @@ type (
 	WebhookEventType struct {
 		Name        string `json:"name"`
 		Description string `json:"description"`
+		Status      string `json:"status,omitempty"`
 	}
 
 	// CreateWebhookRequest struct

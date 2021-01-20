@@ -82,14 +82,14 @@ It is possible that some endpoints are missing in this SDK Client, but you can u
 
 ```go
 // If using Go Modules
-// import "github.com/plutov/paypal/v3" 
+// import "github.com/plutov/paypal/v4" 
 import "github.com/plutov/paypal"
 
 // Create a client instance
 c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 c.SetLog(os.Stdout) // Set log to terminal stdout
 
-accessToken, err := c.GetAccessToken()
+accessToken, err := c.GetAccessToken(context.Background())
 ```
 
 ### How to Contribute

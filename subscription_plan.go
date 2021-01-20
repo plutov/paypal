@@ -1,6 +1,7 @@
 package paypal
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"time"
@@ -131,8 +132,8 @@ func (self *SubscriptionPlan) GetUpdatePatch() []Patch {
 // CreateSubscriptionPlan creates a subscriptionPlan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_create
 // Endpoint: POST /v1/billing/plans
-func (c *Client) CreateSubscriptionPlan(newPlan SubscriptionPlan) (*CreateSubscriptionPlanResponse, error) {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), newPlan)
+func (c *Client) CreateSubscriptionPlan(ctx context.Context, newPlan SubscriptionPlan) (*CreateSubscriptionPlanResponse, error) {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), newPlan)
 	response := &CreateSubscriptionPlanResponse{}
 	if err != nil {
 		return response, err
@@ -144,8 +145,8 @@ func (c *Client) CreateSubscriptionPlan(newPlan SubscriptionPlan) (*CreateSubscr
 // UpdateSubscriptionPlan. updates a plan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_patch
 // Endpoint: PATCH /v1/billing/plans/:plan_id
-func (c *Client) UpdateSubscriptionPlan(updatedPlan SubscriptionPlan) error {
-	req, err := c.NewRequest(http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/billing/plans/", updatedPlan.ID), updatedPlan.GetUpdatePatch())
+func (c *Client) UpdateSubscriptionPlan(ctx context.Context, updatedPlan SubscriptionPlan) error {
+	req, err := c.NewRequest(ctx, http.MethodPatch, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/billing/plans/", updatedPlan.ID), updatedPlan.GetUpdatePatch())
 	if err != nil {
 		return err
 	}
@@ -156,8 +157,8 @@ func (c *Client) UpdateSubscriptionPlan(updatedPlan SubscriptionPlan) error {
 // UpdateSubscriptionPlan. updates a plan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_get
 // Endpoint: GET /v1/billing/plans/:plan_id
-func (c *Client) GetSubscriptionPlan(planId string) (*SubscriptionPlan, error) {
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/billing/plans/", planId), nil)
+func (c *Client) GetSubscriptionPlan(ctx context.Context, planId string) (*SubscriptionPlan, error) {
+	req, err := c.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s%s%s", c.APIBase, "/v1/billing/plans/", planId), nil)
 	response := &SubscriptionPlan{}
 	if err != nil {
 		return response, err
@@ -169,8 +170,8 @@ func (c *Client) GetSubscriptionPlan(planId string) (*SubscriptionPlan, error) {
 // List all plans
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_list
 // Endpoint: GET /v1/billing/plans
-func (c *Client) ListSubscriptionPlans(params *SubscriptionPlanListParameters) (*ListSubscriptionPlansResponse, error) {
-	req, err := c.NewRequest(http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), nil)
+func (c *Client) ListSubscriptionPlans(ctx context.Context, params *SubscriptionPlanListParameters) (*ListSubscriptionPlansResponse, error) {
+	req, err := c.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/billing/plans"), nil)
 	response := &ListSubscriptionPlansResponse{}
 	if err != nil {
 		return response, err
@@ -193,8 +194,8 @@ func (c *Client) ListSubscriptionPlans(params *SubscriptionPlanListParameters) (
 // Activates a plan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_activate
 // Endpoint: POST /v1/billing/plans/{id}/activate
-func (c *Client) ActivateSubscriptionPlan(planId string) error {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/activate", c.APIBase, planId), nil)
+func (c *Client) ActivateSubscriptionPlan(ctx context.Context, planId string) error {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/activate", c.APIBase, planId), nil)
 	if err != nil {
 		return err
 	}
@@ -206,8 +207,8 @@ func (c *Client) ActivateSubscriptionPlan(planId string) error {
 // Deactivates a plan
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_deactivate
 // Endpoint: POST /v1/billing/plans/{id}/deactivate
-func (c *Client) DeactivateSubscriptionPlans(planId string) error {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/deactivate", c.APIBase, planId), nil)
+func (c *Client) DeactivateSubscriptionPlans(ctx context.Context, planId string) error {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/deactivate", c.APIBase, planId), nil)
 	if err != nil {
 		return err
 	}
@@ -219,8 +220,8 @@ func (c *Client) DeactivateSubscriptionPlans(planId string) error {
 // Updates pricing for a plan. For example, you can update a regular billing cycle from $5 per month to $7 per month.
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#plans_update-pricing-schemes
 // Endpoint: POST /v1/billing/plans/{id}/update-pricing-schemes
-func (c *Client) UpdateSubscriptionPlanPricing(planId string, pricingSchemes []PricingSchemeUpdate) error {
-	req, err := c.NewRequest(http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/update-pricing-schemes", c.APIBase, planId), PricingSchemeUpdateRequest{
+func (c *Client) UpdateSubscriptionPlanPricing(ctx context.Context, planId string, pricingSchemes []PricingSchemeUpdate) error {
+	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/plans/%s/update-pricing-schemes", c.APIBase, planId), PricingSchemeUpdateRequest{
 		Schemes: pricingSchemes,
 	})
 	if err != nil {
