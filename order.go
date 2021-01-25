@@ -25,6 +25,18 @@ func (c *Client) GetOrder(ctx context.Context, orderID string) (*Order, error) {
 // CreateOrder - Use this call to create an order
 // Endpoint: POST /v2/checkout/orders
 func (c *Client) CreateOrder(ctx context.Context, intent string, purchaseUnits []PurchaseUnitRequest, payer *CreateOrderPayer, appContext *ApplicationContext) (*Order, error) {
+	return c.CreateOrderWithPaypalRequestID(ctx, intent, purchaseUnits, payer, appContext, "")
+}
+
+// CreateOrderWithPaypalRequestID - Use this call to create an order with idempotency
+// Endpoint: POST /v2/checkout/orders
+func (c *Client) CreateOrderWithPaypalRequestID(ctx context.Context,
+	intent string,
+	purchaseUnits []PurchaseUnitRequest,
+	payer *CreateOrderPayer,
+	appContext *ApplicationContext,
+	requestID string,
+) (*Order, error) {
 	type createOrderRequest struct {
 		Intent             string                `json:"intent"`
 		Payer              *CreateOrderPayer     `json:"payer,omitempty"`
@@ -37,6 +49,10 @@ func (c *Client) CreateOrder(ctx context.Context, intent string, purchaseUnits [
 	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders"), createOrderRequest{Intent: intent, PurchaseUnits: purchaseUnits, Payer: payer, ApplicationContext: appContext})
 	if err != nil {
 		return order, err
+	}
+
+	if requestID != "" {
+		req.Header.Set("PayPal-Request-Id", requestID)
 	}
 
 	if err = c.SendWithAuth(req, order); err != nil {
