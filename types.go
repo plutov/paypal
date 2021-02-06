@@ -277,6 +277,23 @@ type (
 		Links            []Link                `json:"links,omitempty"`
 	}
 
+	//https://developer.paypal.com/docs/api/payments/v2/#captures_get
+	CaptureDetailsResponse struct {
+		Status                    string                     `json:"status,omitempty"`
+		StatusDetails             *CaptureStatusDetails      `json:"status_details,omitempty"`
+		ID                        string                     `json:"id,omitempty"`
+		Amount                    *Money                     `json:"amount,omitempty"`
+		InvoiceID                 string                     `json:"invoice_id,omitempty"`
+		CustomID                  string                     `json:"custom_id,omitempty"`
+		SellerProtection          *SellerProtection          `json:"seller_protection,omitempty"`
+		FinalCapture              bool                       `json:"final_capture,omitempty"`
+		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
+		DisbursementMode          string                     `json:"disbursement_mode,omitempty"`
+		Links                     []Link                     `json:"links,omitempty"`
+		UpdateTime                *time.Time                 `json:"update_time,omitempty"`
+		CreateTime                *time.Time                 `json:"create_time,omitempty"`
+	}
+
 	// CaptureOrderRequest - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 	CaptureOrderRequest struct {
 		PaymentSource *PaymentSource `json:"payment_source"`

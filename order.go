@@ -158,3 +158,19 @@ func (c *Client) RefundCaptureWithPaypalRequestId(ctx context.Context,
 	}
 	return refund, nil
 }
+
+// CapturedDetail - https://developer.paypal.com/docs/api/payments/v2/#captures_get
+// Endpoint: GET /v2/payments/captures/ID
+func (c *Client) CapturedDetail(ctx context.Context, captureID string ) (*CaptureDetailsResponse, error) {
+	response := &CaptureDetailsResponse{}
+
+	req, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/captures/"+captureID), nil)
+	if err != nil {
+		return response, err
+	}
+
+	if err = c.SendWithAuth(req, response); err != nil {
+		return response, err
+	}
+	return response, nil
+}
