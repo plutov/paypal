@@ -152,3 +152,19 @@ func (c *Client) ListBillingPlans(ctx context.Context, bplp BillingPlanListParam
 	err = c.SendWithAuth(req, response)
 	return response, err
 }
+
+// RefundCapture with idempotency - https://developer.paypal.com/docs/api/payments/v2/#captures_get
+// Endpoint: GET /v2/payments/captures/ID
+func (c *Client) CapturedDetail(ctx context.Context, captureID string ) (*CaptureDetailsResponse, error) {
+	refund := &CaptureDetailsResponse{}
+
+	req, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/captures/"+captureID+"/refund"), nil)
+	if err != nil {
+		return refund, err
+	}
+
+	if err = c.SendWithAuth(req, refund); err != nil {
+		return refund, err
+	}
+	return refund, nil
+}
