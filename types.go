@@ -555,10 +555,10 @@ type (
 
 	// PurchaseUnit struct
 	PurchaseUnit struct {
-		ReferenceID         string              `json:"reference_id"`
-		Amount              *PurchaseUnitAmount `json:"amount,omitempty"`
-		Payments            *CapturedPayments   `json:"payments,omitempty"`
-		Payment_Instruction *PaymentInstruction `json:"payment_instruction,omitempty"`
+		ReferenceID        string              `json:"reference_id"`
+		Amount             *PurchaseUnitAmount `json:"amount,omitempty"`
+		Payments           *CapturedPayments   `json:"payments,omitempty"`
+		PaymentInstruction *PaymentInstruction `json:"payment_instruction,omitempty"`
 	}
 
 	// TaxInfo used for orders.
