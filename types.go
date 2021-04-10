@@ -555,9 +555,10 @@ type (
 
 	// PurchaseUnit struct
 	PurchaseUnit struct {
-		ReferenceID string              `json:"reference_id"`
-		Amount      *PurchaseUnitAmount `json:"amount,omitempty"`
-		Payments    *CapturedPayments   `json:"payments,omitempty"`
+		ReferenceID         string              `json:"reference_id"`
+		Amount              *PurchaseUnitAmount `json:"amount,omitempty"`
+		Payments            *CapturedPayments   `json:"payments,omitempty"`
+		Payment_Instruction *PaymentInstruction `json:"payment_instruction,omitempty"`
 	}
 
 	// TaxInfo used for orders.
@@ -596,15 +597,16 @@ type (
 
 	// PurchaseUnitRequest struct
 	PurchaseUnitRequest struct {
-		ReferenceID    string              `json:"reference_id,omitempty"`
-		Amount         *PurchaseUnitAmount `json:"amount"`
-		Payee          *PayeeForOrders     `json:"payee,omitempty"`
-		Description    string              `json:"description,omitempty"`
-		CustomID       string              `json:"custom_id,omitempty"`
-		InvoiceID      string              `json:"invoice_id,omitempty"`
-		SoftDescriptor string              `json:"soft_descriptor,omitempty"`
-		Items          []Item              `json:"items,omitempty"`
-		Shipping       *ShippingDetail     `json:"shipping,omitempty"`
+		ReferenceID        string              `json:"reference_id,omitempty"`
+		Amount             *PurchaseUnitAmount `json:"amount"`
+		Payee              *PayeeForOrders     `json:"payee,omitempty"`
+		Description        string              `json:"description,omitempty"`
+		CustomID           string              `json:"custom_id,omitempty"`
+		InvoiceID          string              `json:"invoice_id,omitempty"`
+		SoftDescriptor     string              `json:"soft_descriptor,omitempty"`
+		Items              []Item              `json:"items,omitempty"`
+		Shipping           *ShippingDetail     `json:"shipping,omitempty"`
+		PaymentInstruction *PaymentInstruction `json:"payment_instruction,omitempty"`
 	}
 
 	// MerchantPreferences struct
