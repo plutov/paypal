@@ -1056,17 +1056,31 @@ type (
 		Links      []Link             `json:"links"`
 	}
 
-	// WebhookEvent struct
-	WebhookEvent struct {
+	// Event struct
+	Event struct {
 		ID              string    `json:"id"`
 		CreateTime      time.Time `json:"create_time"`
 		ResourceType    string    `json:"resource_type"`
 		EventType       string    `json:"event_type"`
 		Summary         string    `json:"summary,omitempty"`
-		Resource        Resource  `json:"resource"`
 		Links           []Link    `json:"links"`
 		EventVersion    string    `json:"event_version,omitempty"`
 		ResourceVersion string    `json:"resource_version,omitempty"`
+	}
+
+	AnyEvent struct {
+		Event
+		Resource json.RawMessage `json:"resource"`
+	}
+
+	PaymentPayoutsItemEvent struct {
+		Event
+		Resource PayoutItemResponse `json:"resource"`
+	}
+
+	PaymentPayoutsBatchEvent struct {
+		Event
+		Resource PayoutResponse `json:"resource"`
 	}
 
 	// WebhookEventType struct
@@ -1107,15 +1121,12 @@ type (
 		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
 		NoteToPayer               string                     `json:"note_to_payer,omitempty"`
 		CustomID                  string                     `json:"custom_id,omitempty"`
-		// merchant-onboarding Resource type
-		PartnerClientID string `json:"partner_client_id,omitempty"`
-		MerchantID      string `json:"merchant_id,omitempty"`
-		// Checkout Resource type
-		Intent        string                 `json:"intent,omitempty"`
-		PurchaseUnits []*PurchaseUnitRequest `json:"purchase_units,omitempty"`
-		Payer         *PayerWithNameAndPhone `json:"payer,omitempty"`
-		// Common
-		Links []Link `json:"links,omitempty"`
+		PartnerClientID           string                     `json:"partner_client_id,omitempty"`
+		MerchantID                string                     `json:"merchant_id,omitempty"`
+		Intent                    string                     `json:"intent,omitempty"`
+		PurchaseUnits             []*PurchaseUnitRequest     `json:"purchase_units,omitempty"`
+		Payer                     *PayerWithNameAndPhone     `json:"payer,omitempty"`
+		Links                     []Link                     `json:"links,omitempty"`
 	}
 
 	CaptureSellerBreakdown struct {

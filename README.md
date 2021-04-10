@@ -330,7 +330,7 @@ c.CreateWebhook(paypal.CreateWebhookRequest{
     EventTypes: []paypal.WebhookEventType{
         paypal.WebhookEventType{
             Name: "PAYMENT.AUTHORIZATION.CREATED",
-            },
+        },
     },
 })
 
@@ -355,7 +355,6 @@ c.DeleteWebhook("WebhookID")
 
 // List registered webhooks
 c.ListWebhooks(paypal.AncorTypeApplication)
-
 ```
 
 ## How to Contribute

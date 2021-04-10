@@ -89,7 +89,7 @@ func (c *Client) VerifyWebhookSignature(ctx context.Context, httpReq *http.Reque
 		TransmissionSig  string          `json:"transmission_sig,omitempty"`
 		TransmissionTime string          `json:"transmission_time,omitempty"`
 		WebhookID        string          `json:"webhook_id,omitempty"`
-		WebhookEvent     json.RawMessage `json:"webhook_event"`
+		Event            json.RawMessage `json:"webhook_event"`
 	}
 
 	// Read the content
@@ -107,7 +107,7 @@ func (c *Client) VerifyWebhookSignature(ctx context.Context, httpReq *http.Reque
 		TransmissionSig:  httpReq.Header.Get("PAYPAL-TRANSMISSION-SIG"),
 		TransmissionTime: httpReq.Header.Get("PAYPAL-TRANSMISSION-TIME"),
 		WebhookID:        webhookID,
-		WebhookEvent:     json.RawMessage(bodyBytes),
+		Event:            json.RawMessage(bodyBytes),
 	}
 
 	response := &VerifyWebhookResponse{}
