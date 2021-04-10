@@ -6,25 +6,47 @@
 
 ## Coverage
 
+### Auth
+
 * POST /v1/oauth2/token
-* POST /v1/identity/openidconnect/tokenservice
-* GET /v1/identity/openidconnect/userinfo/?schema=:schema
+
+### /v1/payments
+
 * POST /v1/payments/payouts
 * GET /v1/payments/payouts/:id
 * GET /v1/payments/payouts-item/:id
 * POST /v1/payments/payouts-item/:id/cancel
+* GET /v1/payments/sale/:id
+* POST /v1/payments/sale/:id/refund
+* GET /v1/payments/billing-plans
+* POST /v1/payments/billing-plans
+* PATCH /v1/payments/billing-plans/:id
+* POST /v1/payments/billing-agreements
+* POST /v1/payments/billing-agreements/:token/agreement-execute
+
+### /v2/payments
+
+* GET /v2/payments/authorizations/:id
+* GET /v2/payments/captures/:id
+* POST /v2/payments/authorizations/:id/capture
+* POST /v2/payments/authorizations/:id/void
+* POST /v2/payments/authorizations/:id/reauthorize
+* GET /v2/payments/refund/:id
+
+### Identity
+* POST /v1/identity/openidconnect/tokenservice
+* GET /v1/identity/openidconnect/userinfo/?schema=:schema
+
+### /v1/payment-experience
+
 * GET /v1/payment-experience/web-profiles
 * POST /v1/payment-experience/web-profiles
 * GET /v1/payment-experience/web-profiles/:id
 * PUT /v1/payment-experience/web-profiles/:id
 * DELETE /v1/payment-experience/web-profiles/:id
-* GET /v2/payments/authorizations/:id
-* POST /v2/payments/authorizations/:id/capture
-* POST /v2/payments/authorizations/:id/void
-* POST /v2/payments/authorizations/:id/reauthorize
-* GET /v1/payments/sale/:id
-* POST /v1/payments/sale/:id/refund
-* GET /v2/payments/refund/:id
+
+### /v1/reporting
+
 * POST /v1/reporting/transactions
 
 ### Vault
@@ -42,14 +64,6 @@
 * PATCH /v2/checkout/orders/:id
 * POST /v2/checkout/orders/:id/authorize
 * POST /v2/checkout/orders/:id/capture
-
-### Billing plans (payments)
-
-* GET /v1/payments/billing-plans
-* POST /v1/payments/billing-plans
-* PATCH /v1/payments/billing-plans/:id
-* POST /v1/payments/billing-agreements
-* POST /v1/payments/billing-agreements/:token/agreement-execute
 
 ### Notifications
 * POST /v1/notifications/webhooks

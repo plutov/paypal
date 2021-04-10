@@ -349,13 +349,14 @@ type (
 
 	// Capture struct
 	Capture struct {
+		ID             string     `json:"id,omitempty"`
 		Amount         *Amount    `json:"amount,omitempty"`
+		State          string     `json:"state,omitempty"`
+		ParentPayment  string     `json:"parent_payment,omitempty"`
+		TransactionFee string     `json:"transaction_fee,omitempty"`
 		IsFinalCapture bool       `json:"is_final_capture"`
 		CreateTime     *time.Time `json:"create_time,omitempty"`
 		UpdateTime     *time.Time `json:"update_time,omitempty"`
-		State          string     `json:"state,omitempty"`
-		ParentPayment  string     `json:"parent_payment,omitempty"`
-		ID             string     `json:"id,omitempty"`
 		Links          []Link     `json:"links,omitempty"`
 	}
 
