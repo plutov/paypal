@@ -1051,7 +1051,7 @@ type (
 		EventTypes []WebhookEventType `json:"event_types"`
 	}
 
-	// Webhook strunct
+	// Webhook struct
 	Webhook struct {
 		ID         string             `json:"id"`
 		URL        string             `json:"url"`
@@ -1059,7 +1059,10 @@ type (
 		Links      []Link             `json:"links"`
 	}
 
-	// Event struct
+	// Event struct.
+	//
+	// The basic webhook event data type. This struct is intended to be
+	// embedded into resource type specific event structs.
 	Event struct {
 		ID              string    `json:"id"`
 		CreateTime      time.Time `json:"create_time"`
@@ -1074,16 +1077,6 @@ type (
 	AnyEvent struct {
 		Event
 		Resource json.RawMessage `json:"resource"`
-	}
-
-	PaymentPayoutsItemEvent struct {
-		Event
-		Resource PayoutItemResponse `json:"resource"`
-	}
-
-	PaymentPayoutsBatchEvent struct {
-		Event
-		Resource PayoutResponse `json:"resource"`
 	}
 
 	// WebhookEventType struct
