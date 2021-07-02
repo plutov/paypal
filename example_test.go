@@ -3,7 +3,7 @@ package paypal_test
 import (
 	"context"
 
-	"github.com/plutov/paypal/v4"
+	paypal "github.com/plutov/paypal/v4"
 )
 
 func Example() {

@@ -1,3 +1,9 @@
+---
+noteId: "4b6058f0dac511eb8dbd315da41fbd81"
+tags: []
+
+---
+
 The MIT License (MIT)
 
 Copyright (c) 2019 Aliaksandr Pliutau
