@@ -1,0 +1,42 @@
+curl -v https://api-m.sandbox.paypal.com/v1/oauth2/token \
+  -H "Accept: application/json" \
+  -H "Accept-Language: en_US" \
+  -u "${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}" \
+  -d "grant_type=client_credentials"
+  
+  
+  curl -v https://api.sandbox.paypal.com/v1/oauth2/token \
+  -H "Accept: application/json" \
+  -H "Accept-Language: en_US" \
+  -u "${PAYPAL_CLIENT_ID}:${PAYPAL_SECRET}" \
+  -d "grant_type=client_credentials"
+  
+  
+  
+  curl -v https://api-m.sandbox.paypal.com/v1/oauth2/token \
+  -H "Accept: application/json" \
+  -H "Accept-Language: en_US" \
+  -u "bad_client_id:secret" \
+  -d "grant_type=client_credentials"
+  
+  
+  https://dev-9590480.okta.com/oauth2/v1/token
+
+curl -v -X POST \
+-H "Content-type:application/x-www-form-urlencoded" \
+"https://dev-9590480.okta.com/oauth2/v1/token" \
+-d "client_id=${OKTA_CLIENTID}&client_secret=${OKTA_SECRET}&grant_type=authorization_code&redirect_uri={redirect_uri}&code={code}"
+
+
+curl -v -X POST \
+-H "Content-type:application/x-www-form-urlencoded" \
+"https://dev-9590480.okta.com/oauth2/v1/token" \
+-d "client_id=${OKTA_CLIENTID}&client_secret=${OKTA_SECRET}&grant_type=client_credentials"
+
+
+curl -v https://dev-9590480.okta.com/oauth2/v1/token \
+     -H "Accept: application/json" \
+     -H "Accept-Language: en_US" \
+     -u "0oa14zzjjc46o6uNa5d7:UOrm5O7OM-4666Jol2S5p1RZ1HcdjjYOkoqnAVDS" \
+     -d "grant_type=client_credentials"
+

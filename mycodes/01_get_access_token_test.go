@@ -8,7 +8,7 @@ import (
 )
 
 func TestGetAccessToken(t *testing.T) {
-	res, err := util.GetPaymentGWAccessToken(
+	_, res, err := util.GetPaymentGWAccessToken(
 		TestClientID, TestSecret, paypal.APIBaseSandBox,
 	)
 	if err != nil {

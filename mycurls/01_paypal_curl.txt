@@ -1,0 +1,43 @@
+curl -v -X POST https://api-m.sandbox.paypal.com/v2/checkout/orders \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer ${PAYPAL_ACCESS_TOKEN}" \
+-d '{
+  "intent": "CAPTURE",
+  "purchase_units": [
+    {
+      "amount": {
+        "currency_code": "USD",
+        "value": "100.00"
+      }
+    }
+  ]
+}'
+
+{
+  "id": "67G75396B4089213G",
+  "status": "CREATED",
+  "links": [
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/67G75396B4089213G",
+      "rel": "self",
+      "method": "GET"
+    },
+    {
+      "href": "https://www.sandbox.paypal.com/checkoutnow?token=67G75396B4089213G",
+      "rel": "approve",
+      "method": "GET"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/67G75396B4089213G",
+      "rel": "update",
+      "method": "PATCH"
+    },
+    {
+      "href": "https://api.sandbox.paypal.com/v2/checkout/orders/67G75396B4089213G/capture",
+      "rel": "capture",
+      "method": "POST"
+    }
+  ]
+}
+
+

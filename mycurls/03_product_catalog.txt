@@ -1,0 +1,21 @@
+curl -v -X PATCH https://api.sandbox.paypal.com/v1/catalogs/products/PROD-16D85939UC060714D \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer ${PAYPAL_ACCESS_TOKEN}" \
+-d '[
+  {
+    "op": "replace",
+    "path": "/description",
+    "value": "Premium video streaming service"
+  }
+]'
+
+curl -v -X PATCH https://api.sandbox.paypal.com/v1/catalogs/products/PROD-16D85939UC060714D \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer ${PAYPAL_ACCESS_TOKEN}" \
+-d '[
+  {
+    "op": "replace",
+    "path": "/name",
+    "value": "Pet Store API 2"
+  }
+]'

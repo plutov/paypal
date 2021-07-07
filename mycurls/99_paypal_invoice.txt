@@ -1,0 +1,229 @@
+curl -v -X POST https://api-m.sandbox.paypal.com/v2/invoicing/generate-next-invoice-number \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer ${PAYPAL_TEST_ACCESS_TOKEN}"
+
+{"invoice_number":"0001"}
+
+
+curl -v -X GET https://api-m.sandbox.paypal.com/v2/invoicing/invoices \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer ${PAYPAL_TEST_ACCESS_TOKEN}"
+
+{}
+
+
+curl -v -X GET https://api-m.sandbox.paypal.com/v2/invoicing/invoices?total_required=true \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer ${PAYPAL_TEST_ACCESS_TOKEN}"
+
+{"total_pages":0,"total_items":0}
+
+
+
+curl -v -X POST https://api-m.sandbox.paypal.com/v2/invoicing/invoices \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer ${PAYPAL_TEST_ACCESS_TOKEN}" \
+-d '{
+  "detail": {
+    "invoice_number": "#123",
+    "reference": "deal-ref",
+    "invoice_date": "2018-11-12",
+    "currency_code": "USD",
+    "note": "Thank you for your business.",
+    "term": "No refunds after 30 days.",
+    "memo": "This is a long contract",
+    "payment_term": {
+      "term_type": "NET_10",
+      "due_date": "2018-11-22"
+    }
+  },
+  "invoicer": {
+    "name": {
+      "given_name": "David",
+      "surname": "Larusso"
+    },
+    "address": {
+      "address_line_1": "1234 First Street",
+      "address_line_2": "337673 Hillside Court",
+      "admin_area_2": "Anytown",
+      "admin_area_1": "CA",
+      "postal_code": "98765",
+      "country_code": "US"
+    },
+    "email_address": "shawnhan.kim@gmail.com",
+    "phones": [
+      {
+        "country_code": "001",
+        "national_number": "4085551234",
+        "phone_type": "MOBILE"
+      }
+    ],
+    "website": "www.test.com",
+    "tax_id": "ABcNkWSfb5ICTt73nD3QON1fnnpgNKBy- Jb5SeuGj185MNNw6g",
+    "logo_url": "https://example.com/logo.PNG",
+    "additional_notes": "2-4"
+  },
+  "primary_recipients": [
+    {
+      "billing_info": {
+        "name": {
+          "given_name": "Stephanie",
+          "surname": "Meyers"
+        },
+        "address": {
+          "address_line_1": "1234 Main Street",
+          "admin_area_2": "Anytown",
+          "admin_area_1": "CA",
+          "postal_code": "98765",
+          "country_code": "US"
+        },
+        "email_address": "bill-me@example.com",
+        "phones": [
+          {
+            "country_code": "001",
+            "national_number": "4884551234",
+            "phone_type": "HOME"
+          }
+        ],
+        "additional_info_value": "add-info"
+      },
+      "shipping_info": {
+        "name": {
+          "given_name": "Stephanie",
+          "surname": "Meyers"
+        },
+        "address": {
+          "address_line_1": "1234 Main Street",
+          "admin_area_2": "Anytown",
+          "admin_area_1": "CA",
+          "postal_code": "98765",
+          "country_code": "US"
+        }
+      }
+    }
+  ],
+  "items": [
+    {
+      "name": "Yoga Mat",
+      "description": "Elastic mat to practice yoga.",
+      "quantity": "1",
+      "unit_amount": {
+        "currency_code": "USD",
+        "value": "50.00"
+      },
+      "tax": {
+        "name": "Sales Tax",
+        "percent": "7.25"
+      },
+      "discount": {
+        "percent": "5"
+      },
+      "unit_of_measure": "QUANTITY"
+    },
+    {
+      "name": "Yoga t-shirt",
+      "quantity": "1",
+      "unit_amount": {
+        "currency_code": "USD",
+        "value": "10.00"
+      },
+      "tax": {
+        "name": "Sales Tax",
+        "percent": "7.25"
+      },
+      "discount": {
+        "amount": {
+          "currency_code": "USD",
+          "value": "5.00"
+        }
+      },
+      "unit_of_measure": "QUANTITY"
+    }
+  ],
+  "configuration": {
+    "partial_payment": {
+      "allow_partial_payment": true,
+      "minimum_amount_due": {
+        "currency_code": "USD",
+        "value": "20.00"
+      }
+    },
+    "allow_tip": true,
+    "tax_calculated_after_discount": true,
+    "tax_inclusive": false,
+    "template_id": "TEMP-19V05281TU309413B"
+  },
+  "amount": {
+    "breakdown": {
+      "custom": {
+        "label": "Packing Charges",
+        "amount": {
+          "currency_code": "USD",
+          "value": "10.00"
+        }
+      },
+      "shipping": {
+        "amount": {
+          "currency_code": "USD",
+          "value": "10.00"
+        },
+        "tax": {
+          "name": "Sales Tax",
+          "percent": "7.25"
+        }
+      },
+      "discount": {
+        "invoice_discount": {
+          "percent": "5"
+        }
+      }
+    }
+  }
+}'
+
+{
+  "name": "INVALID_REQUEST",
+  "message": "Request is not well-formed, syntactically incorrect, or violates schema.",
+  "debug_id": "7b7d989bf467d",
+  "details": [
+    {
+      "field": "/invoicer/email_address",
+      "value": "merchant@example.com",
+      "location": "body",
+      "issue": "INVALID_EMAIL",
+      "description": "Email is not associated with the user."
+    },
+    {
+      "field": "/configuration/template_id",
+      "value": "TEMP-19V05281TU309413B",
+      "location": "body",
+      "description": "Template id is not valid."
+    }
+  ],
+  "links": [
+    {
+      "href": "https://developer.paypal.com/docs/api/invoicing/#errors",
+      "method": "GET"
+    }
+  ]
+}
+
+
+{
+  "name": "UNPROCESSABLE_ENTITY",
+  "message": "The requested action could not be performed, semantically incorrect, or failed business validation.",
+  "debug_id": "73102285f1a1d",
+  "details": [
+    {
+      "issue": "USER_NOT_FOUND",
+      "description": "User is not associated with paypal based on invoicer email."
+    }
+  ],
+  "links": [
+    {
+      "href": "https://developer.paypal.com/docs/api/invoicing/#errors",
+      "method": "GET"
+    }
+  ]
+}
+

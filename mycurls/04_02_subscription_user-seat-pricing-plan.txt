@@ -1,0 +1,106 @@
+--------------------------------------------------------------------------------
+ REQUEST
+--------------------------------------------------------------------------------
+curl -v -k -X POST https://api-m.sandbox.paypal.com/v1/billing/subscriptions \
+  -H "Accept: application/json" \
+  -H "Authorization: Bearer ${PAYPAL_ACCESS_TOKEN}" \
+  -H "PayPal-Request-Id: SUBSCRIPTION-07072021-002" \
+  -H "Prefer: return=representation" \
+  -H "Content-Type: application/json" \
+  -d '{
+        "plan_id": "P-1WF02554CM339793NMDSJQPY",
+        "start_time": "2021-07-07T00:00:00Z",
+        "quantity": "20",
+        "shipping_amount": {
+            "currency_code": "USD",
+            "value": "10.00"
+        },
+        "subscriber": {
+          "name": {
+              "given_name": "John",
+              "surname": "Doe"
+          },
+          "email_address": "customer@example.com",
+          "shipping_address": {
+              "name": {
+                  "full_name": "John Doe"
+              },
+              "address": {
+                  "address_line_1": "2211 N First Street",
+                  "address_line_2": "Building 17",
+                  "admin_area_2": "San Jose",
+                  "admin_area_1": "CA",
+                  "postal_code": "95131",
+                  "country_code": "US"
+              }
+          }
+        },
+        "application_context": {
+          "brand_name": "example",
+          "locale": "en-US",
+          "shipping_preference": "SET_PROVIDED_ADDRESS",
+          "user_action": "SUBSCRIBE_NOW",
+          "payment_method": {
+              "payer_selected": "PAYPAL",
+              "payee_preferred": "IMMEDIATE_PAYMENT_REQUIRED"
+          },
+          "return_url": "https://example.com/returnUrl",
+          "cancel_url": "https://example.com/cancelUrl"
+        }
+      }'
+      
+      
+--------------------------------------------------------------------------------
+ RESPONSE
+--------------------------------------------------------------------------------
+{
+  "status": "APPROVAL_PENDING",
+  "status_update_time": "2021-07-06T21:21:41Z",
+  "id": "I-490MUC3GFRLE",
+  "plan_id": "P-1WF02554CM339793NMDSJQPY",
+  "start_time": "2021-07-07T00:00:00Z",
+  "quantity": "20",
+  "shipping_amount": {
+    "currency_code": "USD",
+    "value": "10.0"
+  },
+  "subscriber": {
+    "email_address": "customer@example.com",
+    "name": {
+      "given_name": "John",
+      "surname": "Doe"
+    },
+    "shipping_address": {
+      "name": {
+        "full_name": "John Doe"
+      },
+      "address": {
+        "address_line_1": "2211 N First Street",
+        "address_line_2": "Building 17",
+        "admin_area_2": "San Jose",
+        "admin_area_1": "CA",
+        "postal_code": "95131",
+        "country_code": "US"
+      }
+    }
+  },
+  "create_time": "2021-07-06T21:21:41Z",
+  "plan_overridden": false,
+  "links": [
+    {
+      "href": "https://www.sandbox.paypal.com/webapps/billing/subscriptions?ba_token=BA-9VN53658HU403441T",
+      "rel": "approve",
+      "method": "GET"
+    },
+    {
+      "href": "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/I-490MUC3GFRLE",
+      "rel": "edit",
+      "method": "PATCH"
+    },
+    {
+      "href": "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/I-490MUC3GFRLE",
+      "rel": "self",
+      "method": "GET"
+    }
+  ]
+}      

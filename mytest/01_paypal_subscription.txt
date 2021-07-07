@@ -1,0 +1,17 @@
+
+1. Test via UI
+
+   - [PayPal]
+     + You have successfully created subscription I-TTRNM37M2TTK
+     
+   - [PayPal CREDIT]  
+     + https://www.sandbox.paypal.com/ppcreditapply/he/us/errorpage
+     + Error 503 backend read error
+       backend read error
+
+       Guru Mediation:
+       Details: cache-sea4457-SEA 1625597886 2107719540
+       Varnish cache server
+
+   - [Debit or Credit Card]
+     + You have successfully created subscription I-C9MT5HAG2N67

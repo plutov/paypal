@@ -1,0 +1,72 @@
+--------------------------------------------------------------------------------
+ REQUEST
+--------------------------------------------------------------------------------
+curl -v -k -X POST https://api.sandbox.paypal.com/v1/billing/subscriptions \
+   -H "Accept: application/json" \
+   -H "Authorization: Bearer ${PAYPAL_ACCESS_TOKEN}" \
+   -H "PayPal-Request-Id: SUBSCRIPTION-07072021-001" \
+   -H "Prefer: return=representation" \
+   -H "Content-Type: application/json" \
+   -d '{
+      "plan_id": "P-3HX087460C8542628MDSJPTQ",
+      "start_time": "2021-07-07T06:00:00Z",
+      "subscriber": {
+        "name": {
+          "given_name": "John",
+          "surname": "Doe"
+        },
+        "email_address": "customer@example.com"
+      },
+      "application_context": {
+        "brand_name": "example",
+        "locale": "en-US",
+        "shipping_preference": "SET_PROVIDED_ADDRESS",
+        "user_action": "SUBSCRIBE_NOW",
+        "payment_method": {
+          "payer_selected": "PAYPAL",
+          "payee_preferred": "IMMEDIATE_PAYMENT_REQUIRED"
+        },
+        "return_url": "https://example.com/returnUrl",
+        "cancel_url": "https://example.com/cancelUrl"
+      }
+    }'
+    
+    
+--------------------------------------------------------------------------------
+ RESPONSE
+--------------------------------------------------------------------------------
+{
+  "status": "APPROVAL_PENDING",
+  "status_update_time": "2021-07-06T21:19:57Z",
+  "id": "I-RDK7GN8UNVVM",
+  "plan_id": "P-3HX087460C8542628MDSJPTQ",
+  "start_time": "2021-07-07T06:00:00Z",
+  "quantity": "1",
+  "subscriber": {
+    "email_address": "customer@example.com",
+    "name": {
+      "given_name": "John",
+      "surname": "Doe"
+    }
+  },
+  "create_time": "2021-07-06T21:19:57Z",
+  "plan_overridden": false,
+  "links": [
+    {
+      "href": "https://www.sandbox.paypal.com/webapps/billing/subscriptions?ba_token=BA-7A839398G29127700",
+      "rel": "approve",
+      "method": "GET"
+    },
+    {
+      "href": "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/I-RDK7GN8UNVVM",
+      "rel": "edit",
+      "method": "PATCH"
+    },
+    {
+      "href": "https://api-m.sandbox.paypal.com/v1/billing/subscriptions/I-RDK7GN8UNVVM",
+      "rel": "self",
+      "method": "GET"
+    }
+  ]
+}
+    

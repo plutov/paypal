@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+
+<body>
+  <script
+    src="https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription">
+  </script>
+
+  <div id="paypal-button-container"></div>
+
+  <script>
+    paypal.Buttons({
+        createSubscription: function(data, actions) {
+            return actions.subscription.create({
+                'plan_id': 'P-3HX087460C8542628MDSJPTQ'
+            });
+        },
+
+        onApprove: function(data, actions) {
+            alert('You have successfully created subscription ' + data.subscriptionID);
+        }
+    }).render('#paypal-button-container');  
+  </script>
+</body>
