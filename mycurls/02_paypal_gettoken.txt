@@ -37,6 +37,6 @@ curl -v -X POST \
 curl -v https://dev-9590480.okta.com/oauth2/v1/token \
      -H "Accept: application/json" \
      -H "Accept-Language: en_US" \
-     -u "0oa14zzjjc46o6uNa5d7:UOrm5O7OM-4666Jol2S5p1RZ1HcdjjYOkoqnAVDS" \
+     -u "${OKTA_CLIENTID}:${OKTA_SECRET}" \
      -d "grant_type=client_credentials"
 
