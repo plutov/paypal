@@ -1,0 +1,2703 @@
+{
+	"info": {
+		"_postman_id": "373cb6f0-9cb2-4ef0-b320-1cce3039259c",
+		"name": "0. API Monetization w/ PayPal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Generate Token",
+			"item": [
+				{
+					"name": "Step 1: Generate auth token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"access_token\", data.access_token);",
+									"var tokenMachineHost = (globals.token_machine !== undefined ? globals.token_machine : (environment.token_machine !== undefined? environment.token_machine : undefined));",
+									"if (tokenMachineHost !== undefined && tokenMachineHost.includes(\"api.sandbox.paypal.com\")) {",
+									"    postman.setEnvironmentVariable(\"host\", tokenMachineHost);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{clientID}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{secret}}",
+									"type": "string"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Host",
+								"value": "api-m.sandbox.paypal.com"
+							},
+							{
+								"key": "Authorization",
+								"value": "Basic YWxjX2NsaWVudDE6c2VjcmV0",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/v1/oauth2/token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"oauth2",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2. Catalog Products (APIs)",
+			"item": [
+				{
+					"name": "create pet-store-api",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Pet Store API\",\n  \"description\": \"Pet Store service\",\n  \"type\": \"SERVICE\",\n  \"category\": \"SOFTWARE\",\n  \"image_url\": \"https://example.com/streaming.jpg\",\n  \"home_url\": \"https://example.com/home\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/v1/catalogs/products",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"catalogs",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create insect-store-api",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Insect Store API\",\n  \"description\": \"Insect Store service\",\n  \"type\": \"SERVICE\",\n  \"category\": \"SOFTWARE\",\n  \"image_url\": \"https://example.com/streaming.jpg\",\n  \"home_url\": \"https://example.com/home\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/v1/catalogs/products",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"catalogs",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is INVALID_RESOURCE_ID\", function () {",
+									"    pm.expect(data.name).to.eql(\"INVALID_RESOURCE_ID\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"The requested resource ID was not found\", function () {",
+									"    pm.expect(data.message).to.eql(\"The requested resource ID was not found\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/v1/catalogs/products",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"catalogs",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/description\",\n    \"value\": \"Pet Store API Service\"\n  }\n]"
+						},
+						"url": {
+							"raw": "{{host}}/v1/catalogs/products/PROD-16D85939UC060714D",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"catalogs",
+								"products",
+								"PROD-16D85939UC060714D"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is INVALID_RESOURCE_ID\", function () {",
+									"    pm.expect(data.name).to.eql(\"INVALID_RESOURCE_ID\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"The requested resource ID was not found\", function () {",
+									"    pm.expect(data.message).to.eql(\"The requested resource ID was not found\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/v1/catalogs/products/PROD-16D85939UC060714D",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"catalogs",
+								"products",
+								"PROD-16D85939UC060714D"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/v1/catalogs/products/PROD-16D85939UC060714D",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"catalogs",
+								"products",
+								"PROD-16D85939UC060714D"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "3. Billing Plans",
+			"item": [
+				{
+					"name": "silver plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_id\": \"PROD-1VX65010A98464720\",\n  \"name\": \"Silver Plan\",\n  \"description\": \"Silver plan : 10K request per hour\",\n  \"billing_cycles\": [\n    {\n      \"frequency\": {\n        \"interval_unit\": \"MONTH\",\n        \"interval_count\": 1\n      },\n      \"tenure_type\": \"TRIAL\",\n      \"sequence\": 1,\n      \"total_cycles\": 1\n    },\n    {\n      \"frequency\": {\n        \"interval_unit\": \"MONTH\",\n        \"interval_count\": 1\n      },\n      \"tenure_type\": \"REGULAR\",\n      \"sequence\": 2,\n      \"total_cycles\": 12,\n      \"pricing_scheme\": {\n        \"fixed_price\": {\n          \"value\": \"100\",\n          \"currency_code\": \"USD\"\n        }\n      }\n    }\n  ],\n  \"payment_preferences\": {\n    \"auto_bill_outstanding\": true,\n    \"setup_fee\": {\n      \"value\": \"100\",\n      \"currency_code\": \"USD\"\n    },\n    \"setup_fee_failure_action\": \"CONTINUE\",\n    \"payment_failure_threshold\": 3\n  },\n  \"taxes\": {\n    \"percentage\": \"10\",\n    \"inclusive\": false\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/v1/billing/plans",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"billing",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "gold plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_id\": \"PROD-1VX65010A98464720\",\n  \"name\": \"Gold Plan\",\n  \"description\": \"Gold plan : 100K request per hour\",\n  \"billing_cycles\": [\n    {\n      \"frequency\": {\n        \"interval_unit\": \"MONTH\",\n        \"interval_count\": 1\n      },\n      \"tenure_type\": \"TRIAL\",\n      \"sequence\": 1,\n      \"total_cycles\": 1\n    },\n    {\n      \"frequency\": {\n        \"interval_unit\": \"MONTH\",\n        \"interval_count\": 1\n      },\n      \"tenure_type\": \"REGULAR\",\n      \"sequence\": 2,\n      \"total_cycles\": 12,\n      \"pricing_scheme\": {\n        \"fixed_price\": {\n          \"value\": \"200\",\n          \"currency_code\": \"USD\"\n        }\n      }\n    }\n  ],\n  \"payment_preferences\": {\n    \"auto_bill_outstanding\": true,\n    \"setup_fee\": {\n      \"value\": \"200\",\n      \"currency_code\": \"USD\"\n    },\n    \"setup_fee_failure_action\": \"CONTINUE\",\n    \"payment_failure_threshold\": 3\n  },\n  \"taxes\": {\n    \"percentage\": \"10\",\n    \"inclusive\": false\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/v1/billing/plans",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"billing",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "platinum plan",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_id\": \"PROD-1VX65010A98464720\",\n  \"name\": \"Platinum Plan\",\n  \"description\": \"Platinum plan : 1M request per hour\",\n  \"billing_cycles\": [\n    {\n      \"frequency\": {\n        \"interval_unit\": \"MONTH\",\n        \"interval_count\": 1\n      },\n      \"tenure_type\": \"TRIAL\",\n      \"sequence\": 1,\n      \"total_cycles\": 1\n    },\n    {\n      \"frequency\": {\n        \"interval_unit\": \"MONTH\",\n        \"interval_count\": 1\n      },\n      \"tenure_type\": \"REGULAR\",\n      \"sequence\": 2,\n      \"total_cycles\": 12,\n      \"pricing_scheme\": {\n        \"fixed_price\": {\n          \"value\": \"400\",\n          \"currency_code\": \"USD\"\n        }\n      }\n    }\n  ],\n  \"payment_preferences\": {\n    \"auto_bill_outstanding\": true,\n    \"setup_fee\": {\n      \"value\": \"400\",\n      \"currency_code\": \"USD\"\n    },\n    \"setup_fee_failure_action\": \"CONTINUE\",\n    \"payment_failure_threshold\": 3\n  },\n  \"taxes\": {\n    \"percentage\": \"10\",\n    \"inclusive\": false\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/v1/billing/plans",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"billing",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "billing plans",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/v1/billing/plans",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"billing",
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deactivate plan (no delete)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/v1/billing/plans/P-3HX087460C8542628MDSJPTQ/deactivate",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"billing",
+								"plans",
+								"P-3HX087460C8542628MDSJPTQ",
+								"deactivate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "billing plan details",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/v1/billing/plans/P-73C6336904829235XMDSMVMY",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"billing",
+								"plans",
+								"P-73C6336904829235XMDSMVMY"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "4. Subscriptions",
+			"item": [
+				{
+					"name": "4.1 PayPal Subscriber Flow",
+					"item": [
+						{
+							"name": "silver plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"plan_id\": \"P-60H059348F2513450MDS7OZI\",\n  \"start_time\": \"2022-07-07T06:00:00Z\",\n  \"subscriber\": {\n    \"name\": {\n      \"given_name\": \"John\",\n      \"surname\": \"Doe\"\n    },\n    \"email_address\": \"customer@example.com\"\n  },\n  \"application_context\": {\n    \"brand_name\": \"example\",\n    \"locale\": \"en-US\",\n    \"shipping_preference\": \"SET_PROVIDED_ADDRESS\",\n    \"user_action\": \"SUBSCRIBE_NOW\",\n    \"payment_method\": {\n      \"payer_selected\": \"PAYPAL\",\n      \"payee_preferred\": \"IMMEDIATE_PAYMENT_REQUIRED\"\n    },\n    \"return_url\": \"https://example.com/returnUrl\",\n    \"cancel_url\": \"https://example.com/cancelUrl\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "silver plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-BDL8FCXFJJT3",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-BDL8FCXFJJT3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "silver plan (transactions)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-BDL8FCXFJJT3?transactions?start_time=2018-01-21T07:50:20.940Z",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-BDL8FCXFJJT3"
+									],
+									"query": [
+										{
+											"key": "transactions?start_time",
+											"value": "2018-01-21T07:50:20.940Z"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gold plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"plan_id\": \"P-1HK58362049113941MDS7QCA\",\n  \"start_time\": \"2022-07-07T06:00:00Z\",\n  \"subscriber\": {\n    \"name\": {\n      \"given_name\": \"John\",\n      \"surname\": \"Doe\"\n    },\n    \"email_address\": \"customer@example.com\"\n  },\n  \"application_context\": {\n    \"brand_name\": \"example\",\n    \"locale\": \"en-US\",\n    \"shipping_preference\": \"SET_PROVIDED_ADDRESS\",\n    \"user_action\": \"SUBSCRIBE_NOW\",\n    \"payment_method\": {\n      \"payer_selected\": \"PAYPAL\",\n      \"payee_preferred\": \"IMMEDIATE_PAYMENT_REQUIRED\"\n    },\n    \"return_url\": \"https://example.com/returnUrl\",\n    \"cancel_url\": \"https://example.com/cancelUrl\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gold plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-KJX8NM2A8V1K",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-KJX8NM2A8V1K"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "platinum plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"plan_id\": \"P-1B930816YA141833FMDS7PZY\",\n  \"start_time\": \"2022-07-07T06:00:00Z\",\n  \"subscriber\": {\n    \"name\": {\n      \"given_name\": \"John\",\n      \"surname\": \"Doe\"\n    },\n    \"email_address\": \"customer@example.com\"\n  },\n  \"application_context\": {\n    \"brand_name\": \"example\",\n    \"locale\": \"en-US\",\n    \"shipping_preference\": \"SET_PROVIDED_ADDRESS\",\n    \"user_action\": \"SUBSCRIBE_NOW\",\n    \"payment_method\": {\n      \"payer_selected\": \"PAYPAL\",\n      \"payee_preferred\": \"IMMEDIATE_PAYMENT_REQUIRED\"\n    },\n    \"return_url\": \"https://example.com/returnUrl\",\n    \"cancel_url\": \"https://example.com/cancelUrl\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "platinum plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-7DCTJ224ABP4",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-7DCTJ224ABP4"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "4.2 Direct Card Flow (Card Not Enabled)",
+					"item": [
+						{
+							"name": "silver plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"plan_id\": \"P-60H059348F2513450MDS7OZI\",\n  \"start_time\": \"2022-07-07T06:00:00Z\",\n  \"shipping_amount\": {\n    \"currency_code\": \"USD\",\n    \"value\": \"10.00\"\n  },\n  \"subscriber\": {\n    \"name\": {\n      \"given_name\": \"John\",\n      \"surname\": \"Doe\"\n    },\n    \"email_address\": \"customer@example.com\",\n    \"shipping_address\": {\n      \"name\": {\n        \"full_name\": \"John Doe\"\n      },\n      \"address\": {\n        \"address_line_1\": \"2211 N First Street\",\n        \"address_line_2\": \"Building 17\",\n        \"admin_area_2\": \"San Jose\",\n        \"admin_area_1\": \"CA\",\n        \"postal_code\": \"95131\",\n        \"country_code\": \"US\"\n      }\n    },\n    \"payment_source\": {\n      \"card\": {\n        \"number\": \"4032038783531985\",\n        \"expiry\": \"2026-06\",\n        \"security_code\": \"741\",\n        \"name\": \"John Doe\",\n        \"billing_address\": {\n          \"address_line_1\": \"2211 N First Street\",\n          \"address_line_2\": \"17.3.160\",\n          \"admin_area_1\": \"CA\",\n          \"admin_area_2\": \"San Jose\",\n          \"postal_code\": \"95131\",\n          \"country_code\": \"US\"\n        }\n      }\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gold plan",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"plan_id\": \"P-1HK58362049113941MDS7QCA\",\n  \"start_time\": \"2022-07-07T06:00:00Z\",\n  \"shipping_amount\": {\n    \"currency_code\": \"USD\",\n    \"value\": \"10.00\"\n  },\n  \"subscriber\": {\n    \"name\": {\n      \"given_name\": \"John\",\n      \"surname\": \"Doe\"\n    },\n    \"email_address\": \"customer@example.com\",\n    \"shipping_address\": {\n      \"name\": {\n        \"full_name\": \"John Doe\"\n      },\n      \"address\": {\n        \"address_line_1\": \"2211 N First Street\",\n        \"address_line_2\": \"Building 17\",\n        \"admin_area_2\": \"San Jose\",\n        \"admin_area_1\": \"CA\",\n        \"postal_code\": \"95131\",\n        \"country_code\": \"US\"\n      }\n    },\n    \"payment_source\": {\n      \"card\": {\n        \"number\": \"4032030646643834\",\n        \"expiry\": \"2025-10\",\n        \"security_code\": \"115\",\n        \"name\": \"Shawn Kim\",\n        \"billing_address\": {\n          \"address_line_1\": \"2211 N First Street\",\n          \"address_line_2\": \"17.3.160\",\n          \"admin_area_1\": \"CA\",\n          \"admin_area_2\": \"San Jose\",\n          \"postal_code\": \"95131\",\n          \"country_code\": \"US\"\n        }\n      }\n    }\n  }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "4.3 Up/Down grade (last payment doesn't work)",
+					"item": [
+						{
+							"name": "silver -> gold",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"plan_id\": \"P-1HK58362049113941MDS7QCA\",\n  \"start_time\": \"2022-07-07T06:00:00Z\",\n  \"subscriber\": {\n    \"name\": {\n      \"given_name\": \"John\",\n      \"surname\": \"Doe\"\n    },\n    \"email_address\": \"customer@example.com\"\n  },\n  \"application_context\": {\n    \"brand_name\": \"example\",\n    \"locale\": \"en-US\",\n    \"shipping_preference\": \"SET_PROVIDED_ADDRESS\",\n    \"user_action\": \"SUBSCRIBE_NOW\",\n    \"payment_method\": {\n      \"payer_selected\": \"PAYPAL\",\n      \"payee_preferred\": \"IMMEDIATE_PAYMENT_REQUIRED\"\n    },\n    \"return_url\": \"https://example.com/returnUrl\",\n    \"cancel_url\": \"https://example.com/cancelUrl\"\n  }\n}"
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-BDL8FCXFJJT3/revise",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-BDL8FCXFJJT3",
+										"revise"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gold plan (activate)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-47XHSED1WE2W/activate",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-47XHSED1WE2W",
+										"activate"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gold plan (suspend)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-47XHSED1WE2W/suspend",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-47XHSED1WE2W",
+										"suspend"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gold plan (cancel)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-47XHSED1WE2W/cancel",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-47XHSED1WE2W",
+										"cancel"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "gold plan (transactions)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var data = pm.response.json();",
+											"",
+											"// Test 1 - Check status",
+											"pm.test(\"Status code is 403\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});",
+											"",
+											"// Test 2 - Error name validation",
+											"pm.test(\"Error name is FORBIDDEN\", function () {",
+											"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+											"});",
+											"",
+											"// Test 2 - Error message validation",
+											"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+											"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+											"",
+											"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{access_token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{access_token}}"
+									},
+									{
+										"key": "Prefer",
+										"value": "return=representation",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{host}}/v1/billing/subscriptions/I-BDL8FCXFJJT3?transactions?start_time=2018-01-21T07:50:20.940Z",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"v1",
+										"billing",
+										"subscriptions",
+										"I-BDL8FCXFJJT3"
+									],
+									"query": [
+										{
+											"key": "transactions?start_time",
+											"value": "2018-01-21T07:50:20.940Z"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "5. Transactions",
+			"item": [
+				{
+					"name": "balances",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/v1/reporting/balances?currency_code=USD",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"reporting",
+								"balances"
+							],
+							"query": [
+								{
+									"key": "currency_code",
+									"value": "USD"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "6. Invoices",
+			"item": [
+				{
+					"name": "generate invoice number",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"invoice_number\": \"ee0044\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/v2/invoicing/generate-next-invoice-number",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v2",
+								"invoicing",
+								"generate-next-invoice-number"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create draft invoice (user-not-found)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();",
+									"",
+									"// Test 1 - Check status",
+									"pm.test(\"Status code is 403\", function () {",
+									"    pm.response.to.have.status(403);",
+									"});",
+									"",
+									"// Test 2 - Error name validation",
+									"pm.test(\"Error name is FORBIDDEN\", function () {",
+									"    pm.expect(data.name).to.eql(\"FORBIDDEN\");",
+									"});",
+									"",
+									"// Test 2 - Error message validation",
+									"pm.test(\"Error message is 'No permission for the requested operation' \", function () {",
+									"    pm.expect(data.message).to.eql(\"No permission for the requested operation\");",
+									"",
+									"    //pm.expect(data.details[0].issue).to.eql(\"MISSING_MESSAGE_CONTENT\");",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"detail\": {\n    \"invoice_number\": \"#0001\",\n    \"reference\": \"deal-ref\",\n    \"invoice_date\": \"2022-07-01\",\n    \"currency_code\": \"USD\",\n    \"note\": \"Thank you for your business.\",\n    \"term\": \"No refunds after 30 days.\",\n    \"memo\": \"This is a long contract\",\n    \"payment_term\": {\n      \"term_type\": \"NET_30\",\n      \"due_date\": \"2022-07-31\"\n    }\n  },\n  \"invoicer\": {\n    \"name\": {\n      \"given_name\": \"Shawn\",\n      \"surname\": \"Kim\"\n    },\n    \"address\": {\n      \"address_line_1\": \"1234 First Street\",\n      \"address_line_2\": \"337673 Hillside Court\",\n      \"admin_area_2\": \"Anytown\",\n      \"admin_area_1\": \"CA\",\n      \"postal_code\": \"98765\",\n      \"country_code\": \"US\"\n    },\n    \"email_address\": \"shawnhan.kim@gmail.com\",\n    \"phones\": [\n      {\n        \"country_code\": \"001\",\n        \"national_number\": \"4085551234\",\n        \"phone_type\": \"MOBILE\"\n      }\n    ],\n    \"website\": \"www.test.com\",\n    \"tax_id\": \"ABcNkWSfb5ICTt73nD3QON1fnnpgNKBy- Jb5SeuGj185MNNw6g\",\n    \"logo_url\": \"https://example.com/logo.PNG\",\n    \"additional_notes\": \"2-4\"\n  },\n  \"primary_recipients\": [\n    {\n      \"billing_info\": {\n        \"name\": {\n          \"given_name\": \"Stephanie\",\n          \"surname\": \"Meyers\"\n        },\n        \"address\": {\n          \"address_line_1\": \"1234 Main Street\",\n          \"admin_area_2\": \"Anytown\",\n          \"admin_area_1\": \"CA\",\n          \"postal_code\": \"98765\",\n          \"country_code\": \"US\"\n        },\n        \"email_address\": \"shawnhan.kim@gmail.com\",\n        \"phones\": [\n          {\n            \"country_code\": \"001\",\n            \"national_number\": \"4884551234\",\n            \"phone_type\": \"HOME\"\n          }\n        ],\n        \"additional_info_value\": \"add-info\"\n      },\n      \"shipping_info\": {\n        \"name\": {\n          \"given_name\": \"Stephanie\",\n          \"surname\": \"Meyers\"\n        },\n        \"address\": {\n          \"address_line_1\": \"1234 Main Street\",\n          \"admin_area_2\": \"Anytown\",\n          \"admin_area_1\": \"CA\",\n          \"postal_code\": \"98765\",\n          \"country_code\": \"US\"\n        }\n      }\n    }\n  ],\n  \"items\": [\n    {\n      \"name\": \"Pet Store API\",\n      \"description\": \"Pet Store API subscription with silver plan.\",\n      \"quantity\": \"1\",\n      \"unit_amount\": {\n        \"currency_code\": \"USD\",\n        \"value\": \"110.00\"\n      },\n      \"tax\": {\n        \"name\": \"Sales Tax\",\n        \"percent\": \"7.25\"\n      },\n      \"discount\": {\n        \"percent\": \"5\"\n      },\n      \"unit_of_measure\": \"QUANTITY\"\n    }\n  ],\n  \"configuration\": {\n    \"partial_payment\": {\n      \"allow_partial_payment\": true,\n      \"minimum_amount_due\": {\n        \"currency_code\": \"USD\",\n        \"value\": \"20.00\"\n      }\n    },\n    \"allow_tip\": true,\n    \"tax_calculated_after_discount\": true,\n    \"tax_inclusive\": false,\n    \"template_id\": \"TEMP-19V05281TU309413B\"\n  },\n  \"amount\": {\n    \"breakdown\": {\n      \"custom\": {\n        \"label\": \"Packing Charges\",\n        \"amount\": {\n          \"currency_code\": \"USD\",\n          \"value\": \"10.00\"\n        }\n      },\n      \"shipping\": {\n        \"amount\": {\n          \"currency_code\": \"USD\",\n          \"value\": \"110.00\"\n        },\n        \"tax\": {\n          \"name\": \"Sales Tax\",\n          \"percent\": \"7.25\"\n        }\n      },\n      \"discount\": {\n        \"invoice_discount\": {\n          \"percent\": \"5\"\n        }\n      }\n    }\n  }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/v2/invoicing/invoices",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v2",
+								"invoicing",
+								"invoices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list invoices",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"postman.setGlobalVariable(\"host\",\"https://apiplatformproxyserv18012451.qa.paypal.com:12326\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Prefer",
+								"value": "return=representation",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{host}}/v2/invoicing/invoices?total_required=true",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v2",
+								"invoicing",
+								"invoices"
+							],
+							"query": [
+								{
+									"key": "total_required",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
