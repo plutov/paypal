@@ -14,14 +14,14 @@ func (c *Client) CreateBillingAgreementToken(
 	startDate string,
 	payer *Payer,
 	plan *BillingPlan,
-	) (*BillingAgreementToken, error) {
+) (*BillingAgreementToken, error) {
 
 	type createBARequest struct {
-		Name	string	`json:"name"`
-		Description	string	`json:"description"`
-		StartDate	string	`json:"start_date"`
-		Payer	*Payer	`json:"payer"`
-		Plan	*BillingPlan	`json:"plan"`
+		Name        string       `json:"name"`
+		Description string       `json:"description"`
+		StartDate   string       `json:"start_date"`
+		Payer       *Payer       `json:"payer"`
+		Plan        *BillingPlan `json:"plan"`
 	}
 
 	billingAgreementToken := &BillingAgreementToken{}
