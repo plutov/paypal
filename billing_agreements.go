@@ -32,7 +32,7 @@ func (c *Client) CreateBillingAgreementToken(
 		fmt.Sprintf("%s%s", c.APIBase, "/v1/billing-agreements/agreement-tokens"),
 		createBARequest{Name: name, Description: description, StartDate: startDate, Payer: payer, Plan: plan})
 	if err != nil {
-		return billingAgreementToken, err
+		return nil, err
 	}
 
 	if err = c.SendWithAuth(req, billingAgreementToken); err != nil {
