@@ -15,7 +15,6 @@ func (c *Client) CreateBillingAgreementToken(
 	payer *Payer,
 	plan *BillingPlan,
 ) (*BillingAgreementToken, error) {
-
 	type createBARequest struct {
 		Name        string       `json:"name"`
 		Description string       `json:"description"`
