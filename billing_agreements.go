@@ -40,3 +40,31 @@ func (c *Client) CreateBillingAgreementToken(
 
 	return billingAgreementToken, nil
 }
+
+// CreateBillingAgreementFromToken - Use this call to create a billing agreement
+// Endpoint: POST /v1/billing-agreements/agreements
+func (c *Client) CreateBillingAgreementFromToken(
+	ctx context.Context,
+	tokenID string,
+) (*BillingAgreement, error) {
+	type createBARequest struct {
+		TokenID string `json:"token_id"`
+	}
+
+	billingAgreement := &BillingAgreement{}
+
+	req, err := c.NewRequest(
+		ctx,
+		"POST",
+		fmt.Sprintf("%s%s", c.APIBase, "/v1/billing-agreements/agreements"),
+		createBARequest{TokenID: tokenID})
+	if err != nil {
+		return nil, err
+	}
+
+	if err = c.SendWithAuth(req, billingAgreement); err != nil {
+		return billingAgreement, err
+	}
+
+	return billingAgreement, nil
+}
