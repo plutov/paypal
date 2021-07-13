@@ -397,6 +397,11 @@ func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request
 			ts.create(w, r)
 		}
 	}
+	if r.RequestURI == "/v1/billing-agreements/agreements" {
+		if r.Method == "POST" {
+			ts.createWithoutName(w, r)
+		}
+	}
 }
 
 func (ts *webprofileTestServer) create(w http.ResponseWriter, r *http.Request) {
@@ -430,6 +435,34 @@ func (ts *webprofileTestServer) create(w http.ResponseWriter, r *http.Request) {
 		}
 		w.WriteHeader(http.StatusCreated)
 	}
+
+	res, _ := json.Marshal(raw)
+	w.Write(res)
+}
+
+func (ts *webprofileTestServer) createWithoutName(w http.ResponseWriter, r *http.Request) {
+	var data map[string]interface{}
+
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	err = json.Unmarshal(body, &data)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+	var raw map[string]string
+
+	w.Header().Set("Content-Type", "application/json")
+
+	raw = map[string]string{
+		"id": "B-12345678901234567",
+	}
+	w.WriteHeader(http.StatusCreated)
 
 	res, _ := json.Marshal(raw)
 	w.Write(res)
@@ -769,4 +802,18 @@ func TestCreateBillingAgreementToken(t *testing.T) {
 		t.Fatal(err)
 	}
 
+}
+
+func TestCreateBillingAgreementFromToken(t *testing.T) {
+
+	ts := httptest.NewServer(&webprofileTestServer{t: t})
+	defer ts.Close()
+
+	c, _ := NewClient("foo", "bar", ts.URL)
+
+	_, err := c.CreateBillingAgreementFromToken(context.Background(),"BillingAgreementToken")
+
+	if err != nil {
+		t.Fatal(err)
+	}
 }
