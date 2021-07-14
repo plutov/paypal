@@ -1150,6 +1150,7 @@ type (
 		PartnerClientID           string                     `json:"partner_client_id,omitempty"`
 		MerchantID                string                     `json:"merchant_id,omitempty"`
 		Intent                    string                     `json:"intent,omitempty"`
+		BillingAgreementID        *string                    `json:"billing_agreement_id,omitempty"`
 		PurchaseUnits             []*PurchaseUnitRequest     `json:"purchase_units,omitempty"`
 		Payer                     *PayerWithNameAndPhone     `json:"payer,omitempty"`
 		Links                     []Link                     `json:"links,omitempty"`
