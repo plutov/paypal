@@ -394,7 +394,7 @@ func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request
 	}
 	if r.RequestURI == "/v1/billing-agreements/agreement-tokens" {
 		if r.Method == "POST" {
-			ts.create(w, r)
+			ts.createWithoutName(w, r)
 		}
 	}
 	if r.RequestURI == "/v1/billing-agreements/agreements" {
