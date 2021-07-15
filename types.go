@@ -326,6 +326,7 @@ type (
 		Payer                       Payer                `json:"payer,omitempty"`
 		ShippingAddress             *ShippingAddress     `json:"shipping_address,omitempty"`
 		OverrideMerchantPreferences *MerchantPreferences `json:"override_merchant_preferences,omitempty"`
+		Links                       []Link               `json:"links,omitempty"`
 	}
 
 	// BillingAgreementToken response struct

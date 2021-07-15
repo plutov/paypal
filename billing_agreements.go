@@ -9,16 +9,14 @@ import (
 // Endpoint: POST /v1/billing-agreements/agreement-tokens
 func (c *Client) CreateBillingAgreementToken(
 	ctx context.Context,
-	name string,
 	description string,
-	startDate string,
+	shippingAddress *ShippingAddress,
 	payer *Payer,
 	plan *BillingPlan,
 ) (*BillingAgreementToken, error) {
 	type createBARequest struct {
-		Name        string       `json:"name"`
-		Description string       `json:"description"`
-		StartDate   string       `json:"start_date"`
+		Description string       `json:"description,omitempty"`
+		ShippingAddress   *ShippingAddress       `json:"shipping_address,omitempty"`
 		Payer       *Payer       `json:"payer"`
 		Plan        *BillingPlan `json:"plan"`
 	}
@@ -29,7 +27,7 @@ func (c *Client) CreateBillingAgreementToken(
 		ctx,
 		"POST",
 		fmt.Sprintf("%s%s", c.APIBase, "/v1/billing-agreements/agreement-tokens"),
-		createBARequest{Name: name, Description: description, StartDate: startDate, Payer: payer, Plan: plan})
+		createBARequest{Description: description, ShippingAddress: shippingAddress, Payer: payer, Plan: plan})
 	if err != nil {
 		return nil, err
 	}

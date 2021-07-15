@@ -792,9 +792,8 @@ func TestCreateBillingAgreementToken(t *testing.T) {
 
 	_, err := c.CreateBillingAgreementToken(
 		context.Background(),
-		"name A",
 		"description A",
-		"start date A",
+		&ShippingAddress{RecipientName: "Recipient", City: "San Francisco"},
 		&Payer{PaymentMethod: "paypal"},
 		&BillingPlan{ID: "id B", Name: "name B", Description: "description B", Type: "type B"})
 
