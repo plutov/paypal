@@ -402,6 +402,11 @@ func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request
 			ts.createWithoutName(w, r)
 		}
 	}
+	if r.RequestURI == "/v1/billing-agreements/agreements" {
+		if r.Method == "POST" {
+			ts.createWithoutName(w, r)
+		}
+	}
 }
 
 func (ts *webprofileTestServer) create(w http.ResponseWriter, r *http.Request) {

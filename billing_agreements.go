@@ -102,4 +102,3 @@ func (c *Client) CreateBillingAgreementTokenBAEndpoint(
 
 	return billingAgreementToken, nil
 }
-
