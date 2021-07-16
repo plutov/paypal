@@ -392,6 +392,11 @@ func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request
 			ts.deleteinvalid(w, r)
 		}
 	}
+	if r.RequestURI == "/v1/payments/billing-agreements" {
+		if r.Method == "POST" {
+			ts.createWithoutName(w, r)
+		}
+	}
 	if r.RequestURI == "/v1/billing-agreements/agreement-tokens" {
 		if r.Method == "POST" {
 			ts.createWithoutName(w, r)

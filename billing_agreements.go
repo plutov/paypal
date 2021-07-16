@@ -56,7 +56,7 @@ func (c *Client) CreateBillingAgreementFromToken(
 	req, err := c.NewRequest(
 		ctx,
 		"POST",
-		fmt.Sprintf("%s%s", c.APIBase, "/v1/billing-agreements/agreements"),
+		fmt.Sprintf("%s%s", c.APIBase, "/v1/payments/billing-agreements"),
 		createBARequest{TokenID: tokenID})
 	if err != nil {
 		return nil, err
