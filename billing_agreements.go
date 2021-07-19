@@ -7,6 +7,7 @@ import (
 
 // CreateBillingAgreementToken - Use this call to create a billing agreement token
 // Endpoint: POST /v1/payments/billing-agreements
+// This endpoint is deprecated
 func (c *Client) CreateBillingAgreementToken(
 	ctx context.Context,
 	name string,
