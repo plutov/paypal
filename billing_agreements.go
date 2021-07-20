@@ -9,13 +9,13 @@ import (
 // Endpoint: POST /v1/billing-agreements/agreement-tokens
 func (c *Client) CreatePaypalBillingAgreementToken(
 	ctx context.Context,
-	description string,
+	description *string,
 	shippingAddress *ShippingAddress,
 	payer *Payer,
 	plan *BillingPlan,
 ) (*BillingAgreementToken, error) {
 	type createBARequest struct {
-		Description     string           `json:"description,omitempty"`
+		Description     *string          `json:"description,omitempty"`
 		ShippingAddress *ShippingAddress `json:"shipping_address,omitempty"`
 		Payer           *Payer           `json:"payer"`
 		Plan            *BillingPlan     `json:"plan"`
@@ -44,12 +44,12 @@ func (c *Client) CreatePaypalBillingAgreementToken(
 func (c *Client) CreatePaypalBillingAgreementFromToken(
 	ctx context.Context,
 	tokenID string,
-) (*BillingAgreement, error) {
+) (*BillingAgreementFromToken, error) {
 	type createBARequest struct {
 		TokenID string `json:"token_id"`
 	}
 
-	billingAgreement := &BillingAgreement{}
+	billingAgreement := &BillingAgreementFromToken{}
 
 	req, err := c.NewRequest(
 		ctx,
