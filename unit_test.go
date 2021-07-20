@@ -392,16 +392,6 @@ func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request
 			ts.deleteinvalid(w, r)
 		}
 	}
-	if r.RequestURI == "/v1/billing-agreements/agreement-tokens" {
-		if r.Method == "POST" {
-			ts.create(w, r)
-		}
-	}
-	if r.RequestURI == "/v1/billing-agreements/agreements" {
-		if r.Method == "POST" {
-			ts.createWithoutName(w, r)
-		}
-	}
 }
 
 func (ts *webprofileTestServer) create(w http.ResponseWriter, r *http.Request) {
@@ -781,39 +771,4 @@ func TestDeleteWebProfile_invalid(t *testing.T) {
 		t.Fatal(err)
 	}
 
-}
-
-func TestCreateBillingAgreementToken(t *testing.T) {
-
-	ts := httptest.NewServer(&webprofileTestServer{t: t})
-	defer ts.Close()
-
-	c, _ := NewClient("foo", "bar", ts.URL)
-
-	_, err := c.CreateBillingAgreementToken(
-		context.Background(),
-		"name A",
-		"description A",
-		"start date A",
-		&Payer{PaymentMethod: "paypal"},
-		&BillingPlan{ID: "id B", Name: "name B", Description: "description B", Type: "type B"})
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-}
-
-func TestCreateBillingAgreementFromToken(t *testing.T) {
-
-	ts := httptest.NewServer(&webprofileTestServer{t: t})
-	defer ts.Close()
-
-	c, _ := NewClient("foo", "bar", ts.URL)
-
-	_, err := c.CreateBillingAgreementFromToken(context.Background(),"BillingAgreementToken")
-
-	if err != nil {
-		t.Fatal(err)
-	}
 }

@@ -328,36 +328,6 @@ type (
 		OverrideMerchantPreferences *MerchantPreferences `json:"override_merchant_preferences,omitempty"`
 	}
 
-	// BillingAgreementToken response struct
-	BillingAgreementToken struct {
-		ID                          string               `json:"id,omitempty"`
-		Name                        string               `json:"name,omitempty"`
-		Description                 string               `json:"description,omitempty"`
-		StartDate                   string               `json:"start_date,omitempty"`
-		AgreementDetails            *AgreementDetails    `json:"agreement_details,omitempty"`
-		Payer                       *Payer               `json:"payer,omitempty"`
-		ShippingAddress             *ShippingAddress     `json:"shipping_address,omitempty"`
-		OverrideMerchantPreferences *MerchantPreferences `json:"override_merchant_preferences,omitempty"`
-		OverrideChargeModels        *OverrideChargeModel `json:"override_charge_models,omitempty"`
-		Plan                        *Plan                `json:"plan,omitempty"`
-	}
-
-	//OverrideChargeModel struct
-	OverrideChargeModel struct {
-		ChargeID string  `json:"charge_id"`
-		Amount   *Amount `json:"amount"`
-	}
-
-	// Plan struct
-	Plan struct {
-		ID                 string              `json:"id"`
-		Name               string              `json:"name"`
-		Description        string              `json:"description"`
-		CreateTime         string              `json:"create_time,omitempty"`
-		UpdateTime         string              `json:"update_time,omitempty"`
-		PaymentDefinitions []PaymentDefinition `json:"payment_definitions,omitempty"`
-	}
-
 	// BillingInfo struct
 	BillingInfo struct {
 		OutstandingBalance  AmountPayout      `json:"outstanding_balance,omitempty"`
