@@ -328,6 +328,31 @@ type (
 		OverrideMerchantPreferences *MerchantPreferences `json:"override_merchant_preferences,omitempty"`
 	}
 
+	// BillingAgreementFromToken struct
+	BillingAgreementFromToken struct {
+		ID          string      `json:"id,omitempty"`
+		Description string      `json:"description,omitempty"`
+		Payer       *Payer      `json:"payer,omitempty"`
+		Plan        BillingPlan `json:"plan,omitempty"`
+		Links       []Link      `json:"links,omitempty"`
+	}
+
+	// BillingAgreementToken response struct
+	BillingAgreementToken struct {
+		Links   []Link `json:"links,omitempty"`
+		TokenID string `json:"token_id,omitempty"`
+	}
+
+	// Plan struct
+	Plan struct {
+		ID                 string              `json:"id"`
+		Name               string              `json:"name"`
+		Description        string              `json:"description"`
+		CreateTime         string              `json:"create_time,omitempty"`
+		UpdateTime         string              `json:"update_time,omitempty"`
+		PaymentDefinitions []PaymentDefinition `json:"payment_definitions,omitempty"`
+	}
+
 	// BillingInfo struct
 	BillingInfo struct {
 		OutstandingBalance  AmountPayout      `json:"outstanding_balance,omitempty"`
