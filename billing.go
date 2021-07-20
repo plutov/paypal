@@ -20,7 +20,9 @@ type (
 		Links               []Link              `json:"links,omitempty"`
 	}
 
-	// CreateBillingResp deprecated, use CreateBillingResponse instead.
+	// CreateBillingResp.
+	//
+	// Deprecated: use CreateBillingResponse instead.
 	CreateBillingResp = CreateBillingResponse
 
 	// CreateAgreementResponse struct
@@ -32,22 +34,26 @@ type (
 		StartTime   time.Time   `json:"start_time,omitempty"`
 	}
 
-	// CreateAgreementResp is deprecated, use CreateAgreementResponse instead.
+	// CreateAgreementResp.
+	//
+	// Deprecated: use CreateAgreementResponse instead.
 	CreateAgreementResp =  CreateAgreementResponse
 
-	// BillingPlanListParams struct
+	// BillingPlanListParams
 	BillingPlanListParams struct {
 		ListParams
 		Status string `json:"status,omitempty"` //Allowed values: CREATED, ACTIVE, INACTIVE, ALL.
 	}
 
-	//BillingPlanListResponse struct
+	// BillingPlanListResponse
 	BillingPlanListResponse struct {
 		SharedListResponse
 		Plans []BillingPlan `json:"plans,omitempty"`
 	}
 
-	// BillingPlanListResp is deprecated, use BillingPlanListResponse instead.
+	// BillingPlanListResp.
+	//
+	// Deprecated: use BillingPlanListResponse instead.
 	BillingPlanListResp = BillingPlanListResponse
 )
 

@@ -1132,8 +1132,16 @@ type (
 		Value     interface{} `json:"value"`
 	}
 
+	// Resource is a mix of fields from several webhook resource types.
+	//
+	// Deprecated: Add implementation of specific resource types in your own
+	// code and don't use this catch all struct, you show know which resource
+	// type you are expecting and handle that type only.
+	//
+	// Every resource struct type should be unique for every combination of
+	// "resource_type"/"resource_version" combination of the Event type /
+	// webhook message.
 	Resource struct {
-		// Payment Resource type
 		ID                        string                     `json:"id,omitempty"`
 		Status                    string                     `json:"status,omitempty"`
 		StatusDetails             *CaptureStatusDetails      `json:"status_details,omitempty"`
