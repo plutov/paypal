@@ -94,6 +94,7 @@ func (c *Client) ActivatePlan(ctx context.Context, planID string) error {
 
 // CreateBillingAgreement creates an agreement for specified plan
 // Endpoint: POST /v1/payments/billing-agreements
+// Deprecated: Use POST /v1/billing-agreements/agreements
 func (c *Client) CreateBillingAgreement(ctx context.Context, a BillingAgreement) (*CreateAgreementResponse, error) {
 	// PayPal needs only ID, so we will remove all fields except Plan ID
 	a.Plan = BillingPlan{
