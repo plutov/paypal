@@ -29,7 +29,7 @@ type (
 	CreateAgreementResponse struct {
 		Name        string      `json:"name,omitempty"`
 		Description string      `json:"description,omitempty"`
-	 	Plan        BillingPlan `json:"plan,omitempty"`
+		Plan        BillingPlan `json:"plan,omitempty"`
 		Links       []Link      `json:"links,omitempty"`
 		StartTime   time.Time   `json:"start_time,omitempty"`
 	}
@@ -37,7 +37,7 @@ type (
 	// CreateAgreementResp.
 	//
 	// Deprecated: use CreateAgreementResponse instead.
-	CreateAgreementResp =  CreateAgreementResponse
+	CreateAgreementResp = CreateAgreementResponse
 
 	// BillingPlanListParams
 	BillingPlanListParams struct {
@@ -100,6 +100,7 @@ func (c *Client) ActivatePlan(ctx context.Context, planID string) error {
 
 // CreateBillingAgreement creates an agreement for specified plan
 // Endpoint: POST /v1/payments/billing-agreements
+// Deprecated: Use POST /v1/billing-agreements/agreements
 func (c *Client) CreateBillingAgreement(ctx context.Context, a BillingAgreement) (*CreateAgreementResponse, error) {
 	// PayPal needs only ID, so we will remove all fields except Plan ID
 	a.Plan = BillingPlan{
