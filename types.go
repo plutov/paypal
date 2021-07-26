@@ -882,6 +882,7 @@ type (
 		ID     string              `json:"id,omitempty"`
 		Amount *PurchaseUnitAmount `json:"amount,omitempty"`
 		Status string              `json:"status,omitempty"`
+		Links  []Link              `json:"links,omitempty"`
 	}
 
 	// Related struct
