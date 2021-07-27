@@ -1184,6 +1184,10 @@ type (
 		LegalConsents         []Consent              `json:"legal_consents,omitempty"`
 	}
 
+	ReferralResponse struct {
+		Links []Link `json:"links,omitempty"`
+	}
+
 	PartnerConfigOverride struct {
 		PartnerLogoURL       string `json:"partner_logo_url,omitempty"`
 		ReturnURL            string `json:"return_url,omitempty"`
