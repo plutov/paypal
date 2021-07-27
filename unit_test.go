@@ -261,6 +261,98 @@ func TestOrderUnmarshal(t *testing.T) {
 	}
 }
 
+func TestOrderCompletedUnmarshal(t *testing.T) {
+	response := `{
+		"id": "1K412082HD5737736",
+		"status": "COMPLETED",
+		"purchase_units": [
+			{
+				"reference_id": "default",
+				"amount": {
+					"currency_code": "EUR",
+					"value": "99.99"
+				},
+				"payee": {
+					"email_address": "payee@business.example.com",
+					"merchant_id": "7DVPP5Q2RZJQY"
+				},
+				"custom_id": "123456",
+				"soft_descriptor": "PAYPAL *TEST STORE",
+				"shipping": {
+					"name": {
+						"full_name": "John Doe"
+					},
+					"address": {
+						"address_line_1": "Address, Country",
+						"admin_area_2": "Area2",
+						"admin_area_1": "Area1",
+						"postal_code": "123456",
+						"country_code": "US"
+					}
+				},
+				"payments": {
+					"captures": [
+						{
+							"id": "6V864560EH247264J",
+							"status": "COMPLETED",
+							"amount": {
+								"currency_code": "EUR",
+								"value": "99.99"
+							},
+							"final_capture": true,
+							"custom_id": "123456",
+							"create_time": "2021-07-27T09:39:17Z",
+							"update_time": "2021-07-27T09:39:17Z"
+						}
+					]
+				}
+			}
+		],
+		"payer": {
+			"name": {
+				"given_name": "John",
+				"surname": "Doe"
+			},
+			"email_address": "payer@personal.example.com",
+			"payer_id": "7D36CJQ2TUEUU",
+			"address": {
+				"address_line_1": "City, Country",
+				"admin_area_2": "Area2",
+				"admin_area_1": "Area1",
+				"postal_code": "123456",
+				"country_code": "US"
+			}
+		},
+		"create_time": "2021-07-27T09:38:37Z",
+		"update_time": "2021-07-27T09:39:17Z",
+		"links": [
+			{
+				"href": "https://api.sandbox.paypal.com/v2/checkout/orders/1K412082HD5737736",
+				"rel": "self",
+				"method": "GET"
+			}
+		]
+	}`
+
+	order := &Order{}
+	err := json.Unmarshal([]byte(response), order)
+	if err != nil {
+		t.Errorf("Order Unmarshal failed")
+	}
+
+	if order.ID != "1K412082HD5737736" ||
+		order.Status != "COMPLETED" ||
+		order.PurchaseUnits[0].Payee.EmailAddress != "payee@business.example.com" ||
+		order.PurchaseUnits[0].CustomID != "123456" ||
+		order.PurchaseUnits[0].Shipping.Name.FullName != "John Doe" ||
+		order.PurchaseUnits[0].Shipping.Address.AdminArea1 != "Area1" ||
+		order.Payer.Name.GivenName != "John" ||
+		order.Payer.Address.AddressLine1 != "City, Country" ||
+		order.Links[0].Href != "https://api.sandbox.paypal.com/v2/checkout/orders/1K412082HD5737736" {
+		t.Errorf("Order decoded result is incorrect, Given: %+v", order)
+	}
+}
+
 func TestTypePayoutItemResponse(t *testing.T) {
 	response := `{
 		"payout_item_id":"9T35G83YA546X",

@@ -582,8 +582,15 @@ type (
 	PurchaseUnit struct {
 		ReferenceID        string              `json:"reference_id"`
 		Amount             *PurchaseUnitAmount `json:"amount,omitempty"`
+		Payee              *PayeeForOrders     `json:"payee,omitempty"`
 		Payments           *CapturedPayments   `json:"payments,omitempty"`
 		PaymentInstruction *PaymentInstruction `json:"payment_instruction,omitempty"`
+		Description        string              `json:"description,omitempty"`
+		CustomID           string              `json:"custom_id,omitempty"`
+		InvoiceID          string              `json:"invoice_id,omitempty"`
+		ID                 string              `json:"id,omitempty"`
+		SoftDescriptor     string              `json:"soft_descriptor,omitempty"`
+		Shipping           *ShippingDetail     `json:"shipping,omitempty"`
 	}
 
 	// TaxInfo used for orders.
@@ -712,11 +719,13 @@ type (
 
 	// PayerWithNameAndPhone struct
 	PayerWithNameAndPhone struct {
-		Name         *CreateOrderPayerName `json:"name,omitempty"`
-		EmailAddress string                `json:"email_address,omitempty"`
-		Phone        *PhoneWithType        `json:"phone,omitempty"`
-		PayerID      string                `json:"payer_id,omitempty"`
-		Address      Address               `json:"address,omitempty"`
+		Name         *CreateOrderPayerName          `json:"name,omitempty"`
+		EmailAddress string                         `json:"email_address,omitempty"`
+		Phone        *PhoneWithType                 `json:"phone,omitempty"`
+		PayerID      string                         `json:"payer_id,omitempty"`
+		BirthDate    string                         `json:"birth_date,omitempty"`
+		TaxInfo      *TaxInfo                       `json:"tax_info,omitempty"`
+		Address      *ShippingDetailAddressPortable `json:"address,omitempty"`
 	}
 
 	// CaptureOrderResponse is the response for capture order
