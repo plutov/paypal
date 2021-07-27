@@ -767,8 +767,8 @@ type (
 
 	// PaymentSource structure
 	PaymentSource struct {
-		Card  *PaymentSourceCard  `json:"card,omitempty"`
-		Token *PaymentSourceToken `json:"token,omitempty"`
+		Card  *PaymentSourceCard  `json:"card"`
+		Token *PaymentSourceToken `json:"token"`
 	}
 
 	// PaymentSourceCard structure
