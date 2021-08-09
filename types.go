@@ -192,15 +192,33 @@ type (
 	}
 
 	// ApplicationContext struct
-	//Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-application_context
+	// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-application_context
 	ApplicationContext struct {
 		BrandName          string             `json:"brand_name,omitempty"`
 		Locale             string             `json:"locale,omitempty"`
 		ShippingPreference ShippingPreference `json:"shipping_preference,omitempty"`
 		UserAction         UserAction         `json:"user_action,omitempty"`
-		//LandingPage        string `json:"landing_page,omitempty"` // not found in documentation
-		ReturnURL string `json:"return_url,omitempty"`
-		CancelURL string `json:"cancel_url,omitempty"`
+		ReturnURL          string             `json:"return_url,omitempty"`
+		CancelURL          string             `json:"cancel_url,omitempty"`
+	}
+
+	// OrderApplicationContext struct
+	// Doc: https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context
+	OrderApplicationContext struct {
+		BrandName          string             `json:"brand_name,omitempty"`
+		Locale             string             `json:"locale,omitempty"`
+		LandingPage        LandingPage        `json:"landing_page,omitempty"`
+		ShippingPreference ShippingPreference `json:"shipping_preference,omitempty"`
+		UserAction         UserAction         `json:"user_action,omitempty"`
+		PaymentMethod      *PaymentMethod     `json:"payment_method"`
+		ReturnURL          string             `json:"return_url,omitempty"`
+		CancelURL          string             `json:"cancel_url,omitempty"`
+	}
+
+	PaymentMethod struct {
+		PayerSelected          string                 `json:"payer_selected"`
+		PayeePreferred         PayeePreferred         `json:"payee_preferred"`
+		StandardEntryClassCode StandardEntryClassCode `json:"standard_entry_class_code"`
 	}
 
 	// Authorization struct
@@ -277,7 +295,7 @@ type (
 		Links            []Link                `json:"links,omitempty"`
 	}
 
-	//https://developer.paypal.com/docs/api/payments/v2/#captures_get
+	// https://developer.paypal.com/docs/api/payments/v2/#captures_get
 	CaptureDetailsResponse struct {
 		Status                    string                     `json:"status,omitempty"`
 		StatusDetails             *CaptureStatusDetails      `json:"status_details,omitempty"`
@@ -929,7 +947,7 @@ type (
 		SenderBatchID string `json:"sender_batch_id,omitempty"`
 	}
 
-	//ShippingAmount struct
+	// ShippingAmount struct
 	ShippingAmount struct {
 		Money
 	}
@@ -958,7 +976,7 @@ type (
 	}
 
 	// Name struct
-	//Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-name
+	// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-name
 	Name struct {
 		FullName   string `json:"full_name,omitempty"`
 		Suffix     string `json:"suffix,omitempty"`
@@ -1006,7 +1024,7 @@ type (
 		Payee            *Payee          `json:"payee,omitempty"`
 	}
 
-	//Payee struct
+	// Payee struct
 	Payee struct {
 		Email string `json:"email"`
 	}
@@ -1327,9 +1345,9 @@ type (
 	}
 
 	ListParams struct {
-		Page          string `json:"page,omitempty"`           //Default: 0.
-		PageSize      string `json:"page_size,omitempty"`      //Default: 10.
-		TotalRequired string `json:"total_required,omitempty"` //Default: no.
+		Page          string `json:"page,omitempty"`           // Default: 0.
+		PageSize      string `json:"page_size,omitempty"`      // Default: 10.
+		TotalRequired string `json:"total_required,omitempty"` // Default: no.
 	}
 
 	SharedListResponse struct {

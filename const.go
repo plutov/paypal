@@ -37,6 +37,14 @@ const (
 	SetupFeeFailureActionCancel   SetupFeeFailureAction = "CANCEL"
 )
 
+type LandingPage string
+
+const (
+	LandingPageLogin        LandingPage = "LOGIN"
+	LandingPageBilling      LandingPage = "BILLING"
+	LandingPageNoPreference LandingPage = "NO_PREFERENCE"
+)
+
 type ShippingPreference string
 
 const (
@@ -52,6 +60,22 @@ const (
 	UserActionPayNow   UserAction = "PAY_NOW"
 )
 
+type PayeePreferred string
+
+const (
+	PayeePreferredUnrestricted             PayeePreferred = "UNRESTRICTED"
+	PayeePreferredImmediatePaymentRequired PayeePreferred = "IMMEDIATE_PAYMENT_REQUIRED"
+)
+
+type StandardEntryClassCode string
+
+const (
+	StandardEntryClassCodeTel StandardEntryClassCode = "TEL"
+	StandardEntryClassCodeWeb StandardEntryClassCode = "WEB"
+	StandardEntryClassCodeCCD StandardEntryClassCode = "CCD"
+	StandardEntryClassCodePPD StandardEntryClassCode = "PPD"
+)
+
 type SubscriptionStatus string
 
 const (
@@ -63,7 +87,7 @@ const (
 	SubscriptionStatusExpired         SubscriptionStatus = "EXPIRED"
 )
 
-//Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-transaction
+// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-transaction
 type SubscriptionTransactionStatus string
 
 const (
@@ -81,7 +105,7 @@ const (
 )
 
 type ProductType string
-type ProductCategory string //Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#definition-product_category
+type ProductCategory string // Doc: https://developer.paypal.com/docs/api/catalog-products/v1/#definition-product_category
 const (
 	ProductTypePhysical ProductType = "PHYSICAL"
 	ProductTypeDigital  ProductType = "DIGITAL"

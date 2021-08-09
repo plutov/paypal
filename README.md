@@ -172,7 +172,18 @@ order, err := c.GetOrder("O-4J082351X3132253H")
 ### Create an Order
 
 ```go
-order, err := c.CreateOrder(paypal.OrderIntentCapture, []paypal.PurchaseUnitRequest{paypal.PurchaseUnitRequest{ReferenceID: "ref-id", Amount: paypal.Amount{Total: "7.00", Currency: "USD"}}})
+purchaseUnit := paypal.PurchaseUnitRequest{ReferenceID: "ref-id", Amount: paypal.Amount{Total: "7.00", Currency: "USD"}}
+appContext := paypal.ApplicationContext{
+	ShippingPreference: paypal.ShippingPreferenceNoShipping,
+	UserAction:         paypal.UserActionPayNow,
+	LandingPage:        paypal.LandingPageLogin,
+	PaymentMethod: paypal.PaymentMethod{
+		PayeePreferred:         paypal.PayeePreferredImmediatePaymentRequired,
+		StandardEntryClassCode: paypal.StandardEntryClassCodeWeb,
+	},
+	ReturnURL: "https://example.com/return-url",
+}
+order, err := c.CreateOrder(ctx, paypal.OrderIntentCapture, []paypal.PurchaseUnitRequest{purchaseUnit}, nil, &appContext)
 ```
 
 ### Update Order by ID

@@ -24,7 +24,7 @@ func (c *Client) GetOrder(ctx context.Context, orderID string) (*Order, error) {
 
 // CreateOrder - Use this call to create an order
 // Endpoint: POST /v2/checkout/orders
-func (c *Client) CreateOrder(ctx context.Context, intent string, purchaseUnits []PurchaseUnitRequest, payer *CreateOrderPayer, appContext *ApplicationContext) (*Order, error) {
+func (c *Client) CreateOrder(ctx context.Context, intent string, purchaseUnits []PurchaseUnitRequest, payer *CreateOrderPayer, appContext *OrderApplicationContext) (*Order, error) {
 	return c.CreateOrderWithPaypalRequestID(ctx, intent, purchaseUnits, payer, appContext, "")
 }
 
@@ -34,14 +34,14 @@ func (c *Client) CreateOrderWithPaypalRequestID(ctx context.Context,
 	intent string,
 	purchaseUnits []PurchaseUnitRequest,
 	payer *CreateOrderPayer,
-	appContext *ApplicationContext,
+	appContext *OrderApplicationContext,
 	requestID string,
 ) (*Order, error) {
 	type createOrderRequest struct {
-		Intent             string                `json:"intent"`
-		Payer              *CreateOrderPayer     `json:"payer,omitempty"`
-		PurchaseUnits      []PurchaseUnitRequest `json:"purchase_units"`
-		ApplicationContext *ApplicationContext   `json:"application_context,omitempty"`
+		Intent             string                   `json:"intent"`
+		Payer              *CreateOrderPayer        `json:"payer,omitempty"`
+		PurchaseUnits      []PurchaseUnitRequest    `json:"purchase_units"`
+		ApplicationContext *OrderApplicationContext `json:"application_context,omitempty"`
 	}
 
 	order := &Order{}
@@ -161,7 +161,7 @@ func (c *Client) RefundCaptureWithPaypalRequestId(ctx context.Context,
 
 // CapturedDetail - https://developer.paypal.com/docs/api/payments/v2/#captures_get
 // Endpoint: GET /v2/payments/captures/ID
-func (c *Client) CapturedDetail(ctx context.Context, captureID string ) (*CaptureDetailsResponse, error) {
+func (c *Client) CapturedDetail(ctx context.Context, captureID string) (*CaptureDetailsResponse, error) {
 	response := &CaptureDetailsResponse{}
 
 	req, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/captures/"+captureID), nil)
