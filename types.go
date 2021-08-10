@@ -210,15 +210,9 @@ type (
 		LandingPage        LandingPage        `json:"landing_page,omitempty"`
 		ShippingPreference ShippingPreference `json:"shipping_preference,omitempty"`
 		UserAction         UserAction         `json:"user_action,omitempty"`
-		PaymentMethod      *PaymentMethod     `json:"payment_method"`
 		ReturnURL          string             `json:"return_url,omitempty"`
 		CancelURL          string             `json:"cancel_url,omitempty"`
-	}
-
-	PaymentMethod struct {
-		PayerSelected          string                 `json:"payer_selected"`
-		PayeePreferred         PayeePreferred         `json:"payee_preferred"`
-		StandardEntryClassCode StandardEntryClassCode `json:"standard_entry_class_code"`
+		// TODO: add missing fields PaymentMethod and StoredPaymentSource
 	}
 
 	// Authorization struct

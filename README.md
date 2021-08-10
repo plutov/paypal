@@ -173,15 +173,12 @@ order, err := c.GetOrder("O-4J082351X3132253H")
 
 ```go
 purchaseUnit := paypal.PurchaseUnitRequest{ReferenceID: "ref-id", Amount: paypal.Amount{Total: "7.00", Currency: "USD"}}
-appContext := paypal.ApplicationContext{
-	ShippingPreference: paypal.ShippingPreferenceNoShipping,
-	UserAction:         paypal.UserActionPayNow,
-	LandingPage:        paypal.LandingPageLogin,
-	PaymentMethod: paypal.PaymentMethod{
-		PayeePreferred:         paypal.PayeePreferredImmediatePaymentRequired,
-		StandardEntryClassCode: paypal.StandardEntryClassCodeWeb,
-	},
-	ReturnURL: "https://example.com/return-url",
+appContext := paypal.OrderApplicationContext{
+    ShippingPreference: paypal.ShippingPreferenceNoShipping,
+    UserAction:         paypal.UserActionPayNow,
+    LandingPage:        paypal.LandingPageLogin,
+    ReturnURL:          "https://example.com/return-url",
+    CancelURL:          "https://example.com/cancel-url",
 }
 order, err := c.CreateOrder(ctx, paypal.OrderIntentCapture, []paypal.PurchaseUnitRequest{purchaseUnit}, nil, &appContext)
 ```
