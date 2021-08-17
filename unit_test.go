@@ -3,11 +3,14 @@ package paypal
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
+
+var testBillingAgreementID = "BillingAgreementID"
 
 type webprofileTestServer struct {
 	t *testing.T
@@ -494,6 +497,11 @@ func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request
 			ts.createWithoutName(w, r)
 		}
 	}
+	if r.RequestURI == fmt.Sprintf("/v1/billing-agreements/agreements/%s/cancel", testBillingAgreementID) {
+		if r.Method == "POST" {
+			ts.deletevalid(w, r)
+		}
+	}
 }
 
 func (ts *webprofileTestServer) create(w http.ResponseWriter, r *http.Request) {
@@ -904,6 +912,20 @@ func TestCreatePaypalBillingAgreementFromToken(t *testing.T) {
 	c, _ := NewClient("foo", "bar", ts.URL)
 
 	_, err := c.CreatePaypalBillingAgreementFromToken(context.Background(), "BillingAgreementToken")
+
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestCancelPaypalBillingAgreement(t *testing.T) {
+
+	ts := httptest.NewServer(&webprofileTestServer{t: t})
+	defer ts.Close()
+
+	c, _ := NewClient("foo", "bar", ts.URL)
+
+	err := c.CancelPaypalBillingAgreement(context.Background(), testBillingAgreementID, "test")
 
 	if err != nil {
 		t.Fatal(err)

@@ -66,3 +66,30 @@ func (c *Client) CreatePaypalBillingAgreementFromToken(
 
 	return billingAgreement, nil
 }
+
+// CancelPaypalBillingAgreement - Use this call to cancel a billing agreement
+// Endpoint: POST /v1/payments/billing-agreements/{agreement_id}/cancel
+func (c *Client) CancelPaypalBillingAgreement(
+	ctx context.Context,
+	billingAgreementID string,
+	note string,
+) error {
+	type createBARequest struct {
+		note string `json:"note"`
+	}
+
+	req, err := c.NewRequest(
+		ctx,
+		"POST",
+		fmt.Sprintf("%s%s%s%s", c.APIBase, "/v1/billing-agreements/agreements/", billingAgreementID, "/cancel"),
+		createBARequest{note})
+	if err != nil {
+		return err
+	}
+
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
+}
