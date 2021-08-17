@@ -925,7 +925,7 @@ func TestCancelPaypalBillingAgreement(t *testing.T) {
 
 	c, _ := NewClient("foo", "bar", ts.URL)
 
-	err := c.CancelPaypalBillingAgreement(context.Background(), testBillingAgreementID, "test")
+	err := c.CancelPaypalBillingAgreement(context.Background(), testBillingAgreementID)
 
 	if err != nil {
 		t.Fatal(err)
