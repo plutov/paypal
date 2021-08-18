@@ -883,7 +883,7 @@ func TestDeleteWebProfile_invalid(t *testing.T) {
 
 }
 
-func TestCreatePaypalBillingAgreementToken(t *testing.T) {
+func TestCreateBillingAgreementToken(t *testing.T) {
 
 	ts := httptest.NewServer(&webprofileTestServer{t: t})
 	defer ts.Close()
@@ -891,7 +891,7 @@ func TestCreatePaypalBillingAgreementToken(t *testing.T) {
 	c, _ := NewClient("foo", "bar", ts.URL)
 	description := "name A"
 
-	_, err := c.CreatePaypalBillingAgreementToken(
+	_, err := c.CreateBillingAgreementToken(
 		context.Background(),
 		&description,
 		&ShippingAddress{RecipientName: "Name", Type: "Type", Line1: "Line1", Line2: "Line2"},
@@ -904,28 +904,28 @@ func TestCreatePaypalBillingAgreementToken(t *testing.T) {
 
 }
 
-func TestCreatePaypalBillingAgreementFromToken(t *testing.T) {
+func TestCreateBillingAgreementFromToken(t *testing.T) {
 
 	ts := httptest.NewServer(&webprofileTestServer{t: t})
 	defer ts.Close()
 
 	c, _ := NewClient("foo", "bar", ts.URL)
 
-	_, err := c.CreatePaypalBillingAgreementFromToken(context.Background(), "BillingAgreementToken")
+	_, err := c.CreateBillingAgreementFromToken(context.Background(), "BillingAgreementToken")
 
 	if err != nil {
 		t.Fatal(err)
 	}
 }
 
-func TestCancelPaypalBillingAgreement(t *testing.T) {
+func TestCancelBillingAgreement(t *testing.T) {
 
 	ts := httptest.NewServer(&webprofileTestServer{t: t})
 	defer ts.Close()
 
 	c, _ := NewClient("foo", "bar", ts.URL)
 
-	err := c.CancelPaypalBillingAgreement(context.Background(), testBillingAgreementID)
+	err := c.CancelBillingAgreement(context.Background(), testBillingAgreementID)
 
 	if err != nil {
 		t.Fatal(err)
