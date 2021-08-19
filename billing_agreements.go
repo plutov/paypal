@@ -7,7 +7,20 @@ import (
 
 // CreatePaypalBillingAgreementToken - Use this call to create a billing agreement token
 // Endpoint: POST /v1/billing-agreements/agreement-tokens
+// Deprecated: use CreateBillingAgreementToken instead
 func (c *Client) CreatePaypalBillingAgreementToken(
+	ctx context.Context,
+	description *string,
+	shippingAddress *ShippingAddress,
+	payer *Payer,
+	plan *BillingPlan,
+) (*BillingAgreementToken, error) {
+	return c.CreateBillingAgreementToken(ctx, description, shippingAddress, payer, plan)
+}
+
+// CreateBillingAgreementToken - Use this call to create a billing agreement token
+// Endpoint: POST /v1/billing-agreements/agreement-tokens
+func (c *Client) CreateBillingAgreementToken(
 	ctx context.Context,
 	description *string,
 	shippingAddress *ShippingAddress,
@@ -41,7 +54,17 @@ func (c *Client) CreatePaypalBillingAgreementToken(
 
 // CreatePaypalBillingAgreementFromToken - Use this call to create a billing agreement
 // Endpoint: POST /v1/billing-agreements/agreements
+// Deprecated: use CreateBillingAgreementFromToken instead
 func (c *Client) CreatePaypalBillingAgreementFromToken(
+	ctx context.Context,
+	tokenID string,
+) (*BillingAgreementFromToken, error) {
+	return c.CreateBillingAgreementFromToken(ctx, tokenID)
+}
+
+// CreateBillingAgreementFromToken - Use this call to create a billing agreement
+// Endpoint: POST /v1/billing-agreements/agreements
+func (c *Client) CreateBillingAgreementFromToken(
 	ctx context.Context,
 	tokenID string,
 ) (*BillingAgreementFromToken, error) {
@@ -65,4 +88,28 @@ func (c *Client) CreatePaypalBillingAgreementFromToken(
 	}
 
 	return billingAgreement, nil
+}
+
+// CancelBillingAgreement - Use this call to cancel a billing agreement
+// Endpoint: POST /v1/billing-agreements/agreements/{agreement_id}/cancel
+func (c *Client) CancelBillingAgreement(
+	ctx context.Context,
+	billingAgreementID string,
+) error {
+	type cancelBARequest struct{}
+
+	req, err := c.NewRequest(
+		ctx,
+		"POST",
+		fmt.Sprintf("%s%s%s%s", c.APIBase, "/v1/billing-agreements/agreements/", billingAgreementID, "/cancel"),
+		cancelBARequest{})
+	if err != nil {
+		return err
+	}
+
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
