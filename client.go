@@ -78,7 +78,7 @@ func (c *Client) SetReturnRepresentation() {
 }
 
 // Send makes a request to the API, the response body will be
-// unmarshaled into v, or if v is an io.Writer, the response will
+// unmarshalled into v, or if v is an io.Writer, the response will
 // be written to it without decoding
 func (c *Client) Send(req *http.Request, v interface{}) error {
 	var (

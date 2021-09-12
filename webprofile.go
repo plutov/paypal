@@ -51,7 +51,7 @@ func (c *Client) GetWebProfile(ctx context.Context, profileID string) (*WebProfi
 	return &wp, nil
 }
 
-// GetWebProfiles retreieves web experience profiles from Paypal
+// GetWebProfiles retrieves web experience profiles from Paypal
 //
 // Endpoint: GET /v1/payment-experience/web-profiles
 func (c *Client) GetWebProfiles(ctx context.Context) ([]WebProfile, error) {

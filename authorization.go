@@ -68,7 +68,7 @@ func (c *Client) VoidAuthorization(ctx context.Context, authID string) (*Authori
 }
 
 // ReauthorizeAuthorization reauthorize a Paypal account payment.
-// PayPal recommends to reauthorize payment after ~3 days
+// PayPal recommends reauthorizing payment after ~3 days
 // Endpoint: POST /v2/payments/authorizations/ID/reauthorize
 func (c *Client) ReauthorizeAuthorization(ctx context.Context, authID string, a *Amount) (*Authorization, error) {
 	buf := bytes.NewBuffer([]byte(`{"amount":{"currency":"` + a.Currency + `","total":"` + a.Total + `"}}`))
