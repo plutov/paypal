@@ -124,7 +124,7 @@ func (c *Client) VerifyWebhookSignature(ctx context.Context, httpReq *http.Reque
 	return response, nil
 }
 
-// GetWebhooksEventTypes - Lists all webhook event types.
+// GetWebhookEventTypes - Lists all webhook event types.
 // Endpoint: GET /v1/notifications/webhooks-event-types
 func (c *Client) GetWebhookEventTypes(ctx context.Context) (*WebhookEventTypesResponse, error) {
 	req, err := c.NewRequest(ctx, http.MethodGet, fmt.Sprintf("%s%s", c.APIBase, "/v1/notifications/webhooks-event-types"), nil)
