@@ -591,6 +591,7 @@ type (
 		ID                 string              `json:"id,omitempty"`
 		SoftDescriptor     string              `json:"soft_descriptor,omitempty"`
 		Shipping           *ShippingDetail     `json:"shipping,omitempty"`
+		Items              []Item              `json:"items,omitempty"`
 	}
 
 	// TaxInfo used for orders.
