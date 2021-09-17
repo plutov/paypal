@@ -48,8 +48,9 @@ const (
 type UserAction string
 
 const (
-	UserActionContinue UserAction = "CONTINUE"
-	UserActionPayNow   UserAction = "PAY_NOW"
+	UserActionContinue     UserAction = "CONTINUE"
+	UserActionPayNow       UserAction = "PAY_NOW"
+	UserActionSubscribeNow UserAction = "SUBSCRIBE_NOW"
 )
 
 type SubscriptionStatus string
