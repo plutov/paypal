@@ -686,6 +686,7 @@ type (
 
 	// CaptureAmount struct
 	CaptureAmount struct {
+		Status                    string                     `json:"status,omitempty"`
 		ID                        string                     `json:"id,omitempty"`
 		CustomID                  string                     `json:"custom_id,omitempty"`
 		Amount                    *PurchaseUnitAmount        `json:"amount,omitempty"`
