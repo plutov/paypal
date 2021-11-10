@@ -97,7 +97,7 @@ func (c *Client) VerifyWebhookSignature(ctx context.Context, httpReq *http.Reque
 	var bodyBytes []byte
 	if httpReq.Body != nil {
 		bodyBytes, _ = ioutil.ReadAll(httpReq.Body)
-	}else{
+	} else {
 		return nil, errors.New("Cannot verify webhook for HTTP Request with empty body.")
 	}
 	// Restore the io.ReadCloser to its original state
