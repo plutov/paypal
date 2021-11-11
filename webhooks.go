@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -89,13 +90,15 @@ func (c *Client) VerifyWebhookSignature(ctx context.Context, httpReq *http.Reque
 		TransmissionSig  string          `json:"transmission_sig,omitempty"`
 		TransmissionTime string          `json:"transmission_time,omitempty"`
 		WebhookID        string          `json:"webhook_id,omitempty"`
-		Event            json.RawMessage `json:"webhook_event"`
+		Event            json.RawMessage `json:"webhook_event,omitempty"`
 	}
 
 	// Read the content
 	var bodyBytes []byte
 	if httpReq.Body != nil {
 		bodyBytes, _ = ioutil.ReadAll(httpReq.Body)
+	} else {
+		return nil, errors.New("Cannot verify webhook for HTTP Request with empty body.")
 	}
 	// Restore the io.ReadCloser to its original state
 	httpReq.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
