@@ -68,7 +68,7 @@ type (
 		SharedListResponse
 	}
 
-	CaptureReqeust struct {
+	CaptureRequest struct {
 		Note        string      `json:"note"`
 		CaptureType CaptureType `json:"capture_type"`
 		Amount      Money       `json:"amount"`
@@ -151,7 +151,7 @@ func (c *Client) CancelSubscription(ctx context.Context, subscriptionId, cancelR
 // Captures an authorized payment from the subscriber on the subscription.
 // Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#subscriptions_capture
 // Endpoint: POST /v1/billing/subscriptions/{id}/capture
-func (c *Client) CaptureSubscription(ctx context.Context, subscriptionId string, request CaptureReqeust) (*SubscriptionCaptureResponse, error) {
+func (c *Client) CaptureSubscription(ctx context.Context, subscriptionId string, request CaptureRequest) (*SubscriptionCaptureResponse, error) {
 	req, err := c.NewRequest(ctx, http.MethodPost, fmt.Sprintf("%s/v1/billing/subscriptions/%s/capture", c.APIBase, subscriptionId), request)
 	response := &SubscriptionCaptureResponse{}
 	if err != nil {
