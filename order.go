@@ -81,7 +81,7 @@ func (c *Client) UpdateOrder(ctx context.Context, orderID string, op string, pat
 	if err = c.SendWithAuth(req, order); err != nil {
 		return err
 	}
-
+	return nil
 }
 
 // AuthorizeOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_authorize
