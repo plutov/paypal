@@ -64,7 +64,7 @@ func (c *Client) CreateOrderWithPaypalRequestID(ctx context.Context,
 
 // UpdateOrder updates the order by ID
 // Endpoint: PATCH /v2/checkout/orders/ID
-func (c *Client) UpdateOrder(ctx context.Context, orderID string, op string, path string, value map[string]string) (*Order, error) {
+func (c *Client) UpdateOrder(ctx context.Context, orderID string, op string, path string, value map[string]string) error {
 
 	type patchRequest struct {
 		Op    string            `json:"op"`
@@ -75,14 +75,13 @@ func (c *Client) UpdateOrder(ctx context.Context, orderID string, op string, pat
 
 	req, err := c.NewRequest(ctx, "PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/checkout/orders/", orderID), patchRequest{Op: op, Path: path, Value: value})
 	if err != nil {
-		return order, err
+		return err
 	}
 
 	if err = c.SendWithAuth(req, order); err != nil {
-		return order, err
+		return err
 	}
 
-	return order, nil
 }
 
 // AuthorizeOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_authorize
