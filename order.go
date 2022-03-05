@@ -64,19 +64,24 @@ func (c *Client) CreateOrderWithPaypalRequestID(ctx context.Context,
 
 // UpdateOrder updates the order by ID
 // Endpoint: PATCH /v2/checkout/orders/ID
-func (c *Client) UpdateOrder(ctx context.Context, orderID string, purchaseUnits []PurchaseUnitRequest) (*Order, error) {
+func (c *Client) UpdateOrder(ctx context.Context, orderID string, op string, path string, value map[string]string) error {
+
+	type patchRequest struct {
+		Op    string            `json:"op"`
+		Path  string            `json:"path"`
+		Value map[string]string `json:"value"`
+	}
 	order := &Order{}
 
-	req, err := c.NewRequest(ctx, "PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/checkout/orders/", orderID), purchaseUnits)
+	req, err := c.NewRequest(ctx, "PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/checkout/orders/", orderID), patchRequest{Op: op, Path: path, Value: value})
 	if err != nil {
-		return order, err
+		return err
 	}
 
 	if err = c.SendWithAuth(req, order); err != nil {
-		return order, err
+		return err
 	}
-
-	return order, nil
+	return nil
 }
 
 // AuthorizeOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_authorize
@@ -161,7 +166,7 @@ func (c *Client) RefundCaptureWithPaypalRequestId(ctx context.Context,
 
 // CapturedDetail - https://developer.paypal.com/docs/api/payments/v2/#captures_get
 // Endpoint: GET /v2/payments/captures/ID
-func (c *Client) CapturedDetail(ctx context.Context, captureID string ) (*CaptureDetailsResponse, error) {
+func (c *Client) CapturedDetail(ctx context.Context, captureID string) (*CaptureDetailsResponse, error) {
 	response := &CaptureDetailsResponse{}
 
 	req, err := c.NewRequest(ctx, "GET", fmt.Sprintf("%s%s", c.APIBase, "/v2/payments/captures/"+captureID), nil)
