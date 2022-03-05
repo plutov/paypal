@@ -299,6 +299,11 @@ type (
 		PaymentSource *PaymentSource `json:"payment_source"`
 	}
 
+	// CaptureOrderMockResponse - https://developer.paypal.com/docs/api-basics/sandbox/request-headers/#test-api-error-handling-routines
+	CaptureOrderMockResponse struct {
+		MockApplicationCodes string `json:"mock_application_codes"`
+	}
+
 	// RefundOrderRequest - https://developer.paypal.com/docs/api/payments/v2/#captures_refund
 	RefundCaptureRequest struct {
 		Amount      *Money `json:"amount,omitempty"`

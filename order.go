@@ -2,6 +2,7 @@ package paypal
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 )
 
@@ -104,7 +105,7 @@ func (c *Client) AuthorizeOrder(ctx context.Context, orderID string, authorizeOr
 // CaptureOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 // Endpoint: POST /v2/checkout/orders/ID/capture
 func (c *Client) CaptureOrder(ctx context.Context, orderID string, captureOrderRequest CaptureOrderRequest) (*CaptureOrderResponse, error) {
-	return c.CaptureOrderWithPaypalRequestId(ctx, orderID, captureOrderRequest, "")
+	return c.CaptureOrderWithPaypalRequestId(ctx, orderID, captureOrderRequest, "", nil)
 }
 
 // CaptureOrder with idempotency - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
@@ -114,6 +115,7 @@ func (c *Client) CaptureOrderWithPaypalRequestId(ctx context.Context,
 	orderID string,
 	captureOrderRequest CaptureOrderRequest,
 	requestID string,
+	mockResponse *CaptureOrderMockResponse,
 ) (*CaptureOrderResponse, error) {
 	capture := &CaptureOrderResponse{}
 
@@ -125,6 +127,15 @@ func (c *Client) CaptureOrderWithPaypalRequestId(ctx context.Context,
 
 	if requestID != "" {
 		req.Header.Set("PayPal-Request-Id", requestID)
+	}
+
+	if mockResponse != nil {
+		mock, err := json.Marshal(mockResponse)
+		if err != nil {
+			return nil, err
+		}
+
+		req.Header.Set("PayPal-Mock-Response", string(mock))
 	}
 
 	if err = c.SendWithAuth(req, capture); err != nil {
