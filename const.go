@@ -105,7 +105,7 @@ const (
 
 type PayeePreferred string // Doc: https://developer.paypal.com/api/orders/v2/#definition-payment_method
 const (
-	PayeePreferredUnrestricted 								PayeePreferred = "UNRESTRICTED"
+	PayeePreferredUnrestricted 						PayeePreferred = "UNRESTRICTED"
 	PayeePreferredImmediatePaymentRequired 					PayeePreferred = "IMMEDIATE_PAYMENT_REQUIRED"
 )
 
