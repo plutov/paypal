@@ -102,3 +102,17 @@ const (
 	ProductCategorySoftwareOther                             ProductCategory = "OTHER"
 	ProductCategorySoftwareServices                          ProductCategory = "SERVICES"
 )
+
+type PayeePreferred string // Doc: https://developer.paypal.com/api/orders/v2/#definition-payment_method
+const (
+	PayeePreferredUnrestricted 						PayeePreferred = "UNRESTRICTED"
+	PayeePreferredImmediatePaymentRequired 					PayeePreferred = "IMMEDIATE_PAYMENT_REQUIRED"
+)
+
+type StandardEntryClassCode string // Doc: https://developer.paypal.com/api/orders/v2/#definition-payment_method
+const (
+	StandardEntryClassCodeTel					StandardEntryClassCode="TEL"
+	StandardEntryClassCodeWeb					StandardEntryClassCode="WEB"
+	StandardEntryClassCodeCcd					StandardEntryClassCode="CCD"
+	StandardEntryClassCodePpd					StandardEntryClassCode="PPD"
+)

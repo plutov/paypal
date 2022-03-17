@@ -198,9 +198,16 @@ type (
 		Locale             string             `json:"locale,omitempty"`
 		ShippingPreference ShippingPreference `json:"shipping_preference,omitempty"`
 		UserAction         UserAction         `json:"user_action,omitempty"`
+		PaymentMethod	   PaymentMethod      `json:"payment_method,omitempty"`
 		//LandingPage        string `json:"landing_page,omitempty"` // not found in documentation
 		ReturnURL string `json:"return_url,omitempty"`
 		CancelURL string `json:"cancel_url,omitempty"`
+	}
+
+	// Doc: https://developer.paypal.com/api/orders/v2/#definition-payment_method
+	PaymentMethod struct {
+		PayeePreferred	  		PayeePreferred      	`json:"payee_preferred,omitempty"`
+		StandardEntryClassCode	        StandardEntryClassCode  `json:"standard_entry_class_code,omitempty"`
 	}
 
 	// Authorization struct
