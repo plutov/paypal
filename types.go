@@ -898,6 +898,7 @@ type (
 		CaptureID     string     `json:"capture_id,omitempty"`
 		ParentPayment string     `json:"parent_payment,omitempty"`
 		UpdateTime    *time.Time `json:"update_time,omitempty"`
+		SaleID        string     `json:"sale_id,omitempty"`
 	}
 
 	// RefundResponse .
