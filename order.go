@@ -72,14 +72,19 @@ func (c *Client) UpdateOrder(ctx context.Context, orderID string, op string, pat
 		Path  string            `json:"path"`
 		Value map[string]string `json:"value"`
 	}
-	order := &Order{}
 
-	req, err := c.NewRequest(ctx, "PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/checkout/orders/", orderID), patchRequest{Op: op, Path: path, Value: value})
+	req, err := c.NewRequest(ctx, "PATCH", fmt.Sprintf("%s%s%s", c.APIBase, "/v2/checkout/orders/", orderID), []patchRequest{
+		{
+			Op:    op,
+			Path:  path,
+			Value: value,
+		},
+	})
 	if err != nil {
 		return err
 	}
 
-	if err = c.SendWithAuth(req, order); err != nil {
+	if err = c.SendWithAuth(req, nil); err != nil {
 		return err
 	}
 	return nil
