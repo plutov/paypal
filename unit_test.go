@@ -144,6 +144,35 @@ func TestTypeErrorResponseTwo(t *testing.T) {
 	}
 }
 
+func TestTypeErrorResponseThree(t *testing.T) {
+	response := `{
+		"name": "BUSINESS_ERROR",
+		"debug_id": "[REDACTED]",
+		"message": "Business error",
+		"information_link": "https://developer.paypal.com/webapps/developer/docs/api/#BUSINESS_ERROR",
+		"details": [
+			{
+				"name": "TOKEN_NOT_FOUND",
+				"message": "Not Found: Invalid BA-Token Identifier"
+			}
+		]
+	}`
+
+	i := &ErrorResponse{}
+	err := json.Unmarshal([]byte(response), i)
+	if err != nil {
+		t.Errorf("ErrorResponse Unmarshal failed")
+	}
+
+	if i.Name != "BUSINESS_ERROR" ||
+		i.Message != "Business error" ||
+		len(i.Details) != 1 ||
+		i.Details[0].Name != "TOKEN_NOT_FOUND" ||
+		i.Details[0].Message != "Not Found: Invalid BA-Token Identifier" {
+		t.Errorf("ErrorResponse decoded result is incorrect, Given: %v", i)
+	}
+}
+
 func TestTypePayoutResponse(t *testing.T) {
 	response := `{
 		"batch_header":{
