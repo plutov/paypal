@@ -495,9 +495,11 @@ type (
 
 	// ErrorResponseDetail struct
 	ErrorResponseDetail struct {
-		Field string `json:"field"`
-		Issue string `json:"issue"`
-		Links []Link `json:"link"`
+		Field   string `json:"field"`
+		Issue   string `json:"issue"`
+		Name    string `json:"name"`
+		Message string `json:"message"`
+		Links   []Link `json:"link"`
 	}
 
 	// ErrorResponse https://developer.paypal.com/docs/api/errors/
