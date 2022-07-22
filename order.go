@@ -92,8 +92,8 @@ func (c *Client) UpdateOrder(ctx context.Context, orderID string, op string, pat
 
 // AuthorizeOrder - https://developer.paypal.com/docs/api/orders/v2/#orders_authorize
 // Endpoint: POST /v2/checkout/orders/ID/authorize
-func (c *Client) AuthorizeOrder(ctx context.Context, orderID string, authorizeOrderRequest AuthorizeOrderRequest) (*Authorization, error) {
-	auth := &Authorization{}
+func (c *Client) AuthorizeOrder(ctx context.Context, orderID string, authorizeOrderRequest AuthorizeOrderRequest) (*AuthorizeOrderResponse, error) {
+	auth := &AuthorizeOrderResponse{}
 
 	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders/"+orderID+"/authorize"), authorizeOrderRequest)
 	if err != nil {
