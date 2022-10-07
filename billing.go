@@ -72,7 +72,7 @@ func (c *Client) CreateBillingPlan(ctx context.Context, plan BillingPlan) (*Crea
 // UpdateBillingPlan updates values inside a billing plan
 // Endpoint: PATCH /v1/payments/billing-plans
 func (c *Client) UpdateBillingPlan(ctx context.Context, planId string, pathValues map[string]map[string]interface{}) error {
-	patchData := []Patch{}
+	var patchData []Patch
 	for path, data := range pathValues {
 		patchData = append(patchData, Patch{
 			Operation: "replace",

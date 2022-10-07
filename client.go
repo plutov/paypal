@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
 	"time"
@@ -105,14 +104,19 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) error {
+		return Body.Close()
+	}(resp.Body)
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		errResp := &ErrorResponse{Response: resp}
-		data, err = ioutil.ReadAll(resp.Body)
+		data, err = io.ReadAll(resp.Body)
 
 		if err == nil && len(data) > 0 {
-			json.Unmarshal(data, errResp)
+			err := json.Unmarshal(data, errResp)
+			if err != nil {
+				return err
+			}
 		}
 
 		return errResp
@@ -122,8 +126,8 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	}
 
 	if w, ok := v.(io.Writer); ok {
-		io.Copy(w, resp.Body)
-		return nil
+		_, err := io.Copy(w, resp.Body)
+		return err
 	}
 
 	return json.NewDecoder(resp.Body).Decode(v)
