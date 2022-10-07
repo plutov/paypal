@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
 	"time"
@@ -100,19 +99,26 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	}
 
 	resp, err = c.Client.Do(req)
-	c.log(req, resp)
+	if c.Log != nil {
+		c.log(req, resp)
+	}
 
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) error {
+		return Body.Close()
+	}(resp.Body)
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		errResp := &ErrorResponse{Response: resp}
-		data, err = ioutil.ReadAll(resp.Body)
+		data, err = io.ReadAll(resp.Body)
 
 		if err == nil && len(data) > 0 {
-			json.Unmarshal(data, errResp)
+			err := json.Unmarshal(data, errResp)
+			if err != nil {
+				return err
+			}
 		}
 
 		return errResp
@@ -122,8 +128,8 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	}
 
 	if w, ok := v.(io.Writer); ok {
-		io.Copy(w, resp.Body)
-		return nil
+		_, err := io.Copy(w, resp.Body)
+		return err
 	}
 
 	return json.NewDecoder(resp.Body).Decode(v)
@@ -179,19 +185,17 @@ func (c *Client) NewRequest(ctx context.Context, method, url string, payload int
 
 // log will dump request and response to the log file
 func (c *Client) log(r *http.Request, resp *http.Response) {
-	if c.Log != nil {
-		var (
-			reqDump  string
-			respDump []byte
-		)
+	var (
+		reqDump  string
+		respDump []byte
+	)
 
-		if r != nil {
-			reqDump = fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
-		}
-		if resp != nil {
-			respDump, _ = httputil.DumpResponse(resp, true)
-		}
-
-		c.Log.Write([]byte(fmt.Sprintf("Request: %s\nResponse: %s\n", reqDump, string(respDump))))
+	if r != nil {
+		reqDump = fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
 	}
+	if resp != nil {
+		respDump, _ = httputil.DumpResponse(resp, true)
+	}
+
+	c.Log.Write([]byte(fmt.Sprintf("Request: %s\nResponse: %s\n", reqDump, string(respDump))))
 }

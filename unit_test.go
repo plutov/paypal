@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -536,7 +536,7 @@ func (ts *webprofileTestServer) ServeHTTP(w http.ResponseWriter, r *http.Request
 func (ts *webprofileTestServer) create(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -572,7 +572,7 @@ func (ts *webprofileTestServer) create(w http.ResponseWriter, r *http.Request) {
 func (ts *webprofileTestServer) createWithoutName(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -600,7 +600,7 @@ func (ts *webprofileTestServer) createWithoutName(w http.ResponseWriter, r *http
 func (ts *webprofileTestServer) updatevalid(w http.ResponseWriter, r *http.Request) {
 	var data map[string]interface{}
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

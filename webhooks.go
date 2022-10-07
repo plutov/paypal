@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -96,12 +96,12 @@ func (c *Client) VerifyWebhookSignature(ctx context.Context, httpReq *http.Reque
 	// Read the content
 	var bodyBytes []byte
 	if httpReq.Body != nil {
-		bodyBytes, _ = ioutil.ReadAll(httpReq.Body)
+		bodyBytes, _ = io.ReadAll(httpReq.Body)
 	} else {
 		return nil, errors.New("Cannot verify webhook for HTTP Request with empty body.")
 	}
 	// Restore the io.ReadCloser to its original state
-	httpReq.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+	httpReq.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
 	verifyRequest := verifyWebhookSignatureRequest{
 		AuthAlgo:         httpReq.Header.Get("PAYPAL-AUTH-ALGO"),
