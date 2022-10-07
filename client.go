@@ -99,9 +99,7 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	}
 
 	resp, err = c.Client.Do(req)
-	if c.Log != nil {
-		c.log(req, resp)
-	}
+	c.log(req, resp)
 
 	if err != nil {
 		return err
@@ -185,17 +183,19 @@ func (c *Client) NewRequest(ctx context.Context, method, url string, payload int
 
 // log will dump request and response to the log file
 func (c *Client) log(r *http.Request, resp *http.Response) {
-	var (
-		reqDump  string
-		respDump []byte
-	)
+	if c.Log != nil {
+		var (
+			reqDump  string
+			respDump []byte
+		)
 
-	if r != nil {
-		reqDump = fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
-	}
-	if resp != nil {
-		respDump, _ = httputil.DumpResponse(resp, true)
-	}
+		if r != nil {
+			reqDump = fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
+		}
+		if resp != nil {
+			respDump, _ = httputil.DumpResponse(resp, true)
+		}
 
-	c.Log.Write([]byte(fmt.Sprintf("Request: %s\nResponse: %s\n", reqDump, string(respDump))))
+		c.Log.Write([]byte(fmt.Sprintf("Request: %s\nResponse: %s\n", reqDump, string(respDump))))
+	}
 }
