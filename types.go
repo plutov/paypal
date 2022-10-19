@@ -405,7 +405,7 @@ type (
 
 	// Client represents a Paypal REST API Client
 	Client struct {
-		sync.Mutex
+		// sync.Mutex
 		mu                   sync.Mutex
 		Client               *http.Client
 		ClientID             string
