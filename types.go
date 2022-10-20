@@ -405,7 +405,8 @@ type (
 
 	// Client represents a Paypal REST API Client
 	Client struct {
-		sync.Mutex
+		// sync.Mutex
+		mu                   sync.Mutex
 		Client               *http.Client
 		ClientID             string
 		Secret               string
@@ -495,12 +496,12 @@ type (
 
 	// ErrorResponseDetail struct
 	ErrorResponseDetail struct {
-		Field   	string `json:"field"`
-		Issue   	string `json:"issue"`
-		Name    	string `json:"name"`
-		Message 	string `json:"message"`
-		Description 	string `json:"description"`
-		Links   	[]Link `json:"link"`
+		Field       string `json:"field"`
+		Issue       string `json:"issue"`
+		Name        string `json:"name"`
+		Message     string `json:"message"`
+		Description string `json:"description"`
+		Links       []Link `json:"link"`
 	}
 
 	// ErrorResponse https://developer.paypal.com/docs/api/errors/
