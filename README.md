@@ -101,6 +101,11 @@
 * POST /v1/billing/subscriptions/:id/capture
 * POST /v1/billing/subscriptions/:id/suspend
 * GET /v1/billing/subscriptions/:id/transactions
+
+### Invoicing
+
+* POST /v2/invoicing/generate-next-invoice-number
+* GET /v2/invoicing/invoices/:id
  
 ## Missing endpoints
 
@@ -370,6 +375,27 @@ c.DeleteWebhook("WebhookID")
 // List registered webhooks
 c.ListWebhooks(paypal.AncorTypeApplication)
 ```
+
+### Generate Next Invoice Number
+```go
+// GenerateInvoiceNumber: generates the next invoice number that is available to the merchant.
+c.GenerateInvoiceNumber(ctx) // might return something like "0001" or "0010".
+```
+
+### Get Invoice Details by ID
+```go
+// the second argument is an ID, it should be valid
+invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
+```
+* for now, we are yet to implement the ShowAllInvoices endpoint, so use the following cURL request for the same(this gives you the list of invoice-IDs for this customer)
+    ```bash
+    curl -v -X GET https://api-m.sandbox.paypal.com/v2/invoicing/invoices?total_required=true \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer <Token>" 
+    ```
+
+* refer to the beginning of this Usage section for obtaining a Token.
+    
 
 ## How to Contribute
 
