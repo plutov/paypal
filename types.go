@@ -192,16 +192,16 @@ type (
 	}
 
 	// ApplicationContext struct
-	//Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-application_context
+	//Doc: https://developer.paypal.com/docs/api/orders/v2/#definition-application_context
 	ApplicationContext struct {
 		BrandName          string             `json:"brand_name,omitempty"`
 		Locale             string             `json:"locale,omitempty"`
 		ShippingPreference ShippingPreference `json:"shipping_preference,omitempty"`
 		UserAction         UserAction         `json:"user_action,omitempty"`
 		PaymentMethod      PaymentMethod      `json:"payment_method,omitempty"`
-		//LandingPage        string `json:"landing_page,omitempty"` // not found in documentation
-		ReturnURL string `json:"return_url,omitempty"`
-		CancelURL string `json:"cancel_url,omitempty"`
+		LandingPage        string             `json:"landing_page,omitempty"`
+		ReturnURL          string             `json:"return_url,omitempty"`
+		CancelURL          string             `json:"cancel_url,omitempty"`
 	}
 
 	// Invoicing relates structures
