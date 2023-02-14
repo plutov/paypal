@@ -36,3 +36,18 @@ func (c *Client) GetInvoiceDetails(ctx context.Context, invoiceID string) (*Invo
 	}
 	return invoice, nil
 }
+
+// DraftInvoice: draft an invoice given information.
+// Endpoint: POST /v2/invoicing/invoices
+func (c *Client) DraftInvoice(ctx context.Context, invoiceData InvoiceDetail) (*Invoice, error) {
+	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/invoicing/invoices", ), invoiceData)
+	invoice := &Invoice{}
+	if err != nil {
+		return invoice, err
+	}
+
+	if err = c.SendWithAuth(req, invoice); err != nil {
+		return invoice, err
+	}
+	return invoice, nil
+}
