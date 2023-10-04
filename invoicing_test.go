@@ -190,7 +190,7 @@ func TestGetInvoice(t *testing.T) {
 				  "currency_code": "USD",
 				  "value": "0.73"
 				},
-				"id": "TAX-9AU06895VD287170A",
+				"id": "TAX-5XV24702TP4910056",
 				"name": "Sales Tax",
 				"percent": "7.25"
 			  }
