@@ -119,8 +119,6 @@ import "github.com/plutov/paypal/v4"
 // Create a client instance
 c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
 c.SetLog(os.Stdout) // Set log to terminal stdout
-
-accessToken, err := c.GetAccessToken(context.Background())
 ```
 
 ## Get authorization by ID
