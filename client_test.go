@@ -65,19 +65,15 @@ func (c *Client) sendWithAuth(req *http.Request, v interface{}) error {
 		err := errors.New("TryLock succeeded inside sendWithAuth with mutex locked")
 		return err
 	}
-
-	if c.Token != nil {
-		if !c.tokenExpiresAt.IsZero() && c.tokenExpiresAt.Sub(time.Now()) < RequestNewTokenBeforeExpiresIn {
-			// c.Token will be updated in GetAccessToken call
-			if _, err := c.GetAccessToken(req.Context()); err != nil {
-				// c.Unlock()
-				c.mu.Unlock()
-				return err
-			}
+	if c.Token == nil || (!c.tokenExpiresAt.IsZero() && time.Until(c.tokenExpiresAt) < RequestNewTokenBeforeExpiresIn) {
+		// c.Token will be updated in GetAccessToken call
+		if _, err := c.GetAccessToken(req.Context()); err != nil {
+			// c.Unlock()
+			c.mu.Unlock()
+			return err
 		}
-
-		req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	}
+	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
 	// Unlock the client mutex before sending the request, this allows multiple requests
 	// to be in progress at the same time.
 	// c.Unlock()
