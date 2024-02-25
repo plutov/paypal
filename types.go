@@ -1649,3 +1649,9 @@ func (e *expirationTime) UnmarshalJSON(b []byte) error {
 	*e = expirationTime(i)
 	return nil
 }
+
+// Convert ExpirationTime to time.Duration
+func (e *expirationTime) ToDuration() time.Duration {
+    seconds := int64(*e)
+    return time.Duration(seconds) * time.Second
+}
