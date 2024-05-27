@@ -11,7 +11,6 @@ type (
 	SubscriptionBase struct {
 		PlanID             string              `json:"plan_id"`
 		StartTime          *JSONTime           `json:"start_time,omitempty"`
-		EffectiveTime      *JSONTime           `json:"effective_time,omitempty"`
 		Quantity           string              `json:"quantity,omitempty"`
 		ShippingAmount     *Money              `json:"shipping_amount,omitempty"`
 		Subscriber         *Subscriber         `json:"subscriber,omitempty"`
