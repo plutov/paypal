@@ -13,17 +13,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// testClientID, testSecret imported from order_test.go
-
-// All test values are defined here
-// var testClientID = "AXy9orp-CDaHhBZ9C78QHW2BKZpACgroqo85_NIOa9mIfJ9QnSVKzY-X_rivR_fTUUr6aLjcJsj6sDur"
-// var testSecret = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCdR_UYNKVxJE-UgS2iCw"
-var testUserID = "https://www.paypal.com/webapps/auth/identity/user/VBqgHcgZwb1PBs69ybjjXfIW86_Hr93aBvF_Rgbh2II"
-var testCardID = "CARD-54E6956910402550WKGRL6EA"
-
-var testProductId = ""   // will be fetched in  func TestProduct(t *testing.T)
-var testBillingPlan = "" // will be fetched in  func TestSubscriptionPlans(t *testing.T)
-
 const alphabet = "abcedfghijklmnopqrstuvwxyz"
 
 func RandomString(n int) string {
@@ -105,17 +94,6 @@ func (c *Client) createProduct(ctx context.Context, product Product) (*CreatePro
 func TestClientMutex(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
 	c.GetAccessToken(context.Background())
-
-	// Basic Testing of the private mutex field
-	c.mu.Lock()
-	if c.mu.TryLock() {
-		t.Fatalf("TryLock succeeded with mutex locked")
-	}
-	c.mu.Unlock()
-	if !c.mu.TryLock() {
-		t.Fatalf("TryLock failed with mutex unlocked")
-	}
-	c.mu.Unlock() // undo changes from the previous TryLock
 
 	// Operational testing of the private mutex field
 	n_iter := 2

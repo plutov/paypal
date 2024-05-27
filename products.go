@@ -33,27 +33,27 @@ type (
 	}
 )
 
-func (self *Product) GetUpdatePatch() []Patch {
+func (p *Product) GetUpdatePatch() []Patch {
 	return []Patch{
 		{
 			Operation: "replace",
 			Path:      "/description",
-			Value:     self.Description,
+			Value:     p.Description,
 		},
 		{
 			Operation: "replace",
 			Path:      "/category",
-			Value:     self.Category,
+			Value:     p.Category,
 		},
 		{
 			Operation: "replace",
 			Path:      "/image_url",
-			Value:     self.ImageUrl,
+			Value:     p.ImageUrl,
 		},
 		{
 			Operation: "replace",
 			Path:      "/home_url",
-			Value:     self.HomeUrl,
+			Value:     p.HomeUrl,
 		},
 	}
 }

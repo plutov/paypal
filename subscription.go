@@ -77,7 +77,7 @@ type (
 
 	// https://developer.paypal.com/docs/api/subscriptions/v1/#definition-plan_override
 	PlanOverride struct {
-		BillingCycles      []BillingCycleOverride       `json:"billing_cycles,omitempty"`
+		BillingCycles      []BillingCycleOverride      `json:"billing_cycles,omitempty"`
 		PaymentPreferences *PaymentPreferencesOverride `json:"payment_preferences,omitempty"`
 		Taxes              *TaxesOverride              `json:"taxes,omitempty"`
 	}
@@ -104,12 +104,12 @@ type (
 	}
 )
 
-func (self *Subscription) GetUpdatePatch() []Patch {
+func (p *Subscription) GetUpdatePatch() []Patch {
 	result := []Patch{
 		{
 			Operation: "replace",
 			Path:      "/billing_info/outstanding_balance",
-			Value:     self.BillingInfo.OutstandingBalance,
+			Value:     p.BillingInfo.OutstandingBalance,
 		},
 	}
 	return result

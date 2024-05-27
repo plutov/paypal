@@ -82,29 +82,29 @@ type (
 	}
 )
 
-func (self *SubscriptionPlan) GetUpdatePatch() []Patch {
+func (p *SubscriptionPlan) GetUpdatePatch() []Patch {
 	result := []Patch{
 		{
 			Operation: "replace",
 			Path:      "/description",
-			Value:     self.Description,
+			Value:     p.Description,
 		},
 	}
 
-	if self.Taxes != nil {
+	if p.Taxes != nil {
 		result = append(result, Patch{
 			Operation: "replace",
 			Path:      "/taxes/percentage",
-			Value:     self.Taxes.Percentage,
+			Value:     p.Taxes.Percentage,
 		})
 	}
 
-	if self.PaymentPreferences != nil {
-		if self.PaymentPreferences.SetupFee != nil {
+	if p.PaymentPreferences != nil {
+		if p.PaymentPreferences.SetupFee != nil {
 			result = append(result, Patch{
 				Operation: "replace",
 				Path:      "/payment_preferences/setup_fee",
-				Value:     self.PaymentPreferences.SetupFee,
+				Value:     p.PaymentPreferences.SetupFee,
 			},
 			)
 		}
@@ -112,17 +112,17 @@ func (self *SubscriptionPlan) GetUpdatePatch() []Patch {
 		result = append(result, []Patch{{
 			Operation: "replace",
 			Path:      "/payment_preferences/auto_bill_outstanding",
-			Value:     self.PaymentPreferences.AutoBillOutstanding,
+			Value:     p.PaymentPreferences.AutoBillOutstanding,
 		},
 			{
 				Operation: "replace",
 				Path:      "/payment_preferences/payment_failure_threshold",
-				Value:     self.PaymentPreferences.PaymentFailureThreshold,
+				Value:     p.PaymentPreferences.PaymentFailureThreshold,
 			},
 			{
 				Operation: "replace",
 				Path:      "/payment_preferences/setup_fee_failure_action",
-				Value:     self.PaymentPreferences.SetupFeeFailureAction,
+				Value:     p.PaymentPreferences.SetupFeeFailureAction,
 			}}...)
 	}
 
