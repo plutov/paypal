@@ -1051,8 +1051,9 @@ type (
 
 	// PaymentSource structure
 	PaymentSource struct {
-		Card  *PaymentSourceCard  `json:"card,omitempty"`
-		Token *PaymentSourceToken `json:"token,omitempty"`
+		Card   *PaymentSourceCard   `json:"card,omitempty"`
+		Token  *PaymentSourceToken  `json:"token,omitempty"`
+		Paypal *PaymentSourcePaypal `json:"paypal,omitempty"`
 	}
 
 	// PaymentSourceCard structure
@@ -1065,6 +1066,22 @@ type (
 		LastDigits     string              `json:"last_digits"`
 		CardType       string              `json:"card_type"`
 		BillingAddress *CardBillingAddress `json:"billing_address"`
+	}
+
+	// PaymentSourcePaypal structure
+	PaymentSourcePaypal struct {
+		ExperienceContext PaymentSourcePaypalExperienceContext `json:"experience_context"`
+	}
+
+	PaymentSourcePaypalExperienceContext struct {
+		PaymentMethodPreference string `json:"payment_method_preference"`
+		BrandName               string `json:"brand_name"`
+		Locale                  string `json:"locale"`
+		LandingPage             string `json:"landing_page"`
+		ShippingPreference      string `json:"shipping_preference"`
+		UserAction              string `json:"user_action"`
+		ReturnURL               string `json:"return_url"`
+		CancelURL               string `json:"cancel_url"`
 	}
 
 	// CardBillingAddress structure

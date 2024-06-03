@@ -23,10 +23,10 @@ func (c *Client) GetOrder(ctx context.Context, orderID string) (*Order, error) {
 	return order, nil
 }
 
-// CreateOrder - Use this call to create an order
+// Create an order
 // Endpoint: POST /v2/checkout/orders
-func (c *Client) CreateOrder(ctx context.Context, intent string, purchaseUnits []PurchaseUnitRequest, payer *CreateOrderPayer, appContext *ApplicationContext) (*Order, error) {
-	return c.CreateOrderWithPaypalRequestID(ctx, intent, purchaseUnits, payer, appContext, "")
+func (c *Client) CreateOrder(ctx context.Context, intent string, purchaseUnits []PurchaseUnitRequest, paymentSource *PaymentSource, appContext *ApplicationContext) (*Order, error) {
+	return c.CreateOrderWithPaypalRequestID(ctx, intent, purchaseUnits, paymentSource, appContext, "")
 }
 
 // CreateOrderWithPaypalRequestID - Use this call to create an order with idempotency
@@ -34,20 +34,20 @@ func (c *Client) CreateOrder(ctx context.Context, intent string, purchaseUnits [
 func (c *Client) CreateOrderWithPaypalRequestID(ctx context.Context,
 	intent string,
 	purchaseUnits []PurchaseUnitRequest,
-	payer *CreateOrderPayer,
+	paymentSource *PaymentSource,
 	appContext *ApplicationContext,
 	requestID string,
 ) (*Order, error) {
 	type createOrderRequest struct {
 		Intent             string                `json:"intent"`
-		Payer              *CreateOrderPayer     `json:"payer,omitempty"`
+		PaymentSource      *PaymentSource        `json:"payment_source,omitempty"`
 		PurchaseUnits      []PurchaseUnitRequest `json:"purchase_units"`
 		ApplicationContext *ApplicationContext   `json:"application_context,omitempty"`
 	}
 
 	order := &Order{}
 
-	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders"), createOrderRequest{Intent: intent, PurchaseUnits: purchaseUnits, Payer: payer, ApplicationContext: appContext})
+	req, err := c.NewRequest(ctx, "POST", fmt.Sprintf("%s%s", c.APIBase, "/v2/checkout/orders"), createOrderRequest{Intent: intent, PurchaseUnits: purchaseUnits, PaymentSource: paymentSource, ApplicationContext: appContext})
 	if err != nil {
 		return order, err
 	}

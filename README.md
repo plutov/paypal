@@ -44,21 +44,6 @@ auth, err := c.VoidAuthorization(authID)
 auth, err := c.ReauthorizeAuthorization(authID, &paypal.Amount{Total: "7.00", Currency: "USD"})
 ```
 
-### Get Sale by ID
-
-```go
-sale, err := c.GetSale("36C38912MN9658832")
-```
-
-### Refund Sale by ID
-
-```go
-// Full
-refund, err := c.RefundSale(saleID, nil)
-// Partial
-refund, err := c.RefundSale(saleID, &paypal.Amount{Total: "7.00", Currency: "USD"})
-```
-
 ### Get Refund by ID
 
 ```go
@@ -74,7 +59,11 @@ order, err := c.GetOrder("O-4J082351X3132253H")
 ### Create an Order
 
 ```go
-order, err := c.CreateOrder(paypal.OrderIntentCapture, []paypal.PurchaseUnitRequest{paypal.PurchaseUnitRequest{ReferenceID: "ref-id", Amount: paypal.Amount{Total: "7.00", Currency: "USD"}}})
+ctx := context.Background()
+units := []paypal.PurchaseUnitRequest{}
+source := &paypal.PaymentSource{}
+appCtx := &paypalApplicationContext{}
+order, err := c.CreateOrder(ctx, paypal.OrderIntentCapture, units, ource, appCtx)
 ```
 
 ### Update Order by ID
@@ -130,7 +119,7 @@ payout := paypal.Payout{
     },
 }
 
-payoutResp, err := c.CreateSinglePayout(payout)
+payoutResp, err := c.CreatePayout(payout)
 ```
 
 ### Get payout by ID
@@ -239,6 +228,7 @@ c.GetCreditCards(nil)
 ```
 
 ### Webhooks
+
 ```go
 // Create a webhook
 c.CreateWebhook(paypal.CreateWebhookRequest{
@@ -287,22 +277,22 @@ c.GenerateInvoiceNumber(ctx) // might return something like "0001" or "0010".
 invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
 ```
 
-* for now, we are yet to implement the ShowAllInvoices endpoint, so use the following cURL request for the same(this gives you the list of invoice-IDs for this customer)
-    ```bash
-    curl -v -X GET https://api-m.sandbox.paypal.com/v2/invoicing/invoices?total_required=true \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer <Token>" 
-    ```
+- for now, we are yet to implement the ShowAllInvoices endpoint, so use the following cURL request for the same(this gives you the list of invoice-IDs for this customer)
 
-* refer to the beginning of this Usage section for obtaining a Token.
-    
+  ```bash
+  curl -v -X GET https://api-m.sandbox.paypal.com/v2/invoicing/invoices?total_required=true \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <Token>"
+  ```
+
+- refer to the beginning of this Usage section for obtaining a Token.
 
 ## How to Contribute
 
-* Fork a repository
-* Add/Fix something
-* Check that tests are passing
-* Create PR
+- Fork a repository
+- Add/Fix something
+- Check that tests are passing
+- Create PR
 
 Current contributors:
 
