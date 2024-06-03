@@ -587,32 +587,6 @@ type (
 		SenderBatchHeader *SenderBatchHeader `json:"sender_batch_header,omitempty"`
 	}
 
-	// BillingAgreement struct
-	BillingAgreement struct {
-		Name                        string               `json:"name,omitempty"`
-		Description                 string               `json:"description,omitempty"`
-		StartDate                   JSONTime             `json:"start_date,omitempty"`
-		Plan                        BillingPlan          `json:"plan,omitempty"`
-		Payer                       Payer                `json:"payer,omitempty"`
-		ShippingAddress             *ShippingAddress     `json:"shipping_address,omitempty"`
-		OverrideMerchantPreferences *MerchantPreferences `json:"override_merchant_preferences,omitempty"`
-	}
-
-	// BillingAgreementFromToken struct
-	BillingAgreementFromToken struct {
-		ID          string      `json:"id,omitempty"`
-		Description string      `json:"description,omitempty"`
-		Payer       *Payer      `json:"payer,omitempty"`
-		Plan        BillingPlan `json:"plan,omitempty"`
-		Links       []Link      `json:"links,omitempty"`
-	}
-
-	// BillingAgreementToken response struct
-	BillingAgreementToken struct {
-		Links   []Link `json:"links,omitempty"`
-		TokenID string `json:"token_id,omitempty"`
-	}
-
 	// Plan struct
 	Plan struct {
 		ID                 string              `json:"id"`
@@ -1415,38 +1389,6 @@ type (
 		Value     interface{} `json:"value"`
 	}
 
-	// Resource is a mix of fields from several webhook resource types.
-	//
-	// Deprecated: Add implementation of specific resource types in your own
-	// code and don't use this catch all struct, you show know which resource
-	// type you are expecting and handle that type only.
-	//
-	// Every resource struct type should be unique for every combination of
-	// "resource_type"/"resource_version" combination of the Event type /
-	// webhook message.
-	Resource struct {
-		ID                        string                     `json:"id,omitempty"`
-		Status                    string                     `json:"status,omitempty"`
-		StatusDetails             *CaptureStatusDetails      `json:"status_details,omitempty"`
-		Amount                    *PurchaseUnitAmount        `json:"amount,omitempty"`
-		UpdateTime                string                     `json:"update_time,omitempty"`
-		CreateTime                string                     `json:"create_time,omitempty"`
-		ExpirationTime            string                     `json:"expiration_time,omitempty"`
-		SellerProtection          *SellerProtection          `json:"seller_protection,omitempty"`
-		FinalCapture              bool                       `json:"final_capture,omitempty"`
-		SellerPayableBreakdown    *CaptureSellerBreakdown    `json:"seller_payable_breakdown,omitempty"`
-		SellerReceivableBreakdown *SellerReceivableBreakdown `json:"seller_receivable_breakdown,omitempty"`
-		NoteToPayer               string                     `json:"note_to_payer,omitempty"`
-		CustomID                  string                     `json:"custom_id,omitempty"`
-		PartnerClientID           string                     `json:"partner_client_id,omitempty"`
-		MerchantID                string                     `json:"merchant_id,omitempty"`
-		Intent                    string                     `json:"intent,omitempty"`
-		BillingAgreementID        *string                    `json:"billing_agreement_id,omitempty"`
-		PurchaseUnits             []*PurchaseUnitRequest     `json:"purchase_units,omitempty"`
-		Payer                     *PayerWithNameAndPhone     `json:"payer,omitempty"`
-		Links                     []Link                     `json:"links,omitempty"`
-	}
-
 	CaptureSellerBreakdown struct {
 		GrossAmount         PurchaseUnitAmount  `json:"gross_amount"`
 		PayPalFee           PurchaseUnitAmount  `json:"paypal_fee"`
@@ -1615,6 +1557,12 @@ type (
 		TotalPages int    `json:"total_pages,omitempty"`
 		Links      []Link `json:"links,omitempty"`
 	}
+
+	Patch struct {
+		Operation string      `json:"op"`
+		Path      string      `json:"path"`
+		Value     interface{} `json:"value"`
+	}
 )
 
 // Error method implementation for ErrorResponse struct
@@ -1652,6 +1600,6 @@ func (e *expirationTime) UnmarshalJSON(b []byte) error {
 
 // Convert ExpirationTime to time.Duration
 func (e *expirationTime) ToDuration() time.Duration {
-    seconds := int64(*e)
-    return time.Duration(seconds) * time.Second
+	seconds := int64(*e)
+	return time.Duration(seconds) * time.Second
 }

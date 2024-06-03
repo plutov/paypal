@@ -2,112 +2,13 @@
 
 # Go client for PayPal REST API
 
-## Coverage
+## Paypal REST API Docs
 
-### Auth
+[Get started with PayPal REST APIs](https://developer.paypal.com/api/rest/)
 
-* POST /v1/oauth2/token
-
-### /v1/payments
-
-* POST /v1/payments/payouts
-* GET /v1/payments/payouts/:id
-* GET /v1/payments/payouts-item/:id
-* POST /v1/payments/payouts-item/:id/cancel
-* GET /v1/payments/sale/:id
-* POST /v1/payments/sale/:id/refund
-* GET /v1/payments/billing-plans
-* POST /v1/payments/billing-plans
-* PATCH /v1/payments/billing-plans/:id
-* POST /v1/payments/billing-agreements
-* POST /v1/payments/billing-agreements/:token/agreement-execute
-
-### /v2/payments
-
-* GET /v2/payments/authorizations/:id
-* GET /v2/payments/captures/:id
-* POST /v2/payments/authorizations/:id/capture
-* POST /v2/payments/authorizations/:id/void
-* POST /v2/payments/authorizations/:id/reauthorize
-* GET /v2/payments/refund/:id
-
-### Identity
-* POST /v1/identity/openidconnect/tokenservice
-* GET /v1/identity/openidconnect/userinfo/?schema=:schema
-
-### /v1/payment-experience
-
-* GET /v1/payment-experience/web-profiles
-* POST /v1/payment-experience/web-profiles
-* GET /v1/payment-experience/web-profiles/:id
-* PUT /v1/payment-experience/web-profiles/:id
-* DELETE /v1/payment-experience/web-profiles/:id
-
-### /v1/reporting
-
-* POST /v1/reporting/transactions
-
-### Vault
-
-* POST /v1/vault/credit-cards
-* DELETE /v1/vault/credit-cards/:id
-* PATCH /v1/vault/credit-cards/:id
-* GET /v1/vault/credit-cards/:id
-* GET /v1/vault/credit-cards
-
-### Checkout
-
-* POST /v2/checkout/orders
-* GET /v2/checkout/orders/:id
-* PATCH /v2/checkout/orders/:id
-* POST /v2/checkout/orders/:id/authorize
-* POST /v2/checkout/orders/:id/capture
-
-### Notifications
-* POST /v1/notifications/webhooks
-* GET /v1/notifications/webhooks
-* GET /v1/notifications/webhooks/:id
-* PATCH /v1/notifications/webhooks/:id
-* DELETE /v1/notifications/webhooks/:id
-* POST /v1/notifications/verify-webhook-signature
-
-### Products (Catalog)
-
-* POST /v1/catalogs/products
-* PATCH /v1/catalogs/products/:id
-* GET /v1/catalogs/products/:id
-* GET /v1/catalogs/products
-
-### Billing Plans (Subscriptions)
-
-* POST  /v1/billing/plans
-* PATCH /v1/billing/plans/:id
-* GET   /v1/billing/plans/:id
-* GET   /v1/billing/plans
-* POST  /v1/billing/plans/:id/activate
-* POST  /v1/billing/plans/:id/deactivate
-* POST  /v1/billing/plans/:id/update-pricing-schemes
-
-### Subscriptions
-
-* POST /v1/billing/subscriptions
-* PATCH /v1/billing/subscriptions/:id
-* GET /v1/billing/subscriptions/:id
-* POST /v1/billing/subscriptions/:id/activate
-* POST /v1/billing/subscriptions/:id/cancel
-* POST /v1/billing/subscriptions/:id/revise
-* POST /v1/billing/subscriptions/:id/capture
-* POST /v1/billing/subscriptions/:id/suspend
-* GET /v1/billing/subscriptions/:id/transactions
-
-### Invoicing
-
-* POST /v2/invoicing/generate-next-invoice-number
-* GET /v2/invoicing/invoices/:id
- 
 ## Missing endpoints
 
-It is possible that some endpoints are missing in this Client, but you can use built-in `paypal` functions to perform a request: `NewClient -> NewRequest -> SendWithAuth`
+It is possible that some endpoints are missing in this client, but you can use built-in `paypal` functions to perform a request: `NewClient -> NewRequest -> SendWithAuth`
 
 ## Usage
 
@@ -373,16 +274,19 @@ c.ListWebhooks(paypal.AncorTypeApplication)
 ```
 
 ### Generate Next Invoice Number
+
 ```go
 // GenerateInvoiceNumber: generates the next invoice number that is available to the merchant.
 c.GenerateInvoiceNumber(ctx) // might return something like "0001" or "0010".
 ```
 
 ### Get Invoice Details by ID
+
 ```go
 // the second argument is an ID, it should be valid
 invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
 ```
+
 * for now, we are yet to implement the ShowAllInvoices endpoint, so use the following cURL request for the same(this gives you the list of invoice-IDs for this customer)
     ```bash
     curl -v -X GET https://api-m.sandbox.paypal.com/v2/invoicing/invoices?total_required=true \
@@ -407,5 +311,6 @@ Current contributors:
 
 ## Tests
 
-* Unit tests: `go test -v ./...`
-* Integration tests: `go test -tags=integration`
+```
+go test -v ./...
+```

@@ -15,6 +15,9 @@ import (
 
 const alphabet = "abcedfghijklmnopqrstuvwxyz"
 
+var testClientID = "AXy9orp-CDaHhBZ9C78QHW2BKZpACgroqo85_NIOa9mIfJ9QnSVKzY-X_rivR_fTUUr6aLjcJsj6sDur"
+var testSecret = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCdR_UYNKVxJE-UgS2iCw"
+
 func RandomString(n int) string {
 	var sb strings.Builder
 	k := len(alphabet)

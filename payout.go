@@ -23,11 +23,6 @@ func (c *Client) CreatePayout(ctx context.Context, p Payout) (*PayoutResponse, e
 	return response, nil
 }
 
-// CreateSinglePayout is deprecated, use CreatePayout instead.
-func (c *Client) CreateSinglePayout(ctx context.Context, p Payout) (*PayoutResponse, error) {
-	return c.CreatePayout(ctx, p)
-}
-
 // GetPayout shows the latest status of a batch payout along with the transaction status and other data for individual items.
 // Also, returns IDs for the individual payout items. You can use these item IDs in other calls.
 // Endpoint: GET /v1/payments/payouts/ID
