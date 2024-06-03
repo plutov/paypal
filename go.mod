@@ -1,6 +1,6 @@
 module github.com/plutov/paypal/v4
 
-go 1.22
+go 1.21
 
 require github.com/stretchr/testify v1.9.0
 
