@@ -483,14 +483,13 @@ type (
 		Links            []Link                `json:"links,omitempty"`
 	}
 
-	// AuthorizeOrderResponse .
 	AuthorizeOrderResponse struct {
 		CreateTime    *time.Time             `json:"create_time,omitempty"`
 		UpdateTime    *time.Time             `json:"update_time,omitempty"`
 		ID            string                 `json:"id,omitempty"`
 		Status        string                 `json:"status,omitempty"`
 		Intent        string                 `json:"intent,omitempty"`
-		PurchaseUnits []PurchaseUnitRequest  `json:"purchase_units,omitempty"`
+		PurchaseUnits []PurchaseUnit         `json:"purchase_units,omitempty"`
 		Payer         *PayerWithNameAndPhone `json:"payer,omitempty"`
 	}
 
@@ -826,7 +825,6 @@ type (
 		Value    string `json:"value"`
 	}
 
-	// PurchaseUnit struct
 	PurchaseUnit struct {
 		ReferenceID        string              `json:"reference_id"`
 		Amount             *PurchaseUnitAmount `json:"amount,omitempty"`
@@ -944,7 +942,8 @@ type (
 
 	// CapturedPayments has the amounts for a captured order
 	CapturedPayments struct {
-		Captures []CaptureAmount `json:"captures,omitempty"`
+		Autthorizations []Authorization `json:"authorizations,omitempty"`
+		Captures        []CaptureAmount `json:"captures,omitempty"`
 	}
 
 	// CapturedPurchaseItem are items for a captured order

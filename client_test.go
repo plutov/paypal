@@ -2,7 +2,6 @@ package paypal
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"math/rand"
 	"net/http"
@@ -46,38 +45,15 @@ func createRandomProduct(t *testing.T) Product {
 // test the Lock and Unlock methods of the private mutex field
 // of Client structure.
 func (c *Client) sendWithAuth(req *http.Request, v interface{}) error {
-	// c.Lock()
 	c.mu.Lock()
-	// Note: Here we do not want to `defer c.Unlock()` because we need `c.Send(...)`
-	// to happen outside of the locked section.
+	defer c.mu.Unlock()
 
-	if c.mu.TryLock() {
-		// if the code is able to acquire a lock
-		// despite the mutex of c being locked, throw an error
-		err := errors.New("TryLock succeeded inside sendWithAuth with mutex locked")
-		return err
-	}
 	if c.Token == nil || (!c.tokenExpiresAt.IsZero() && time.Until(c.tokenExpiresAt) < RequestNewTokenBeforeExpiresIn) {
-		// c.Token will be updated in GetAccessToken call
 		if _, err := c.GetAccessToken(req.Context()); err != nil {
-			// c.Unlock()
-			c.mu.Unlock()
 			return err
 		}
 	}
 	req.Header.Set("Authorization", "Bearer "+c.Token.Token)
-	// Unlock the client mutex before sending the request, this allows multiple requests
-	// to be in progress at the same time.
-	// c.Unlock()
-	c.mu.Unlock()
-
-	if !c.mu.TryLock() {
-		// if the code is unable to acquire a lock
-		// despite the mutex of c being unlocked, throw an error
-		err := errors.New("TryLock failed inside sendWithAuth with mutex unlocked")
-		return err
-	}
-	c.mu.Unlock() // undo changes from the previous TryLock
 
 	return c.Send(req, v)
 }
