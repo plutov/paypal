@@ -297,7 +297,7 @@ invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
 Current contributors:
 
 - [Roopak Venkatakrishnan](https://github.com/roopakv)
-- [Alex Pliutau](https://github.com/plutov)
+- [Alex Pliutau](https://packagemain.tech)
 
 ## Tests
 
