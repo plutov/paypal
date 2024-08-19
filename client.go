@@ -97,13 +97,23 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	if c.returnRepresentation {
 		req.Header.Set("Prefer", "return=representation")
 	}
+	if c.Log != nil {
+		if reqDump, err := httputil.DumpRequestOut(req, true); err == nil {
+			c.Log.Write([]byte(fmt.Sprintf("Request: %s\n", reqDump)))
+		}
+	}
 
 	resp, err = c.Client.Do(req)
-	c.log(req, resp)
-
 	if err != nil {
 		return err
 	}
+
+	if c.Log != nil {
+		if respDump, err := httputil.DumpResponse(resp, true); err == nil {
+			c.Log.Write([]byte(fmt.Sprintf("Response from %s: %s\n", req.URL, respDump)))
+		}
+	}
+
 	defer func(Body io.ReadCloser) error {
 		return Body.Close()
 	}(resp.Body)
@@ -179,23 +189,4 @@ func (c *Client) NewRequest(ctx context.Context, method, url string, payload int
 		buf = bytes.NewBuffer(b)
 	}
 	return http.NewRequestWithContext(ctx, method, url, buf)
-}
-
-// log will dump request and response to the log file
-func (c *Client) log(r *http.Request, resp *http.Response) {
-	if c.Log != nil {
-		var (
-			reqDump  string
-			respDump []byte
-		)
-
-		if r != nil {
-			reqDump = fmt.Sprintf("%s %s. Data: %s", r.Method, r.URL.String(), r.Form.Encode())
-		}
-		if resp != nil {
-			respDump, _ = httputil.DumpResponse(resp, true)
-		}
-
-		c.Log.Write([]byte(fmt.Sprintf("Request: %s\nResponse: %s\n", reqDump, string(respDump))))
-	}
 }
