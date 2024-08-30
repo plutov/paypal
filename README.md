@@ -1,5 +1,10 @@
 [Docs](https://pkg.go.dev/github.com/plutov/paypal)
 
+<p>
+    <a href="https://github.com/plutov/paypal/releases"><img src="https://img.shields.io/github/release/plutov/paypal.svg" alt="Latest Release"></a>
+    <a href="https://pkg.go.dev/github.com/plutov/paypal?tab=doc"><img src="https://godoc.org/github.com/golang/gddo?status.svg" alt="GoDoc"></a>
+</p>
+
 # Go client for PayPal REST API
 
 ## Paypal REST API Docs
@@ -294,10 +299,10 @@ invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
 - Check that tests are passing
 - Create PR
 
-Current contributors:
+Main contributors:
 
-- [Roopak Venkatakrishnan](https://github.com/roopakv)
 - [Alex Pliutau](https://github.com/plutov)
+- [Roopak Venkatakrishnan](https://github.com/roopakv)
 
 ## Tests
 

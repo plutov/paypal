@@ -12,10 +12,10 @@ import (
 
 const (
 	// APIBaseSandBox points to the sandbox (for testing) version of the API
-	APIBaseSandBox = "https://api.sandbox.paypal.com"
+	APIBaseSandBox = "https://api-m.sandbox.paypal.com"
 
 	// APIBaseLive points to the live version of the API
-	APIBaseLive = "https://api.paypal.com"
+	APIBaseLive = "https://api-m.paypal.com"
 
 	// RequestNewTokenBeforeExpiresIn is used by SendWithAuth and try to get new Token when it's about to expire
 	RequestNewTokenBeforeExpiresIn = time.Duration(60) * time.Second
