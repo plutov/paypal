@@ -62,7 +62,7 @@ order, err := c.GetOrder("O-4J082351X3132253H")
 ctx := context.Background()
 units := []paypal.PurchaseUnitRequest{}
 source := &paypal.PaymentSource{}
-appCtx := &paypalApplicationContext{}
+appCtx := &paypal.ApplicationContext{}
 order, err := c.CreateOrder(ctx, paypal.OrderIntentCapture, units, ource, appCtx)
 ```
 
