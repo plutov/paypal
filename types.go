@@ -782,6 +782,8 @@ type (
 		Description string `json:"description,omitempty"`
 		SKU         string `json:"sku,omitempty"`
 		Category    string `json:"category,omitempty"`
+		URL         string `json:"url,omitempty"`
+		ImageURL    string `json:"image_url,omitempty"`
 	}
 
 	// ItemList struct
