@@ -120,7 +120,11 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		errResp := &ErrorResponse{Response: resp}
-		data, err = io.ReadAll(resp.Body)
+
+		var bodyBuffer bytes.Buffer
+		teeReader := io.TeeReader(resp.Body, &bodyBuffer)
+		data, err = io.ReadAll(teeReader)
+		resp.Body = io.NopCloser(&bodyBuffer)
 
 		if err == nil && len(data) > 0 {
 			err := json.Unmarshal(data, errResp)
