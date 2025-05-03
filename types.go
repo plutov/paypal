@@ -944,8 +944,8 @@ type (
 
 	// CapturedPayments has the amounts for a captured order
 	CapturedPayments struct {
-		Autthorizations []Authorization `json:"authorizations,omitempty"`
-		Captures        []CaptureAmount `json:"captures,omitempty"`
+		Authorizations []Authorization `json:"authorizations,omitempty"`
+		Captures       []CaptureAmount `json:"captures,omitempty"`
 	}
 
 	// CapturedPurchaseItem are items for a captured order
