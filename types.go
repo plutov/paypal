@@ -192,7 +192,7 @@ type (
 	}
 
 	// ApplicationContext struct
-	//Doc: https://developer.paypal.com/docs/api/orders/v2/#definition-application_context
+	// Doc: https://developer.paypal.com/docs/api/orders/v2/#definition-application_context
 	ApplicationContext struct {
 		BrandName          string             `json:"brand_name,omitempty"`
 		Locale             string             `json:"locale,omitempty"`
@@ -385,7 +385,7 @@ type (
 		RecipientAddress InvoiceAddressPortable `json:"address,omitempty"` // address of the recipient.
 		RecipientName    Name                   `json:"name,omitempty"`    // The first and Last name of the recipient.
 	}
-	//used in InvoicePayments struct
+	// used in InvoicePayments struct
 	// Doc: https://developer.paypal.com/docs/api/invoicing/v2/#definition-payment_detail
 	InvoicePaymentDetails struct {
 		Method       string             `json:"method"`
@@ -541,7 +541,7 @@ type (
 		Links            []Link                `json:"links,omitempty"`
 	}
 
-	//https://developer.paypal.com/docs/api/payments/v2/#captures_get
+	// https://developer.paypal.com/docs/api/payments/v2/#captures_get
 	CaptureDetailsResponse struct {
 		Status                    string                     `json:"status,omitempty"`
 		StatusDetails             *CaptureStatusDetails      `json:"status_details,omitempty"`
@@ -1198,7 +1198,7 @@ type (
 		SenderBatchID string `json:"sender_batch_id,omitempty"`
 	}
 
-	//ShippingAmount struct
+	// ShippingAmount struct
 	ShippingAmount struct {
 		Money
 	}
@@ -1227,7 +1227,7 @@ type (
 	}
 
 	// Name struct
-	//Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-name
+	// Doc: https://developer.paypal.com/docs/api/subscriptions/v1/#definition-name
 	Name struct {
 		FullName   string `json:"full_name,omitempty"`
 		Suffix     string `json:"suffix,omitempty"`
@@ -1245,8 +1245,8 @@ type (
 
 	// Subscriber struct
 	Subscriber struct {
-		PayerID         string               `json:"payer_id"`
-		ShippingAddress ShippingDetail       `json:"shipping_address,omitempty"`
+		PayerID         string               `json:"payer_id,omitempty"`
+		ShippingAddress *ShippingDetail      `json:"shipping_address,omitempty"`
 		Name            CreateOrderPayerName `json:"name,omitempty"`
 		EmailAddress    string               `json:"email_address,omitempty"`
 	}
@@ -1276,7 +1276,7 @@ type (
 		Payee            *Payee          `json:"payee,omitempty"`
 	}
 
-	//Payee struct
+	// Payee struct
 	Payee struct {
 		Email string `json:"email"`
 	}
@@ -1565,9 +1565,9 @@ type (
 	}
 
 	ListParams struct {
-		Page          string `json:"page,omitempty"`           //Default: 0.
-		PageSize      string `json:"page_size,omitempty"`      //Default: 10.
-		TotalRequired string `json:"total_required,omitempty"` //Default: no.
+		Page          string `json:"page,omitempty"`           // Default: 0.
+		PageSize      string `json:"page_size,omitempty"`      // Default: 10.
+		TotalRequired string `json:"total_required,omitempty"` // Default: no.
 	}
 
 	SharedListResponse struct {
