@@ -79,7 +79,7 @@ func (c *Client) SetReturnRepresentation() {
 // Send makes a request to the API, the response body will be
 // unmarshalled into v, or if v is an io.Writer, the response will
 // be written to it without decoding
-func (c *Client) Send(req *http.Request, v interface{}) error {
+func (c *Client) Send(req *http.Request, v interface{}) (retErr error) {
 	var (
 		err  error
 		resp *http.Response
@@ -99,7 +99,10 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 	}
 	if c.Log != nil {
 		if reqDump, err := httputil.DumpRequestOut(req, true); err == nil {
-			c.Log.Write([]byte(fmt.Sprintf("Request: %s\n", reqDump)))
+			logMsg := fmt.Sprintf("Request: %s\n", string(reqDump))
+			if _, logErr := c.Log.Write([]byte(logMsg)); logErr != nil {
+				return logErr
+			}
 		}
 	}
 
@@ -110,13 +113,19 @@ func (c *Client) Send(req *http.Request, v interface{}) error {
 
 	if c.Log != nil {
 		if respDump, err := httputil.DumpResponse(resp, true); err == nil {
-			c.Log.Write([]byte(fmt.Sprintf("Response from %s: %s\n", req.URL, respDump)))
+			logMsg := fmt.Sprintf("Response from %s: %s\n", req.URL.RequestURI(), string(respDump))
+			if _, logErr := c.Log.Write([]byte(logMsg)); logErr != nil {
+				return logErr
+			}
 		}
 	}
 
-	defer func(Body io.ReadCloser) error {
-		return Body.Close()
-	}(resp.Body)
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil && retErr == nil {
+			retErr = err
+		}
+	}()
 
 	if resp.StatusCode < 200 || resp.StatusCode > 299 {
 		errResp := &ErrorResponse{Response: resp}

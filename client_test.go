@@ -14,8 +14,10 @@ import (
 
 const alphabet = "abcedfghijklmnopqrstuvwxyz"
 
-var testClientID = "AXy9orp-CDaHhBZ9C78QHW2BKZpACgroqo85_NIOa9mIfJ9QnSVKzY-X_rivR_fTUUr6aLjcJsj6sDur"
-var testSecret = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCdR_UYNKVxJE-UgS2iCw"
+var (
+	testClientID = "AXy9orp-CDaHhBZ9C78QHW2BKZpACgroqo85_NIOa9mIfJ9QnSVKzY-X_rivR_fTUUr6aLjcJsj6sDur"
+	testSecret   = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCdR_UYNKVxJE-UgS2iCw"
+)
 
 func RandomString(n int) string {
 	var sb strings.Builder
@@ -29,7 +31,7 @@ func RandomString(n int) string {
 }
 
 func createRandomProduct(t *testing.T) Product {
-	//create a product
+	// create a product
 	productData := Product{
 		Name:        RandomString(10),
 		Description: RandomString(100),
@@ -72,7 +74,8 @@ func (c *Client) createProduct(ctx context.Context, product Product) (*CreatePro
 
 func TestClientMutex(t *testing.T) {
 	c, _ := NewClient(testClientID, testSecret, APIBaseSandBox)
-	c.GetAccessToken(context.Background())
+	_, err := c.GetAccessToken(context.Background())
+	assert.NoError(t, err)
 
 	// Operational testing of the private mutex field
 	n_iter := 2
@@ -90,5 +93,4 @@ func TestClientMutex(t *testing.T) {
 		err := <-errs
 		assert.Equal(t, nil, err)
 	}
-
 }
