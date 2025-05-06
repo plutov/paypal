@@ -75,8 +75,11 @@ func (c *Client) UpdateDispute(ctx context.Context, disputeId string, params *Up
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Provides evidence for a dispute, by ID
@@ -87,8 +90,11 @@ func (c *Client) DisputeProvideEvidence(ctx context.Context, disputeId string, p
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Appeals a dispute, by ID
@@ -99,8 +105,11 @@ func (c *Client) DisputeAppeal(ctx context.Context, disputeId string, params *Di
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Accepts liability for a claim, by ID
@@ -111,8 +120,11 @@ func (c *Client) DisputeAcceptClaim(ctx context.Context, disputeId string, param
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Settles a dispute in either the customer's or merchant's favor.
@@ -123,8 +135,11 @@ func (c *Client) SettleDispute(ctx context.Context, disputeId string, adjudicate
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Updates the status of a dispute, by ID
@@ -136,8 +151,11 @@ func (c *Client) DisputeUpdateStatus(ctx context.Context, disputeId string, adju
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Escalates the dispute, by ID
@@ -148,8 +166,11 @@ func (c *Client) DisputeEscalateToClaim(ctx context.Context, disputeId string, n
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Sends a message about a dispute, by ID, to the other party in the dispute.
@@ -160,8 +181,11 @@ func (c *Client) DisputeSendMessageToOtherParty(ctx context.Context, disputeId s
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Makes an offer to the other party to resolve a dispute, by ID
@@ -172,8 +196,11 @@ func (c *Client) DisputeMakeOffer(ctx context.Context, disputeId string, params 
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // The customer accepts the offer from merchant to resolve a dispute, by ID
@@ -184,8 +211,11 @@ func (c *Client) DisputeAcceptOffer(ctx context.Context, disputeId string, note 
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Denies an offer that the merchant proposes for a dispute, by ID.
@@ -196,8 +226,11 @@ func (c *Client) DisputeDenyOffer(ctx context.Context, disputeId string, note st
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Acknowledges that the customer returned an item for a dispute, by ID.
@@ -208,8 +241,11 @@ func (c *Client) DisputeAcknowledgeReturnItem(ctx context.Context, disputeId str
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Provides supporting information for a dispute, by ID.
@@ -220,6 +256,9 @@ func (c *Client) DisputeProvideSupportingInfo(ctx context.Context, disputeId str
 	if err != nil {
 		return err
 	}
-	err = c.SendWithAuth(req, nil)
-	return err
+	if err = c.SendWithAuth(req, nil); err != nil {
+		return err
+	}
+
+	return nil
 }
