@@ -5,6 +5,8 @@
     <a href="https://pkg.go.dev/github.com/plutov/paypal?tab=doc"><img src="https://godoc.org/github.com/golang/gddo?status.svg" alt="GoDoc"></a>
 </p>
 
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/plutov/paypal?utm_source=oss&utm_medium=github&utm_campaign=plutov%2Fpaypal&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
+
 # Go client for PayPal REST API
 
 ## Paypal REST API Docs
