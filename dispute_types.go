@@ -19,8 +19,8 @@ type ListDisputesResponse struct {
 
 type DisputeItem struct {
 	DisputeID             string                     `json:"dispute_id,omitempty"`
-	CreateTime            time.Time                  `json:"create_time,omitempty"`
-	UpdateTime            time.Time                  `json:"update_time,omitempty"`
+	CreateTime            time.Time                  `json:"create_time"`
+	UpdateTime            time.Time                  `json:"update_time"`
 	DisputedTransactions  []*DisputedTransactionItem `json:"disputed_transactions,omitempty"`
 	Reason                string                     `json:"reason,omitempty"`
 	Status                string                     `json:"status,omitempty"`
@@ -35,8 +35,8 @@ type DisputeItem struct {
 
 type DisputedTransactionItem struct {
 	BuyerTransactionID string `json:"buyer_transaction_id,omitempty"`
-	Buyer              Buyer  `json:"buyer,omitempty"`
-	Seller             Seller `json:"seller,omitempty"`
+	Buyer              Buyer  `json:"buyer"`
+	Seller             Seller `json:"seller"`
 }
 
 type Buyer struct {
@@ -52,8 +52,8 @@ type Seller struct {
 
 type GetDisputeDetailResponse struct {
 	DisputeID             string                       `json:"dispute_id,omitempty"`
-	CreateTime            time.Time                    `json:"create_time,omitempty"`
-	UpdateTime            time.Time                    `json:"update_time,omitempty"`
+	CreateTime            time.Time                    `json:"create_time"`
+	UpdateTime            time.Time                    `json:"update_time"`
 	DisputedTransactions  []*DisputedTransactionDetail `json:"disputed_transactions,omitempty"`
 	Reason                string                       `json:"reason,omitempty"`
 	Status                string                       `json:"status,omitempty"`
@@ -74,15 +74,15 @@ type DisputeOutcome struct {
 
 type DisputedTransactionDetail struct {
 	SellerTransactionID string    `json:"seller_transaction_id,omitempty"`
-	CreateTime          time.Time `json:"create_time,omitempty"`
+	CreateTime          time.Time `json:"create_time"`
 	TransactionStatus   string    `json:"transaction_status,omitempty"`
 	GrossAmount         *Money    `json:"gross_amount,omitempty"`
-	Buyer               Buyer     `json:"buyer,omitempty"`
-	Seller              Seller    `json:"seller,omitempty"`
+	Buyer               Buyer     `json:"buyer"`
+	Seller              Seller    `json:"seller"`
 }
 
 type Extensions struct {
-	MerchandizeDisputeProperties MerchandizeDisputeProperties `json:"merchandize_dispute_properties,omitempty"`
+	MerchandizeDisputeProperties MerchandizeDisputeProperties `json:"merchandize_dispute_properties"`
 }
 
 type MerchandizeDisputeProperties struct {
@@ -97,7 +97,7 @@ type ServiceDetails struct {
 
 type Message struct {
 	PostedBy   string      `json:"posted_by,omitempty"`
-	TimePosted time.Time   `json:"time_posted,omitempty"`
+	TimePosted time.Time   `json:"time_posted"`
 	Content    string      `json:"content,omitempty"`
 	Documents  []*Document `json:"documents,omitempty"`
 }
@@ -114,7 +114,7 @@ type Offer struct {
 }
 
 type History struct {
-	OfferTime             time.Time `json:"offer_time,omitempty"`
+	OfferTime             time.Time `json:"offer_time"`
 	Actor                 string    `json:"actor,omitempty"`
 	EventType             string    `json:"event_type,omitempty"`
 	OfferType             string    `json:"offer_type,omitempty"`
@@ -126,7 +126,7 @@ type History struct {
 type UpdateDisputeValue struct {
 	ID         string    `json:"id,omitempty"`
 	Name       string    `json:"name,omitempty"`
-	CreateTime time.Time `json:"create_time,omitempty"`
+	CreateTime time.Time `json:"create_time"`
 	Reason     string    `json:"reason,omitempty"`
 	Status     string    `json:"status,omitempty"`
 }
