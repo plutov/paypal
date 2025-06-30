@@ -728,9 +728,9 @@ type (
 	// ErrorResponseDetail struct
 	ErrorResponseDetail struct {
 		Field       string `json:"field"`
-		Issue       string `json:"issue"`
-		Name        string `json:"name"`
-		Message     string `json:"message"`
+		Value	    string `json:"value"`
+		Location    string `json:"location"`
+		Issue       string `json:"issue"` 
 		Description string `json:"description"`
 		Links       []Link `json:"link"`
 	}
