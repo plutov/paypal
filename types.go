@@ -728,9 +728,9 @@ type (
 	// ErrorResponseDetail struct
 	ErrorResponseDetail struct {
 		Field       string `json:"field"`
-		Value	    string `json:"value"`
+		Value       string `json:"value"`
 		Location    string `json:"location"`
-		Issue       string `json:"issue"` 
+		Issue       string `json:"issue"`
 		Description string `json:"description"`
 		Links       []Link `json:"link"`
 	}
@@ -743,6 +743,7 @@ type (
 		Message         string                `json:"message"`
 		InformationLink string                `json:"information_link"`
 		Details         []ErrorResponseDetail `json:"details"`
+		Links           []Link                `json:"link"`
 	}
 
 	// ExecuteAgreementResponse struct
