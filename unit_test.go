@@ -134,18 +134,24 @@ func TestTypeErrorResponseTwo(t *testing.T) {
 }
 
 func TestTypeErrorResponseThree(t *testing.T) {
+
 	response := `{
-		"name": "BUSINESS_ERROR",
-		"debug_id": "[REDACTED]",
-		"message": "Business error",
-		"information_link": "https://developer.paypal.com/webapps/developer/docs/api/#BUSINESS_ERROR",
-		"details": [
-			{
-				"name": "TOKEN_NOT_FOUND",
-				"message": "Not Found: Invalid BA-Token Identifier"
-			}
-		]
-	}`
+            "name": "DUPLICATE_TRACKER",
+            "message": "Business error",
+            "debug_id": "[REDACTED]",
+            "details": [
+                {
+                    "field": "#/trackers/0/tracking_number",
+                    "value": "[TRACKING_NUMBER]",
+                    "location": "body",
+                    "issue": "TRACKING_NUMBER_ALREADY_EXIST",
+                    "description": "Tracking information already exists with same Tracking number",
+                    "links": [
+
+                    ]
+                }
+            ]
+        }`
 
 	i := &ErrorResponse{}
 	err := json.Unmarshal([]byte(response), i)
@@ -153,11 +159,12 @@ func TestTypeErrorResponseThree(t *testing.T) {
 		t.Errorf("ErrorResponse Unmarshal failed")
 	}
 
-	if i.Name != "BUSINESS_ERROR" ||
+	if i.Name != "DUPLICATE_TRACKER" ||
 		i.Message != "Business error" ||
 		len(i.Details) != 1 ||
-		i.Details[0].Name != "TOKEN_NOT_FOUND" ||
-		i.Details[0].Message != "Not Found: Invalid BA-Token Identifier" {
+		i.Details[0].Issue != "TRACKING_NUMBER_ALREADY_EXIST" ||
+		i.Details[0].Value != "[TRACKING_NUMBER]" ||
+		i.Details[0].Description != "Tracking information already exists with same Tracking number" {
 		t.Errorf("ErrorResponse decoded result is incorrect, Given: %v", i)
 	}
 }
