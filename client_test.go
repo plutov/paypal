@@ -23,16 +23,16 @@ func RandomString(n int) string {
 	var sb strings.Builder
 	k := len(alphabet)
 
-	for i := 0; i < n; i++ {
+	for range n {
 		c := alphabet[rand.Intn(k)]
 		sb.WriteByte(c)
 	}
 	return sb.String()
 }
 
-func createRandomProduct(t *testing.T) Product {
+func createRandomProduct() Product {
 	// create a product
-	productData := Product{
+	prodictData := Product{
 		Name:        RandomString(10),
 		Description: RandomString(100),
 		Category:    ProductCategorySoftware,
@@ -40,7 +40,7 @@ func createRandomProduct(t *testing.T) Product {
 		ImageUrl:    "https://example.com/image.png",
 		HomeUrl:     "https://example.com",
 	}
-	return productData
+	return prodictData
 }
 
 // this is a simple copy of the SendWithAuth method, used to
@@ -84,7 +84,7 @@ func TestClientMutex(t *testing.T) {
 
 	for i := 0; i < n_iter; i++ {
 		go func() {
-			_, err := c.createProduct(context.Background(), createRandomProduct(t))
+			_, err := c.createProduct(context.Background(), createRandomProduct())
 			errs <- err
 		}()
 	}
