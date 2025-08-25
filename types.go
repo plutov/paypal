@@ -8,6 +8,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	// add limiter support
+	"github.com/plutov/paypal/v4/limiter"
 )
 
 const (
@@ -646,6 +649,10 @@ type (
 		Token                *TokenResponse
 		tokenExpiresAt       time.Time
 		returnRepresentation bool
+
+		// optional rate limiter; if set, SendWithAuth will check it before making requests
+		rateLimiter    limiter.RateLimiter
+		rateLimiterKey string
 	}
 
 	// CreditCard struct
@@ -1594,7 +1601,7 @@ func (t JSONTime) MarshalJSON() ([]byte, error) {
 	return []byte(stamp), nil
 }
 
-// UnmarshalJSON for JSONTime, timezone offset is missing a colon ':"
+// UnmarshalJSON for JSONTime, timezone offset is missing a colon ':'
 func (t *JSONTime) UnmarshalJSON(b []byte) error {
 	s := strings.Trim(string(b), `"`)
 	nt, err := time.Parse("2006-01-02T15:04:05Z0700", s)

@@ -10,7 +10,11 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"time"
+
+	"github.com/plutov/paypal/v4/limiter"
 )
+
+var ErrRateLimited = errors.New("rate limited")
 
 // NewClient returns new Client struct
 // APIBase is a base API URL, for testing you can use paypal.APIBaseSandBox
@@ -74,6 +78,15 @@ func (c *Client) SetLog(log io.Writer) {
 // Verbose response: https://developer.paypal.com/docs/api/orders/v2/#orders-authorize-header-parameters
 func (c *Client) SetReturnRepresentation() {
 	c.returnRepresentation = true
+}
+
+// SetLimiter configures an optional rate limiter used by SendWithAuth.
+// key is used as the rate limit bucket key; if empty, a default is used.
+func (c *Client) SetLimiter(l limiter.RateLimiter, key string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.rateLimiter = l
+	c.rateLimiterKey = key
 }
 
 // Send makes a request to the API, the response body will be
@@ -166,7 +179,34 @@ func (c *Client) SendWithAuth(req *http.Request, v interface{}) error {
 	// Note: Here we do not want to `defer c.Unlock()` because we need `c.Send(...)`
 	// to happen outside of the locked section.
 
-	if c.Token == nil || (!c.tokenExpiresAt.IsZero() && time.Until(c.tokenExpiresAt) < RequestNewTokenBeforeExpiresIn) {
+	// determine if a token request is needed under the lock
+	needToken := c.Token == nil || (!c.tokenExpiresAt.IsZero() && time.Until(c.tokenExpiresAt) < RequestNewTokenBeforeExpiresIn)
+
+	// optional rate limiting
+	if c.rateLimiter != nil {
+		key := c.rateLimiterKey
+		if key == "" {
+			key = "paypal:client"
+		}
+		ctx := req.Context()
+		permits := 1
+		if needToken {
+			permits = 2 // one for token request, one for the main API call
+		}
+		for i := 0; i < permits; i++ {
+			dec, err := c.rateLimiter.Allow(ctx, key)
+			if err != nil {
+				c.mu.Unlock()
+				return err
+			}
+			if !dec.Allowed {
+				c.mu.Unlock()
+				return ErrRateLimited
+			}
+		}
+	}
+
+	if needToken {
 		// c.Token will be updated in GetAccessToken call
 		if _, err := c.GetAccessToken(req.Context()); err != nil {
 			// c.Unlock()
