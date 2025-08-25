@@ -2,7 +2,10 @@ module github.com/plutov/paypal/v4
 
 go 1.24.4
 
-require github.com/stretchr/testify v1.10.0
+require (
+	github.com/redis/go-redis/v9 v9.12.1
+	github.com/stretchr/testify v1.10.0
+)
 
 require (
 	4d63.com/gocheckcompilerdirectives v1.3.0 // indirect
@@ -50,6 +53,7 @@ require (
 	github.com/dave/dst v0.27.3 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/denis-tingaikin/go-header v0.5.0 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/ettle/strcase v0.2.0 // indirect
 	github.com/fatih/color v1.18.0 // indirect
