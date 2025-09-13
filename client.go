@@ -16,19 +16,48 @@ import (
 
 var ErrRateLimited = errors.New("rate limited")
 
+type Option func(o *Client) *Client
+
+func WithCache(cache Cache) Option {
+	return func(c *Client) *Client {
+		c.cache = cache
+		return c
+	}
+}
+
 // NewClient returns new Client struct
 // APIBase is a base API URL, for testing you can use paypal.APIBaseSandBox
-func NewClient(clientID string, secret string, APIBase string) (*Client, error) {
+func NewClient(ctx context.Context, clientID string, secret string, APIBase string, options ...Option) (*Client, error) {
 	if clientID == "" || secret == "" || APIBase == "" {
 		return nil, errors.New("ClientID, Secret and APIBase are required to create a Client")
 	}
 
-	return &Client{
+	cli := &Client{
 		Client:   &http.Client{},
 		ClientID: clientID,
 		Secret:   secret,
 		APIBase:  APIBase,
-	}, nil
+	}
+
+	for _, option := range options {
+		cli = option(cli)
+	}
+	cli.checkCacheToken(ctx)
+	return cli, nil
+}
+
+func (c *Client) checkCacheToken(ctx context.Context) {
+	if c.cache == nil {
+		return
+	}
+
+	token, err := c.cache.GetToken(ctx, c.ClientID)
+	if err != nil {
+		return
+	}
+	if token != nil && token.Token != "" {
+		c.SetAccessTokenWithExpiry(token.Token, token.ExpiresAt)
+	}
 }
 
 // GetAccessToken returns struct of TokenResponse
@@ -50,6 +79,20 @@ func (c *Client) GetAccessToken(ctx context.Context) (*TokenResponse, error) {
 	if response.Token != "" {
 		c.Token = response
 		c.tokenExpiresAt = time.Now().Add(time.Duration(response.ExpiresIn) * time.Second)
+
+		if c.cache != nil {
+			token := &CacheToken{
+				RefreshToken: response.RefreshToken,
+				Token:        response.Token,
+				Type:         response.Type,
+				ExpiresIn:    int64(response.ExpiresIn),
+				ExpiresAt:    c.tokenExpiresAt.Unix(),
+			}
+			err = c.cache.SetToken(ctx, c.ClientID, token)
+			if err != nil {
+				return response, err
+			}
+		}
 	}
 
 	return response, err
@@ -66,6 +109,16 @@ func (c *Client) SetAccessToken(token string) {
 		Token: token,
 	}
 	c.tokenExpiresAt = time.Time{}
+}
+
+// SetAccessTokenWithExpiry sets saved token to current client with expiry time
+func (c *Client) SetAccessTokenWithExpiry(token string, expiresAt int64) {
+	c.Token = &TokenResponse{
+		Token: token,
+	}
+	if expiresAt > 0 {
+		c.tokenExpiresAt = time.Unix(expiresAt, 0)
+	}
 }
 
 // SetLog will set/change the output destination.

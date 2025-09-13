@@ -650,6 +650,8 @@ type (
 		tokenExpiresAt       time.Time
 		returnRepresentation bool
 
+		cache Cache
+
 		// optional rate limiter; if set, SendWithAuth will check it before making requests
 		rateLimiter    limiter.RateLimiter
 		rateLimiterKey string
