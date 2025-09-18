@@ -7,4 +7,4 @@ Some basic suggestions to get you started:
 - Make sure the PR passes all the tests.
 - Make sure the PR passes the linter.
 - Make sure the PR is well documented and formatted.
-- Make sure the PR is well tested.
+- Add tests for any new features or changes.

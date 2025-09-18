@@ -1,155 +1,12 @@
 package paypal_test
 
 import (
-	"context"
 	"encoding/json"
 	"testing"
 
 	"github.com/plutov/paypal/v4"
 	"github.com/stretchr/testify/assert"
 )
-
-// All test values are defined here
-var devTestClientID = "AXy9orp-CDaHhBZ9C78QHW2BKZpACgroqo85_NIOa9mIfJ9QnSVKzY-X_rivR_fTUUr6aLjcJsj6sDur"
-var devTestSecret = "EBoIiUSkCKeSk49hHSgTem1qnjzzJgRQHDEHvGpzlLEf_nIoJd91xu8rPOBDCdR_UYNKVxJE-UgS2iCw"
-var devAPIBaseSandBox = "https://api.sandbox.paypal.com"
-
-func TestGenerateInvoiceNumber(t *testing.T) {
-	ctx := context.Background()
-
-	c, _ := paypal.NewClient(devTestClientID, devTestSecret, devAPIBaseSandBox)
-	_, err := c.GetAccessToken(ctx)
-	assert.Equal(t, nil, err)
-
-	_, err = c.GenerateInvoiceNumber(ctx)
-	assert.Equal(t, nil, err)
-}
-func assertTwoInvoices(t *testing.T, invoice paypal.Invoice, testInvoice paypal.Invoice) {
-
-	// additional_recipients
-	assert.Equal(t, len(invoice.AdditionalRecipients), len(testInvoice.AdditionalRecipients))
-	// additional_recipients --> email_address !! EQUALITY OF SPLICE OF STRUCT REMAINING !!
-
-	// amount
-	assert.Equal(t, invoice.AmountSummary.Currency, testInvoice.AmountSummary.Currency)
-	assert.Equal(t, invoice.AmountSummary.Value, testInvoice.AmountSummary.Value)
-	// amount-->breakdown-->custom-->amount
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Custom.Amount.Currency, testInvoice.AmountSummary.Breakdown.Custom.Amount.Currency)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Custom.Amount.Value, testInvoice.AmountSummary.Breakdown.Custom.Amount.Value)
-	// amount-->breakdown-->custom-->label
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Custom.Label, testInvoice.AmountSummary.Breakdown.Custom.Label)
-	// amount-->breakdown-->discount-->amount
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Discount.InvoiceDiscount.DiscountAmount.Currency, testInvoice.AmountSummary.Breakdown.Discount.InvoiceDiscount.DiscountAmount.Currency)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Discount.InvoiceDiscount.DiscountAmount.Value, testInvoice.AmountSummary.Breakdown.Discount.InvoiceDiscount.DiscountAmount.Value)
-	// amount-->breakdown-->discount-->percent
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Discount.InvoiceDiscount.Percent, testInvoice.AmountSummary.Breakdown.Discount.InvoiceDiscount.Percent)
-	// amount-->breakdown-->discount-->item_discount
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Discount.ItemDiscount.Currency, testInvoice.AmountSummary.Breakdown.Discount.ItemDiscount.Currency)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Discount.ItemDiscount.Value, testInvoice.AmountSummary.Breakdown.Discount.ItemDiscount.Value)
-	// amount-->breakdown-->item_total
-	assert.Equal(t, invoice.AmountSummary.Breakdown.ItemTotal.Currency, testInvoice.AmountSummary.Breakdown.ItemTotal.Currency)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.ItemTotal.Value, testInvoice.AmountSummary.Breakdown.ItemTotal.Value)
-	// amount-->breakdown-->shipping-->amount
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Shipping.Amount.Currency, testInvoice.AmountSummary.Breakdown.Shipping.Amount.Currency)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Shipping.Amount.Value, testInvoice.AmountSummary.Breakdown.Shipping.Amount.Value)
-	// amount-->breakdown-->shipping-->tax
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Shipping.Tax.Amount.Currency, testInvoice.AmountSummary.Breakdown.Shipping.Tax.Amount.Currency)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Shipping.Tax.Amount.Value, testInvoice.AmountSummary.Breakdown.Shipping.Tax.Amount.Value)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Shipping.Tax.ID, testInvoice.AmountSummary.Breakdown.Shipping.Tax.ID)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Shipping.Tax.Name, testInvoice.AmountSummary.Breakdown.Shipping.Tax.Name)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.Shipping.Tax.Percent, testInvoice.AmountSummary.Breakdown.Shipping.Tax.Percent)
-	// amount-->breakdown-->tax_total
-	assert.Equal(t, invoice.AmountSummary.Breakdown.TaxTotal.Currency, testInvoice.AmountSummary.Breakdown.TaxTotal.Currency)
-	assert.Equal(t, invoice.AmountSummary.Breakdown.TaxTotal.Value, testInvoice.AmountSummary.Breakdown.TaxTotal.Value)
-
-	// configuration
-	assert.Equal(t, invoice.Configuration.AllowTip, testInvoice.Configuration.AllowTip)
-	assert.Equal(t, invoice.Configuration.TaxCalculatedAfterDiscount, testInvoice.Configuration.TaxCalculatedAfterDiscount)
-	assert.Equal(t, invoice.Configuration.TaxInclusive, testInvoice.Configuration.TaxInclusive)
-	assert.Equal(t, invoice.Configuration.TemplateId, testInvoice.Configuration.TemplateId)
-	// configuration --> partial_payment
-	assert.Equal(t, invoice.Configuration.PartialPayment.AllowPartialPayment, testInvoice.Configuration.PartialPayment.AllowPartialPayment)
-	assert.Equal(t, invoice.Configuration.PartialPayment.MinimumAmountDue.Currency, testInvoice.Configuration.PartialPayment.MinimumAmountDue.Currency)
-	assert.Equal(t, invoice.Configuration.PartialPayment.MinimumAmountDue.Value, testInvoice.Configuration.PartialPayment.MinimumAmountDue.Value)
-
-	// detail
-	assert.Equal(t, invoice.Detail.CurrencyCode, testInvoice.Detail.CurrencyCode)
-	assert.Equal(t, invoice.Detail.InvoiceDate, testInvoice.Detail.InvoiceDate)
-	assert.Equal(t, invoice.Detail.InvoiceNumber, testInvoice.Detail.InvoiceNumber)
-	assert.Equal(t, invoice.Detail.Memo, testInvoice.Detail.Memo)
-	assert.Equal(t, invoice.Detail.Note, testInvoice.Detail.Note)
-	assert.Equal(t, invoice.Detail.Reference, testInvoice.Detail.Reference)
-	assert.Equal(t, invoice.Detail.TermsAndConditions, testInvoice.Detail.TermsAndConditions)
-	// detail --> attachments !! EQUALITY OF SPLICE OF STRUCT REMAINING !!
-	assert.Equal(t, len(invoice.Detail.Attachments), len(testInvoice.Detail.Attachments))
-	// detail --> metadata
-	assert.Equal(t, invoice.Detail.Metadata.CancelTime, testInvoice.Detail.Metadata.CancelTime)
-	assert.Equal(t, invoice.Detail.Metadata.CancellledTimeBy, testInvoice.Detail.Metadata.CancellledTimeBy)
-	assert.Equal(t, invoice.Detail.Metadata.CreateTime, testInvoice.Detail.Metadata.CreateTime)
-	assert.Equal(t, invoice.Detail.Metadata.CreatedBy, testInvoice.Detail.Metadata.CreatedBy)
-	assert.Equal(t, invoice.Detail.Metadata.CreatedByFlow, testInvoice.Detail.Metadata.CreatedByFlow)
-	assert.Equal(t, invoice.Detail.Metadata.FirstSentTime, testInvoice.Detail.Metadata.FirstSentTime)
-	assert.Equal(t, invoice.Detail.Metadata.InvoicerViewUrl, testInvoice.Detail.Metadata.InvoicerViewUrl)
-	assert.Equal(t, invoice.Detail.Metadata.LastSentBy, testInvoice.Detail.Metadata.LastSentBy)
-	assert.Equal(t, invoice.Detail.Metadata.LastSentTime, testInvoice.Detail.Metadata.LastSentTime)
-	assert.Equal(t, invoice.Detail.Metadata.LastUpdateTime, testInvoice.Detail.Metadata.LastUpdateTime)
-	assert.Equal(t, invoice.Detail.Metadata.LastUpdatedBy, testInvoice.Detail.Metadata.LastUpdatedBy)
-	assert.Equal(t, invoice.Detail.Metadata.RecipientViewUrl, testInvoice.Detail.Metadata.RecipientViewUrl)
-	// detail --> payment_term
-	assert.Equal(t, invoice.Detail.PaymentTerm.DueDate, testInvoice.Detail.PaymentTerm.DueDate)
-	assert.Equal(t, invoice.Detail.PaymentTerm.TermType, testInvoice.Detail.PaymentTerm.TermType)
-
-	// due_amount
-	assert.Equal(t, invoice.DueAmount.Currency, testInvoice.DueAmount.Currency)
-	assert.Equal(t, invoice.DueAmount.Value, testInvoice.DueAmount.Value)
-
-	// gratuity
-	assert.Equal(t, invoice.Gratuity.Currency, testInvoice.Gratuity.Currency)
-	assert.Equal(t, invoice.Gratuity.Value, testInvoice.Gratuity.Value)
-
-	// id
-	assert.Equal(t, invoice.ID, testInvoice.ID)
-
-	// invoicer
-	assert.Equal(t, invoice.Invoicer.AdditionalNotes, testInvoice.Invoicer.AdditionalNotes)
-	assert.Equal(t, invoice.Invoicer.EmailAddress, testInvoice.Invoicer.EmailAddress)
-	assert.Equal(t, invoice.Invoicer.LogoUrl, testInvoice.Invoicer.LogoUrl)
-	assert.Equal(t, invoice.Invoicer.TaxId, testInvoice.Invoicer.TaxId)
-	assert.Equal(t, invoice.Invoicer.Website, testInvoice.Invoicer.Website)
-	// !!!  SPLICE EQUALITY STILL REMAINING !!!!!
-	// invoicer --> phones
-	assert.Equal(t, len(invoice.Invoicer.Phones), len(testInvoice.Invoicer.Phones))
-
-	// items
-	// !!!  SPLICE EQUALITY STILL REMAINING !!!!!
-	assert.Equal(t, len(invoice.Items), len(testInvoice.Items))
-
-	// links
-	// !!!  SPLICE EQUALITY STILL REMAINING !!!!!
-	assert.Equal(t, len(invoice.Links), len(testInvoice.Links))
-
-	// parent_id
-	assert.Equal(t, invoice.ParentID, testInvoice.ParentID)
-
-	// payments
-	assert.Equal(t, invoice.Payments.PaidAmount.Currency, testInvoice.Payments.PaidAmount.Currency)
-	assert.Equal(t, invoice.Payments.PaidAmount.Value, testInvoice.Payments.PaidAmount.Value)
-	// payments --> transactions
-	assert.Equal(t, len(invoice.Payments.Transactions), len(testInvoice.Payments.Transactions))
-
-	// primary_recipients
-	// !!!  SPLICE EQUALITY STILL REMAINING !!!!!
-	assert.Equal(t, len(invoice.PrimaryRecipients), len(testInvoice.PrimaryRecipients))
-
-	// refunds
-	assert.Equal(t, invoice.Refunds.RefundAmount.Currency, testInvoice.Refunds.RefundAmount.Currency)
-	assert.Equal(t, invoice.Refunds.RefundAmount.Value, testInvoice.Refunds.RefundAmount.Value)
-	assert.Equal(t, len(invoice.Refunds.RefundDetails), len(testInvoice.Refunds.RefundDetails))
-
-	// status
-	assert.Equal(t, invoice.Status, testInvoice.Status)
-
-}
 
 func TestGetInvoice(t *testing.T) {
 	testInvoiceJSONData := []byte(`
@@ -394,13 +251,4 @@ func TestGetInvoice(t *testing.T) {
 	var testInvoice paypal.Invoice
 	err := json.Unmarshal(testInvoiceJSONData, &testInvoice)
 	assert.Equal(t, nil, err) // if passed, means unmarshalling was successful
-
-	ctx := context.Background()
-
-	c, _ := paypal.NewClient(devTestClientID, devTestSecret, devAPIBaseSandBox)
-	_, _ = c.GetAccessToken(ctx)
-
-	invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
-	assert.Equal(t, nil, err) // if passed, means that request was successful
-	assertTwoInvoices(t, *invoice, testInvoice)
 }

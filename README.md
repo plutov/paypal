@@ -5,13 +5,12 @@
     <a href="https://pkg.go.dev/github.com/plutov/paypal?tab=doc"><img src="https://godoc.org/github.com/golang/gddo?status.svg" alt="GoDoc"></a>
 </p>
 
-![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/plutov/paypal?utm_source=oss&utm_medium=github&utm_campaign=plutov%2Fpaypal&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
-
 # Go client for PayPal REST API
 
 ## Paypal REST API Docs
 
-[Get started with PayPal REST APIs](https://developer.paypal.com/api/rest/)
+- [Get started with PayPal REST APIs](https://developer.paypal.com/api/rest/)
+- [Specification](https://github.com/paypal/paypal-rest-api-specifications)
 
 ## Missing endpoints
 
@@ -23,11 +22,11 @@ It is possible that some endpoints are missing in this client, but you can use b
 import "github.com/plutov/paypal/v4"
 
 // Create a client instance
-c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox)
+c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox) // or paypal.APIBaseLive
 c.SetLog(os.Stdout) // Set log to terminal stdout
 ```
 
-## Get authorization by ID
+### Get authorization by ID
 
 ```go
 auth, err := c.GetAuthorization("2DC87612EK520411B")
@@ -284,27 +283,9 @@ c.GenerateInvoiceNumber(ctx) // might return something like "0001" or "0010".
 invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
 ```
 
-- for now, we are yet to implement the ShowAllInvoices endpoint, so use the following cURL request for the same(this gives you the list of invoice-IDs for this customer)
+## Contributing
 
-  ```bash
-  curl -v -X GET https://api-m.sandbox.paypal.com/v2/invoicing/invoices?total_required=true \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <Token>"
-  ```
-
-- refer to the beginning of this Usage section for obtaining a Token.
-
-## How to Contribute
-
-- Fork a repository
-- Add/Fix something
-- Check that tests are passing
-- Create PR
-
-Main contributors:
-
-- [Alex Pliutau](https://github.com/plutov)
-- [Roopak Venkatakrishnan](https://github.com/roopakv)
+Check out [./CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Tests
 
