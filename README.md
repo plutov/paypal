@@ -1,5 +1,3 @@
-[Docs](https://pkg.go.dev/github.com/plutov/paypal)
-
 <p>
     <a href="https://github.com/plutov/paypal/releases"><img src="https://img.shields.io/github/release/plutov/paypal.svg" alt="Latest Release"></a>
     <a href="https://pkg.go.dev/github.com/plutov/paypal?tab=doc"><img src="https://godoc.org/github.com/golang/gddo?status.svg" alt="GoDoc"></a>
