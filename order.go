@@ -23,7 +23,7 @@ func (c *Client) GetOrder(ctx context.Context, orderID string) (*Order, error) {
 	return order, nil
 }
 
-// Create an order
+// CreateOrder Create an order
 // Endpoint: POST /v2/checkout/orders
 func (c *Client) CreateOrder(ctx context.Context, intent string, purchaseUnits []PurchaseUnitRequest, paymentSource *PaymentSource, appContext *ApplicationContext) (*Order, error) {
 	return c.CreateOrderWithPaypalRequestID(ctx, intent, purchaseUnits, paymentSource, appContext, "")
@@ -113,7 +113,7 @@ func (c *Client) CaptureOrder(ctx context.Context, orderID string, captureOrderR
 	return c.CaptureOrderWithPaypalRequestId(ctx, orderID, captureOrderRequest, "", nil)
 }
 
-// CaptureOrder with idempotency - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
+// CaptureOrderWithPaypalRequestId with idempotency - https://developer.paypal.com/docs/api/orders/v2/#orders_capture
 // Endpoint: POST /v2/checkout/orders/ID/capture
 // https://developer.paypal.com/docs/api/reference/api-requests/#http-request-headers
 func (c *Client) CaptureOrderWithPaypalRequestId(ctx context.Context,
@@ -143,6 +143,11 @@ func (c *Client) CaptureOrderWithPaypalRequestId(ctx context.Context,
 		req.Header.Set("PayPal-Mock-Response", string(mock))
 	}
 
+	//Add for STC API, we need to link order together
+	//https://developer.paypal.com/limited-release/raas/integration-guide/#link-setthetransactioncontext
+	//https://developer.paypal.com/docs/api/orders/v2/#orders_capture!in=header&path=PayPal-Client-Metadata-Id&t=request
+	req.Header.Set("PayPal-Client-Metadata-Id", orderID)
+
 	if err = c.SendWithAuth(req, capture); err != nil {
 		return capture, err
 	}
@@ -156,7 +161,7 @@ func (c *Client) RefundCapture(ctx context.Context, captureID string, refundCapt
 	return c.RefundCaptureWithPaypalRequestId(ctx, captureID, refundCaptureRequest, "")
 }
 
-// RefundCapture with idempotency - https://developer.paypal.com/docs/api/payments/v2/#captures_refund
+// RefundCaptureWithPaypalRequestId with idempotency - https://developer.paypal.com/docs/api/payments/v2/#captures_refund
 // Endpoint: POST /v2/payments/captures/ID/refund
 func (c *Client) RefundCaptureWithPaypalRequestId(ctx context.Context,
 	captureID string,
