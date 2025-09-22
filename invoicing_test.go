@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/plutov/paypal/v4"
 	"github.com/stretchr/testify/assert"
+	"github.com/xiongdi9456/paypal/v4"
 )
 
 func TestGetInvoice(t *testing.T) {
