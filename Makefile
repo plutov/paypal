@@ -5,3 +5,8 @@ oapi:
 		go tool oapi-codegen -o mockserver/$$name/gen.go --package srv --generate std-http-server,models,strict-server $$file; \
 	done
 
+lint:
+	go tool golangci-lint run
+
+test:
+	go test -race -v ./...

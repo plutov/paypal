@@ -278,7 +278,7 @@ This projects uses [paypal-rest-api-specifications](https://github.com/paypal/pa
 
 
 ```
-go test -v ./...
+make test
 ```
 
 To update the mock server, first we need to get the latest OpenAPI specification files and then generate the mock server code. Paypal has multiple files that have to be combined into one OpenAPI file. The following commands will do that:
@@ -288,3 +288,11 @@ make oapi
 ```
 
 Then make sure to add missing mock implementations in `mockserver/impl.go`.
+
+## Linting
+
+Make sure to run the linter before submitting a PR:
+
+```bash
+make lint
+```
