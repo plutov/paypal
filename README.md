@@ -23,7 +23,7 @@ c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox) // or 
 c.SetLog(os.Stdout)
 ```
 
-### Get authorization by ID
+### Get authorization
 
 ```go
 auth, err := c.GetAuthorization("2DC87612EK520411B")
@@ -47,19 +47,19 @@ auth, err := c.VoidAuthorization(authID)
 auth, err := c.ReauthorizeAuthorization(authID, &paypal.Amount{Total: "7.00", Currency: "USD"})
 ```
 
-### Get Refund by ID
+### Get Refund
 
 ```go
 refund, err := c.GetRefund("O-4J082351X3132253H")
 ```
 
-### Get Order by ID
+### Get Order
 
 ```go
 order, err := c.GetOrder("O-4J082351X3132253H")
 ```
 
-### Create an Order
+### Create Order
 
 ```go
 units := []paypal.PurchaseUnitRequest{}
@@ -68,7 +68,7 @@ appCtx := &paypal.ApplicationContext{}
 order, err := c.CreateOrder(context.TODO(), paypal.OrderIntentCapture, units, ource, appCtx)
 ```
 
-### Update Order by ID
+### Update Order
 
 ```go
 order, err := c.UpdateOrder("O-4J082351X3132253H", []paypal.PurchaseUnitRequest{})
@@ -90,11 +90,12 @@ capture, err := c.CaptureOrder(orderID, paypal.CaptureOrderRequest{})
 
 ```go
 token, err := c.GrantNewAccessTokenFromAuthCode("<Authorization-Code>", "http://example.com/myapp/return.php")
+
 // ... or by refresh token
 token, err := c.GrantNewAccessTokenFromRefreshToken("<Refresh-Token>")
 ```
 
-### Retreive user information
+### Get user info
 
 ```go
 userInfo, err := c.GetUserInfo("openid")
@@ -124,19 +125,19 @@ payout := paypal.Payout{
 payoutResp, err := c.CreatePayout(payout)
 ```
 
-### Get payout by ID
+### Get payout
 
 ```go
 payout, err := c.GetPayout("PayoutBatchID")
 ```
 
-### Get payout item by ID
+### Get payout item
 
 ```go
 payoutItem, err := c.GetPayoutItem("PayoutItemID")
 ```
 
-### Cancel unclaimed payout item by ID
+### Cancel unclaimed payout item
 
 ```go
 payoutItem, err := c.CancelPayoutItem("PayoutItemID")
@@ -261,7 +262,7 @@ c.ListWebhooks(paypal.AncorTypeApplication)
 c.GenerateInvoiceNumber(ctx) // might return something like "0001" or "0010".
 ```
 
-### Get Invoice Details by ID
+### Get Invoice Details
 
 ```go
 invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
@@ -271,8 +272,19 @@ invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
 
 Check out [./CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Tests
+## Testing
+
+This projects uses [paypal-rest-api-specifications](https://github.com/paypal/paypal-rest-api-specifications) to generate a mock server for testing purposes.
+
 
 ```
 go test -v ./...
 ```
+
+To update the mock server, first we need to get the latest OpenAPI specification files and then generate the mock server code. Paypal has multiple files that have to be combined into one OpenAPI file. The following commands will do that:
+
+```bash
+make oapi
+```
+
+Then make sure to add missing mock implementations in `mockserver/impl.go`.
