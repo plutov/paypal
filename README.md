@@ -19,9 +19,8 @@ It is possible that some endpoints are missing in this client, but you can use b
 ```go
 import "github.com/plutov/paypal/v4"
 
-// Create a client instance
 c, err := paypal.NewClient("clientID", "secretID", paypal.APIBaseSandBox) // or paypal.APIBaseLive
-c.SetLog(os.Stdout) // Set log to terminal stdout
+c.SetLog(os.Stdout)
 ```
 
 ### Get authorization by ID
@@ -63,11 +62,10 @@ order, err := c.GetOrder("O-4J082351X3132253H")
 ### Create an Order
 
 ```go
-ctx := context.Background()
 units := []paypal.PurchaseUnitRequest{}
 source := &paypal.PaymentSource{}
 appCtx := &paypal.ApplicationContext{}
-order, err := c.CreateOrder(ctx, paypal.OrderIntentCapture, units, ource, appCtx)
+order, err := c.CreateOrder(context.TODO(), paypal.OrderIntentCapture, units, ource, appCtx)
 ```
 
 ### Update Order by ID
@@ -201,7 +199,6 @@ err := c.DeleteWebProfile("XP-CP6S-W9DY-96H8-MVN2")
 ### Vault
 
 ```go
-// Store CC
 c.StoreCreditCard(paypal.CreditCard{
     Number:      "4417119669820331",
     Type:        "visa",
@@ -212,10 +209,8 @@ c.StoreCreditCard(paypal.CreditCard{
     LastName:    "Bar",
 })
 
-// Delete it
 c.DeleteCreditCard("CARD-ID-123")
 
-// Edit it
 c.PatchCreditCard("CARD-ID-123", []paypal.CreditCardField{
     paypal.CreditCardField{
         Operation: "replace",
@@ -224,17 +219,14 @@ c.PatchCreditCard("CARD-ID-123", []paypal.CreditCardField{
     },
 })
 
-// Get it
 c.GetCreditCard("CARD-ID-123")
 
-// Get all stored credit cards
 c.GetCreditCards(nil)
 ```
 
 ### Webhooks
 
 ```go
-// Create a webhook
 c.CreateWebhook(paypal.CreateWebhookRequest{
     URL: "webhook URL",
     EventTypes: []paypal.WebhookEventType{
@@ -244,7 +236,6 @@ c.CreateWebhook(paypal.CreateWebhookRequest{
     },
 })
 
-// Update a registered webhook
 c.UpdateWebhook("WebhookID", []paypal.WebhookField{
     paypal.WebhookField{
         Operation: "replace",
@@ -257,27 +248,22 @@ c.UpdateWebhook("WebhookID", []paypal.WebhookField{
     },
 })
 
-// Get a registered webhook
 c.GetWebhook("WebhookID")
 
-// Delete a webhook
 c.DeleteWebhook("WebhookID")
 
-// List registered webhooks
 c.ListWebhooks(paypal.AncorTypeApplication)
 ```
 
 ### Generate Next Invoice Number
 
 ```go
-// GenerateInvoiceNumber: generates the next invoice number that is available to the merchant.
 c.GenerateInvoiceNumber(ctx) // might return something like "0001" or "0010".
 ```
 
 ### Get Invoice Details by ID
 
 ```go
-// the second argument is an ID, it should be valid
 invoice, err := c.GetInvoiceDetails(ctx, "INV2-XFXV-YW42-ZANU-4F33")
 ```
 
