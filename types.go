@@ -963,6 +963,7 @@ type (
 		ReferenceID string                       `json:"reference_id"`
 		Shipping    CapturedPurchaseUnitShipping `json:"shipping,omitempty"`
 		Payments    *CapturedPayments            `json:"payments,omitempty"`
+		Description string                       `json:"description,omitempty"`
 	}
 
 	CapturedPurchaseUnitShipping struct {
