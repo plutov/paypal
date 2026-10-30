@@ -1073,6 +1073,12 @@ type (
 
 	// PaymentSourcePaypal structure
 	PaymentSourcePaypal struct {
+		EmailAddress      string                               `json:"email_address,omitempty"`
+		Name              *CreateOrderPayerName                `json:"name,omitempty"`
+		Phone             *PhoneWithType                       `json:"phone,omitempty"`
+		BirthDate         string                               `json:"birth_date,omitempty"`
+		TaxInfo           *TaxInfo                             `json:"tax_info,omitempty"`
+		Address           *ShippingDetailAddressPortable       `json:"address,omitempty"`
 		ExperienceContext PaymentSourcePaypalExperienceContext `json:"experience_context"`
 	}
 
